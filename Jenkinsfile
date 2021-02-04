@@ -28,13 +28,8 @@ pipeline {
     post {  
          always {  
              echo 'This will always run'  
-            
-             committerEmail = sh (
-                  script: 'git --no-pager show -s --format=\'%ae\'',
-                  returnStdout: true
-             ).trim()
              
-             mail bcc: "", body: "<b>Example</b><br>Project: ${env.JOB_NAME} <br>Build Number: ${env.BUILD_NUMBER} <br> URL de build: ${env.BUILD_URL}", cc: '', charset: 'UTF-8', from: '', mimeType: 'text/html', replyTo: '', subject: "ERROR CI: Project name -> ${env.JOB_NAME}", to: "${committerEmail}";
+             mail bcc: "", body: "<b>Example</b><br>Project: ${env.JOB_NAME} <br>Build Number: ${env.BUILD_NUMBER} <br> URL de build: ${env.BUILD_URL}", cc: '', charset: 'UTF-8', from: '', mimeType: 'text/html', replyTo: '', subject: "ERROR CI: Project name -> ${env.JOB_NAME}", to: "${GIT_COMMITTER_EMAIL}";
          }  
          success {  
              echo 'This will run only if successful'  
