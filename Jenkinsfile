@@ -4,6 +4,7 @@ pipeline {
         stage('Build') { 
             steps {
                 echo "This is the build stage." 
+		
 		// sh "rm -rf my-app"
 		// sh "mvn clean -f my-app"
 		// sh "mvn install -f my-app"
