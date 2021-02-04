@@ -29,7 +29,7 @@ pipeline {
          always {  
             echo 'This will always run'  
              
-            emailext body: 'A Test EMail', recipientProviders: [[$class: 'DevelopersRecipientProvider'], [$class: 'RequesterRecipientProvider']], subject: 'Test'
+            emailext body: 'A Test EMail ', recipientProviders: [[$class: 'DevelopersRecipientProvider'], [$class: 'RequesterRecipientProvider']], subject: 'Test'
          }  
          success {  
              echo 'This will run only if successful'  
