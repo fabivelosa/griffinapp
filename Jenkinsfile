@@ -28,6 +28,7 @@ pipeline {
     post {  
          always {  
             echo 'This will always run'  
+            mineRepository
          }  
          success {  
              echo 'This will run only if successful'  
