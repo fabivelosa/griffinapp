@@ -23,12 +23,16 @@ pipeline {
 		// sh "mvn test -f my-app"
             }
         }
+        stage('Git Forensics'){
+            steps{
+                mineRepository
+            }
+        }
     }
     
     post {  
          always {  
             echo 'This will always run'  
-            mineRepository
          }  
          success {  
              echo 'This will run only if successful'  
