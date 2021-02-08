@@ -25,7 +25,7 @@ pipeline {
         }
         stage('Git Forensics'){
             steps{
-                mineRepository
+               // mineRepository
             }
         }
     }
