@@ -25,8 +25,8 @@ pipeline {
         }
         stage('Git Forensics'){
             steps{
-                echo "Mines Repo"
-               mineRepository scm
+               echo "Mines Repo"
+               mineRepository()
             }
         }
     }
