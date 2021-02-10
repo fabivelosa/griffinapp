@@ -40,6 +40,7 @@ pipeline {
          always {  
             echo 'This will always run'  
             mineRepository()
+	    junit 'prodigiesApp/target/surefire-reports/*.xml'
          }  
          success {  
 	    archiveArtifacts artifacts: 'prodigiesApp/target/*.jar', followSymlinks: false         
