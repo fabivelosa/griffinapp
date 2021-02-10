@@ -33,7 +33,7 @@ pipeline {
         stage('Generate Test Reports') { 
             steps {
 	    junit 'prodigiesApp/target/surefire-reports/*.xml'
-	    jacoco changeBuildStatus: true, exclusionPattern: '**/*Test*.class', inclusionPattern: '**/*.class', minimumInstructionCoverage: '80', runAlways: true          
+	    jacoco exclusionPattern: '**/*Test*.class', inclusionPattern: '**/*.class', runAlways: true       
 	}
         }
     }
