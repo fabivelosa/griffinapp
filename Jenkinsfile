@@ -42,8 +42,8 @@ pipeline {
             mineRepository()
          }  
          success {  
-             echo 'This will run only if successful'  
-         }  
+	    archiveArtifacts artifacts: 'prodigiesApp/target/*.jar', followSymlinks: false         
+	 }  
          failure {  
              echo 'This will run only on failure'  
          }  
