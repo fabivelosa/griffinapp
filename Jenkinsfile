@@ -4,9 +4,20 @@ pipeline {
     environment {
         EMAIL_TO = 'A00278899@student.ait.ie'
     }
-    
+
+    tools { 
+        maven 'Maven 3.3.6' 
+        jdk 'jdk8' 
+    }
     
     stages {
+	stage ('Initialize') {
+            steps {
+                sh '''
+                    echo "PATH = ${PATH}"
+                    echo "M2_HOME = ${M2_HOME}"
+                '''
+            }
         stage('Build') { 
             steps {
                 echo "This is the build stage." 
