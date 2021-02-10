@@ -23,16 +23,15 @@ pipeline {
             steps {
                 echo "This is the build stage." 
 		        echo "${WORKSPACE}"
-                 sh "ls -la ${WORKSPACE}"
-                 sh "rm -rf prodigiesApp"
-		sh "mvn clean"
-		sh "mvn install"
+                sh "ls -la ${WORKSPACE}"
+		sh "mvn clean -f prodigiesApp"
+		sh "mvn install -f prodigiesApp"
             }
         }
         stage('Test') { 
             steps {
                 echo "This is the test stage." 
-		 sh "mvn test"
+		 sh "mvn test -f prodigiesApp"
             }
         }
         stage('Git Forensics'){
