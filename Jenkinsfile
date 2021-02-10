@@ -18,6 +18,7 @@ pipeline {
                     echo "M2_HOME = ${M2_HOME}"
                 '''
             }
+        }
         stage('Build') { 
             steps {
                 echo "This is the build stage." 
