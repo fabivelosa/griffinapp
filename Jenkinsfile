@@ -21,28 +21,29 @@ pipeline {
         }
         stage('Build') { 
             steps {
-                echo "This is the build stage." 
-		        echo "${WORKSPACE}"
-                sh "ls -la ${WORKSPACE}"
 		sh "mvn clean -f prodigiesApp"
 		sh "mvn install -f prodigiesApp"
             }
         }
         stage('Test') { 
             steps {
-                echo "This is the test stage." 
 		 sh "mvn test -f prodigiesApp"
             }
+        }
+        stage('Generate Test Reports') { 
+            steps {
+	    junit 'prodigiesApp/target/surefire-reports/*.xml'
+	    jacoco changeBuildStatus: true, exclusionPattern: '**/*Test*.class', inclusionPattern: '**/*.class', runAlways: true            }
         }
     }
     
     post {  
          always {  
-            echo 'This will always run'  
+            echo 'This action mines the repository for commit forensics'  
             mineRepository()
-	    junit 'prodigiesApp/target/surefire-reports/*.xml'
          }  
          success {  
+            echo 'This action archives the jar files in the successful build'  
 	    archiveArtifacts artifacts: 'prodigiesApp/target/*.jar', followSymlinks: false         
 	 }  
          failure {  
