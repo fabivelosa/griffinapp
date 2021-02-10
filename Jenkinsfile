@@ -34,11 +34,6 @@ pipeline {
 		 sh "mvn test -f prodigiesApp"
             }
         }
-        stage('Git Forensics'){
-            steps{
-               echo "Mines Repo"
-            }
-        }
     }
     
     post {  
