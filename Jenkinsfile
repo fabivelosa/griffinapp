@@ -13,7 +13,7 @@ pipeline {
     stages {
 	stage ('Static Code Analysis') {
             steps {
-                echo "This stage performance static code analysis"
+                sh "mvn pmd:pmd -f prodigiesApp"
             }
         }
         stage('Build') { 
