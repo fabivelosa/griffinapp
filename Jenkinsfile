@@ -11,12 +11,9 @@ pipeline {
     }
     
     stages {
-	stage ('Initialize') {
+	stage ('Static Code Analysis') {
             steps {
-                sh '''
-                    echo "PATH = ${PATH}"
-                    echo "M2_HOME = ${M2_HOME}"
-                '''
+                echo "This stage performance static code analysis"
             }
         }
         stage('Build') { 
