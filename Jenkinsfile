@@ -4,38 +4,48 @@ pipeline {
     environment {
         EMAIL_TO = 'A00278899@student.ait.ie'
     }
-    
+
+    tools { 
+        maven 'Maven 3.3.6' 
+        jdk 'jdk8' 
+    }
     
     stages {
+	stage ('Static Code Analysis') {
+            steps {
+                sh "mvn pmd:pmd -f prodigiesApp"
+            }
+        }
         stage('Build') { 
             steps {
-                echo "This is the build stage." 
-		        echo "${WORKSPACE}"
-                sh "ls -la ${WORKSPACE}"
-                // sh "rm -rf my-app"
-		// sh "mvn clean -f my-app"
-		// sh "mvn install -f my-app"
+		sh "mvn clean -f prodigiesApp"
+		sh "mvn install -f prodigiesApp"
             }
         }
         stage('Test') { 
             steps {
-                echo "This is the test stage." 
-		// sh "mvn test -f my-app"
+		 sh "mvn test -f prodigiesApp"
             }
+        }
+        stage('Generate Test Reports') { 
+            steps {
+	    junit 'prodigiesApp/target/surefire-reports/*.xml'
+	    jacoco exclusionPattern: '**/*Test*.class', inclusionPattern: '**/*.class', runAlways: true       
+	}
         }
     }
     
     post {  
          always {  
-            echo 'This will always run'  
-             
-            emailext body: 'A Test EMail ', recipientProviders: [[$class: 'DevelopersRecipientProvider'], [$class: 'RequesterRecipientProvider']], subject: 'Test'
+            echo 'This action mines the repository for commit forensics'  
+            mineRepository()
          }  
          success {  
-             echo 'This will run only if successful'  
-         }  
+            echo 'This action archives the jar files in the successful build'  
+	    archiveArtifacts artifacts: 'prodigiesApp/target/*.jar', followSymlinks: false         
+	 }  
          failure {  
-               mail bcc: '', body: "<b>Example</b><br>Project: ${env.JOB_NAME} <br>Build Number: ${env.BUILD_NUMBER} <br> URL de build: ${env.BUILD_URL}", cc: '', charset: 'UTF-8', from: '', mimeType: 'text/html', replyTo: '', subject: "ERROR CI: Project name -> ${env.JOB_NAME}", to: "{EMAIL_TO}";  
+             echo 'This will run only on failure'  
          }  
          unstable {  
              echo 'This will run only if the run was marked as unstable'  
@@ -44,7 +54,5 @@ pipeline {
              echo 'This will run only if the state of the Pipeline has changed'  
              echo 'For example, if the Pipeline was previously failing but is now successful'  
          }  
-     }  
-    
-    
+     }      
 }
