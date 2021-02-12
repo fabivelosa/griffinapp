@@ -11,8 +11,4 @@ public class AppTest {
 		assertEquals("Test Passed!", myTest.test());
 	}
 	
-	@Test
-	public void failingTest() {
-		fail();
-	}
 }
