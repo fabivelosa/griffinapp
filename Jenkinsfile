@@ -16,22 +16,27 @@ pipeline {
                 sh "mvn pmd:pmd -f prodigiesApp"
             }
         }
-        stage('Build') { 
+        stage('Unit Test') { 
             steps {
 		sh "mvn clean -f prodigiesApp"
+		sh "mvn test -f prodigiesApp"
+            }
+        }
+        stage('Build') { 
+            steps {
 		sh "mvn install -f prodigiesApp"
             }
         }
-        stage('Test') { 
+        stage('Integration Test') { 
             steps {
-		 sh "mvn test -f prodigiesApp"
+		 echo "This is the integration test stage"
             }
         }
         stage('Generate Test Reports') { 
             steps {
-	    junit 'prodigiesApp/target/surefire-reports/*.xml'
-	    jacoco exclusionPattern: '**/*Test*.class', inclusionPattern: '**/*.class', runAlways: true       
-	}
+	    	junit 'prodigiesApp/target/surefire-reports/*.xml'
+	    	jacoco exclusionPattern: '**/*Test*.class', inclusionPattern: '**/*.class', runAlways: true       
+	    }
         }
     }
     
