@@ -1,6 +1,6 @@
 package prodigiesApp;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;
 
@@ -9,5 +9,10 @@ public class AppTest {
 	public void test() {
 		AppMain myTest = new AppMain();
 		assertEquals("Test Passed!", myTest.test());
+	}
+	
+	@Test
+	public void failingTest() {
+		fail();
 	}
 }
