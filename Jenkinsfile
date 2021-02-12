@@ -32,18 +32,13 @@ pipeline {
 		 echo "This is the integration test stage"
             }
         }
-        stage('Generate Test Reports') { 
-            steps {
-	    	junit 'prodigiesApp/target/surefire-reports/*.xml'
-	    	jacoco exclusionPattern: '**/*Test*.class', inclusionPattern: '**/*.class', runAlways: true       
-	    }
-        }
     }
     
     post {  
          always {  
-            echo 'This action mines the repository for commit forensics'  
             mineRepository()
+	    junit 'prodigiesApp/target/surefire-reports/*.xml'
+	    jacoco exclusionPattern: '**/*Test*.class', inclusionPattern: '**/*.class', runAlways: true  
          }  
          success {  
             echo 'This action archives the jar files in the successful build'  
