@@ -13,8 +13,7 @@ pipeline {
     stages {
 	stage ('Static Code Analysis') {
             steps {
-             // sh "mvn clean verify sonar:sonar -Dsonar.login=1db5bb45ac8b4754e277d231c29d0292f80b61c9 -f prodigiesApp"
-             echo "Placeholder"
+              sh "mvn clean verify sonar:sonar -Dsonar.login=1db5bb45ac8b4754e277d231c29d0292f80b61c9 -f prodigiesApp"
             }
         }
         stage('Unit Test') { 
@@ -23,17 +22,18 @@ pipeline {
 		sh "mvn test -f prodigiesApp"
             }
         }
-        stage('Build') { 
-            steps {
-		sh "mvn install -f prodigiesApp"
-            }
-        }
         stage('Integration Test') { 
             steps {
 		       echo "This is the integration test stage"
 		       sh "mvn test -Parquillian-test -f prodigiesApp"
             }
         }
+        stage('Build') { 
+            steps {
+		sh "mvn install -f prodigiesApp"
+            }
+        }
+
     }
     
     post {  
