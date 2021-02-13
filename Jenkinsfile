@@ -29,7 +29,8 @@ pipeline {
         }
         stage('Integration Test') { 
             steps {
-		 echo "This is the integration test stage"
+		       echo "This is the integration test stage"
+		       sh "mvn test -f prodigiesApp"
             }
         }
     }
