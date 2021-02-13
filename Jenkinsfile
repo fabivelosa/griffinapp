@@ -22,15 +22,15 @@ pipeline {
 		sh "mvn test -f prodigiesApp"
             }
         }
+        stage('Build') { 
+            steps {
+		sh "mvn install -f prodigiesApp"
+            }
+        }
         stage('Integration Test') { 
             steps {
 		       echo "This is the integration test stage"
 		       sh "mvn test -Parquillian-test -f prodigiesApp"
-            }
-        }
-        stage('Build') { 
-            steps {
-		sh "mvn install -f prodigiesApp"
             }
         }
     }
