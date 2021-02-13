@@ -13,7 +13,8 @@ pipeline {
     stages {
 	stage ('Static Code Analysis') {
             steps {
-              sh "mvn clean verify sonar:sonar -Dsonar.login=1db5bb45ac8b4754e277d231c29d0292f80b61c9 -f prodigiesApp"
+             // sh "mvn clean verify sonar:sonar -Dsonar.login=1db5bb45ac8b4754e277d231c29d0292f80b61c9 -f prodigiesApp"
+             echo "Placeholder"
             }
         }
         stage('Unit Test') { 
