@@ -13,7 +13,7 @@ pipeline {
     stages {
 	stage ('Static Code Analysis') {
             steps {
-                sh "mvn pmd:pmd -f prodigiesApp"
+                echo "placeholder"
             }
         }
         stage('Unit Test') { 
