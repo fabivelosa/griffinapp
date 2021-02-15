@@ -15,12 +15,12 @@ pipeline {
             steps {
              // sh "mvn clean verify sonar:sonar -Dsonar.login=1db5bb45ac8b4754e277d231c29d0292f80b61c9 -f prodigiesApp"
              echo "Placeholder"
+	     sh "mvn clean -f prodigiesApp"
              sh "mvn pmd:pmd -f prodigiesApp"
             }
         }
         stage('Unit Test') { 
             steps {
-		sh "mvn clean -f prodigiesApp"
 		sh "mvn test -f prodigiesApp"
             }
         }
