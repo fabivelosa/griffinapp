@@ -15,7 +15,7 @@ pipeline {
             steps {
              // sh "mvn clean verify sonar:sonar -Dsonar.login=1db5bb45ac8b4754e277d231c29d0292f80b61c9 -f prodigiesApp"
              echo "Placeholder"
-             sh "mvn pmd:check -f prodigiesApp"
+             sh "mvn pmd:pmd -f prodigiesApp"
             }
         }
         stage('Unit Test') { 
@@ -43,7 +43,7 @@ pipeline {
             echo 'This action mines the repository for commit forensics'  
             mineRepository()
 	    junit 'prodigiesApp/target/surefire-reports/*.xml'
-        recordIssues enabledForFailure: true, tool: pmdParser(pattern: 'pmd.xml'), sourceCodeEncoding: 'UTF-8'
+	    recordIssues enabledForFailure: true, sourceCodeEncoding: 'UTF-8', tools: [pmdParser()]
 	    jacoco exclusionPattern: '**/*Test*.class', inclusionPattern: '**/*.class', runAlways: true    
          }  
          success {  
