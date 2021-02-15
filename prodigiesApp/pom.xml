@@ -130,6 +130,11 @@
 					</execution>
 				</executions>
 			</plugin>
+           	<plugin>
+               	<groupId>org.apache.maven.plugins</groupId>
+               	<artifactId>maven-pmd-plugin</artifactId>
+               	<version>3.14.0</version>
+            </plugin>
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>2.3.2</version>
@@ -138,18 +143,6 @@
                     <target>1.6</target>
                 </configuration>
             </plugin>
-		    <plugin>
-		    	<groupId>org.apache.maven.plugins</groupId>
-		        <artifactId>maven-pmd-plugin</artifactId>
-		        <version>3.14.0</version>
-		        <executions>
-		          <execution>
-		            <goals>
-		              <goal>check</goal>
-		            </goals>
-		          </execution>
-		        </executions>
-		    </plugin>
 		</plugins>
 	</build>
 </project>
