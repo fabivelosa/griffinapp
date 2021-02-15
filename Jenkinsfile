@@ -43,7 +43,7 @@ pipeline {
             echo 'This action mines the repository for commit forensics'  
             mineRepository()
 	    junit 'prodigiesApp/target/surefire-reports/*.xml'
-        recordIssues enabledForFailure: true, tool: pmdParser(pattern: 'prodigiesApp/target/pmd.xml'), sourceCodeEncoding: 'UTF-8'
+        recordIssues enabledForFailure: true, tool: pmdParser(pattern: 'target/pmd.xml'), sourceCodeEncoding: 'UTF-8'
 	    jacoco exclusionPattern: '**/*Test*.class', inclusionPattern: '**/*.class', runAlways: true    
          }  
          success {  
