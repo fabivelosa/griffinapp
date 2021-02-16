@@ -54,5 +54,5 @@ Thumbs.db
 *.wmv
 
 # ChromeDriver
-resources/chromedriver/*
+*/prodigiesApp/resources/chromedriver/*
 
