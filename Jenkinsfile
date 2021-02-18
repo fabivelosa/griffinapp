@@ -13,11 +13,11 @@ pipeline {
     stages {
 	stage ('Static Code Analysis') {
             steps {
-             echo "Placeholder"
-	     sh "mvn clean -f prodigiesApp"
+	         sh "mvn clean -f prodigiesApp"
              sh "mvn pmd:pmd -f prodigiesApp"
+             sh "mvn checkstyle:checkstyle -f prodigiesApp"
             }
-        }
+        }    
         stage('Unit Test') { 
             steps {
 		sh "mvn test -f prodigiesApp"
@@ -32,6 +32,11 @@ pipeline {
         stage('Build') { 
             steps {
 		sh "mvn install -f prodigiesApp"
+            }
+        }
+        stage('Findbugs Analysis'){
+            steps{
+            sh "mvn findbugs:findbugs -f prodigiesApp"
             }
         }
 
