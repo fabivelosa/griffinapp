@@ -13,12 +13,11 @@ pipeline {
     stages {
 	stage ('Static Code Analysis') {
             steps {
-             // sh "mvn clean verify sonar:sonar -Dsonar.login=1db5bb45ac8b4754e277d231c29d0292f80b61c9 -f prodigiesApp"
-             echo "Placeholder"
-	     sh "mvn clean -f prodigiesApp"
+	         sh "mvn clean -f prodigiesApp"
              sh "mvn pmd:pmd -f prodigiesApp"
+             sh "mvn checkstyle:checkstyle -f prodigiesApp"
             }
-        }
+        }    
         stage('Unit Test') { 
             steps {
 		sh "mvn test -f prodigiesApp"
@@ -35,6 +34,11 @@ pipeline {
 		sh "mvn install -f prodigiesApp"
             }
         }
+        stage('Findbugs Analysis'){
+            steps{
+            sh "mvn findbugs:findbugs -f prodigiesApp"
+            }
+        }
 
     }
     
@@ -44,6 +48,7 @@ pipeline {
             mineRepository()
 	    junit 'prodigiesApp/target/surefire-reports/*.xml'
 	    recordIssues enabledForFailure: true, sourceCodeEncoding: 'UTF-8', tools: [pmdParser()]
+        recordIssues enabledForFailure: true, tools: [checkStyle()] 
 	    jacoco exclusionPattern: '**/*Test*.class', inclusionPattern: '**/*.class', runAlways: true    
          }  
          success {  
