@@ -12,14 +12,13 @@ public class AppTest {
 	}
 	
 	
-	@Test
+	
+	/*
+	 * The following is a failing test to check pipeline behaviour
+	 * 	@Test
 	public void failTest() {
 		AppMain myTest = new AppMain();
 		assertEquals("Test Failed...", myTest.test());
 	}
-	
-	/*
-	 * The following is a failing test to check pipeline behaviour
-	 * 
 	*/
 }
