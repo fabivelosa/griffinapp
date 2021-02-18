@@ -48,6 +48,7 @@ pipeline {
             mineRepository()
 	    junit 'prodigiesApp/target/surefire-reports/*.xml'
 	    recordIssues enabledForFailure: true, sourceCodeEncoding: 'UTF-8', tools: [pmdParser()]
+        recordIssues enabledForFailure: true, tools: [checkStyle()] 
 	    jacoco exclusionPattern: '**/*Test*.class', inclusionPattern: '**/*.class', runAlways: true    
          }  
          success {  
