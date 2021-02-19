@@ -13,11 +13,11 @@ pipeline {
     stages {
 	stage ('Static Code Analysis') {
             steps {
-             echo "Placeholder"
-	     sh "mvn clean -f prodigiesApp"
+	         sh "mvn clean -f prodigiesApp"
              sh "mvn pmd:pmd -f prodigiesApp"
+             sh "mvn checkstyle:checkstyle -f prodigiesApp"
             }
-        }
+        }    
         stage('Unit Test') { 
             steps {
 		sh "mvn test -f prodigiesApp"
@@ -34,6 +34,11 @@ pipeline {
 		sh "mvn install -f prodigiesApp"
             }
         }
+        stage('Findbugs Analysis'){
+            steps{
+            sh "mvn findbugs:findbugs -f prodigiesApp"
+            }
+        }
 
     }
     
@@ -43,6 +48,8 @@ pipeline {
             mineRepository()
 	    junit 'prodigiesApp/target/surefire-reports/*.xml'
 	    recordIssues enabledForFailure: true, sourceCodeEncoding: 'UTF-8', tools: [pmdParser()]
+        recordIssues enabledForFailure: true, tools: [checkStyle()] 
+        recordIssues enabledForFailure: true, tools: [findBugs(useRankAsPriority: true)]
 	    jacoco exclusionPattern: '**/*Test*.class', inclusionPattern: '**/*.class', runAlways: true    
          }  
          success {  
