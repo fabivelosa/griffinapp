@@ -7,11 +7,10 @@ import org.junit.jupiter.api.Test;
 public class AppTest {
 	@Test
 	public void test() {
-		AppMain myTest = new AppMain();
+		final AppMain myTest = new AppMain();
 		assertEquals("Test Passed!", myTest.test());
 	}
-	
-	
+
 	
 	/*
 	 * The following is a failing test to check pipeline behaviour

@@ -23,97 +23,112 @@ public class CallFailure {
 	public Date getEventTime() {
 		return eventTime;
 	}
-	final public void setEventTime(Date eventTime) {
+	
+	public void setEventTime(final Date eventTime) {
 		this.eventTime = eventTime;
 	}
 	
 	public int getEventID() {
 		return eventID;
 	}
-	final public void setEventID(int eventID) {
+	
+	public void setEventID(final int eventID) {
 		this.eventID = eventID;
 	}
 	
 	public boolean isFailureClass() {
 		return failureClass;
 	}
-	final public void setFailureClass(boolean failureClass) {
+	
+	public void setFailureClass(final boolean failureClass) {
 		this.failureClass = failureClass;
 	}
 	
 	public int getUeType() {
 		return ueType;
 	}
-	final public void setUeType(int ueType) {
+	
+	public void setUeType(final int ueType) {
 		this.ueType = ueType;
 	}
 	
 	public int getMarketCode() {
 		return marketCode;
 	}
-	final public void setMarketCode(int marketCode) {
+	
+	public void setMarketCode(final int marketCode) {
 		this.marketCode = marketCode;
 	}
 	
 	public int getOperatorCode() {
 		return operatorCode;
 	}
-	final public void setOperatorCode(int operatorCode) {
+	
+	public void setOperatorCode(final int operatorCode) {
 		this.operatorCode = operatorCode;
 	}
 	
 	public int getCellID() {
 		return cellID;
 	}
-	final public void setCellID(int cellID) {
+	
+	public void setCellID(final int cellID) {
 		this.cellID = cellID;
 	}
 	
 	public int getDuration() {
 		return duration;
 	}
-	final public void setDuration(int duration) {
+	
+	public void setDuration(final int duration) {
 		this.duration = duration;
 	}
 	
 	public int getCauseCode() {
 		return causeCode;
 	}
-	final public void setCauseCode(int causeCode) {
+	
+	public void setCauseCode(final int causeCode) {
 		this.causeCode = causeCode;
 	}
 	
 	public int getNeVersion() {
 		return neVersion;
 	}
-	final public void setNeVersion(int neVersion) {
+	
+	public void setNeVersion(final int neVersion) {
 		this.neVersion = neVersion;
 	}
 	
 	public long getImsiID() {
 		return imsiID;
 	}
-	final public void setImsiID(long imsiID) {
+	
+	public void setImsiID(final long imsiID) {
 		this.imsiID = imsiID;
 	}
+	
 	public long getHier_3() {
 		return hier_3;
 	}
-	final public void setHier_3(long hier_3) {
+	
+	public void setHier_3(final long hier_3) {
 		this.hier_3 = hier_3;
 	}
 	
 	public long getHier_32() {
 		return hier_32;
 	}
-	final public void setHier_32(long hier_32) {
+	
+	public void setHier_32(final long hier_32) {
 		this.hier_32 = hier_32;
 	}
 	
 	public long getHier_321() {
 		return hier_321;
 	}
-	final public void setHier_321(long hier_321) {
+	
+	public void setHier_321(final long hier_321) {
 		this.hier_321 = hier_321;
 	}
 	
