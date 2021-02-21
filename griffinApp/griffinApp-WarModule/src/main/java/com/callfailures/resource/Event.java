@@ -1,6 +1,7 @@
 package com.callfailures.resource;
 
-import javax.inject.Inject;
+import javax.ejb.EJB;
+import javax.ejb.Stateless;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -11,9 +12,10 @@ import com.callfailures.entity.CallFailure;
 import com.callfailures.services.CallFailureService; 
 
 @Path("/events") 
+@Stateless
 public class Event {
 
-	@Inject
+	@EJB
 	private CallFailureService callfailureService; 
 
 	@GET
