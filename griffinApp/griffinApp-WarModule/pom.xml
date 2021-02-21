@@ -13,23 +13,21 @@
 	<packaging>war</packaging>
 
 	<name>griffinApp-WarModule Maven Webapp</name>
-	
-	
+		
 
 	<dependencies>
 		<dependency>
 			<groupId>com.callfailures</groupId>
 			<artifactId>griffinApp-JarModule</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
+			
 		</dependency>
 		
 		<dependency>
 			<groupId>javax</groupId>
-			<artifactId>javaee-web-api</artifactId>
-			<version>6.0</version>
-			<scope>provided</scope>
-		</dependency>
-		
+			<artifactId>javaee-api</artifactId>
+			<version>8.0</version>
+		</dependency>	
 	
 		
 	</dependencies>

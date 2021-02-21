@@ -1,29 +1,26 @@
 package com.callfailures.resource;
 
-import javax.ejb.EJB;
-import javax.ejb.LocalBean;
-import javax.ejb.Stateless; 
+import javax.inject.Inject;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType; 
+import javax.ws.rs.core.MediaType;
 
-import com.callfailures.entity.CallFailure; 
+import com.callfailures.entity.CallFailure;
+import com.callfailures.services.CallFailureService; 
 
 @Path("/events") 
-@Stateless 
-@LocalBean 
 public class Event {
 
-	@EJB
-	private Event eventsDao; 
+	@Inject
+	private CallFailureService callfailureService; 
 
 	@GET
 	@Path("/{id}")
 	@Produces({ MediaType.APPLICATION_JSON })
-	public Event getEvent(@PathParam("id") int eventId) {
-		return eventsDao.getEvent(eventId);
+	public CallFailure getEvent(@PathParam("id") int eventId) {
+		return callfailureService.findById(eventId);
 	} 
 
 }

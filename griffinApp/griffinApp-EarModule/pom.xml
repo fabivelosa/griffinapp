@@ -18,7 +18,30 @@
   	<dependency>
   		<groupId>com.callfailures</groupId>
   		<artifactId>griffinApp-WarModule</artifactId>
-  		<type>pom</type>
+  		<type>war</type>
   	</dependency>
   </dependencies>
+  <build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-ear-plugin</artifactId>
+				<configuration>
+					<defaultLibBundleDir>lib/</defaultLibBundleDir>
+					<skinnyWars>true</skinnyWars>
+					<modules>
+						<webModule>
+							<groupId>com.callfailures</groupId>
+							<artifactId>griffinApp-WarModule</artifactId>
+							<contextRoot>/callfailures</contextRoot>
+						</webModule>
+						<ejbModule>
+							<groupId>com.callfailures</groupId>
+							<artifactId>griffinApp-JarModule</artifactId>
+						</ejbModule>
+					</modules>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
 </project>
