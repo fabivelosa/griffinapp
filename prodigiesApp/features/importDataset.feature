@@ -1,5 +1,5 @@
 #Author: Wilmir Nicanor <A00278899@student.ait.ie>
-@ImportDataset
+@ImportDataset @SystemAdmin
 Feature: As the System Administrator, 
 	I want to be able to receive and import Datasets
 	So that the system has the data available to query and analyse.

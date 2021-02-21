@@ -8,13 +8,17 @@
   <artifactId>griffinApp-EarModule</artifactId>
   <packaging>ear</packaging>
 
- 
   <dependencies>
   	<dependency>
   		<groupId>com.callfailures</groupId>
   		<artifactId>griffinApp-JarModule</artifactId>
   		<type>ejb</type>
   	</dependency>
+  	<dependency>
+		<groupId>com.callfailures</groupId>
+		<artifactId>griffinApp-WarModule</artifactId>
+		<type>war</type>
+	</dependency>
   	<dependency>
   		<groupId>com.callfailures</groupId>
   		<artifactId>griffinApp-WarModule</artifactId>

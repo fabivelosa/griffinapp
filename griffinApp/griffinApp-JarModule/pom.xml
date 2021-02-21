@@ -13,8 +13,6 @@
 	<artifactId>griffinApp-JarModule</artifactId>
 	<name>griffinApp-JarModule</name>
 
-
-
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<maven.compiler.source>1.8</maven.compiler.source>
@@ -64,37 +62,42 @@
 			<version>8.0</version>
 		</dependency>
 	</dependencies>
-
 	<build>
-		
-		<plugins>
-			<plugin>
-				<groupId>io.github.divinespear</groupId>
-				<artifactId>jpa-schema-maven-plugin</artifactId>
-				<version>0.2.1</version>
-				<configuration>
-					<hibernate.dialect>org.hibernate.dialect.MySQL5Dialect</hibernate.dialect>
-					<databaseProductName>MySQL</databaseProductName>
-					<databaseMajorVersion>5</databaseMajorVersion>
-					<databaseMinorVersion>0</databaseMinorVersion>
-					<vendor>hibernate</vendor>
-					<packageToScan>com.callfailures.entity</packageToScan>
-					<scriptAction>create</scriptAction>
-					<format>true</format>
-				</configuration>
-				<dependencies>
-					<dependency>
-						<groupId>org.hibernate</groupId>
-						<artifactId>hibernate-entitymanager</artifactId>
-						<version>4.3.7.Final</version>
-					</dependency>
-				</dependencies>
-				<executions>
-					<execution> <goals> <goal>generate</goal> </goals> </execution>
-				</executions>
-			</plugin>
-		</plugins>
-
+	<plugins>
+		<plugin>
+			<groupId>io.github.divinespear</groupId>
+			<artifactId>jpa-schema-maven-plugin</artifactId>
+			<version>0.2.1</version>
+			<configuration>
+				<hibernate.dialect>org.hibernate.dialect.MySQL5Dialect</hibernate.dialect>
+				<databaseProductName>MySQL</databaseProductName>
+				<databaseMajorVersion>5</databaseMajorVersion>
+				<databaseMinorVersion>0</databaseMinorVersion>
+				<vendor>hibernate</vendor>
+				<packageToScan>com.callfailures.entity</packageToScan>
+				<scriptAction>create</scriptAction>
+				<format>true</format>
+			</configuration>
+			<dependencies>
+				<dependency>
+					<groupId>org.hibernate.javax.persistence</groupId>
+					<artifactId>hibernate-jpa-2.1-api</artifactId>
+					<version>1.0.0.Final</version>
+				</dependency>
+				<dependency>
+					<groupId>org.hibernate</groupId>
+					<artifactId>hibernate-entitymanager</artifactId>
+					<version>5.0.12.Final</version>
+				</dependency>
+			</dependencies>
+<!-- 			<executions>
+				<execution>
+					<goals>
+						<goal>generate</goal>
+					</goals>
+				</execution>
+			</executions> -->
+		</plugin>
+	 </plugins>
 	</build>
-
 </project>
