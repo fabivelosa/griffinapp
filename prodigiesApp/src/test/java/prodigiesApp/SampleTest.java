@@ -9,8 +9,8 @@ class SampleTest {
 
 	@Test
 	void test() {
-		String s = "Hello test";
-		assertEquals("Hello test", s);
+		final String s = "Hello ";
+		assertEquals("Hello ", s);
 	}
 
 	
