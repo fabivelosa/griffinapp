@@ -9,7 +9,8 @@ class SampleTest {
 
 	@Test
 	void test() {
-		fail("Not yet implemented");
+		String s = "Hello test";
+		assertEquals("Hello test", s);
 	}
 
 	
