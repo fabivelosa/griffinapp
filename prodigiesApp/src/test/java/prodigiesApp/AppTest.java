@@ -8,6 +8,7 @@ public class AppTest {
 	@Test
 	public void test() {
 		AppMain myTest = new AppMain();
+		AppMain.main(null);
 		assertEquals("Test Passed!", myTest.test());
 	}
 	
