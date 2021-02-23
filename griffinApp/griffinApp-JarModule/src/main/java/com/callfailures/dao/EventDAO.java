@@ -21,4 +21,12 @@ public class EventDAO {
 	public CallFailure getEventByIMSI(int imsi) {
 		return em.find(CallFailure.class, imsi);
 	}
+	
+	public void save(CallFailure callFail) {
+		em.persist(callFail);
+	}
+	
+	public void update(CallFailure callFail) {
+		em.merge(callFail);
+	}
 }
