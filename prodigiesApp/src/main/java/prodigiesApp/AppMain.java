@@ -3,7 +3,7 @@ package prodigiesApp;
 
 public class AppMain {
     public static void main(String[] args) {
-        System.out.println("Hello Nial!");
+        System.out.println("Commit to 2 servers!");
     }
     
     public String test() {
