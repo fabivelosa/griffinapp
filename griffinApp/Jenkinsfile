@@ -10,8 +10,8 @@ pipeline {
 	stage ('Static Code Analysis') {
             steps {
 	     sh "mvn clean -f griffinApp"
-             // sh "mvn pmd:pmd -f griffinApp"
-             // sh "mvn checkstyle:checkstyle -f griffinApp"
+             sh "mvn pmd:pmd -f griffinApp"
+             sh "mvn checkstyle:checkstyle -f griffinApp"
             }
         }    
         stage('Unit Test') { 
@@ -49,9 +49,9 @@ pipeline {
 	    jacoco exclusionPattern: '**/*Test*.class', inclusionPattern: '**/*.class', runAlways: true    
          }  
          success {  
-	    archiveArtifacts artifacts: 'griffinApp/target/*.jar', followSymlinks: false     
-	    archiveArtifacts artifacts: 'griffinApp/target/*.war', followSymlinks: false         
-	    archiveArtifacts artifacts: 'griffinApp/target/*.ear', followSymlinks: false         
+	    archiveArtifacts artifacts: 'griffinApp/griffinApp-JarModule/target/*.jar', followSymlinks: false     
+	    archiveArtifacts artifacts: 'griffinApp/griffinApp-WarModule/target/*.war', followSymlinks: false         
+	    archiveArtifacts artifacts: 'griffinApp/griffinApp-EarModule/target/*.ear', followSymlinks: false         
     
 	 }  
 
