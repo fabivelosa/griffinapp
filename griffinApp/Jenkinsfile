@@ -10,8 +10,8 @@ pipeline {
 	stage ('Static Code Analysis') {
             steps {
 	     sh "mvn clean -f griffinApp"
-             sh "mvn pmd:pmd -f griffinApp"
-             sh "mvn checkstyle:checkstyle -f griffinApp"
+             // sh "mvn pmd:pmd -f griffinApp"
+             // sh "mvn checkstyle:checkstyle -f griffinApp"
             }
         }    
         stage('Unit Test') { 
