@@ -63,9 +63,9 @@
                	<groupId>org.apache.maven.plugins</groupId>
                	<artifactId>maven-pmd-plugin</artifactId>
                	<version>3.14.0</version>
-               	<configuration>
+                	<configuration>
                		<rulesets>
-               			<ruleset>/resources/rulesets/CDS_pmd_ruleset_jse-1.0.xml</ruleset>
+               			<ruleset>../resources/rulesets/CDS_pmd_ruleset_jse-1.0.xml</ruleset>
                		</rulesets>
                	</configuration>
             </plugin>
