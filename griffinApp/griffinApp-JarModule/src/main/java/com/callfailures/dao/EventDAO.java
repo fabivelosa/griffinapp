@@ -18,4 +18,7 @@ public class EventDAO {
 		return em.find(CallFailure.class, eventId);
 	}
 
+	public CallFailure getEventByIMSI(int imsi) {
+		return em.find(CallFailure.class, imsi);
+	}
 }
