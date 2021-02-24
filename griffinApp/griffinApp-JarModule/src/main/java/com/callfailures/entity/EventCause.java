@@ -1,9 +1,13 @@
 package com.callfailures.entity;
 
+import java.util.List;
+
+import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinColumns;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -11,34 +15,33 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 @Table(name = "eventCause")
 public class EventCause {
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int eventId; // do we need it???
-	private int causeCode; // 4099 4098
+	@EmbeddedId
+	private EventCausePK eventCauseId;
+	
+	@OneToMany(fetch=FetchType.LAZY)
+	@JoinColumns({
+		@JoinColumn(name="eventCauseId", referencedColumnName = "eventCauseId",insertable=false,updatable=false),
+        @JoinColumn(name="causeCode", referencedColumnName = "causeCode",insertable=false,updatable=false)
+		
+	}) 
+	private List<Events> events;
+	
 	private String description;
 
-	public int getEventId() {
-		return eventId;
-	}
-
-	public void setEventId(int eventId) {
-		this.eventId = eventId;
-	}
-
-	public int getCauseCode() {
-		return causeCode;
-	}
-
-	public void setCauseCode(int causeCode) {
-		this.causeCode = causeCode;
-	}
-
-	public String getDescription() {
+	public String getDescription() { 
 		return description;
 	}
 
 	public void setDescription(String description) {
 		this.description = description;
+	}
+
+	public EventCausePK getEventCauseId() {
+		return eventCauseId;
+	}
+
+	public void setEventCauseId(EventCausePK eventCauseId) {
+		this.eventCauseId = eventCauseId;
 	}
 
 }

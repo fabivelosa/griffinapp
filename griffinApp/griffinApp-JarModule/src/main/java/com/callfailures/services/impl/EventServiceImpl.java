@@ -4,17 +4,17 @@ import javax.ejb.Stateless;
 import javax.inject.Inject;
 
 import com.callfailures.dao.EventDAO;
-import com.callfailures.entity.CallFailure;
-import com.callfailures.services.CallFailureService;
+import com.callfailures.entity.Events;
+import com.callfailures.services.EventService;
 
 @Stateless
-public class  CallFailureServiceImpl implements CallFailureService {
+public class  EventServiceImpl implements EventService {
 
 	@Inject
 	EventDAO eventDAO;
 
 	@Override
-	public CallFailure findById(final int  id) {
+	public Events findById(final int  id) {
 		
 		return eventDAO.getEvent(id);
 	}
