@@ -55,7 +55,7 @@ public class Events {
 
 	private int cellId;
 	private int duration;
-	private int neVersion;
+	private String neVersion;
 
 	@Column(length = 15)
 	private String IMSI;
