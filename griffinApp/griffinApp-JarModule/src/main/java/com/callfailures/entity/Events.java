@@ -55,7 +55,6 @@ public class Events {
 
 	private int cellId;
 	private int duration;
-	private int causeCode;
 	private int neVersion;
 
 	@Column(length = 15)
@@ -68,7 +67,7 @@ public class Events {
 	public Events() {}
 	
 	public Events(EventCause eventCause, Date dateTime, FailureClass failureClass, UserEquipment ueType,
-			MarketOperator marketOperator, int cellId, int duration, int causeCode, int neVersion, String iMSI,
+			MarketOperator marketOperator, int cellId, int duration, int neVersion, String iMSI,
 			String hier3Id, String hier32Id, String hier321Id) {
 		this.eventCause = eventCause;
 		this.dateTime = dateTime;
@@ -77,7 +76,6 @@ public class Events {
 		this.marketOperator = marketOperator;
 		this.cellId = cellId;
 		this.duration = duration;
-		this.causeCode = causeCode;
 		this.neVersion = neVersion;
 		IMSI = iMSI;
 		this.hier3Id = hier3Id;
@@ -139,14 +137,6 @@ public class Events {
 
 	public void setDuration(int duration) {
 		this.duration = duration;
-	}
-
-	public int getCauseCode() {
-		return causeCode;
-	}
-
-	public void setCauseCode(int causeCode) {
-		this.causeCode = causeCode;
 	}
 
 	public int getNeVersion() {
