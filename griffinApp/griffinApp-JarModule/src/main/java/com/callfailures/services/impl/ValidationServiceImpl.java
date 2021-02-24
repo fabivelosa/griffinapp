@@ -1,6 +1,5 @@
 package com.callfailures.services.impl;
 
-import java.util.Collection;
 import java.util.Iterator;
 import java.util.Set;
 
@@ -20,18 +19,17 @@ public class ValidationServiceImpl implements ValidationService{
 	Validator validator;
 	
 	@Override
-	public void validate(Events callFailure) throws FieldNotValidException{
-		validateFields(callFailure);	
+	public void validate(Events events) throws FieldNotValidException{
+		validateFields(events);	
 		
-		validateFields(callFailure.getMarketOperator());
+		validateFields(events.getEventCause());
+		
+		validateFields(events.getMarketOperator());
 	
-		validateFields(callFailure.getUeType());
+		validateFields(events.getUeType());
+				
+		validateFields(events.getFailureClass());
 		
-		validateFields(callFailure.getEventCause());
-		
-		validateFields(callFailure.getFailureClass());
-		
-
 	}
 
 	private <T> void validateFields(T t) {

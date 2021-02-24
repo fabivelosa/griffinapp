@@ -18,5 +18,5 @@ public class EventDAO {
 	public Events getEvent(int eventId) {
 		return em.find(Events.class, eventId); 
 	}
-
+	
 }

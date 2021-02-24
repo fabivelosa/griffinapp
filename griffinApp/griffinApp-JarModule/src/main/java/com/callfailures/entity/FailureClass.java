@@ -1,10 +1,10 @@
 package com.callfailures.entity;
 
-import java.util.Date;
-
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import javax.xml.bind.annotation.XmlRootElement;
 
 @Entity(name = "failureClass")
@@ -12,7 +12,10 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Table(name = "failureClass")
 public class FailureClass {
 	@Id
+	@Min(0)
+	@Max(4)
 	private int failureClass;
+	
 	private String failureDesc;
 
 	public FailureClass() {}
