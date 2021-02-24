@@ -59,7 +59,16 @@
 					<target>1.8</target>
 				</configuration>
 			</plugin>
-
+			<plugin>
+               	<groupId>org.apache.maven.plugins</groupId>
+               	<artifactId>maven-pmd-plugin</artifactId>
+               	<version>3.14.0</version>
+                	<configuration>
+               		<rulesets>
+               			<ruleset>../resources/rulesets/CDS_pmd_ruleset_jse-1.0.xml</ruleset>
+               		</rulesets>
+               	</configuration>
+            </plugin>
 		</plugins>
 	</build>
 
