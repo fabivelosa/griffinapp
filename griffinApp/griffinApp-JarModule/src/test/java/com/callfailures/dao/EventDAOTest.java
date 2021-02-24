@@ -26,14 +26,14 @@ public class EventDAOTest {
 	}
 
 	@Test
-	public void testSuccessForFindById() {
+	public void testSuccessForGetEvent() {
 		when(entityManager.find(CallFailure.class, eventID)).thenReturn(callFailure);
 		assertEquals(callFailure, eventDAO.getEvent(eventID));
 	}
 	
 	@Test
-	public void testFailureForFindById() {
-		when(em.find(CallFailure.class, eventID)).thenReturn(callFailure);
+	public void testFailureForGetEvent() {
+		when(entityManager.find(CallFailure.class, eventID)).thenReturn(callFailure);
 		assertNotEquals(callFailure, eventDAO.getEvent(2));
 	}
 	
