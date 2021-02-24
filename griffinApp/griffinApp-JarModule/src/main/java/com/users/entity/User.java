@@ -12,7 +12,7 @@ public class User {
 
 	@Id @GeneratedValue(strategy=GenerationType.IDENTITY)
 	private String userName;
-	private int userId;
+	private String userId;
 	private String userType;
 	private String userPassword;
 
@@ -24,11 +24,11 @@ public class User {
 		this.userName = userName;
 	}
 
-	public int getUserId() {
+	public String getUserId() {
 		return userId;
 	}
 
-	public void setUserId(int userId) {
+	public void setUserId(String userId) {
 		this.userId = userId;
 	}
 
