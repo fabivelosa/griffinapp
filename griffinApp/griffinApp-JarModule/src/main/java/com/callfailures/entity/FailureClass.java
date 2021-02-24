@@ -15,6 +15,13 @@ public class FailureClass {
 	private int failureClass;
 	private String failureDesc;
 
+	public FailureClass() {}
+	
+	public FailureClass(int failureClass, String failureDesc) {
+		this.failureClass = failureClass;
+		this.failureDesc = failureDesc;
+	}
+	
 	public int getFailureClass() {
 		return failureClass;
 	}

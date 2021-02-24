@@ -21,6 +21,12 @@ public class UserEquipment {
 	private String deviceOS;
 	private String inputModel;
 
+	public UserEquipment() {}
+	
+	public UserEquipment(int ueType) {
+		this.ueType = ueType;
+	}
+	
 	public int getUeType() {
 		return ueType;
 	}

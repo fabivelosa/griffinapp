@@ -17,6 +17,16 @@ public class MarketOperator {
 	private String countryDesc;
 	private String operatorDesc;
 
+	public MarketOperator() {
+		
+	}
+	
+	public MarketOperator(MarketOperatorPK marketOperatorId, String countryDesc, String operatorDesc) {
+		this.marketOperatorId = marketOperatorId;
+		this.countryDesc = countryDesc;
+		this.operatorDesc = operatorDesc;
+	}
+
 	public MarketOperatorPK getMarketOperatorId() {
 		return marketOperatorId;
 	}

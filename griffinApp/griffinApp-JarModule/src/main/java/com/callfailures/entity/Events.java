@@ -64,6 +64,27 @@ public class Events {
 	private String hier32Id;
 	private String hier321Id;
 
+	
+	public Events() {}
+	
+	public Events(EventCause eventCause, Date dateTime, FailureClass failureClass, UserEquipment ueType,
+			MarketOperator marketOperator, int cellId, int duration, int causeCode, int neVersion, String iMSI,
+			String hier3Id, String hier32Id, String hier321Id) {
+		this.eventCause = eventCause;
+		this.dateTime = dateTime;
+		this.failureClass = failureClass;
+		this.ueType = ueType;
+		this.marketOperator = marketOperator;
+		this.cellId = cellId;
+		this.duration = duration;
+		this.causeCode = causeCode;
+		this.neVersion = neVersion;
+		IMSI = iMSI;
+		this.hier3Id = hier3Id;
+		this.hier32Id = hier32Id;
+		this.hier321Id = hier321Id;
+	}
+
 	public UserEquipment getUeType() {
 		return ueType;
 	}

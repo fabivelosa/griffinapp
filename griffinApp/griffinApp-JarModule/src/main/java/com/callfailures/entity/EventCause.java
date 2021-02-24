@@ -14,6 +14,13 @@ public class EventCause {
 
 	private String description;
 
+	public EventCause() {}
+	
+	public EventCause(EventCausePK eventCauseId, String description) {
+		this.eventCauseId = eventCauseId;
+		this.description = description;
+	}
+
 	public String getDescription() {
 		return description;
 	}
