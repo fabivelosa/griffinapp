@@ -25,6 +25,14 @@ public class MarketOperatorPK implements Serializable {
 	@Size(min = 2, max = 3)
 	private int operatorCode;
 
+	
+	public MarketOperatorPK() {}
+	
+	public MarketOperatorPK(int countryCode, int operatorCode) {
+		this.countryCode = countryCode;
+		this.operatorCode = operatorCode;
+	}
+
 	@Override
 	public int hashCode() {
 		return Objects.hash(countryCode, operatorCode);

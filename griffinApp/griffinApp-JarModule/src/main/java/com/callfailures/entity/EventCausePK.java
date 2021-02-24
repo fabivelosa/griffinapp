@@ -18,7 +18,14 @@ public class EventCausePK implements Serializable {
 	private int eventCauseId;
 
 	@NotNull
-	private int causeCode; // 4099 4098
+	private int causeCode;
+	
+	public EventCausePK() {}
+	
+	public EventCausePK(int eventCauseId, int causeCode) {
+		this.eventCauseId = eventCauseId;
+		this.causeCode = causeCode;
+	}
 
 	@Override
 	public int hashCode() {
