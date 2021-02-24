@@ -11,8 +11,8 @@ import javax.persistence.Id;
 public class User {
 
 	@Id @GeneratedValue(strategy=GenerationType.IDENTITY)
-	private String userName;
 	private String userId;
+	private String userName;
 	private String userType;
 	private String userPassword;
 
