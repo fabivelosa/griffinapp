@@ -1,8 +1,6 @@
 package com.callfailures.entity;
 
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -11,28 +9,19 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 @Table(name = "ue")
 public class UE {
+
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int ueId; // do we need it???
-	private int typeAllocationCode;
+	private int ueType;
 	private String marketingName;
 	private String manufacturer;
 	private int accessCapability;
 
-	public int getUeId() {
-		return ueId;
+	public int getUeType() {
+		return ueType;
 	}
 
-	public void setUeId(int ueId) {
-		this.ueId = ueId;
-	}
-
-	public int getTypeAllocationCode() {
-		return typeAllocationCode;
-	}
-
-	public void setTypeAllocationCode(int typeAllocationCode) {
-		this.typeAllocationCode = typeAllocationCode;
+	public void setUeType(int ueType) {
+		this.ueType = ueType;
 	}
 
 	public String getMarketingName() {

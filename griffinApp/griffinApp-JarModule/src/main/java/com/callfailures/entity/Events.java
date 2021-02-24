@@ -2,6 +2,7 @@ package com.callfailures.entity;
 
 import java.util.Date;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -10,6 +11,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinColumns;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlRootElement;
 
 @Entity(name = "event")
@@ -19,27 +21,56 @@ public class Events {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int eventId;
-	
+
 	@ManyToOne
 	@JoinColumns({
-		@JoinColumn(name="eventCauseId", referencedColumnName = "eventCauseId",insertable=false,updatable=false),
-        @JoinColumn(name="causeCode", referencedColumnName = "causeCode",insertable=false,updatable=false)
-		
-	})   	
+			@JoinColumn(name = "eventCauseId", referencedColumnName = "eventCauseId", insertable = false, updatable = false),
+			@JoinColumn(name = "causeCode", referencedColumnName = "causeCode", insertable = false, updatable = false)
+
+	})
+	@NotNull
 	private EventCause eventCause; // 4099 4098
+
+	@NotNull
 	private Date dateTime;
-	private int failureClass;
-	private String ueType;
-	private int marketId;
-	private int operatorId;
+
+	@ManyToOne
+	@JoinColumn(name = "failureClass", referencedColumnName = "failureClass")
+	@NotNull
+	private FailureClass failureClass;
+
+	@ManyToOne
+	@JoinColumn(name = "ueType", referencedColumnName = "ueType")
+	@NotNull
+	private UE ueType;
+
+	@ManyToOne
+	@JoinColumns({
+			@JoinColumn(name = "countryCode", referencedColumnName = "countryCode", insertable = false, updatable = false),
+			@JoinColumn(name = "operatorCode", referencedColumnName = "operatorCode", insertable = false, updatable = false)
+
+	})
+	@NotNull
+	private MarketOperator marketOperator;
+
 	private int cellId;
 	private int duration;
 	private int causeCode;
 	private int neVersion;
+
+	@Column(length = 15)
 	private String IMSI;
 	private String hier3Id;
 	private String hier32Id;
 	private String hier321Id;
+
+	public UE getUeType() {
+		return ueType;
+	}
+
+	public void setUeType(UE ueType) {
+		this.ueType = ueType;
+	}
 
 	public int getEventId() {
 		return eventId;
@@ -57,36 +88,20 @@ public class Events {
 		this.dateTime = dateTime;
 	}
 
-	public int getFailureClass() {
+	public MarketOperator getMarketOperator() {
+		return marketOperator;
+	}
+
+	public void setMarketOperator(MarketOperator marketOperator) {
+		this.marketOperator = marketOperator;
+	}
+
+	public FailureClass getFailureClass() {
 		return failureClass;
 	}
 
-	public void setFailureClass(int failureClass) {
+	public void setFailureClass(FailureClass failureClass) {
 		this.failureClass = failureClass;
-	}
-
-	public String getUeType() {
-		return ueType;
-	}
-
-	public void setUeType(String ueType) {
-		this.ueType = ueType;
-	}
-
-	public int getMarketId() {
-		return marketId;
-	}
-
-	public void setMarketId(int marketId) {
-		this.marketId = marketId;
-	}
-
-	public int getOperatorId() {
-		return operatorId;
-	}
-
-	public void setOperatorId(int operatorId) {
-		this.operatorId = operatorId;
 	}
 
 	public int getCellId() {

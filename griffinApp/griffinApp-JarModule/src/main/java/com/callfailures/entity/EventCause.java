@@ -1,13 +1,7 @@
 package com.callfailures.entity;
 
-import java.util.List;
-
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinColumns;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -17,18 +11,10 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class EventCause {
 	@EmbeddedId
 	private EventCausePK eventCauseId;
-	
-	@OneToMany(fetch=FetchType.LAZY)
-	@JoinColumns({
-		@JoinColumn(name="eventCauseId", referencedColumnName = "eventCauseId",insertable=false,updatable=false),
-        @JoinColumn(name="causeCode", referencedColumnName = "causeCode",insertable=false,updatable=false)
-		
-	}) 
-	private List<Events> events;
-	
+
 	private String description;
 
-	public String getDescription() { 
+	public String getDescription() {
 		return description;
 	}
 
