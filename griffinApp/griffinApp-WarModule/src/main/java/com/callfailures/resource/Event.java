@@ -8,21 +8,22 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-import com.callfailures.entity.CallFailure;
-import com.callfailures.services.CallFailureService; 
+import com.callfailures.entity.Events; 
+import com.callfailures.services.EventService; 
 
 @Path("/events") 
 @Stateless
 public class Event {
 
 	@EJB
-	private CallFailureService callfailureService; 
-
+	private EventService eventService;
 	@GET
 	@Path("/{id}")
 	@Produces({ MediaType.APPLICATION_JSON })
-	public CallFailure getEvent(@PathParam("id") int eventId) {
-		return callfailureService.findById(eventId);
+	public Events getEvent(@PathParam("id") int eventId) {
+		Events event = eventService.findById(eventId);
+		System.out.println(event.getEventCause().getDescription());
+		return eventService.findById(eventId);
 	} 
 
 }

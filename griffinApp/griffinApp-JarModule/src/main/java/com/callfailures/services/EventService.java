@@ -2,12 +2,12 @@ package com.callfailures.services;
 
 import javax.ejb.Local;
 
-import com.callfailures.entity.CallFailure;
+import com.callfailures.entity.Events;
 
 @Local
-public interface CallFailureService {
+public interface EventService {
 
 	
-	public CallFailure findById(final int id);
+	public Events findById(final int id);
 
 }

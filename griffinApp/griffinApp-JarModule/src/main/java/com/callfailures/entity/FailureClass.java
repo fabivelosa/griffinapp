@@ -14,7 +14,6 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Table(name = "failureClass")
 public class FailureClass {
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int failureClass;
 	private Date failureDesc;
 

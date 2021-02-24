@@ -6,17 +6,27 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinColumns;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 
 @Entity(name = "event")
 @XmlRootElement
 @Table(name = "event")
-public class CallFailure { 
+public class Events {
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY) 
-	private int eventId; // do we need it???
-	private int eventCode; // 4099 4098
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private int eventId;
+	
+	@ManyToOne
+	@JoinColumns({
+		@JoinColumn(name="eventCauseId", referencedColumnName = "eventCauseId",insertable=false,updatable=false),
+        @JoinColumn(name="causeCode", referencedColumnName = "causeCode",insertable=false,updatable=false)
+		
+	})   	
+	private EventCause eventCause; // 4099 4098
 	private Date dateTime;
 	private int failureClass;
 	private String ueType;
@@ -37,14 +47,6 @@ public class CallFailure {
 
 	public void setEventId(int eventId) {
 		this.eventId = eventId;
-	}
-
-	public int getEventCode() {
-		return eventCode;
-	}
-
-	public void setEventCode(int eventCode) {
-		this.eventCode = eventCode;
 	}
 
 	public Date getDateTime() {
@@ -151,4 +153,11 @@ public class CallFailure {
 		this.hier321Id = hier321Id;
 	}
 
+	public EventCause getEventCause() {
+		return eventCause;
+	}
+
+	public void setEventCause(EventCause eventCause) {
+		this.eventCause = eventCause;
+	}
 }
