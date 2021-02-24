@@ -29,7 +29,7 @@ public class Events {
 
 	})
 	@NotNull
-	private EventCause eventCause; // 4099 4098
+	private EventCause eventCause;
 
 	@NotNull
 	private Date dateTime;
@@ -42,7 +42,7 @@ public class Events {
 	@ManyToOne
 	@JoinColumn(name = "ueType", referencedColumnName = "ueType")
 	@NotNull
-	private UE ueType;
+	private UserEquipment ueType;
 
 	@ManyToOne
 	@JoinColumns({
@@ -64,11 +64,11 @@ public class Events {
 	private String hier32Id;
 	private String hier321Id;
 
-	public UE getUeType() {
+	public UserEquipment getUeType() {
 		return ueType;
 	}
 
-	public void setUeType(UE ueType) {
+	public void setUeType(UserEquipment ueType) {
 		this.ueType = ueType;
 	}
 
