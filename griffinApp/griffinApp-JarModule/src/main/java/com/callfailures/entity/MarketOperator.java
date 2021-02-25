@@ -3,6 +3,8 @@ package com.callfailures.entity;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlRootElement;
 
 @Entity(name = "mccmnc")
@@ -11,11 +13,24 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class MarketOperator {
 
 	@EmbeddedId
+	@Valid
 	private MarketOperatorPK marketOperatorId;
-
 	
+	@NotNull
 	private String countryDesc;
+	
+	@NotNull
 	private String operatorDesc;
+
+	public MarketOperator() {
+		
+	}
+	
+	public MarketOperator(MarketOperatorPK marketOperatorId, String countryDesc, String operatorDesc) {
+		this.marketOperatorId = marketOperatorId;
+		this.countryDesc = countryDesc;
+		this.operatorDesc = operatorDesc;
+	}
 
 	public MarketOperatorPK getMarketOperatorId() {
 		return marketOperatorId;

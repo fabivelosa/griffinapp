@@ -1,8 +1,7 @@
 package com.callfailures.entity;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -12,6 +11,7 @@ import javax.persistence.JoinColumns;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 
 @Entity(name = "event")
@@ -32,7 +32,7 @@ public class Events {
 	private EventCause eventCause;
 
 	@NotNull
-	private Date dateTime;
+	private LocalDateTime dateTime;
 
 	@ManyToOne
 	@JoinColumn(name = "failureClass", referencedColumnName = "failureClass")
@@ -53,16 +53,46 @@ public class Events {
 	@NotNull
 	private MarketOperator marketOperator;
 
+	@NotNull
 	private int cellId;
+	
+	@NotNull
 	private int duration;
-	private int causeCode;
-	private int neVersion;
+	
+	@NotNull
+	private String neVersion;
 
-	@Column(length = 15)
+	@NotNull
 	private String IMSI;
+	
+	@NotNull
 	private String hier3Id;
+	
+	@NotNull
 	private String hier32Id;
+	
+	@NotNull
 	private String hier321Id;
+
+	
+	public Events() {}
+	
+	public Events(EventCause eventCause, LocalDateTime dateTime, FailureClass failureClass, UserEquipment ueType,
+			MarketOperator marketOperator, int cellId, int duration, String neVersion, String iMSI,
+			String hier3Id, String hier32Id, String hier321Id) {
+		this.eventCause = eventCause;
+		this.dateTime = dateTime;
+		this.failureClass = failureClass;
+		this.ueType = ueType;
+		this.marketOperator = marketOperator;
+		this.cellId = cellId;
+		this.duration = duration;
+		this.neVersion = neVersion;
+		IMSI = iMSI;
+		this.hier3Id = hier3Id;
+		this.hier32Id = hier32Id;
+		this.hier321Id = hier321Id;
+	}
 
 	public UserEquipment getUeType() {
 		return ueType;
@@ -80,11 +110,11 @@ public class Events {
 		this.eventId = eventId;
 	}
 
-	public Date getDateTime() {
+	public LocalDateTime getDateTime() {
 		return dateTime;
 	}
 
-	public void setDateTime(Date dateTime) {
+	public void setDateTime(LocalDateTime dateTime) {
 		this.dateTime = dateTime;
 	}
 
@@ -120,19 +150,11 @@ public class Events {
 		this.duration = duration;
 	}
 
-	public int getCauseCode() {
-		return causeCode;
-	}
-
-	public void setCauseCode(int causeCode) {
-		this.causeCode = causeCode;
-	}
-
-	public int getNeVersion() {
+	public String getNeVersion() {
 		return neVersion;
 	}
 
-	public void setNeVersion(int neVersion) {
+	public void setNeVersion(String neVersion) {
 		this.neVersion = neVersion;
 	}
 

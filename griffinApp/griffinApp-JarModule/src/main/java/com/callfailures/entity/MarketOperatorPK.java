@@ -3,10 +3,10 @@ package com.callfailures.entity;
 import java.io.Serializable;
 import java.util.Objects;
 
-import javax.persistence.Column;
 import javax.persistence.Embeddable;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 
 @Embeddable
 public class MarketOperatorPK implements Serializable {
@@ -17,13 +17,22 @@ public class MarketOperatorPK implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@NotNull
-	@Column(length = 3)
+	@Min(100)
+	@Max(999)
 	private int countryCode;
 
 	@NotNull
-	@Column(length = 3)
-	@Size(min = 2, max = 3)
+	@Min(10)
+	@Max(999)
 	private int operatorCode;
+
+	
+	public MarketOperatorPK() {}
+	
+	public MarketOperatorPK(int countryCode, int operatorCode) {
+		this.countryCode = countryCode;
+		this.operatorCode = operatorCode;
+	}
 
 	@Override
 	public int hashCode() {
