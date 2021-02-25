@@ -4,29 +4,26 @@ import javax.ejb.Stateless;
 import javax.inject.Inject;
 
 import com.callfailures.dao.EventDAO;
+import com.callfailures.dao.FailureClassDAO;
 import com.callfailures.entity.Events;
+import com.callfailures.entity.FailureClass;
 import com.callfailures.services.EventService;
+import com.callfailures.services.FailureClassService;
 import com.callfailures.services.ValidationService;
 
 @Stateless
-public class EventServiceImpl implements EventService {
+public class  FailureClassServiceImpl implements FailureClassService {
 
 	@Inject
-	EventDAO eventDAO;
+	FailureClassDAO failureClassDAO;
 
 	@Inject
 	ValidationService validationService;
-
+	
 	@Override
-	public Events findById(final int id) {
-
-		return eventDAO.getEvent(id);
-	}
-
-	@Override
-	public void create(Events event) {
-		eventDAO.create(event);
-
+	public FailureClass findById(final int  id) {
+		
+		return failureClassDAO.getFailureClass(id);
 	}
 
 }

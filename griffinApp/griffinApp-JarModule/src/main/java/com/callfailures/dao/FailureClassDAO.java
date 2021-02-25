@@ -1,26 +1,21 @@
 package com.callfailures.dao;
 
-
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
-import com.callfailures.entity.Events;
+import com.callfailures.entity.FailureClass;
 
 @Stateless
 @LocalBean
-public class EventDAO {
+public class FailureClassDAO {
 
 	@PersistenceContext
 	private EntityManager em;
 
-	public Events getEvent(int eventId) {
-		return em.find(Events.class, eventId); 
+	public FailureClass getFailureClass(int failClassId) {
+		return em.find(FailureClass.class, failClassId);
 	}
-	
-	public void create(Events event) {
-		em.persist(event);
-	}
-	
+
 }

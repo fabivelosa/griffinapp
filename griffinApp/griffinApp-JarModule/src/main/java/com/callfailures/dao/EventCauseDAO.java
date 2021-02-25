@@ -6,21 +6,17 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
-import com.callfailures.entity.Events;
+import com.callfailures.entity.EventCause;
 
 @Stateless
 @LocalBean
-public class EventDAO {
+public class EventCauseDAO {
 
 	@PersistenceContext
 	private EntityManager em;
 
-	public Events getEvent(int eventId) {
-		return em.find(Events.class, eventId); 
-	}
-	
-	public void create(Events event) {
-		em.persist(event);
+	public EventCause getEventCause(Object eventCauseId) {
+		return em.find(EventCause.class, eventCauseId); 
 	}
 	
 }
