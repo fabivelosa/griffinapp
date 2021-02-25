@@ -91,8 +91,8 @@ public class ValidationServiceImplUTest {
 
 	
 	private UserEquipment parseUE(final Integer ueId) {
-		final UserEquipment ue = ueId == null ? null : new UserEquipment(ueId);
-		return ue;
+		final UserEquipment userEquipment = ueId == null ? null : new UserEquipment(ueId);
+		return userEquipment;
 	}
 
 	

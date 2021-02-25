@@ -1,11 +1,11 @@
 package com.callfailures.errors;
 
-public enum CallFailureErrors {
+public enum EventDataErrors {
 	INVALID_FIELD("Invalid Field");
 	
 	private final String errorMessage;
 	
-	CallFailureErrors(final String errorMessage){
+	EventDataErrors(final String errorMessage){
 		this.errorMessage = errorMessage;
 	}
 

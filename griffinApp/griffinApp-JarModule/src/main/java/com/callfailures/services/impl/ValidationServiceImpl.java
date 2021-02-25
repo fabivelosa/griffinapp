@@ -19,7 +19,7 @@ public class ValidationServiceImpl implements ValidationService{
 	Validator validator;
 	
 	@Override
-	public void validate(Events events) throws FieldNotValidException{
+	public void validate(final Events events) throws FieldNotValidException{
 		validateFields(events);	
 		
 		validateFields(events.getEventCause());
@@ -32,8 +32,8 @@ public class ValidationServiceImpl implements ValidationService{
 		
 	}
 
-	private <T> void validateFields(T t) {
-		final Set<ConstraintViolation<T>> errors = validator.validate(t);
+	private <T> void validateFields(T object) {
+		final Set<ConstraintViolation<T>> errors = validator.validate(object);
 		
 		final Iterator<ConstraintViolation<T>> errorsIterator = errors.iterator();
 		

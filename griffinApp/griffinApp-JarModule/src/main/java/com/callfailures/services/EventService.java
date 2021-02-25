@@ -8,6 +8,6 @@ import com.callfailures.entity.Events;
 public interface EventService {
 
 	
-	public Events findById(final int id);
+	Events findById(final int eventId);
 
 }
