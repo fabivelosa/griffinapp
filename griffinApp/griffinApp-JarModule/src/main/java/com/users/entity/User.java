@@ -5,9 +5,11 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Table;
 
-@Entity
+@Entity (name= "users")
 @XmlRootElement
+@Table (name = "users")
 public class User {
 
 	@Id @GeneratedValue(strategy=GenerationType.IDENTITY)
