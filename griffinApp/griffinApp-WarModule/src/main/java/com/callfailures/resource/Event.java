@@ -30,7 +30,6 @@ public class Event {
 	} 
 
 	
-	
 	@GET
 	@Path("/sampleJSON2")
 	@Produces(MediaType.APPLICATION_JSON)
