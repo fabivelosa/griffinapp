@@ -56,3 +56,5 @@ Thumbs.db
 # ChromeDriver
 */prodigiesApp/resources/chromedriver/*
 
+# PMD
+*.pmd
