@@ -3,8 +3,6 @@ package com.callfailures.entity;
 import java.util.Date;
 
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -15,7 +13,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class FailureClass {
 	@Id
 	private int failureClass;
-	private Date failureDesc;
+	private String failureDesc;
 
 	public int getFailureClass() {
 		return failureClass;
@@ -25,11 +23,11 @@ public class FailureClass {
 		this.failureClass = failureClass;
 	}
 
-	public Date getFailureDesc() {
+	public String getFailureDesc() {
 		return failureDesc;
 	}
 
-	public void setFailureDesc(Date failureDesc) {
+	public void setFailureDesc(String failureDesc) {
 		this.failureDesc = failureDesc;
 	}
 
