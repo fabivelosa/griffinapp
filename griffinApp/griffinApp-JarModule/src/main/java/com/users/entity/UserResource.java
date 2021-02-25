@@ -18,7 +18,7 @@ import javax.ws.rs.core.Response;
 
 import com.users.dao.RegisteredUsersDAO;
 
-@Path("/wines")
+@Path("/users")
 @Stateless
 @LocalBean
 public class UserResource {
@@ -55,7 +55,7 @@ public class UserResource {
 	@Path("/{id}")
 	@Consumes("application/json")
 	@Produces({ MediaType.APPLICATION_JSON })
-	public Response updateWine(User user) {
+	public Response updateUser(User user) {
 		userDao.updateUser(user);
 			return Response.status(200).entity(user).build();
 		
