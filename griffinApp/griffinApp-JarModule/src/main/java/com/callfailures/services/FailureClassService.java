@@ -9,4 +9,6 @@ public interface FailureClassService {
 
 	public FailureClass findById(final int id);
 
+	public void create(FailureClass obj);
+
 }

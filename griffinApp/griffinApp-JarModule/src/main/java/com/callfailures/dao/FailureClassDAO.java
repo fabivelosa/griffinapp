@@ -18,4 +18,7 @@ public class FailureClassDAO {
 		return em.find(FailureClass.class, failClassId);
 	}
 
+	public void create(FailureClass obj) {
+		em.persist(obj);
+	}
 }

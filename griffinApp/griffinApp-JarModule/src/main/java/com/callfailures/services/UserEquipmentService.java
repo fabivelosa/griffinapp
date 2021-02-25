@@ -9,4 +9,6 @@ public interface UserEquipmentService {
 
 	public UserEquipment findById(final int id);
 
+	public void create(UserEquipment obj);
+
 }

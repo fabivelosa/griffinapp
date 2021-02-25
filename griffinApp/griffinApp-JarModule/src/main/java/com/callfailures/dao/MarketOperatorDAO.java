@@ -18,4 +18,8 @@ public class MarketOperatorDAO {
 		return em.find(MarketOperator.class, marketOperatorId);
 	}
 
+	public void create(MarketOperator obj) {
+		em.persist(obj);
+	}
+
 }

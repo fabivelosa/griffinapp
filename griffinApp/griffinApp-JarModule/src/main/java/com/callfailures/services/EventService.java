@@ -9,6 +9,6 @@ public interface EventService {
 
 	public Events findById(final int id);
 
-	public void create(Events event);
+	public void create(Events obj);
 
 }

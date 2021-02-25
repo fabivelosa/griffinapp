@@ -1,6 +1,5 @@
 package com.callfailures.dao;
 
-
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -16,11 +15,11 @@ public class EventDAO {
 	private EntityManager em;
 
 	public Events getEvent(int eventId) {
-		return em.find(Events.class, eventId); 
+		return em.find(Events.class, eventId);
 	}
-	
-	public void create(Events event) {
-		em.persist(event);
+
+	public void create(Events obj) {
+		em.persist(obj);
 	}
-	
+
 }

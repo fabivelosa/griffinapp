@@ -23,4 +23,9 @@ public class MarketOperatorServiceImpl implements MarketOperatorService {
 		return marketOperatorDAO.getMarketOperator(id);
 	}
 
+	@Override
+	public void create(MarketOperator obj) {
+		marketOperatorDAO.create(obj);
+	}
+
 }

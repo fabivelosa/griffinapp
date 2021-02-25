@@ -10,4 +10,5 @@ public interface MarketOperatorService {
 
 	public MarketOperator findById(final MarketOperatorPK id);
 
+	public void create(MarketOperator obj);
 }

@@ -23,4 +23,9 @@ public class EventCauseServiceImpl implements EventCauseService {
 		return eventCauseDAO.getEventCause(id);
 	}
 
+	@Override
+	public void create(EventCause obj) {
+		eventCauseDAO.create(obj);
+	}
+
 }
