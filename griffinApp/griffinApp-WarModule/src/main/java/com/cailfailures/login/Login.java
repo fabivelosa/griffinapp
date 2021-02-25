@@ -11,30 +11,30 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import com.users.dao.RegisteredUsersDAO;
+import com.users.entity.User;
+
 
 @Path("/login") 
 @Stateless
 public class Login {
 
+	@EJB
+	private RegisteredUsersDAO userDao;
 	
 	
 	@GET
-	@Produces({MediaType.TEXT_PLAIN})
-	@Path("/{query}")
-	public Response checkLogin(@PathParam("query") String username) {
+	@Produces({MediaType.APPLICATION_JSON})
+	@Path("/{id}")
+	public Response checkLogin(@PathParam("id") String username) {
 		
-		if (isAuthenticated(username)) {
-			//return Response.status(200).entity(user).build();
-		}
-		
-		/*User user = userDAO.findUserByUsername(username);
-		if (person != null) {
-		
-			validate password();
+		System.out.println("id called");
+		User user = userDao.getUserById(username);
+		System.out.println(user);
+		if (user != null) {
+		//Check password
 			return Response.status(200).entity(user).build();
 		}
-		
-		*/
 		
 		return Response.status(400).build();
 	}
@@ -44,24 +44,6 @@ public class Login {
 		String authorize = "";
 		return false;
 	}
-	/*
-	private void validateUser(User user) {
-		
-	}
-	
-	*/
-	
-	/*
-	@POST
-	@Produces({MediaType.APPLICATION_JSON})
-	@Path("/query")
-	public Response findUserByUsername(
-					@QueryParam("username") String username,
-					@QueryParam("password")String password) {
-		
-		
-		return Response.status(200).entity().build();
-	} */
 	
 	
 }

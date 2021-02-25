@@ -1,30 +1,49 @@
-var rootUrl="http://localhost:8080/callfailures/";
+var rootUrl="http://localhost:8080/callfailures/api";
 
-var test =function() {
-	console.log('test');
+var startup =function() {
+	console.log('Index initiated');
 };
 
 var loginSubmit=function(){
-	console.log('loginsubmission pressed: ' + id);
+	console.log('loginsubmission pressed: ');
 	$.ajax({
 		type: 'GET',
-		url: rootUrl + '/' + 'login',
+		url: rootUrl +'/' +'login' + '/20' ,
 		dataType: "json",
 		success: function(data){
-			$('#btnDelete').show();
-			console.log('findById success: ' + data.name);
-			currentWine = data;
-			renderDetails(currentWine);
+		//	$('#btnDelete').show();
+			console.log('User found success:'+ data);
+		//	currentWine = data;
+		// render function	renderDetails(currentWine);
 		},
 		error: function(){
-			console.log('error occured:');
+			console.log('error occured: No user Found');
 		}
 	});
 };
 
 
+var loginSubmits=function(){
+	console.log('loginsubmission pressed: ');
+	$.ajax({
+		type: 'GET',
+		url: rootUrl + 'login' + '/bob',
+		dataType: "json",
+		success: function(data){
+		//	$('#btnDelete').show();
+			console.log('User found success:'+ data);
+		//	currentWine = data;
+		// render function	renderDetails(currentWine);
+		},
+		error: function(){
+			console.log('error occured: No user Found');
+		}
+	});
+};
 
 $(document).ready(function(){
-
-	test();
-});
+	//$('#sampleBtn').click(function()){};
+	
+	startup();
+}
+);
