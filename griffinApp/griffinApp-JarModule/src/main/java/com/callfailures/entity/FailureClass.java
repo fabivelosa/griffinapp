@@ -22,7 +22,7 @@ public class FailureClass {
 	
 	public FailureClass(int failureClass, String failureDesc) {
 		this.failureClass = failureClass;
-		this.failureDesc = failureDesc;
+		this.failureDesc = failureDesc; 
 	}
 	
 	public int getFailureClass() {
