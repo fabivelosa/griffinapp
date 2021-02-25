@@ -5,20 +5,21 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
-import com.callfailures.entity.Events;
+import com.callfailures.entity.MarketOperator;
+import com.callfailures.entity.UserEquipment;
 
 @Stateless
 @LocalBean
-public class EventDAO {
+public class UserEquipmentDAO {
 
 	@PersistenceContext
 	private EntityManager em;
 
-	public Events getEvent(int eventId) {
-		return em.find(Events.class, eventId);
+	public UserEquipment getUserEquipment(int ueId) {
+		return em.find(UserEquipment.class, ueId);
 	}
 
-	public void create(Events obj) {
+	public void create(UserEquipment obj) {
 		em.persist(obj);
 	}
 

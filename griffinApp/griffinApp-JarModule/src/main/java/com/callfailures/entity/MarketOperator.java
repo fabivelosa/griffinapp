@@ -32,6 +32,7 @@ public class MarketOperator {
 		this.operatorDesc = operatorDesc;
 	}
 
+	
 	public MarketOperatorPK getMarketOperatorId() {
 		return marketOperatorId;
 	}

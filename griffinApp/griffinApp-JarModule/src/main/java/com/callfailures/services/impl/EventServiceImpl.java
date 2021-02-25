@@ -9,18 +9,24 @@ import com.callfailures.services.EventService;
 import com.callfailures.services.ValidationService;
 
 @Stateless
-public class  EventServiceImpl implements EventService {
+public class EventServiceImpl implements EventService {
 
 	@Inject
 	EventDAO eventDAO;
 
 	@Inject
 	ValidationService validationService;
-	
+
 	@Override
-	public Events findById(final int  id) {
-		
+	public Events findById(final int id) {
+
 		return eventDAO.getEvent(id);
+	}
+
+	@Override
+	public void create(Events event) {
+		eventDAO.create(event);
+
 	}
 
 }
