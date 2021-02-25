@@ -8,7 +8,7 @@ var loginSubmit=function(){
 	console.log('loginsubmission pressed: ' + id);
 	$.ajax({
 		type: 'GET',
-		url: rootUrl + '/' + 'login'+ '/' +,
+		url: rootUrl + '/' + 'login',
 		dataType: "json",
 		success: function(data){
 			$('#btnDelete').show();
@@ -26,6 +26,5 @@ var loginSubmit=function(){
 
 $(document).ready(function(){
 
-	
 	test();
-	});
+});
