@@ -18,6 +18,7 @@ import org.apache.commons.io.IOUtils;
 import org.jboss.resteasy.plugins.providers.multipart.InputPart;
 import org.jboss.resteasy.plugins.providers.multipart.MultipartFormDataInput;
 
+import com.callfailures.services.EventService;
 import com.callfailures.services.FailureClassService;
 
 @Path("/file")
@@ -26,7 +27,10 @@ public class UploadFileService {
 	@EJB
 	private FailureClassService  service;
 
-	private final String UPLOADED_FILE_PATH = System.getProperty("user.dir");
+	@EJB
+	private EventService eventService;
+	
+	private final String UPLOADED_FILE_PATH = System.getProperty("user.dir") + "/fileUploads/";
 
 	@POST
 	@Path("/upload")
@@ -60,6 +64,9 @@ public class UploadFileService {
 				System.out.println("name "+sheet.getName());
 				
 				service.read(sheet);
+				
+				eventService.read(sheet);
+				
 				
 				System.out.println("Done read");
 
