@@ -22,7 +22,7 @@ public class MarketOperatorPK implements Serializable {
 	private int countryCode;
 
 	@NotNull
-	@Min(10)
+	@Min(0)
 	@Max(999)
 	private int operatorCode;
 
