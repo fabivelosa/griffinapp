@@ -14,11 +14,11 @@ public class EventCauseDAO {
 	@PersistenceContext
 	private EntityManager em;
 
-	public EventCause getEventCause(Object eventCauseId) {
+	public EventCause getEventCause(final Object eventCauseId) {
 		return em.find(EventCause.class, eventCauseId);
 	}
 
-	public void create(EventCause obj) {
+	public void create(final EventCause obj) {
 		em.persist(obj);
 	}
 }

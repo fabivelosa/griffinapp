@@ -7,18 +7,22 @@ import javax.persistence.PersistenceContext;
 
 import com.callfailures.entity.FailureClass;
 
+
 @Stateless
 @LocalBean
 public class FailureClassDAO {
 
+
 	@PersistenceContext
 	private EntityManager em;
 
-	public FailureClass getFailureClass(int failClassId) {
+
+	public FailureClass getFailureClass(final int failClassId) {
 		return em.find(FailureClass.class, failClassId);
 	}
 
-	public void create(FailureClass obj) {
+
+	public void create(final FailureClass obj) {
 		em.persist(obj);
 	}
 }
