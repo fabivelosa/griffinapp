@@ -1,5 +1,8 @@
 package com.callfailures.services;
 
+import java.io.File;
+import java.util.List;
+
 import javax.ejb.Local;
 
 import com.callfailures.entity.Events;
@@ -10,5 +13,7 @@ public interface EventService {
 	Events findById(final int eventId);
 
 	public void create(Events obj);
+
+	List<Events> read(File workbookFile);
 
 }
