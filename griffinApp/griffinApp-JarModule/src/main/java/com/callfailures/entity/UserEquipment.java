@@ -32,13 +32,14 @@ public class UserEquipment {
 
 	public void setTac(int tac) {
 		this.tac = tac;
+
 	}
 
 	public String getModel() {
 		return model;
 	}
 
-	public void setModel(String model) {
+	public void setModel(final String model) {
 		this.model = model;
 	}
 
@@ -46,7 +47,7 @@ public class UserEquipment {
 		return vendorName;
 	}
 
-	public void setVendorName(String vendorName) {
+	public void setVendorName(final String vendorName) {
 		this.vendorName = vendorName;
 	}
 
@@ -62,7 +63,7 @@ public class UserEquipment {
 		return deviceType;
 	}
 
-	public void setDeviceType(String deviceType) {
+	public void setDeviceType(final String deviceType) {
 		this.deviceType = deviceType;
 	}
 
@@ -78,7 +79,7 @@ public class UserEquipment {
 		return deviceOS;
 	}
 
-	public void setDeviceOS(String deviceOS) {
+	public void setDeviceOS(final String deviceOS) {
 		this.deviceOS = deviceOS;
 	}
 
@@ -86,8 +87,13 @@ public class UserEquipment {
 		return inputMode;
 	}
 
+<<<<<<< HEAD
 	public void setInputMode(String inputMode) {
 		this.inputMode = inputMode;
+=======
+	public void setInputModel(final String inputModel) {
+		this.inputModel = inputModel;
+>>>>>>> ebc82e13c38e60825d6058485c22e5e965562135
 	}
 	
 }

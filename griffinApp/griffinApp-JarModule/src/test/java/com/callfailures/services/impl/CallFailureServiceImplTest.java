@@ -26,7 +26,7 @@ public class CallFailureServiceImplTest {
 
 	@Before
 	public void setUp() throws Exception {
-		callFailure = new Events();
+		callFailure = new Events(); 
 	}
 
 	@Test

@@ -14,11 +14,11 @@ public class MarketOperatorDAO {
 	@PersistenceContext
 	private EntityManager em;
 
-	public MarketOperator getMarketOperator(Object marketOperatorId) {
+	public MarketOperator getMarketOperator(final Object marketOperatorId) {
 		return em.find(MarketOperator.class, marketOperatorId);
 	}
 
-	public void create(MarketOperator obj) {
+	public void create(final MarketOperator obj) {
 		em.persist(obj);
 	}
 
