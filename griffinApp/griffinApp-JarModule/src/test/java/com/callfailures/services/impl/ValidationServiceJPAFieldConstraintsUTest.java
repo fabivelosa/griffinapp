@@ -22,7 +22,7 @@ import com.callfailures.entity.UserEquipment;
 import com.callfailures.exception.FieldNotValidException;
 import com.callfailures.services.ValidationService;
 
-public class ValidationServiceImplUTest {
+public class ValidationServiceJPAFieldConstraintsUTest {
 
 	private ValidationService validationService;
 	private Validator validator;
