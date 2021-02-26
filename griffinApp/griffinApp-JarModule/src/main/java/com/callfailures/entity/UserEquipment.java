@@ -87,13 +87,8 @@ public class UserEquipment {
 		return inputMode;
 	}
 
-<<<<<<< HEAD
 	public void setInputMode(String inputMode) {
 		this.inputMode = inputMode;
-=======
-	public void setInputModel(final String inputModel) {
-		this.inputModel = inputModel;
->>>>>>> ebc82e13c38e60825d6058485c22e5e965562135
 	}
 	
 }
