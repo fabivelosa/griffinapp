@@ -21,17 +21,18 @@ public class UserEquipment {
 	private String deviceOS;
 	private String inputModel;
 
-	public UserEquipment() {}
-	
-	public UserEquipment(int ueType) {
+	public UserEquipment() {
+	}
+
+	public UserEquipment(final int ueType) {
 		this.ueType = ueType;
 	}
-	
+
 	public int getUeType() {
 		return ueType;
 	}
 
-	public void setUeType(int ueType) {
+	public void setUeType(final int ueType) {
 		this.ueType = ueType;
 	}
 
@@ -39,7 +40,7 @@ public class UserEquipment {
 		return marketingName;
 	}
 
-	public void setMarketingName(String marketingName) {
+	public void setMarketingName(final String marketingName) {
 		this.marketingName = marketingName;
 	}
 
@@ -47,7 +48,7 @@ public class UserEquipment {
 		return manufacturer;
 	}
 
-	public void setManufacturer(String manufacturer) {
+	public void setManufacturer(final String manufacturer) {
 		this.manufacturer = manufacturer;
 	}
 
@@ -55,7 +56,7 @@ public class UserEquipment {
 		return accessCapability;
 	}
 
-	public void setAccessCapability(String accessCapability) {
+	public void setAccessCapability(final String accessCapability) {
 		this.accessCapability = accessCapability;
 	}
 
@@ -63,7 +64,7 @@ public class UserEquipment {
 		return model;
 	}
 
-	public void setModel(String model) {
+	public void setModel(final String model) {
 		this.model = model;
 	}
 
@@ -71,7 +72,7 @@ public class UserEquipment {
 		return vendorName;
 	}
 
-	public void setVendorName(String vendorName) {
+	public void setVendorName(final String vendorName) {
 		this.vendorName = vendorName;
 	}
 
@@ -79,7 +80,7 @@ public class UserEquipment {
 		return deviceType;
 	}
 
-	public void setDeviceType(String deviceType) {
+	public void setDeviceType(final String deviceType) {
 		this.deviceType = deviceType;
 	}
 
@@ -87,7 +88,7 @@ public class UserEquipment {
 		return deviceOS;
 	}
 
-	public void setDeviceOS(String deviceOS) {
+	public void setDeviceOS(final String deviceOS) {
 		this.deviceOS = deviceOS;
 	}
 
@@ -95,7 +96,7 @@ public class UserEquipment {
 		return inputModel;
 	}
 
-	public void setInputModel(String inputModel) {
+	public void setInputModel(final String inputModel) {
 		this.inputModel = inputModel;
 	}
 

@@ -26,10 +26,10 @@ public class MarketOperatorPK implements Serializable {
 	@Max(999)
 	private int operatorCode;
 
-	
-	public MarketOperatorPK() {}
-	
-	public MarketOperatorPK(int countryCode, int operatorCode) {
+	public MarketOperatorPK() {
+	}
+
+	public MarketOperatorPK(final int countryCode, final int operatorCode) {
 		this.countryCode = countryCode;
 		this.operatorCode = operatorCode;
 	}
@@ -40,14 +40,14 @@ public class MarketOperatorPK implements Serializable {
 	}
 
 	@Override
-	public boolean equals(Object obj) {
+	public boolean equals(final Object obj) {
 		if (this == obj) {
 			return true;
 		}
 		if (!(obj instanceof MarketOperatorPK)) {
 			return false;
 		}
-		MarketOperatorPK other = (MarketOperatorPK) obj;
+		final MarketOperatorPK other = (MarketOperatorPK) obj;
 		return countryCode == other.countryCode && operatorCode == other.operatorCode;
 	}
 
