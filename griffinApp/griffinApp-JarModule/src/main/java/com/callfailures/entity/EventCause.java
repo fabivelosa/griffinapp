@@ -16,9 +16,10 @@ public class EventCause {
 
 	private String description;
 
-	public EventCause() {}
-	
-	public EventCause(EventCausePK eventCauseId, String description) {
+	public EventCause() {
+	}
+
+	public EventCause(final EventCausePK eventCauseId, final String description) {
 		this.eventCauseId = eventCauseId;
 		this.description = description;
 	}
@@ -27,7 +28,7 @@ public class EventCause {
 		return description;
 	}
 
-	public void setDescription(String description) {
+	public void setDescription(final String description) {
 		this.description = description;
 	}
 
@@ -35,7 +36,7 @@ public class EventCause {
 		return eventCauseId;
 	}
 
-	public void setEventCauseId(EventCausePK eventCauseId) {
+	public void setEventCauseId(final EventCausePK eventCauseId) {
 		this.eventCauseId = eventCauseId;
 	}
 

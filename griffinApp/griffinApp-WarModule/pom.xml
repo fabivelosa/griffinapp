@@ -8,35 +8,51 @@
 		<groupId>com.callfailures</groupId>
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
-	
+
 	<artifactId>griffinApp-WarModule</artifactId>
 	<packaging>war</packaging>
 
 	<name>griffinApp-WarModule Maven Webapp</name>
-		
+
 
 	<dependencies>
 		<dependency>
 			<groupId>com.callfailures</groupId>
 			<artifactId>griffinApp-JarModule</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
-			
+			<scope>provided</scope>
+
 		</dependency>
-		
+
 		<dependency>
 			<groupId>javax</groupId>
 			<artifactId>javaee-api</artifactId>
 			<version>8.0</version>
-		</dependency>	
-		
+			<scope>provided</scope>
+		</dependency>
+
 		<dependency>
 			<groupId>javax</groupId>
 			<artifactId>javaee-web-api</artifactId>
 			<version>6.0</version>
 			<scope>provided</scope>
 		</dependency>
-	
-		
+
+		<dependency>
+			<groupId>org.jboss.resteasy</groupId>
+			<artifactId>resteasy-jaxrs</artifactId>
+			<version>2.2.1.GA</version>
+			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.jboss.resteasy</groupId>
+			<artifactId>resteasy-multipart-provider</artifactId>
+			<version>2.2.0.GA</version>
+			<scope>provided</scope>
+		</dependency>
+
+
 	</dependencies>
 
 </project>

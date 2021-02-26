@@ -39,7 +39,7 @@ public class Events {
 	private FailureClass failureClass;
 
 	@ManyToOne
-	@JoinColumn(name = "ueType", referencedColumnName = "ueType")
+	@JoinColumn(name = "tac", referencedColumnName = "tac")
 	@NotNull
 	private UserEquipment ueType;
 
@@ -54,31 +54,31 @@ public class Events {
 
 	@NotNull
 	private int cellId;
-	
+
 	@NotNull
 	private int duration;
-	
+
 	@NotNull
 	private String neVersion;
 
 	@NotNull
-	private String IMSI;
-	
+	private String imsi;
+
 	@NotNull
 	private String hier3Id;
-	
+
 	@NotNull
 	private String hier32Id;
-	
+
 	@NotNull
 	private String hier321Id;
 
-	
-	public Events() {}
-	
-	public Events(EventCause eventCause, LocalDateTime dateTime, FailureClass failureClass, UserEquipment ueType,
-			MarketOperator marketOperator, int cellId, int duration, String neVersion, String iMSI,
-			String hier3Id, String hier32Id, String hier321Id) {
+	public Events() {
+	}
+
+	public Events(final EventCause eventCause, final LocalDateTime dateTime, final FailureClass failureClass,
+			final UserEquipment ueType, final MarketOperator marketOperator, final int cellId, final int duration,
+			final String neVersion, final String imsi, final String hier3Id, final String hier32Id, final String hier321Id) {
 		this.eventCause = eventCause;
 		this.dateTime = dateTime;
 		this.failureClass = failureClass;
@@ -87,7 +87,7 @@ public class Events {
 		this.cellId = cellId;
 		this.duration = duration;
 		this.neVersion = neVersion;
-		IMSI = iMSI;
+		this.imsi = imsi;
 		this.hier3Id = hier3Id;
 		this.hier32Id = hier32Id;
 		this.hier321Id = hier321Id;
@@ -97,7 +97,7 @@ public class Events {
 		return ueType;
 	}
 
-	public void setUeType(UserEquipment ueType) {
+	public void setUeType(final UserEquipment ueType) {
 		this.ueType = ueType;
 	}
 
@@ -105,7 +105,7 @@ public class Events {
 		return eventId;
 	}
 
-	public void setEventId(int eventId) {
+	public void setEventId(final int eventId) {
 		this.eventId = eventId;
 	}
 
@@ -113,7 +113,7 @@ public class Events {
 		return dateTime;
 	}
 
-	public void setDateTime(LocalDateTime dateTime) {
+	public void setDateTime(final LocalDateTime dateTime) {
 		this.dateTime = dateTime;
 	}
 
@@ -121,7 +121,7 @@ public class Events {
 		return marketOperator;
 	}
 
-	public void setMarketOperator(MarketOperator marketOperator) {
+	public void setMarketOperator(final MarketOperator marketOperator) {
 		this.marketOperator = marketOperator;
 	}
 
@@ -129,7 +129,7 @@ public class Events {
 		return failureClass;
 	}
 
-	public void setFailureClass(FailureClass failureClass) {
+	public void setFailureClass(final FailureClass failureClass) {
 		this.failureClass = failureClass;
 	}
 
@@ -137,7 +137,7 @@ public class Events {
 		return cellId;
 	}
 
-	public void setCellId(int cellId) {
+	public void setCellId(final int cellId) {
 		this.cellId = cellId;
 	}
 
@@ -145,7 +145,7 @@ public class Events {
 		return duration;
 	}
 
-	public void setDuration(int duration) {
+	public void setDuration(final int duration) {
 		this.duration = duration;
 	}
 
@@ -153,23 +153,23 @@ public class Events {
 		return neVersion;
 	}
 
-	public void setNeVersion(String neVersion) {
+	public void setNeVersion(final String neVersion) {
 		this.neVersion = neVersion;
 	}
 
-	public String getIMSI() {
-		return IMSI;
+	public String getImsi() {
+		return imsi;
 	}
 
-	public void setIMSI(String iMSI) {
-		IMSI = iMSI;
+	public void setImsi(final String imsi) {
+		this.imsi = imsi;
 	}
 
 	public String getHier3Id() {
 		return hier3Id;
 	}
 
-	public void setHier3Id(String hier3Id) {
+	public void setHier3Id(final String hier3Id) {
 		this.hier3Id = hier3Id;
 	}
 
@@ -177,7 +177,7 @@ public class Events {
 		return hier32Id;
 	}
 
-	public void setHier32Id(String hier32Id) {
+	public void setHier32Id(final String hier32Id) {
 		this.hier32Id = hier32Id;
 	}
 
@@ -185,7 +185,7 @@ public class Events {
 		return hier321Id;
 	}
 
-	public void setHier321Id(String hier321Id) {
+	public void setHier321Id(final String hier321Id) {
 		this.hier321Id = hier321Id;
 	}
 
@@ -193,7 +193,7 @@ public class Events {
 		return eventCause;
 	}
 
-	public void setEventCause(EventCause eventCause) {
+	public void setEventCause(final EventCause eventCause) {
 		this.eventCause = eventCause;
 	}
 }

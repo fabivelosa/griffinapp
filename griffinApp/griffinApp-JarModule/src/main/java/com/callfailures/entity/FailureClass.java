@@ -15,21 +15,22 @@ public class FailureClass {
 	@Min(0)
 	@Max(4)
 	private int failureClass;
-	
+
 	private String failureDesc;
 
-	public FailureClass() {}
-	
-	public FailureClass(int failureClass, String failureDesc) {
+	public FailureClass() {
+	}
+
+	public FailureClass(final int failureClass, final String failureDesc) {
 		this.failureClass = failureClass;
 		this.failureDesc = failureDesc;
 	}
-	
+
 	public int getFailureClass() {
 		return failureClass;
 	}
 
-	public void setFailureClass(int failureClass) {
+	public void setFailureClass(final int failureClass) {
 		this.failureClass = failureClass;
 	}
 
@@ -37,7 +38,7 @@ public class FailureClass {
 		return failureDesc;
 	}
 
-	public void setFailureDesc(String failureDesc) {
+	public void setFailureDesc(final String failureDesc) {
 		this.failureDesc = failureDesc;
 	}
 

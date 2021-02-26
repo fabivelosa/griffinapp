@@ -2,6 +2,9 @@ package com.users.entity;
 
 import javax.persistence.Entity;
 import javax.xml.bind.annotation.XmlRootElement;
+
+import org.hibernate.annotations.GenericGenerator;
+
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -12,7 +15,9 @@ import javax.persistence.Table;
 @Table (name = "users")
 public class User {
 
-	@Id @GeneratedValue(strategy=GenerationType.IDENTITY)
+	@Id
+	@GeneratedValue(generator = "uuid")
+	@GenericGenerator(name = "uuid", strategy = "uuid2")
 	private String userId;
 	private String userName;
 	private String userType;

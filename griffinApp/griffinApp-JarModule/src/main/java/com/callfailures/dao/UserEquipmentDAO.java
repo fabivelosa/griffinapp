@@ -5,7 +5,6 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
-import com.callfailures.entity.MarketOperator;
 import com.callfailures.entity.UserEquipment;
 
 @Stateless
@@ -15,11 +14,11 @@ public class UserEquipmentDAO {
 	@PersistenceContext
 	private EntityManager em;
 
-	public UserEquipment getUserEquipment(int ueId) {
+	public UserEquipment getUserEquipment(final int ueId) {
 		return em.find(UserEquipment.class, ueId);
 	}
 
-	public void create(UserEquipment obj) {
+	public void create(final UserEquipment obj) {
 		em.persist(obj);
 	}
 

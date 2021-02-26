@@ -39,10 +39,10 @@
 			<version>5.0.12.Final</version>
 		</dependency>
 		<dependency>
-		    <groupId>org.hibernate</groupId>
-		    <artifactId>hibernate-validator</artifactId>
-		    <version>5.2.1.Final</version>
-		    <scope>test</scope>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-validator</artifactId>
+			<version>5.2.1.Final</version>
+			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.hibernate</groupId>
@@ -65,45 +65,50 @@
 		<dependency>
 			<groupId>javax</groupId>
 			<artifactId>javaee-api</artifactId>
-			<version>8.0</version>
+			</dependency>
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi-ooxml</artifactId>
+			<version>3.15</version>
 		</dependency>
+		
+		<dependency>
+    <groupId>org.apache.poi</groupId>
+    <artifactId>poi</artifactId>
+    <version>4.1.2</version>
+</dependency>
 	</dependencies>
 	<build>
-	<plugins>
-		<plugin>
-			<groupId>io.github.divinespear</groupId>
-			<artifactId>jpa-schema-maven-plugin</artifactId>
-			<version>0.2.1</version>
-			<configuration>
-				<hibernate.dialect>org.hibernate.dialect.MySQL5Dialect</hibernate.dialect>
-				<databaseProductName>MySQL</databaseProductName>
-				<databaseMajorVersion>5</databaseMajorVersion>
-				<databaseMinorVersion>0</databaseMinorVersion>
-				<vendor>hibernate</vendor>
-				<packageToScan>com.callfailures.entity</packageToScan>
-				<scriptAction>create</scriptAction>
-				<format>true</format>
-			</configuration>
-			<dependencies>
-				<dependency>
-					<groupId>org.hibernate.javax.persistence</groupId>
-					<artifactId>hibernate-jpa-2.1-api</artifactId>
-					<version>1.0.0.Final</version>
-				</dependency>
-				<dependency>
-					<groupId>org.hibernate</groupId>
-					<artifactId>hibernate-entitymanager</artifactId>
-					<version>5.0.12.Final</version>
-				</dependency>
-			</dependencies>
-<!-- 			<executions>
-				<execution>
-					<goals>
-						<goal>generate</goal>
-					</goals>
-				</execution>
-			</executions> -->
-		</plugin>
-	 </plugins>
+		<plugins>
+			<plugin>
+				<groupId>io.github.divinespear</groupId>
+				<artifactId>jpa-schema-maven-plugin</artifactId>
+				<version>0.2.1</version>
+				<configuration>
+					<hibernate.dialect>org.hibernate.dialect.MySQL5Dialect</hibernate.dialect>
+					<databaseProductName>MySQL</databaseProductName>
+					<databaseMajorVersion>5</databaseMajorVersion>
+					<databaseMinorVersion>0</databaseMinorVersion>
+					<vendor>hibernate</vendor>
+					<packageToScan>com.callfailures.entity</packageToScan>
+					<scriptAction>create</scriptAction>
+					<format>true</format>
+				</configuration>
+				<dependencies>
+					<dependency>
+						<groupId>org.hibernate.javax.persistence</groupId>
+						<artifactId>hibernate-jpa-2.1-api</artifactId>
+						<version>1.0.0.Final</version>
+					</dependency>
+					<dependency>
+						<groupId>org.hibernate</groupId>
+						<artifactId>hibernate-entitymanager</artifactId>
+						<version>5.0.12.Final</version>
+					</dependency>
+				</dependencies>
+				<!-- <executions> <execution> <goals> <goal>generate</goal> </goals> 
+					</execution> </executions> -->
+			</plugin>
+		</plugins>
 	</build>
 </project>

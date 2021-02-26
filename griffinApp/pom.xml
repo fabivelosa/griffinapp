@@ -57,19 +57,19 @@
 				<configuration>
 					<source>1.8</source>
 					<target>1.8</target>
-				</configuration>             
+				</configuration>
 			</plugin>
-  			<plugin>
-               	<groupId>org.apache.maven.plugins</groupId>
-               	<artifactId>maven-pmd-plugin</artifactId>
-               	<version>3.14.0</version>
-                	<configuration>
-               		<rulesets>
-               			<ruleset>../resources/rulesets/CDS_pmd_ruleset_jse-1.0.xml</ruleset>
-               		</rulesets>
-               	</configuration>
-            </plugin>   
-        </plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-pmd-plugin</artifactId>
+				<version>3.14.0</version>
+				<configuration>
+					<rulesets>
+						<ruleset>../resources/rulesets/CDS_pmd_ruleset_jse-1.0.xml</ruleset>
+					</rulesets>
+				</configuration>
+			</plugin>
+		</plugins>
 	</build>
 
 	<dependencyManagement>
@@ -122,13 +122,13 @@
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
-	
+
 	<dependencies>
 		<dependency>
 			<groupId>javax</groupId>
 			<artifactId>javaee-api</artifactId>
 			<scope>provided</scope>
-		</dependency>	
+		</dependency>
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>
@@ -159,7 +159,7 @@
 			<version>5.4.2</version>
 			<scope>test</scope>
 		</dependency>
-        <dependency>
+		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<version>4.11</version>
@@ -182,6 +182,18 @@
 			<artifactId>javax.el</artifactId>
 			<version>2.2.4</version>
 			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.jboss.resteasy</groupId>
+			<artifactId>resteasy-multipart-provider</artifactId>
+			<version>2.2.0.GA</version>
+			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
+			<version>2.0.1</version>
 		</dependency>
 	</dependencies>
 
