@@ -26,7 +26,7 @@ public class UploadFileService {
 	@EJB
 	private FailureClassService  service;
 
-	private final String UPLOADED_FILE_PATH = "/Users/fabi/file/";
+	private final String UPLOADED_FILE_PATH = System.getProperty("user.dir");
 
 	@POST
 	@Path("/upload")
