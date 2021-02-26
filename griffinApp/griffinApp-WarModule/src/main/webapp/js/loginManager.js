@@ -4,11 +4,11 @@ var startup =function() {
 	console.log('Index initiated');
 };
 
-var loginSubmit=function(){
-	console.log('loginsubmission pressed: ');
+var loginSubmit=function(id,password){
+	console.log('loginsubmission pressed: '+id + password);
 	$.ajax({
 		type: 'GET',
-		url: rootUrl +'/' +'login' + '/20' ,
+		url: rootUrl +'/' +'login' + '/' + id,
 		dataType: "json",
 		success: function(data){
 		//	$('#btnDelete').show();
@@ -17,33 +17,19 @@ var loginSubmit=function(){
 		// render function	renderDetails(currentWine);
 		},
 		error: function(){
-			console.log('error occured: No user Found');
+			console.log('error occured: No user Found'+id);
 		}
 	});
 };
 
-
-var loginSubmits=function(){
-	console.log('loginsubmission pressed: ');
-	$.ajax({
-		type: 'GET',
-		url: rootUrl + 'login' + '/bob',
-		dataType: "json",
-		success: function(data){
-		//	$('#btnDelete').show();
-			console.log('User found success:'+ data);
-		//	currentWine = data;
-		// render function	renderDetails(currentWine);
-		},
-		error: function(){
-			console.log('error occured: No user Found');
-		}
-	});
-};
 
 $(document).ready(function(){
-	//$('#sampleBtn').click(function()){};
+		startup();
+	$('#loginBtn').click(function(){
+		//loginSubmit($('#userNameLogin').val);
+		loginSubmit(document.getElementById("userNameLogin").value,document.getElementById("passwordLogin").value);
+	});
 	
-	startup();
+
 }
 );

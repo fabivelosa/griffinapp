@@ -3,6 +3,7 @@ package com.cailfailures.login;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.ws.rs.GET;
+import javax.ws.rs.HeaderParam;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -25,9 +26,14 @@ public class Login {
 	
 	@GET
 	@Produces({MediaType.APPLICATION_JSON})
-	@Path("/{id}")
-	public Response checkLogin(@PathParam("id") String username) {
+	@Path("/checkLogin")
+	public Response checkLogin(@HeaderParam("id") String auth) {
 		
+		if (isAuthenticated(auth)) {
+			
+		}
+		
+		/*
 		System.out.println("id called");
 		User user = userDao.getUserById(username);
 		System.out.println(user);
@@ -35,12 +41,18 @@ public class Login {
 		//Check password
 			return Response.status(200).entity(user).build();
 		}
+		*/
+		
 		
 		return Response.status(400).build();
+		
+		
 	}
 	
 	
 	private boolean isAuthenticated(String auth) {
+		
+		//Decode String retreived from database
 		String authorize = "";
 		return false;
 	}

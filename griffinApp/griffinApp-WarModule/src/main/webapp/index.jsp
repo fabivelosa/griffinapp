@@ -11,8 +11,7 @@
 <div class="signIn">
 	<input type="text" id = "userNameLogin" /> 
 	<input type="text" id = "passwordLogin"/>
-	<button id ="sampleBtn" onclick="loginSubmit()">Login </button> 
-		<button id ="sampleBtn" onclick="loginSubmits()">Login </button> 
+	<button id ="loginBtn">Login </button> 
 </div>
 
 
