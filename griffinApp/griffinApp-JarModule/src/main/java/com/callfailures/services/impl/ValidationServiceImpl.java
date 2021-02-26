@@ -39,7 +39,7 @@ public class ValidationServiceImpl implements ValidationService{
 		
 		if (errorsIterator.hasNext()) {
 			final ConstraintViolation<T> violation = errorsIterator.next();
-			throw new FieldNotValidException(violation.getPropertyPath().toString(), violation.getMessage());
+			throw new FieldNotValidException(violation.getPropertyPath().toString().toLowerCase(), violation.getMessage());
 		}
 	}
 
