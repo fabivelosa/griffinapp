@@ -8,7 +8,7 @@ import com.callfailures.entity.EventCausePK;
 @Local
 public interface EventCauseService {
 
-	public EventCause findById(final EventCausePK id);
+	EventCause findById(final EventCausePK id);
 
-	public void create(EventCause obj);
+	void create(EventCause obj);
 }

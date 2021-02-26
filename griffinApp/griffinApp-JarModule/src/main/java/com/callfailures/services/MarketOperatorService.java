@@ -8,7 +8,7 @@ import com.callfailures.entity.MarketOperatorPK;
 @Local
 public interface MarketOperatorService {
 
-	public MarketOperator findById(final MarketOperatorPK id);
+	MarketOperator findById(final MarketOperatorPK id);
 
-	public void create(MarketOperator obj);
+	void create(MarketOperator obj);
 }

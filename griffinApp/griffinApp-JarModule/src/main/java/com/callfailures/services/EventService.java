@@ -12,7 +12,7 @@ public interface EventService {
 
 	Events findById(final int eventId);
 
-	public void create(Events obj);
+	void create(Events obj);
 
 	List<Events> read(File workbookFile);
 

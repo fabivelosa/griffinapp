@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pmd>
+    <workingSet>Aggregate for window 1613842929861</workingSet>
+    <useProjectRuleSet>true</useProjectRuleSet>
+    <ruleSetFile>/Users/fabi/Desktop/MASE/Agile Design &amp; Testing/SonarCube/Ericsson JavaSE Ruleset/CDS_pmd_ruleset_jse-1.0.xml</ruleSetFile>
+    <includeDerivedFiles>false</includeDerivedFiles>
+    <violationsAsErrors>true</violationsAsErrors>
+    <fullBuildEnabled>true</fullBuildEnabled>
+</pmd>

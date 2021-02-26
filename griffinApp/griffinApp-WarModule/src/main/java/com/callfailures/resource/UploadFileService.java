@@ -23,9 +23,9 @@ import com.callfailures.services.FailureClassService;
 
 @Path("/file")
 public class UploadFileService {
-	
+
 	@EJB
-	private FailureClassService  service;
+	private FailureClassService service;
 
 	@EJB
 	private EventService eventService;
@@ -35,12 +35,12 @@ public class UploadFileService {
 	@POST
 	@Path("/upload")
 	@Consumes("multipart/form-data")
-	public Response uploadFile(MultipartFormDataInput input) {
+	public Response uploadFile(final MultipartFormDataInput input) {
 
 		String fileName = "";
 
-		Map<String, List<InputPart>> uploadForm = input.getFormDataMap();
-		List<InputPart> inputParts = uploadForm.get("uploadedFile");
+		final Map<String, List<InputPart>> uploadForm = input.getFormDataMap();
+		final List<InputPart> inputParts = uploadForm.get("uploadedFile");
 		File sheet = null;
 
 		for (InputPart inputPart : inputParts) {
@@ -61,12 +61,11 @@ public class UploadFileService {
 				sheet = writeFile(bytes, fileName);
 
 				System.out.println("Done upload");
-				System.out.println("name "+sheet.getName());
-				
+				System.out.println("name " + sheet.getName());
+
 				service.read(sheet);
 				
 				eventService.read(sheet);
-				
 				
 				System.out.println("Done read");
 
@@ -75,8 +74,7 @@ public class UploadFileService {
 			}
 
 		}
-		
-		
+
 		return Response.status(200).entity("uploadFile is called, Uploaded file name : " + fileName).build();
 
 	}
@@ -85,7 +83,7 @@ public class UploadFileService {
 	 * header sample { Content-Type=[image/png], Content-Disposition=[form-data;
 	 * name="file"; filename="filename.extension"] }
 	 **/
-	// get uploaded filename, is there a easy way in RESTEasy?
+	// get uploaded filename
 	private String getFileName(MultivaluedMap<String, String> header) {
 
 		String[] contentDisposition = header.getFirst("Content-Disposition").split(";");
@@ -102,8 +100,7 @@ public class UploadFileService {
 		return "unknown";
 	}
 
-	// save to somewhere
-	private File  writeFile(byte[] content, String filename) throws IOException {
+	private File writeFile(byte[] content, String filename) throws IOException {
 
 		File file = new File(filename);
 
@@ -116,7 +113,7 @@ public class UploadFileService {
 		fop.write(content);
 		fop.flush();
 		fop.close();
-		
+
 		return file;
 
 	}

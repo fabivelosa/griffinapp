@@ -7,8 +7,8 @@ import com.callfailures.entity.UserEquipment;
 @Local
 public interface UserEquipmentService {
 
-	public UserEquipment findById(final int id);
+	UserEquipment findById(final int id);
 
-	public void create(UserEquipment obj);
+	void create(UserEquipment obj);
 
 }
