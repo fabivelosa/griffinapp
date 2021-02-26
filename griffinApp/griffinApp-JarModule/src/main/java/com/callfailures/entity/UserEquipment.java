@@ -16,7 +16,7 @@ public class UserEquipment {
 	private String vendorName;
 	private String accessCapability;
 	private String deviceType;
-	private int ueType;
+	private String ueType;
 	private String deviceOS;
 	private String inputMode;
 
