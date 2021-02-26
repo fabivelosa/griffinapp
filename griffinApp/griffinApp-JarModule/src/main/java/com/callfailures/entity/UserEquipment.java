@@ -66,11 +66,11 @@ public class UserEquipment {
 		this.deviceType = deviceType;
 	}
 
-	public int getUeType() {
+	public String getUeType() {
 		return ueType;
 	}
 
-	public void setUeType(int ueType) {
+	public void setUeType(String ueType) {
 		this.ueType = ueType;
 	}
 
