@@ -7,8 +7,8 @@ import com.callfailures.entity.Events;
 @Local
 public interface EventService {
 
-	public Events findById(final int id);
+	Events findById(final int id);
 
-	public void create(Events obj);
+	void create(Events obj);
 
 }

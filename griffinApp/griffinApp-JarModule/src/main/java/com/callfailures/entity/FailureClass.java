@@ -3,6 +3,7 @@ package com.callfailures.entity;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -17,9 +18,20 @@ public class FailureClass {
 	private int failureClass;
 
 	private String failureDesc;
+	
+//	@Transient
+//	private String statusMessage;
 
 	public FailureClass() {
 	}
+
+//	public String getStatusMessage() {
+//		return statusMessage;
+//	}
+//
+//	public void setStatusMessage(String statusMessage) {
+//		this.statusMessage = statusMessage;
+//	}
 
 	public FailureClass(final int failureClass, final String failureDesc) {
 		this.failureClass = failureClass;
