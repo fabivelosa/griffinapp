@@ -39,7 +39,7 @@ public class Events {
 	private FailureClass failureClass;
 
 	@ManyToOne
-	@JoinColumn(name = "ueType", referencedColumnName = "ueType")
+	@JoinColumn(name = "tac", referencedColumnName = "tac")
 	@NotNull
 	private UserEquipment ueType;
 
