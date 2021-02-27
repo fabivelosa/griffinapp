@@ -14,7 +14,7 @@ public class FailureClassDAO {
 
 
 	@PersistenceContext
-	private EntityManager em;
+	EntityManager em;
 
 
 	public FailureClass getFailureClass(final int failClassId) {

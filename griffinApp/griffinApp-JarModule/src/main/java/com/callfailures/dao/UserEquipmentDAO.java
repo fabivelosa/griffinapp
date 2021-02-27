@@ -12,7 +12,7 @@ import com.callfailures.entity.UserEquipment;
 public class UserEquipmentDAO {
 
 	@PersistenceContext
-	private EntityManager em;
+	EntityManager em;
 
 	public UserEquipment getUserEquipment(final int ueId) {
 		return em.find(UserEquipment.class, ueId);
