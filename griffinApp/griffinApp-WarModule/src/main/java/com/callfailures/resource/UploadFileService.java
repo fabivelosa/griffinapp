@@ -37,6 +37,8 @@ public class UploadFileService {
 	@Consumes("multipart/form-data")
 	public Response uploadFile(final MultipartFormDataInput input) {
 
+		long startNano = System.nanoTime();
+		
 		String fileName = "";
 
 		final Map<String, List<InputPart>> uploadForm = input.getFormDataMap();
@@ -63,7 +65,9 @@ public class UploadFileService {
 				System.out.println("Done upload");
 				System.out.println("name " + sheet.getName());
 
-				service.read(sheet);
+				System.out.println();
+				
+//				service.read(sheet);
 				
 				/*
 				 * Commenting out the eventService.read(sheet) for now  until all the persist tabs tasks are done
@@ -73,7 +77,8 @@ public class UploadFileService {
 				 * (3) Load the reference dataset by run the referencedataset.sql script. You can find this script in JAR module's
 				 * src/main/resources folder			
 				 */
-//					eventService.read(sheet);
+				
+				eventService.read(sheet);
 				
 				System.out.println("Done read");
 
@@ -83,6 +88,12 @@ public class UploadFileService {
 
 		}
 
+		long endNano = System.nanoTime();
+
+		long duration = (endNano - startNano) / 1000000000;
+		
+		System.out.println("It took " + duration + "seconds to validate and store the data");
+		
 		return Response.status(200).entity("uploadFile is called, Uploaded file name : " + fileName).build();
 
 	}
