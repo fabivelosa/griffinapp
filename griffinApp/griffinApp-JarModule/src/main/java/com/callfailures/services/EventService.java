@@ -6,6 +6,7 @@ import java.util.List;
 import javax.ejb.Local;
 
 import com.callfailures.entity.Events;
+import com.callfailures.parsingutils.ParsingResponse;
 
 @Local
 public interface EventService {
@@ -14,6 +15,6 @@ public interface EventService {
 
 	void create(Events obj);
 
-	List<Events> read(File workbookFile);
+	ParsingResponse<Events> read(File workbookFile);
 
 }

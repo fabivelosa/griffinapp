@@ -21,6 +21,8 @@ import com.callfailures.dao.EventDAO;
 import com.callfailures.entity.Events;
 import com.callfailures.entity.FailureClass;
 import com.callfailures.exception.FieldNotValidException;
+import com.callfailures.parsingutils.InvalidRow;
+import com.callfailures.parsingutils.ParsingResponse;
 import com.callfailures.services.EventService;
 import com.callfailures.services.ValidationService;
 
@@ -47,10 +49,9 @@ public class EventServiceImpl implements EventService {
 	}
 
 	@Override
-	public List<Events> read(File workbookFile) {
-		List<Integer> validRows = new ArrayList<>();
-		List<Events> list = new ArrayList<>();
-
+	public ParsingResponse<Events> read(File workbookFile) {
+		final ParsingResponse<Events> parsingResult = new ParsingResponse<>();
+		
 		try(Workbook workbook = new XSSFWorkbook(workbookFile);) {
 
 			Sheet sheet = workbook.getSheetAt(0);
@@ -69,16 +70,16 @@ public class EventServiceImpl implements EventService {
 
 					eventDAO.create(events);
 
-					list.add(events);
+					parsingResult.addValidObject(events);
 				}catch(FieldNotValidException e) {
-					System.out.println(e.getMessage());
+					parsingResult.addInvalidRow(new InvalidRow(rowNumber, e.getMessage()));
 				}
 			}
 		} catch (IOException | InvalidFormatException e) {
 			e.printStackTrace();
 		}
 
-		return list;
+		return parsingResult;
 	}
 
 	
@@ -101,7 +102,7 @@ public class EventServiceImpl implements EventService {
 
 		events.setHier321Id(validationService.checkhier321Id(row, 13));
 
-		events.setEventCause(validationService.checkExistingEventCause(row, 1, 2));
+		events.setEventCause(validationService.checkExistingEventCause(row, 1, 8));
 
 		events.setFailureClass(validationService.checkExistingFailureClass(row, 2));
 

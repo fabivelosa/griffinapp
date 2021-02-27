@@ -18,6 +18,9 @@ import org.apache.commons.io.IOUtils;
 import org.jboss.resteasy.plugins.providers.multipart.InputPart;
 import org.jboss.resteasy.plugins.providers.multipart.MultipartFormDataInput;
 
+import com.callfailures.entity.Events;
+import com.callfailures.parsingutils.InvalidRow;
+import com.callfailures.parsingutils.ParsingResponse;
 import com.callfailures.services.EventService;
 import com.callfailures.services.FailureClassService;
 
@@ -67,20 +70,21 @@ public class UploadFileService {
 
 				System.out.println();
 				
-//				service.read(sheet);
+				service.read(sheet);
 				
 				/*
 				 * Commenting out the eventService.read(sheet) for now  until all the persist tabs tasks are done
 				 * The Events (Base Data) is the last tab to read as it needs to refer to the other tabs for validation
-				 * IF YOU WANNA TEST IT OUT, (1) Uncomment the line for eventService.read(sheet)
+				 * IF YOU WANNA TEST IT OUT, (1) Uncomment the line for eventService.read(sheet) until the line with for loop
 				 * (2) Comment out service.read(sheet) above
 				 * (3) Load the reference dataset by run the referencedataset.sql script. You can find this script in JAR module's
 				 * src/main/resources folder			
 				 */
-				
-				eventService.read(sheet);
-				
-				System.out.println("Done read");
+//				ParsingResponse<Events> eventsResults = eventService.read(sheet);
+//				System.out.println("Valid Events Row Count is : " + eventsResults.getValidObjects().size());
+//				System.out.println("Invalid Events Row Count is : " + eventsResults.getInvalidRows().size());
+//				for(final InvalidRow row : eventsResults.getInvalidRows()) System.out.println("Row " + row.getRowNumber() + "\t" + row.getErrorMessage());
+//				System.out.println("Done read");
 
 			} catch (IOException e) {
 				e.printStackTrace();
