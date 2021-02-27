@@ -1,5 +1,8 @@
 package com.callfailures.exception;
 
+import javax.ejb.ApplicationException;
+
+@ApplicationException
 public class FieldNotValidException extends RuntimeException{
 	/**
 	 * 

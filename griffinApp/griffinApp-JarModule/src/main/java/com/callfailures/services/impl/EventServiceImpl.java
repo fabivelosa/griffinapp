@@ -20,6 +20,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import com.callfailures.dao.EventDAO;
 import com.callfailures.entity.Events;
 import com.callfailures.entity.FailureClass;
+import com.callfailures.exception.FieldNotValidException;
 import com.callfailures.services.EventService;
 import com.callfailures.services.ValidationService;
 
@@ -31,6 +32,7 @@ public class EventServiceImpl implements EventService {
 
 	@Inject
 	ValidationService validationService;
+
 
 	@Override
 	public Events findById(final int id) {
@@ -46,51 +48,71 @@ public class EventServiceImpl implements EventService {
 
 	@Override
 	public List<Events> read(File workbookFile) {
+		List<Integer> validRows = new ArrayList<>();
 		List<Events> list = new ArrayList<>();
 
-		try {
-			Workbook workbook = new XSSFWorkbook(workbookFile);
+		try(Workbook workbook = new XSSFWorkbook(workbookFile);) {
+
 			Sheet sheet = workbook.getSheetAt(0);
-			Iterator<Row> iterator = sheet.iterator();
-			System.out.println("\n\nIterating over Rows and Columns using Iterator\n");
 			Iterator<Row> rowIterator = sheet.rowIterator();
 
 			Row row = rowIterator.next();
+
+			int rowNumber = 0;
+
 			while (rowIterator.hasNext()) {
+				rowNumber++;
 				row = rowIterator.next();
 
-				Iterator<Cell> cellIterator = row.cellIterator();
+				try {
+					Events events = createEventObject(row);
 
-				Cell cell = cellIterator.next();
-				System.out.print(cell + "\t");
-				Events event = new Events();
+					eventDAO.create(events);
 
-				
-				
-				
-				
-				
-//				failureClass.setFailureClass(new Double((cell.getNumericCellValue())).intValue());
-
-				cell = cellIterator.next();
-//				failureClass.setFailureDesc(cell.getStringCellValue());
-				list.add(event);
-//				eventDAO.create(event);
-
+					list.add(events);
+				}catch(FieldNotValidException e) {
+					System.out.println(e.getMessage());
+				}
 			}
-			System.out.println();
-
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (InvalidFormatException e) {
-			// TODO Auto-generated catch block
+		} catch (IOException | InvalidFormatException e) {
 			e.printStackTrace();
 		}
-		
-		
+
 		return list;
+	}
+
+	
+	private Events createEventObject(Row row) {
+		Events events = new Events();
+
+		events.setDateTime(validationService.checkDate(row, 0));
+
+		events.setCellId(validationService.checkCellId(row, 6));
+
+		events.setDuration(validationService.checkDuration(row, 7));
+
+		events.setNeVersion(validationService.checkNEVersion(row, 9));
+
+		events.setImsi(validationService.checkIMSI(row, 10));
+
+		events.setHier3Id(validationService.checkhier3Id(row, 11));
+
+		events.setHier32Id(validationService.checkhier32Id(row, 12));
+
+		events.setHier321Id(validationService.checkhier321Id(row, 13));
+
+		events.setEventCause(validationService.checkExistingEventCause(row, 1, 2));
+
+		events.setFailureClass(validationService.checkExistingFailureClass(row, 2));
+
+		events.setUeType(validationService.checkExistingUserEquipmentType(row, 3));
+
+		events.setMarketOperator(validationService.checkExistingMarketOperator(row, 4,5));
+
+		System.out.println(events);
+
+		validationService.validate(events);
+		return events;
 	}
 
 }
