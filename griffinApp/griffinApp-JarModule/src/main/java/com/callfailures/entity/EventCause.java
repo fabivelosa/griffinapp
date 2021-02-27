@@ -10,6 +10,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 @Table(name = "eventCause")
 public class EventCause {
+	
 	@EmbeddedId
 	@Valid
 	private EventCausePK eventCauseId;
