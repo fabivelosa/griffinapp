@@ -35,7 +35,7 @@ public class UploadFileService {
 	private EventService eventService;
 
 	private final String UPLOADED_FILE_PATH = System.getProperty("user.dir") + "/fileUploads/";
-	
+
 	@POST
 	@Path("/upload")
 	@Consumes("multipart/form-data")
@@ -71,24 +71,31 @@ public class UploadFileService {
 
 				System.out.println();
 
-//				service.read(sheet);
+				// service.read(sheet);
 
 				/*
 				 * Commenting out the eventService.read(sheet) for now until all the persist
 				 * tabs tasks are done The Events (Base Data) is the last tab to read as it
 				 * needs to refer to the other tabs for validation IF YOU WANNA TEST IT OUT, (1)
-				 * Uncomment the line for eventService.read(sheet) (2) Comment out
-				 * service.read(sheet) above (3) Load the reference dataset by run the
-				 * referencedataset.sql script. You can find this script in JAR module's
+				 * Uncomment the line for eventService.read(sheet) until the line with for loop
+				 * (2) Comment out service.read(sheet) above (3) Load the reference dataset by
+				 * run the referencedataset.sql script. You can find this script in JAR module's
 				 * src/main/resources folder
 				 */
 
 				causeService.read(sheet);
 				failClassService.read(sheet);
-				
+				// UE tab
+				// Mcc-mnc tab
+
 				eventService.read(sheet);
 
 				System.out.println("Done read");
+
+//				ParsingResponse<Events> eventsResults = eventService.read(sheet);
+//				System.out.println("Valid Events Row Count is : " + eventsResults.getValidObjects().size());
+//				System.out.println("Invalid Events Row Count is : " + eventsResults.getInvalidRows().size());
+//				for(final InvalidRow row : eventsResults.getInvalidRows()) System.out.println("Row " + row.getRowNumber() + "\t" + row.getErrorMessage());
 
 			} catch (IOException e) {
 				e.printStackTrace();
