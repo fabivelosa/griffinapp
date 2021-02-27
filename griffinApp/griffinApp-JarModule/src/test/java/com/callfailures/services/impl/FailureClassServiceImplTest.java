@@ -21,7 +21,6 @@ import org.mockito.internal.verification.Times;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import com.callfailures.dao.FailureClassDAO;
-import com.callfailures.entity.Events;
 import com.callfailures.entity.FailureClass;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -46,7 +45,7 @@ public class FailureClassServiceImplTest {
 		failureClass.setFailureClass(0);
 		failureClass.setFailureDesc("Sample");
 		when(failureClassDAO.getFailureClass(failureClassID)).thenReturn(failureClass);
-		FailureClass failureClassObj = failureClassServiceImpl.findById(failureClassID);
+		final FailureClass failureClassObj = failureClassServiceImpl.findById(failureClassID);
 		verify(failureClassDAO, new Times(1)).getFailureClass(failureClassID); 
 		assertEquals(0, failureClassObj.getFailureClass());
 		assertEquals("Sample", failureClassObj.getFailureDesc());
@@ -70,19 +69,19 @@ public class FailureClassServiceImplTest {
 	
 	@Test
 	public void testSuccessForRead() {
-		URL url = this.getClass().getResource("/failureClassService/validData.xlsx");
-		File workbookFile = new File(url.getFile());
+		final URL url = this.getClass().getResource("/failureClassService/validData.xlsx");
+		final File workbookFile = new File(url.getFile());
 		Mockito.doNothing().when(failureClassDAO).create(any(FailureClass.class));
-		Map<String, List<FailureClass>> failureClassSuccess =  failureClassServiceImpl.read(workbookFile);
+		final Map<String, List<FailureClass>> failureClassSuccess =  failureClassServiceImpl.read(workbookFile);
 		assertEquals(true, failureClassSuccess.containsKey("SUCCESS"));
 	}
 	
 	@Test
 	public void testFailureForRead() {
-		URL url = this.getClass().getResource("/failureClassService/validData.xlsx");
-		File workbookFile = new File(url.getFile());
+		final URL url = this.getClass().getResource("/failureClassService/validData.xlsx");
+		final File workbookFile = new File(url.getFile());
 		Mockito.doThrow(Exception.class).when(failureClassDAO).create(any(FailureClass.class));
-		Map<String, List<FailureClass>> failureClassSuccess =  failureClassServiceImpl.read(workbookFile);
+		final Map<String, List<FailureClass>> failureClassSuccess =  failureClassServiceImpl.read(workbookFile);
 		assertEquals(true, failureClassSuccess.containsKey("ERROR"));
 	}
 

@@ -14,7 +14,6 @@ import org.mockito.Mockito;
 import org.mockito.internal.verification.Times;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import com.callfailures.entity.Events;
 import com.callfailures.entity.FailureClass;
 
 @RunWith(MockitoJUnitRunner.class)
