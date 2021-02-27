@@ -13,7 +13,7 @@ create table event (
 	failureClass integer,
 	countryCode integer,
 	operatorCode integer,
-	ueType integer,
+	tac integer,
 	primary key (eventId)
 );
 
@@ -39,16 +39,23 @@ create table mccmnc (
 );
 
 create table ue (
-	ueType integer not null,
+	tac integer not null,
 	accessCapability varchar(255),
 	deviceOS varchar(255),
 	deviceType varchar(255),
-	inputModel varchar(255),
-	manufacturer varchar(255),
-	marketingName varchar(255),
+	inputMode varchar(255),
 	model varchar(255),
+	ueType varchar(255),
 	vendorName varchar(255),
-	primary key (ueType)
+	primary key (tac)
+);
+
+create table users (
+	userId varchar(255) not null,
+	userName varchar(255),
+	userPassword varchar(255),
+	userType varchar(255),
+	primary key (userId)
 );
 
 alter table event
@@ -64,6 +71,6 @@ alter table event
 	references mccmnc (countryCode,operatorCode);
 
 alter table event
-	add constraint FKlbwtjlcl6k4lwwg99lmkukayx foreign key (ueType)
-	references ue (ueType);
+	add constraint FK3pg3hygny0mcyrbb3p3eyfvie foreign key (tac)
+	references ue (tac);
 
