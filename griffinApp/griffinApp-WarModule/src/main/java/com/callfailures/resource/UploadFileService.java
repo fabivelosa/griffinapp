@@ -65,7 +65,15 @@ public class UploadFileService {
 
 				service.read(sheet);
 				
-				eventService.read(sheet);
+				/*
+				 * Commenting out the eventService.read(sheet) for now  until all the persist tabs tasks are done
+				 * The Events (Base Data) is the last tab to read as it needs to refer to the other tabs for validation
+				 * IF YOU WANNA TEST IT OUT, (1) Uncomment the line for eventService.read(sheet)
+				 * (2) Comment out service.read(sheet) above
+				 * (3) Load the reference dataset by run the referencedataset.sql script. You can find this script in JAR module's
+				 * src/main/resources folder			
+				 */
+				//	eventService.read(sheet);
 				
 				System.out.println("Done read");
 
