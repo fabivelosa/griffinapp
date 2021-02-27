@@ -22,15 +22,16 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import com.callfailures.dao.FailureClassDAO;
 import com.callfailures.entity.FailureClass;
 import com.callfailures.services.FailureClassService;
+import com.callfailures.services.ValidationService;
 
-
-
- 
 @Stateless
 public class FailureClassServiceImpl implements FailureClassService {
 
 	@Inject
 	FailureClassDAO failureClassDAO;
+
+	@Inject
+	ValidationService validationService;
 
 	@Override
 	public FailureClass findById(final int id) {
@@ -47,7 +48,7 @@ public class FailureClassServiceImpl implements FailureClassService {
 	@Override
 	public Map<String, List<FailureClass>> read(final File workbookFile) {
 
-		final Map<String, List<FailureClass>> resut = new HashMap<String, List<FailureClass>>();
+		final Map<String, List<FailureClass>> result = new HashMap<String, List<FailureClass>>();
 		final List<FailureClass> listSucess = new ArrayList<FailureClass>();
 		final List<FailureClass> listError = new ArrayList<FailureClass>();
 
@@ -61,25 +62,24 @@ public class FailureClassServiceImpl implements FailureClassService {
 			FailureClass failureClass = null;
 			Row row = rowIterator.next();
 			while (rowIterator.hasNext()) {
-				row = rowIterator.next(); 
+				row = rowIterator.next();
 
 				final Iterator<Cell> cellIterator = row.cellIterator();
 
-				Cell cell = cellIterator.next();
-				System.out.print(cell + "\t");
 				failureClass = new FailureClass();
 
-				failureClass.setFailureClass(new Double(cell.getNumericCellValue()).intValue());
+				Cell cell = cellIterator.next();
 
+				failureClass.setFailureClass(new Double(cell.getNumericCellValue()).intValue());
 				cell = cellIterator.next();
 				failureClass.setFailureDesc(cell.getStringCellValue());
 
 				try {
-					failureClassDAO.create(failureClass);
-					
-					listSucess.add(failureClass);
+					if (validationService.checkExistingFailureClass(failureClass) == null) {
+						failureClassDAO.create(failureClass);
+						listSucess.add(failureClass);
+					}
 				} catch (Exception e) {
-					//failureClass.setStatusMessage(e.getMessage());
 					listError.add(failureClass);
 				}
 
@@ -93,10 +93,10 @@ public class FailureClassServiceImpl implements FailureClassService {
 			e.printStackTrace();
 		}
 
-		resut.put("SUCCESS", (ArrayList<FailureClass>) listSucess);
-		resut.put("ERROR", (ArrayList<FailureClass>) listError);
+		result.put("SUCCESS", (ArrayList<FailureClass>) listSucess);
+		result.put("ERROR", (ArrayList<FailureClass>) listError);
 
-		return resut;
+		return result;
 	}
 
 }

@@ -110,6 +110,21 @@ public class ValidationServiceImpl implements ValidationService{
 	}
 
 	@Override
+	public FailureClass checkExistingFailureClass(final FailureClass newItem) {
+		int failureClassId;
+		try {
+			failureClassId = newItem.getFailureClass();
+		}catch(Exception exception){
+			throw new FieldNotValidException("failureClass", "Invalid Failure Class Id");
+		}
+		final FailureClass failureClass = failureClassDAO.getFailureClass(failureClassId);
+		if(!(failureClass == null)) {
+			throw new FieldNotValidException("failureClass", "Already exists Failure Class Id");
+		}
+		return failureClass;
+	}
+	
+	@Override
 	public EventCause checkExistingEventCause(final Row row, final int eventColumnNumber, final int causeColumnNumber) throws FieldNotValidException{
 		int eventId;
 		int causeCode;
@@ -121,6 +136,19 @@ public class ValidationServiceImpl implements ValidationService{
 		}
 		EventCause eventCause = eventCauseDAO.getEventCause(new EventCausePK(eventId, causeCode));
 		if(eventCause == null) {
+			throw new FieldNotValidException("eventCause", "Inexistent Event and Cause Code combination");
+		}
+		return eventCause;
+	}
+	
+	
+	@Override
+	public EventCause checkExistingEventCause(EventCause newItem) throws FieldNotValidException{
+		int eventId = newItem.getEventCauseId().getEventCauseId();
+		int causeCode =  newItem.getEventCauseId().getCauseCode();
+		
+		EventCause eventCause = eventCauseDAO.getEventCause(new EventCausePK(eventId, causeCode));
+		if (!(eventCause == null)) {
 			throw new FieldNotValidException("eventCause", "Inexistent Event and Cause Code combination");
 		}
 		return eventCause;

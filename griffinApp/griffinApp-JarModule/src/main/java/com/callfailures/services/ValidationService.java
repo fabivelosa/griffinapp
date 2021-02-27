@@ -150,4 +150,21 @@ public interface ValidationService {
 	String checkhier321Id(Row row, int column) throws FieldNotValidException;
 
 	
+	/**
+	 * Reads the FailureClass
+	 * @param FailureClass Object
+	 * @return the valid FailureClass
+	 * @throws FieldNotValidException if the FailureClass already exists
+	 */
+	FailureClass checkExistingFailureClass(FailureClass failureClass);
+
+	/**
+	 * Reads the EventCause
+	 * @param EventCause Object
+	 * @return the valid EventCause
+	 * @throws FieldNotValidException if the EventCause already exists
+	 */
+	EventCause checkExistingEventCause(EventCause newItem) throws FieldNotValidException;
+
+	
 }
