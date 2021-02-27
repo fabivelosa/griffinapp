@@ -63,7 +63,7 @@ public class ValidationServiceImpl implements ValidationService{
 	}
 
 	@Override
-	public MarketOperator checkExistingMarketOperator(final Row row, final int mCcColNumber, final int mNcColNumber) {
+	public MarketOperator checkExistingMarketOperator(final Row row, final int mCcColNumber, final int mNcColNumber) throws FieldNotValidException{
 		int market;
 		int operator;
 		try {
@@ -80,7 +80,7 @@ public class ValidationServiceImpl implements ValidationService{
 	}
 
 	@Override
-	public UserEquipment checkExistingUserEquipmentType(final Row row, final int colNumber) {
+	public UserEquipment checkExistingUserEquipmentType(final Row row, final int colNumber) throws FieldNotValidException{
 		int ueID; 
 		try {
 			ueID = (int) row.getCell(colNumber).getNumericCellValue();
@@ -95,7 +95,7 @@ public class ValidationServiceImpl implements ValidationService{
 	}
 
 	@Override
-	public FailureClass checkExistingFailureClass(final Row row, final int colNumber) {
+	public FailureClass checkExistingFailureClass(final Row row, final int colNumber) throws FieldNotValidException{
 		int failureClassId;
 		try {
 			failureClassId = (int) row.getCell(colNumber).getNumericCellValue();
@@ -110,7 +110,7 @@ public class ValidationServiceImpl implements ValidationService{
 	}
 
 	@Override
-	public EventCause checkExistingEventCause(final Row row, final int eventColumnNumber, final int causeColumnNumber) {
+	public EventCause checkExistingEventCause(final Row row, final int eventColumnNumber, final int causeColumnNumber) throws FieldNotValidException{
 		int eventId;
 		int causeCode;
 		try {
@@ -127,7 +127,7 @@ public class ValidationServiceImpl implements ValidationService{
 	}
 
 	@Override
-	public LocalDateTime checkDate(final Row row, final int colNumber) {
+	public LocalDateTime checkDate(final Row row, final int colNumber) throws FieldNotValidException{
 		LocalDateTime dateTime;
 		try {
 			dateTime = row.getCell(colNumber).getLocalDateTimeCellValue();
@@ -138,7 +138,7 @@ public class ValidationServiceImpl implements ValidationService{
 	}
 
 	@Override
-	public int checkCellId(final Row row, final int colNumber) {
+	public int checkCellId(final Row row, final int colNumber) throws FieldNotValidException{
 		int cellid;
 		try {
 			cellid = (int) row.getCell(colNumber).getNumericCellValue();
@@ -149,7 +149,7 @@ public class ValidationServiceImpl implements ValidationService{
 	}
 
 	@Override
-	public int checkDuration(final Row row, final int colNumber) {
+	public int checkDuration(final Row row, final int colNumber) throws FieldNotValidException{
 		int duration;
 		try {
 			duration = (int) row.getCell(colNumber).getNumericCellValue();
@@ -160,7 +160,7 @@ public class ValidationServiceImpl implements ValidationService{
 	}
 
 	@Override
-	public String checkNEVersion(final Row row, final int colNumber) {
+	public String checkNEVersion(final Row row, final int colNumber) throws FieldNotValidException{
 		String neVersion;
 		try {
 			neVersion = row.getCell(colNumber).getStringCellValue();
@@ -175,7 +175,7 @@ public class ValidationServiceImpl implements ValidationService{
 	}
 
 	@Override
-	public String checkIMSI(final Row row, final int colNumber) {
+	public String checkIMSI(final Row row, final int colNumber) throws FieldNotValidException{
 		String imsi;
 		try {
 			imsi = BigDecimal.valueOf(row.getCell(colNumber).getNumericCellValue()).toBigInteger().toString();
@@ -189,7 +189,7 @@ public class ValidationServiceImpl implements ValidationService{
 	}
 
 	@Override
-	public String checkhier3Id(final Row row, final int colNumber) {
+	public String checkhier3Id(final Row row, final int colNumber) throws FieldNotValidException{
 		String imsi;
 		try {
 			imsi = BigDecimal.valueOf(row.getCell(colNumber).getNumericCellValue()).toBigInteger().toString();
@@ -204,7 +204,7 @@ public class ValidationServiceImpl implements ValidationService{
 	}
 
 	@Override
-	public String checkhier32Id(final Row row, final int colNumber) {
+	public String checkhier32Id(final Row row, final int colNumber) throws FieldNotValidException{
 		String imsi;
 		try {
 			imsi = BigDecimal.valueOf(row.getCell(colNumber).getNumericCellValue()).toBigInteger().toString();
@@ -219,7 +219,7 @@ public class ValidationServiceImpl implements ValidationService{
 	}
 
 	@Override
-	public String checkhier321Id(final Row row, final int colNumber) {
+	public String checkhier321Id(final Row row, final int colNumber) throws FieldNotValidException{
 		String imsi;
 		try {
 			imsi = BigDecimal.valueOf(row.getCell(colNumber).getNumericCellValue()).toBigInteger().toString();
