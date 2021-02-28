@@ -2,6 +2,8 @@ package com.callfailures.services;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 import javax.ejb.Local;
 
@@ -14,5 +16,5 @@ public interface UserEquipmentService {
 
 	void create(UserEquipment obj);
 	
-	ArrayList<UserEquipment> read(File workbookFile);
+	Map<String, List<UserEquipment>> read(File workbookFile);
 }
