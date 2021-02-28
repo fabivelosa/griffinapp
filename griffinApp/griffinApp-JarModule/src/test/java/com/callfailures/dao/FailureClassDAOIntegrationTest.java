@@ -19,7 +19,7 @@ import com.callfailures.entity.UserEquipment;
 import com.callfailures.utils.test.EntityGenerator;
 
 @RunWith(Arquillian.class)
-public class FailureClassDAOIntTest {
+public class FailureClassDAOIntegrationTest {
 	   @Deployment
 	   public static JavaArchive createTestArchive() {
 	      return ShrinkWrap.create(JavaArchive.class, "test.jar")
