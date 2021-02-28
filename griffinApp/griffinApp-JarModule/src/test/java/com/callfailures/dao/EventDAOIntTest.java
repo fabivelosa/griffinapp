@@ -51,16 +51,16 @@ public class EventDAOIntTest {
 	   private final CreateEvents eventGenerator = new CreateEvents();
 	   
 	   @Test
-	   public void testCanPersistUserObject () {
+	   public void testCanPersistEventObject () {
 		final String localDateTime = "03/18/2020 23:45";
-		final Integer eventId = 4098;
-		final Integer failureId = 1;
-		final Integer ueId = 21060800;
-		final Integer mCc = 100;
-		final Integer mNc = 930;
-		final Integer cellId = 4;
-		final Integer duration = 1000;
-		final Integer causeCode = 0;
+		final int eventId = 4098;
+		final int failureId = 1;
+		final int ueId = 21060800;
+		final int mCc = 100;
+		final int mNc = 930;
+		final int cellId = 4;
+		final int duration = 1000;
+		final int causeCode = 0;
 		final String neVersion = "11B";
 		final String hier3Id = "4.81E+18";
 		final String hier32Id = "8.23E+18";
@@ -78,7 +78,8 @@ public class EventDAOIntTest {
 		   eventCauseDAO.create(events.getEventCause());
 		   userEquipmentDAO.create(events.getUeType());
 		   eventDAO.create(events);
-		   assertEquals(1,1);
+		   final Events queryEvent = eventDAO.getEvent(1);
+		   assertEquals(1, queryEvent.getEventId());
 
 	   }
 
