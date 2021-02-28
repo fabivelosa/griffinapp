@@ -78,6 +78,21 @@ public class ValidationServiceImpl implements ValidationService{
 		}
 		return marketOperator;
 	}
+	
+	@Override
+	public MarketOperator checkExistingMarketOperator(MarketOperator newItem) throws FieldNotValidException {
+		MarketOperatorPK marketOperatorId;
+		try {
+			marketOperatorId = newItem.getMarketOperatorId();
+		}catch(Exception exception){
+			throw new FieldNotValidException("failureClass", "Invalid Market Operator");
+		}
+		final MarketOperator operator = marketOperatorDAO.getMarketOperator(marketOperatorId);
+		if(!(operator == null)) {
+			throw new FieldNotValidException("operator", "Already exists Market Operator");
+		}
+		return operator;
+	}
 
 	@Override
 	public UserEquipment checkExistingUserEquipmentType(final Row row, final int colNumber) throws FieldNotValidException{
@@ -153,6 +168,8 @@ public class ValidationServiceImpl implements ValidationService{
 		}
 		return eventCause;
 	}
+	
+	
 
 	@Override
 	public LocalDateTime checkDate(final Row row, final int colNumber) throws FieldNotValidException{
@@ -259,5 +276,8 @@ public class ValidationServiceImpl implements ValidationService{
 		}
 		return imsi;
 	}
+
+
+	
 
 }

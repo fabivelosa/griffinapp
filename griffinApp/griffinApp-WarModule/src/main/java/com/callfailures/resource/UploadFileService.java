@@ -21,6 +21,7 @@ import org.jboss.resteasy.plugins.providers.multipart.MultipartFormDataInput;
 import com.callfailures.services.EventCauseService;
 import com.callfailures.services.EventService;
 import com.callfailures.services.FailureClassService;
+import com.callfailures.services.MarketOperatorService;
 import com.callfailures.services.UserEquipmentService;
 
 @Path("/file")
@@ -37,6 +38,9 @@ public class UploadFileService {
 	
 	@EJB
 	private UserEquipmentService userEquipmentService;
+	
+	@EJB
+	private MarketOperatorService marketOperatorService;
 
 	private final String UPLOADED_FILE_PATH = System.getProperty("user.dir") + "/fileUploads/";
 
@@ -90,6 +94,7 @@ public class UploadFileService {
 				causeService.read(sheet);
 				failClassService.read(sheet);
 				userEquipmentService.read(sheet);
+				marketOperatorService.read(sheet);
 				// UE tab
 				// Mcc-mnc tab
 
