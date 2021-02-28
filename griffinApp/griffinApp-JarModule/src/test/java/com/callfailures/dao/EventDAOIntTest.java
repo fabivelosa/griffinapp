@@ -17,7 +17,7 @@ import com.callfailures.entity.FailureClass;
 import com.callfailures.entity.MarketOperator;
 import com.callfailures.entity.MarketOperatorPK;
 import com.callfailures.entity.UserEquipment;
-import com.callfailures.utils.test.CreateEvents;
+import com.callfailures.utils.test.EntityGenerator;
 
 @RunWith(Arquillian.class)
 public class EventDAOIntTest {
@@ -27,7 +27,7 @@ public class EventDAOIntTest {
 	      return ShrinkWrap.create(JavaArchive.class, "test.jar")
 	         .addClasses(EventDAO.class, Events.class, EventCause.class, 
 	        		 MarketOperator.class, UserEquipment.class, FailureClass.class,
-	        		 EventCausePK.class, MarketOperatorPK.class, CreateEvents.class,
+	        		 EventCausePK.class, MarketOperatorPK.class, EntityGenerator.class,
 	        		 FailureClassDAO.class, MarketOperatorDAO.class, EventCauseDAO.class,
 	        		 UserEquipmentDAO.class)
 	         .addAsManifestResource(
@@ -48,7 +48,7 @@ public class EventDAOIntTest {
 	   private UserEquipmentDAO userEquipmentDAO;
 	   
 	   private Events events = new Events();
-	   private final CreateEvents eventGenerator = new CreateEvents();
+	   private final EntityGenerator eventGenerator = new EntityGenerator();
 	   
 	   @Test
 	   public void testCanPersistEventObject () {
