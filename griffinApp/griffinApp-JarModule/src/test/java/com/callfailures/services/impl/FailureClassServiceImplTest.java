@@ -7,6 +7,7 @@ import static org.mockito.Mockito.when;
 
 import java.io.File;
 import java.net.URL;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.Map;
 
@@ -30,6 +31,7 @@ public class FailureClassServiceImplTest {
 	private final FailureClassDAO failureClassDAO = mock(FailureClassDAO.class);
 	private static final int failureClassID = 1;
 	private FailureClass failureClass;
+	private final String absolutePath = Paths.get("src","test","resources").toFile().getAbsolutePath();
 
 	@InjectMocks
 	private FailureClassServiceImpl failureClassServiceImpl;
@@ -69,8 +71,7 @@ public class FailureClassServiceImplTest {
 	
 	@Test
 	public void testSuccessForRead() {
-		final URL url = this.getClass().getResource("/failureClassService/validData.xlsx");
-		final File workbookFile = new File(url.getFile());
+		final File workbookFile = new File(absolutePath + "/failureClassService/validData.xlsx");
 		Mockito.doNothing().when(failureClassDAO).create(any(FailureClass.class));
 		final Map<String, List<FailureClass>> failureClassSuccess =  failureClassServiceImpl.read(workbookFile);
 		assertEquals(true, failureClassSuccess.containsKey("SUCCESS"));
@@ -78,8 +79,7 @@ public class FailureClassServiceImplTest {
 	
 	@Test
 	public void testFailureForRead() {
-		final URL url = this.getClass().getResource("/failureClassService/validData.xlsx");
-		final File workbookFile = new File(url.getFile());
+		final File workbookFile = new File(absolutePath + "/failureClassService/validData.xlsx");
 		Mockito.doThrow(Exception.class).when(failureClassDAO).create(any(FailureClass.class));
 		final Map<String, List<FailureClass>> failureClassSuccess =  failureClassServiceImpl.read(workbookFile);
 		assertEquals(true, failureClassSuccess.containsKey("ERROR"));
