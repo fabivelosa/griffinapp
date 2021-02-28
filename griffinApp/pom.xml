@@ -242,5 +242,6 @@
 		<module>griffinApp-JarModule</module>
 		<module>griffinApp-WarModule</module>
 		<module>griffinApp-EarModule</module>
+		<module>griffinApp-SeleniumTest</module>
 	</modules>
 </project>
