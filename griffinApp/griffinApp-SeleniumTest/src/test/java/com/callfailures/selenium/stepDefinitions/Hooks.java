@@ -9,7 +9,7 @@ import cucumber.api.java.Before;
 public class Hooks {
 	public static WebDriver driver;
 	public static final String ROOT_DIRECTORY = System.getProperty("user.dir");
-	public static final String TEST_UPLOAD_PAGE = "http://www.w3schools.com/howto/howto_html_file_upload_button.asp";
+	public static final String TEST_UPLOAD_PAGE = "http://localhost:8080/callfailures/upload.html";
 	
 	
 	@Before
