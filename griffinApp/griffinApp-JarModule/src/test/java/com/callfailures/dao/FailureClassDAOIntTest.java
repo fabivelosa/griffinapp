@@ -16,6 +16,7 @@ import com.callfailures.entity.FailureClass;
 import com.callfailures.entity.MarketOperator;
 import com.callfailures.entity.MarketOperatorPK;
 import com.callfailures.entity.UserEquipment;
+import com.callfailures.utils.test.EntityGenerator;
 
 @RunWith(Arquillian.class)
 public class FailureClassDAOIntTest {
@@ -24,7 +25,7 @@ public class FailureClassDAOIntTest {
 	      return ShrinkWrap.create(JavaArchive.class, "test.jar")
 	         .addClasses(FailureClassDAO.class, Events.class, EventCause.class, 
 	        		 MarketOperator.class, UserEquipment.class, FailureClass.class,
-	        		 EventCausePK.class, MarketOperatorPK.class)
+	        		 EventCausePK.class, MarketOperatorPK.class, EntityGenerator.class)
 	         .addAsManifestResource(
 	            "arquillian-persistence/persistence.xml", 
 	            ArchivePaths.create("persistence.xml"));
@@ -34,15 +35,17 @@ public class FailureClassDAOIntTest {
 	   @Inject
 	   private FailureClassDAO failureClassDAO;
 	   
-	   private final FailureClass failureClass = new FailureClass();
+	   private FailureClass failureClass = new FailureClass();
+	   private final EntityGenerator entityGenerator = new EntityGenerator();
 
 	   @Test
-	   public void testCanPersistUserObject() {
-		   failureClass.setFailureClass(0);
-		   failureClass.setFailureDesc("sample");
+	   public void testCanPersistFailureClassObject() {
+		   final int failureId = 0;
+		   final String failureClassDescription = "sample";
+		   failureClass = entityGenerator.parseFailureClass(failureId, failureClassDescription);
 		   failureClassDAO.create(failureClass);
-		   final FailureClass queryFailureClass = failureClassDAO.getFailureClass(0);
-		   assertEquals(0, queryFailureClass.getFailureClass());
+		   final FailureClass queryResult = failureClassDAO.getFailureClass(0);
+		   assertEquals(failureClassDescription, queryResult.getFailureDesc());
 	   }
 
 	}
