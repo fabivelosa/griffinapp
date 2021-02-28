@@ -165,6 +165,15 @@ public interface ValidationService {
 	 * @throws FieldNotValidException if the EventCause already exists
 	 */
 	EventCause checkExistingEventCause(EventCause newItem) throws FieldNotValidException;
+	
+	/**
+	 * Reads the MarketOperator
+	 * @param MarketOperator Object
+	 * @return the valid MarketOperator
+	 * @throws FieldNotValidException if the MarketOperator already exists
+	 */
+	MarketOperator checkExistingMarketOperator(MarketOperator operator) throws FieldNotValidException;
+	 
 
 	
 }
