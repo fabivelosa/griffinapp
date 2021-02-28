@@ -85,7 +85,7 @@ public class ValidationServiceImpl implements ValidationService{
 		try {
 			marketOperatorId = newItem.getMarketOperatorId();
 		}catch(Exception exception){
-			throw new FieldNotValidException("failureClass", "Invalid Failure Class Id");
+			throw new FieldNotValidException("failureClass", "Invalid Market Operator");
 		}
 		final MarketOperator operator = marketOperatorDAO.getMarketOperator(marketOperatorId);
 		if(!(operator == null)) {
