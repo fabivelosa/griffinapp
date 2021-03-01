@@ -7,8 +7,10 @@ import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.shrinkwrap.api.ArchivePaths;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.spec.JavaArchive;
+import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.junit.runners.MethodSorters;
 
 import com.callfailures.entity.EventCause;
 import com.callfailures.entity.EventCausePK;
@@ -19,6 +21,7 @@ import com.callfailures.entity.MarketOperatorPK;
 import com.callfailures.entity.UserEquipment;
 import com.callfailures.utils.test.EntityGenerator;
 
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 @RunWith(Arquillian.class)
 public class EventDAOIntegrationTest {
 	   
@@ -48,28 +51,17 @@ public class EventDAOIntegrationTest {
 	   private UserEquipmentDAO userEquipmentDAO;
 	   
 	   private Events events = new Events();
-	   private final EntityGenerator eventGenerator = new EntityGenerator();
+	   private final static EntityGenerator eventGenerator = new EntityGenerator();
+	   private final static String localDateTime = "03/18/2020 23:45";
+	   private final static int eventId = 4098, failureId = 1, ueId = 21060800, mCc = 100, mNc = 930, cellId = 4, duration = 1000,  causeCode = 0 ;
+	   private final static String neVersion = "11B", hier3Id = "4.81E+18", hier32Id = "8.23E+18", hier321Id = "1.15E+18", IMSI = "3.45E+14" ;
+	   private final static String eventCauseDescription = "S1 SIG CONN SETUP-SUCCESS";
+	   private final static String failureClassDescription = "HIGH PRIORITY ACCESS";
+	   private final static String country = "Antigua and Barbuda";
+	   private final static String operator = "AT&T Wireless-Antigua AG";
 	   
 	   @Test
-	   public void testCanPersistEventObject () {
-		final String localDateTime = "03/18/2020 23:45";
-		final int eventId = 4098;
-		final int failureId = 1;
-		final int ueId = 21060800;
-		final int mCc = 100;
-		final int mNc = 930;
-		final int cellId = 4;
-		final int duration = 1000;
-		final int causeCode = 0;
-		final String neVersion = "11B";
-		final String hier3Id = "4.81E+18";
-		final String hier32Id = "8.23E+18";
-		final String hier321Id = "1.15E+18";
-		final String eventCauseDescription = "S1 SIG CONN SETUP-SUCCESS";
-		final String failureClassDescription = "HIGH PRIORITY ACCESS";
-		final String country = "Antigua and Barbuda";
-		final String operator = "AT&T Wireless-Antigua AG";
-		final String IMSI = "3.45E+14";
+	   public void testCreateEvent() {
 		events = eventGenerator.generateCallFailureInstance(localDateTime, eventId, failureId, ueId, mCc, mNc,
 					cellId, duration, causeCode, neVersion, IMSI , hier3Id, hier32Id, hier321Id, eventCauseDescription,
 					failureClassDescription, country, operator);
@@ -78,9 +70,59 @@ public class EventDAOIntegrationTest {
 		   eventCauseDAO.create(events.getEventCause());
 		   userEquipmentDAO.create(events.getUeType());
 		   eventDAO.create(events);
+	   }
+	   
+	   @Test
+	   public void testGetEventId() {
 		   final Events queryEvent = eventDAO.getEvent(1);
 		   assertEquals(1, queryEvent.getEventId());
-
+	   }
+	   	   
+	   @Test
+	   public void testGetEventCellId() {
+		   final Events queryEvent = eventDAO.getEvent(1);
+		   assertEquals(cellId, queryEvent.getCellId());
+	   }
+	   
+	   @Test
+	   public void testGetEventDuration() {
+		   final Events queryEvent = eventDAO.getEvent(1);
+		   assertEquals(duration, queryEvent.getDuration());
+	   }
+	   
+	   @Test
+	   public void testGetEventHier321Id() {
+		   final Events queryEvent = eventDAO.getEvent(1);
+		   assertEquals(hier321Id, queryEvent.getHier321Id());
+	   }
+	   
+	   @Test
+	   public void testGetEventHier32Id() {
+		   final Events queryEvent = eventDAO.getEvent(1);
+		   assertEquals(hier32Id, queryEvent.getHier32Id());
+	   }
+	   
+	   @Test
+	   public void testGetEventHier3Id() {
+		   final Events queryEvent = eventDAO.getEvent(1);
+		   assertEquals(hier3Id, queryEvent.getHier3Id());
+	   }
+	   
+	   @Test
+	   public void testGetEventImsi() {
+		   final Events queryEvent = eventDAO.getEvent(1);
+		   assertEquals(IMSI, queryEvent.getImsi());
+	   }
+	   
+	   @Test
+	   public void testGetEventNeVersion() {
+		   final Events queryEvent = eventDAO.getEvent(1);
+		   assertEquals(neVersion, queryEvent.getNeVersion());
+	   }
+	   	   
+	   @Test
+	   public void testFailureGetEvent() {
+		   assertEquals(null, eventDAO.getEvent(2));
 	   }
 
 	}
