@@ -52,7 +52,7 @@ public class FailureClassDAOIntegrationTest {
 	   @Test
 	   public void testGetFailureClassId() {
 		   final FailureClass queryResult = failureClassDAO.getFailureClass(0);
-		   assertEquals(failureClassDescription, queryResult.getFailureDesc());
+		   assertEquals(0, queryResult.getFailureClass());
 	   }
 	   
 	   @Test
