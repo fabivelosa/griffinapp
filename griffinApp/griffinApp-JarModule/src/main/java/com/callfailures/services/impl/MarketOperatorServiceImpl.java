@@ -1,14 +1,9 @@
 package com.callfailures.services.impl;
 
 import java.io.File;
-
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -20,10 +15,11 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
-
 import com.callfailures.dao.MarketOperatorDAO;
 import com.callfailures.entity.MarketOperator;
 import com.callfailures.entity.MarketOperatorPK;
+import com.callfailures.parsingutils.InvalidRow;
+import com.callfailures.parsingutils.ParsingResponse;
 import com.callfailures.services.MarketOperatorService;
 import com.callfailures.services.ValidationService;
 
@@ -46,19 +42,15 @@ public class MarketOperatorServiceImpl implements MarketOperatorService {
 		marketOperatorDAO.create(obj);
 	}
 
-
 	@Override
-	public Map<String, List<MarketOperator>> read(final File workbookFile){
+	public ParsingResponse<MarketOperator> read(final File workbookFile) {
 
-		final Map<String, List<MarketOperator>> result = new HashMap<String, List<MarketOperator>>();
-		final List<MarketOperator> listSuccess = new ArrayList<MarketOperator>();
-		final List <MarketOperator> listError = new ArrayList<MarketOperator>();
+		final ParsingResponse<MarketOperator> result = new ParsingResponse<>();
 
 		try {
 			final Workbook workbook = new XSSFWorkbook(workbookFile);
-			final Sheet sheet = workbook.getSheetAt(1);
+			final Sheet sheet = workbook.getSheetAt(4);
 			final Iterator<Row> iterator = sheet.iterator();
-			System.out.println("\n\nIterating over Rows and Columns using Iterator\n");
 			final Iterator<Row> rowIterator = sheet.rowIterator();
 			MarketOperator operator = null;
 			MarketOperatorPK operatorPK = null;
@@ -77,7 +69,6 @@ public class MarketOperatorServiceImpl implements MarketOperatorService {
 				operatorPK.setOperatorCode(new Double(cell.getNumericCellValue()).intValue());
 				cell = cellIterator.next();
 
-
 				operator.setMarketOperatorId(operatorPK);
 				operator.setCountryDesc(cell.getStringCellValue());
 				operator.setOperatorDesc(cell.getStringCellValue());
@@ -85,10 +76,10 @@ public class MarketOperatorServiceImpl implements MarketOperatorService {
 				try {
 					if (validationService.checkExistingMarketOperator(operator) == null) {
 						marketOperatorDAO.create(operator);
-						listSuccess.add(operator);
+						result.addValidObject(operator);
 					}
 				} catch (Exception e) {
-					listError.add(operator);
+					result.addInvalidRow(new InvalidRow(cell.getRowIndex(), e.getMessage()));
 				}
 			}
 		} catch (FileNotFoundException e) {
@@ -99,12 +90,7 @@ public class MarketOperatorServiceImpl implements MarketOperatorService {
 			e.printStackTrace();
 		}
 
-		result.put("SUCCESS", (ArrayList<MarketOperator>) listSuccess);
-		result.put("ERROR", (ArrayList<MarketOperator>) listError);
-
 		return result;
 	}
 
-
 }
-

@@ -3,11 +3,7 @@ package com.callfailures.services.impl;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -22,6 +18,8 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import com.callfailures.dao.EventCauseDAO;
 import com.callfailures.entity.EventCause;
 import com.callfailures.entity.EventCausePK;
+import com.callfailures.parsingutils.InvalidRow;
+import com.callfailures.parsingutils.ParsingResponse;
 import com.callfailures.services.EventCauseService;
 import com.callfailures.services.ValidationService;
 
@@ -45,11 +43,9 @@ public class EventCauseServiceImpl implements EventCauseService {
 	}
 
 	@Override
-	public Map<String, List<EventCause>> read(final File workbookFile) {
+	public ParsingResponse<EventCause> read(final File workbookFile) {
 
-		final Map<String, List<EventCause>> result = new HashMap<String, List<EventCause>>();
-		final List<EventCause> listSucess = new ArrayList<EventCause>();
-		final List<EventCause> listError = new ArrayList<EventCause>();
+		final ParsingResponse<EventCause> result = new ParsingResponse<>();
 
 		try {
 			final Workbook workbook = new XSSFWorkbook(workbookFile);
@@ -77,12 +73,12 @@ public class EventCauseServiceImpl implements EventCauseService {
 				eventCause.setDescription(cell.getStringCellValue());
 
 				try {
-					if (validationService.checkExistingEventCause(eventCause) == null) {
-						eventCauseDAO.create(eventCause);
-						listSucess.add(eventCause);
-					}
+					 if (validationService.checkExistingEventCause(eventCause) == null) {
+					eventCauseDAO.create(eventCause);
+					result.addValidObject(eventCause);
+					 }
 				} catch (Exception e) {
-					listError.add(eventCause);
+					result.addInvalidRow(new InvalidRow(cell.getRowIndex(), e.getMessage()));
 				}
 			}
 		} catch (FileNotFoundException e) {
@@ -92,9 +88,6 @@ public class EventCauseServiceImpl implements EventCauseService {
 		} catch (InvalidFormatException e) {
 			e.printStackTrace();
 		}
-
-		result.put("SUCCESS", (ArrayList<EventCause>) listSucess);
-		result.put("ERROR", (ArrayList<EventCause>) listError);
 
 		return result;
 	}

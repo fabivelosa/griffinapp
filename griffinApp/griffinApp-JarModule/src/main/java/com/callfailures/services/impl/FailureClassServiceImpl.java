@@ -3,11 +3,7 @@ package com.callfailures.services.impl;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -21,6 +17,8 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import com.callfailures.dao.FailureClassDAO;
 import com.callfailures.entity.FailureClass;
+import com.callfailures.parsingutils.InvalidRow;
+import com.callfailures.parsingutils.ParsingResponse;
 import com.callfailures.services.FailureClassService;
 import com.callfailures.services.ValidationService;
 
@@ -46,18 +44,15 @@ public class FailureClassServiceImpl implements FailureClassService {
 	}
 
 	@Override
-	public Map<String, List<FailureClass>> read(final File workbookFile) {
+	public ParsingResponse<FailureClass> read(final File workbookFile) {
 
-		final Map<String, List<FailureClass>> result = new HashMap<String, List<FailureClass>>();
-		final List<FailureClass> listSucess = new ArrayList<FailureClass>();
-		final List<FailureClass> listError = new ArrayList<FailureClass>();
+		final ParsingResponse<FailureClass> result = new ParsingResponse<>(); 
 
 		try {
 
 			final Workbook workbook = new XSSFWorkbook(workbookFile);
 			final Sheet sheet = workbook.getSheetAt(2);
 			final Iterator<Row> iterator = sheet.iterator();
-			System.out.println("\n\nIterating over Rows and Columns using Iterator\n");
 			final Iterator<Row> rowIterator = sheet.rowIterator();
 			FailureClass failureClass = null;
 			Row row = rowIterator.next();
@@ -70,17 +65,18 @@ public class FailureClassServiceImpl implements FailureClassService {
 
 				Cell cell = cellIterator.next();
 
-				failureClass.setFailureClass(new Double(cell.getNumericCellValue()).intValue());
+				failureClass.setFailureClass(new Double(cell.getNumericCellValue()).intValue()); 
 				cell = cellIterator.next();
 				failureClass.setFailureDesc(cell.getStringCellValue());
 
 				try {
-					if (validationService.checkExistingFailureClass(failureClass) == null) {
-						failureClassDAO.create(failureClass);
-						listSucess.add(failureClass);
-					}
+					 if (validationService.checkExistingFailureClass(failureClass) == null) {
+					failureClassDAO.create(failureClass);
+					result.addValidObject(failureClass);
+					 }
 				} catch (Exception e) {
-					listError.add(failureClass);
+					result.addInvalidRow(new InvalidRow(cell.getRowIndex(), e.getMessage()));
+
 				}
 
 			}
@@ -92,9 +88,6 @@ public class FailureClassServiceImpl implements FailureClassService {
 		} catch (InvalidFormatException e) {
 			e.printStackTrace();
 		}
-
-		result.put("SUCCESS", (ArrayList<FailureClass>) listSucess);
-		result.put("ERROR", (ArrayList<FailureClass>) listError);
 
 		return result;
 	}

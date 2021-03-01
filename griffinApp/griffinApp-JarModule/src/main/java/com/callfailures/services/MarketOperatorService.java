@@ -17,6 +17,6 @@ public interface MarketOperatorService {
 
 	void create(MarketOperator obj);
 	
-	Map<String, List<MarketOperator>> read(File workbookFile);
+	ParsingResponse<MarketOperator> read(File workbookFile);
 
 }

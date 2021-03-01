@@ -35,10 +35,10 @@ public class UploadFileService {
 
 	@EJB
 	private EventService eventService;
-	
+
 	@EJB
 	private UserEquipmentService userEquipmentService;
-	
+
 	@EJB
 	private MarketOperatorService marketOperatorService;
 
@@ -71,15 +71,13 @@ public class UploadFileService {
 
 				// constructs upload file path
 				fileName = UPLOADED_FILE_PATH + fileName;
-				
+
 				sheet = writeFile(bytes, fileName);
 
 				System.out.println("Done upload");
 				System.out.println("name " + sheet.getName());
-				
-				System.out.println();
 
-				// service.read(sheet);
+				System.out.println();
 
 				/*
 				 * Commenting out the eventService.read(sheet) for now until all the persist
@@ -95,9 +93,6 @@ public class UploadFileService {
 				failClassService.read(sheet);
 				userEquipmentService.read(sheet);
 				marketOperatorService.read(sheet);
-				// UE tab
-				// Mcc-mnc tab
-
 				eventService.read(sheet);
 
 				System.out.println("Done read");

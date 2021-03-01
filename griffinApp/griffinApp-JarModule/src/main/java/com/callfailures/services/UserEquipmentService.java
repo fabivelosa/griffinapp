@@ -8,6 +8,7 @@ import java.util.Map;
 import javax.ejb.Local;
 
 import com.callfailures.entity.UserEquipment;
+import com.callfailures.parsingutils.ParsingResponse;
 
 @Local
 public interface UserEquipmentService {
@@ -16,5 +17,5 @@ public interface UserEquipmentService {
 
 	void create(UserEquipment obj);
 	
-	Map<String, List<UserEquipment>> read(File workbookFile);
+	ParsingResponse<UserEquipment> read(File workbookFile);
 }

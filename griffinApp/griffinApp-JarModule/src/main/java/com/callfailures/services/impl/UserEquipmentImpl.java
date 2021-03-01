@@ -3,11 +3,7 @@ package com.callfailures.services.impl;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -21,8 +17,9 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import com.callfailures.dao.UserEquipmentDAO;
-import com.callfailures.entity.FailureClass;
 import com.callfailures.entity.UserEquipment;
+import com.callfailures.parsingutils.InvalidRow;
+import com.callfailures.parsingutils.ParsingResponse;
 import com.callfailures.services.UserEquipmentService;
 
 @Stateless
@@ -30,34 +27,30 @@ public class UserEquipmentImpl implements UserEquipmentService {
 
 	@Inject
 	UserEquipmentDAO userEquipmentDAO;
-	
+
 	ValidationServiceImpl validationService;
 
 	@Override
 	public UserEquipment findById(int id) {
-		// TODO Auto-generated method stub
 		return userEquipmentDAO.getUserEquipment(id);
 	}
 
 	@Override
 	public void create(UserEquipment obj) {
-		// TODO Auto-generated method stub
 		userEquipmentDAO.create(obj);
 	}
 
 	@Override
-	public Map<String, List<UserEquipment>> read(final File workbookFile) {
-		// TODO Auto-generated method stub
-		final Map<String, List<UserEquipment>> result = new HashMap<String, List<UserEquipment>>();
-		final List<UserEquipment> success = new ArrayList<>();
-		final List<UserEquipment> error = new ArrayList<>();
+	public ParsingResponse<UserEquipment> read(final File workbookFile) {
+
+		final ParsingResponse<UserEquipment> result = new ParsingResponse<>(); 
+
 		try {
 
 			final Workbook workbook = new XSSFWorkbook(workbookFile);
 			final DataFormatter df = new DataFormatter();
 			final Sheet sheet = workbook.getSheetAt(3);
 			final Iterator<Row> iterator = sheet.iterator();
-			System.out.println("\n\nIterating over Rows and Columns using Iterator\n");
 			final Iterator<Row> rowIterator = sheet.rowIterator();
 			UserEquipment userEquipment = null;
 			Row row = rowIterator.next();
@@ -85,12 +78,12 @@ public class UserEquipmentImpl implements UserEquipmentService {
 				cell = cellIterator.next();
 				userEquipment.setInputMode(cell.getStringCellValue());
 				try {
-					if(validationService.checkExistingUserEquipmentType(row, 0) == null) {
+				//	if (validationService.checkExistingUserEquipmentType(userEquipment) == null) {
 						userEquipmentDAO.create(userEquipment);
-						success.add(userEquipment);
-					}
-				} catch (Exception e){
-					error.add(userEquipment);
+						result.addValidObject(userEquipment);
+				//	}
+				} catch (Exception e) {
+					result.addInvalidRow(new InvalidRow(cell.getRowIndex(), e.getMessage()));
 				}
 			}
 
@@ -101,8 +94,7 @@ public class UserEquipmentImpl implements UserEquipmentService {
 		} catch (InvalidFormatException e) {
 			e.printStackTrace();
 		}
-		result.put("SUCCESS", (ArrayList<UserEquipment>) success);
-		result.put("ERROR", (ArrayList<UserEquipment>) error);
+
 		return result;
 	}
 

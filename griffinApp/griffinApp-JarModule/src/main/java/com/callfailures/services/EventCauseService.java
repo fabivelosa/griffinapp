@@ -9,6 +9,7 @@ import javax.ejb.Local;
 import com.callfailures.entity.EventCause;
 import com.callfailures.entity.EventCausePK;
 import com.callfailures.entity.FailureClass;
+import com.callfailures.parsingutils.ParsingResponse;
 
 @Local
 public interface EventCauseService {
@@ -17,5 +18,5 @@ public interface EventCauseService {
 
 	void create(EventCause obj);
 	
-	 Map<String,List<EventCause>> read(File workbookFile);
+	 ParsingResponse<EventCause> read(File workbookFile);
 }
