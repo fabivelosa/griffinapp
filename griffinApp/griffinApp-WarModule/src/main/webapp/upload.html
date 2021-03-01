@@ -6,25 +6,32 @@
 <script src="js/jquery-3.5.1.min.js"></script>
 <script src="js/uploadData.js"> </script>
 
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js" integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0" crossorigin="anonymous"></script>
+
 </head>
 <body>
 
-	 <h1>JAX-RS Upload Form</h1>
+	<div class="row">
+		 <h1>JAX-RS Upload Form</h1>
+		<div class="col=md-6">
+    		<form action="api/file/upload" method="post" enctype="multipart/form-data">
+    		    	<h2>Upload Data</h2>
+       			<p>
+       	 			Select a file : <input type="file" name="uploadedFile" id = "uploadFile" size="50" />
+      			</p>
+				<input type="submit" value="Upload It" id ="uploadBtn" />
+    		</form>
+    	</div>
+    	<div class="col=md-6" id="sampleData">
+    	<h2>Error Data </h2>
+			<button id="displayData">Generate Sample</button>
+			<ul id="errorsList"></ul>
+		</div>
+    	
+	</div>
 
-    <form action="api/file/upload" method="post" enctype="multipart/form-data">
-        
-       <p>
-        Select a file : <input type="file" name="uploadedFile" id = "uploadFile" size="50" />
-       </p>
 
-       <input type="submit" value="Upload It" id ="uploadBtn" />
-    </form>
-
-<div id="sampleData">
-<button id="displayData">Generate Sample</button>
-
-<ul id="errorsList"></ul>
-</div>
 
 </body>
 </html>
