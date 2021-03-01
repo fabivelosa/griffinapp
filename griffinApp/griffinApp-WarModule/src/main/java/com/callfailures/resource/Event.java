@@ -3,16 +3,12 @@ package com.callfailures.resource;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.ws.rs.GET;
-import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 
-import com.callfailures.dto.EventsUploadResponseDTO;
 import com.callfailures.entity.Events;
-import com.callfailures.errors.DataErrorMessage;
 import com.callfailures.services.EventService; 
 
 @Path("/events") 

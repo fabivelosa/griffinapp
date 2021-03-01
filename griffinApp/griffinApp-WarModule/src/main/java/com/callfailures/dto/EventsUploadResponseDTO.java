@@ -1,11 +1,8 @@
 package com.callfailures.dto;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.LinkedHashSet;
 
-import com.callfailures.errors.DataErrorMessage;
 import com.callfailures.parsingutils.InvalidRow;
 
 public class EventsUploadResponseDTO implements Serializable{
