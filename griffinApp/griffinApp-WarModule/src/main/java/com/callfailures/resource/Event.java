@@ -31,22 +31,4 @@ public class Event {
 		return eventService.findById(eventId);
 	} 
 	
- //http://localhost:8080/callfailures/api/events/sampleJSON2
-	
-	@GET
-	@Path("/sampleJSON2")
-	@Produces(MediaType.APPLICATION_JSON)
-	public Response getSampleJSONResponse() {
-		EventsUploadResponseDTO sample =  new EventsUploadResponseDTO();
-		
-		for(int i = 0; i < 30000; i++) {
-			sample.addValidDataRowNumber(i);
-		}
-		
-		sample.addErroneousData(new DataErrorMessage(1, "Missing IMSI"));
-		sample.addErroneousData(new DataErrorMessage(2, "Invalid MCC-MNC Combination"));
-
-		return Response.status(200).entity(sample.getErroneousData()).build();
-	}
-	
 }

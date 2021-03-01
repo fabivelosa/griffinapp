@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -11,6 +12,8 @@ import javax.ejb.EJB;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
 
@@ -18,6 +21,13 @@ import org.apache.commons.io.IOUtils;
 import org.jboss.resteasy.plugins.providers.multipart.InputPart;
 import org.jboss.resteasy.plugins.providers.multipart.MultipartFormDataInput;
 
+import com.callfailures.dto.EventsUploadResponseDTO;
+import com.callfailures.entity.EventCause;
+import com.callfailures.entity.Events;
+import com.callfailures.entity.FailureClass;
+import com.callfailures.entity.MarketOperator;
+import com.callfailures.entity.UserEquipment;
+import com.callfailures.parsingutils.ParsingResponse;
 import com.callfailures.services.EventCauseService;
 import com.callfailures.services.EventService;
 import com.callfailures.services.FailureClassService;
@@ -46,6 +56,7 @@ public class UploadFileService {
 
 	@POST
 	@Path("/upload")
+	@Produces({ MediaType.APPLICATION_JSON })
 	@Consumes("multipart/form-data")
 	public Response uploadFile(final MultipartFormDataInput input) {
 
@@ -55,6 +66,7 @@ public class UploadFileService {
 
 		final Map<String, List<InputPart>> uploadForm = input.getFormDataMap();
 		final List<InputPart> inputParts = uploadForm.get("uploadedFile");
+		List<EventsUploadResponseDTO> uploadsOverallResult = new ArrayList<>();
 		File sheet = null;
 
 		for (InputPart inputPart : inputParts) {
@@ -77,30 +89,16 @@ public class UploadFileService {
 				System.out.println("Done upload");
 				System.out.println("name " + sheet.getName());
 
-				System.out.println();
-
-				/*
-				 * Commenting out the eventService.read(sheet) for now until all the persist
-				 * tabs tasks are done The Events (Base Data) is the last tab to read as it
-				 * needs to refer to the other tabs for validation IF YOU WANNA TEST IT OUT, (1)
-				 * Uncomment the line for eventService.read(sheet) until the line with for loop
-				 * (2) Comment out service.read(sheet) above (3) Load the reference dataset by
-				 * run the referencedataset.sql script. You can find this script in JAR module's
-				 * src/main/resources folder
-				 */
-
-				causeService.read(sheet);
-				failClassService.read(sheet);
-				userEquipmentService.read(sheet);
-				marketOperatorService.read(sheet);
-				eventService.read(sheet);
+				ParsingResponse<EventCause> eventCauses = causeService.read(sheet);
+				ParsingResponse<FailureClass> failureClasses = failClassService.read(sheet);
+				ParsingResponse<UserEquipment> userEquipment = userEquipmentService.read(sheet);
+				ParsingResponse<MarketOperator> marketOperator =  marketOperatorService.read(sheet);
+				ParsingResponse<Events> events = eventService.read(sheet);
+				
+				generateResponseEntity(uploadsOverallResult, eventCauses, failureClasses, userEquipment, marketOperator,
+						events);
 
 				System.out.println("Done read");
-
-//				ParsingResponse<Events> eventsResults = eventService.read(sheet);
-//				System.out.println("Valid Events Row Count is : " + eventsResults.getValidObjects().size());
-//				System.out.println("Invalid Events Row Count is : " + eventsResults.getInvalidRows().size());
-//				for(final InvalidRow row : eventsResults.getInvalidRows()) System.out.println("Row " + row.getRowNumber() + "\t" + row.getErrorMessage());
 
 			} catch (IOException e) {
 				e.printStackTrace();
@@ -114,8 +112,19 @@ public class UploadFileService {
 
 		System.out.println("It took " + duration + "seconds to validate and store the data");
 
-		return Response.status(200).entity("uploadFile is called, Uploaded file name : " + fileName).build();
+		return Response.status(200).entity(uploadsOverallResult).build();
+	}
 
+	
+	private void generateResponseEntity(List<EventsUploadResponseDTO> uploadsOverallResult,
+			ParsingResponse<EventCause> eventCauses, ParsingResponse<FailureClass> failureClasses,
+			ParsingResponse<UserEquipment> userEquipment, ParsingResponse<MarketOperator> marketOperator,
+			ParsingResponse<Events> events) {
+		uploadsOverallResult.add(new EventsUploadResponseDTO("Event Cause", eventCauses.getValidObjects().size(), eventCauses.getInvalidRows()));
+		uploadsOverallResult.add(new EventsUploadResponseDTO("Failure Class", failureClasses.getValidObjects().size(), failureClasses.getInvalidRows()));
+		uploadsOverallResult.add(new EventsUploadResponseDTO("User Equipment", userEquipment.getValidObjects().size(), userEquipment.getInvalidRows()));
+		uploadsOverallResult.add(new EventsUploadResponseDTO("MCC-NCC", marketOperator.getValidObjects().size(), marketOperator.getInvalidRows()));
+		uploadsOverallResult.add(new EventsUploadResponseDTO("Base Data", events.getValidObjects().size(), events.getInvalidRows()));
 	}
 
 	/**
