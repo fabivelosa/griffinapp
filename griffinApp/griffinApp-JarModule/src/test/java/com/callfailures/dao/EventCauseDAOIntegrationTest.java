@@ -22,12 +22,12 @@ import com.callfailures.utils.test.EntityGenerator;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 @RunWith(Arquillian.class)
-public class FailureClassDAOIntegrationTest {
+public class EventCauseDAOIntegrationTest {
 	   @Deployment
 	   public static JavaArchive createTestArchive() {
 	      return ShrinkWrap.create(JavaArchive.class, "test.jar")
-	         .addClasses(FailureClassDAO.class, Events.class, EventCause.class, 
-	        		 MarketOperator.class, UserEquipment.class, FailureClass.class,
+	         .addClasses(EventCauseDAO.class, Events.class, EventCause.class, 
+	        		 MarketOperator.class, UserEquipment.class, EventCause.class, FailureClass.class,
 	        		 EventCausePK.class, MarketOperatorPK.class, EntityGenerator.class)
 	         .addAsManifestResource(
 	            "arquillian-persistence/persistence.xml", 
@@ -36,34 +36,41 @@ public class FailureClassDAOIntegrationTest {
 
 
 	   @Inject
-	   private FailureClassDAO failureClassDAO;
+	   private EventCauseDAO eventCauseDAO;
 	   
-	   private FailureClass failureClass = new FailureClass();
+	   private EventCause eventCause = new EventCause();
 	   private final EntityGenerator entityGenerator = new EntityGenerator();
-	   private static final int failureId = 0;
-	   private static final String failureClassDescription = "sample";
+	   private static final int eventId = 4097;
+	   private static final int causeCode = 0;
+	   private static final String eventCauseDescription = "sample";
 	   
 	   @Test
 	   public void testCreate() {
-		   failureClass = entityGenerator.parseFailureClass(failureId, failureClassDescription);
-		   failureClassDAO.create(failureClass);
+		   eventCause = entityGenerator.parseEventCause(eventId, causeCode, eventCauseDescription);
+		   eventCauseDAO.create(eventCause);
 	   }
 
 	   @Test
-	   public void testGetFailureClassId() {
-		   final FailureClass queryResult = failureClassDAO.getFailureClass(0);
-		   assertEquals(0, queryResult.getFailureClass());
+	   public void testGetEventCauseId() {
+		   final EventCause queryResult = eventCauseDAO.getEventCause(new EventCausePK(eventId,causeCode));
+		   assertEquals(eventId, queryResult.getEventCauseId().getEventCauseId());
 	   }
 	   
 	   @Test
-	   public void testGetFailureClassDescription() {
-		   final FailureClass queryResult = failureClassDAO.getFailureClass(0);
-		   assertEquals(failureClassDescription, queryResult.getFailureDesc());
+	   public void testGetEventCauseCode() {
+		   final EventCause queryResult = eventCauseDAO.getEventCause(new EventCausePK(eventId,causeCode));
+		   assertEquals(causeCode, queryResult.getEventCauseId().getCauseCode());
+	   }
+	   
+	   @Test
+	   public void testGetEventCauseDescription() {
+		   final EventCause queryResult = eventCauseDAO.getEventCause(new EventCausePK(eventId,causeCode));
+		   assertEquals(eventCauseDescription, queryResult.getDescription());
 	   }
 	      
 	   @Test
-	   public void testFailureGetFailureClass() {
-		   assertEquals(null, failureClassDAO.getFailureClass(1));
+	   public void testFailureGetEventCause() {
+		   assertEquals(null, eventCauseDAO.getEventCause(new EventCausePK(0, 0)));
 	   }
    
 	}

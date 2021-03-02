@@ -22,11 +22,11 @@ import com.callfailures.utils.test.EntityGenerator;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 @RunWith(Arquillian.class)
-public class FailureClassDAOIntegrationTest {
+public class UserEqipmentDAOIntegrationTest {
 	   @Deployment
 	   public static JavaArchive createTestArchive() {
 	      return ShrinkWrap.create(JavaArchive.class, "test.jar")
-	         .addClasses(FailureClassDAO.class, Events.class, EventCause.class, 
+	         .addClasses(UserEquipmentDAO.class, Events.class, EventCause.class, 
 	        		 MarketOperator.class, UserEquipment.class, FailureClass.class,
 	        		 EventCausePK.class, MarketOperatorPK.class, EntityGenerator.class)
 	         .addAsManifestResource(
@@ -36,34 +36,35 @@ public class FailureClassDAOIntegrationTest {
 
 
 	   @Inject
-	   private FailureClassDAO failureClassDAO;
+	   private UserEquipmentDAO userEquipmentDAO;
 	   
-	   private FailureClass failureClass = new FailureClass();
+	   private UserEquipment userEquipment = new UserEquipment();
 	   private final EntityGenerator entityGenerator = new EntityGenerator();
-	   private static final int failureId = 0;
-	   private static final String failureClassDescription = "sample";
+	   private static final int ueId = 21060800;
+	   private static final String accessCapability = "GSM 1800, GSM 900";
 	   
 	   @Test
 	   public void testCreate() {
-		   failureClass = entityGenerator.parseFailureClass(failureId, failureClassDescription);
-		   failureClassDAO.create(failureClass);
+		   userEquipment = entityGenerator.parseUE(ueId);
+		   userEquipment.setAccessCapability(accessCapability);
+		   userEquipmentDAO.create(userEquipment);
 	   }
 
 	   @Test
-	   public void testGetFailureClassId() {
-		   final FailureClass queryResult = failureClassDAO.getFailureClass(0);
-		   assertEquals(0, queryResult.getFailureClass());
+	   public void testGetUEId() {
+		   final UserEquipment queryResult = userEquipmentDAO.getUserEquipment(ueId);
+		   assertEquals(ueId, queryResult.getTac());
 	   }
 	   
 	   @Test
-	   public void testGetFailureClassDescription() {
-		   final FailureClass queryResult = failureClassDAO.getFailureClass(0);
-		   assertEquals(failureClassDescription, queryResult.getFailureDesc());
+	   public void testGetUEAccessCapability() {
+		   final UserEquipment queryResult = userEquipmentDAO.getUserEquipment(ueId);
+		   assertEquals(accessCapability, queryResult.getAccessCapability());
 	   }
-	      
+	   
 	   @Test
-	   public void testFailureGetFailureClass() {
-		   assertEquals(null, failureClassDAO.getFailureClass(1));
+	   public void testFailureGetUE() {
+		   assertEquals(null, userEquipmentDAO.getUserEquipment(3));
 	   }
    
 	}
