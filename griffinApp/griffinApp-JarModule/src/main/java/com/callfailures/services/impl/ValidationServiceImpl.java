@@ -81,13 +81,7 @@ public class ValidationServiceImpl implements ValidationService {
 
 	@Override
 	public MarketOperator checkExistingMarketOperator(MarketOperator newItem) throws FieldNotValidException {
-		MarketOperatorPK marketOperatorId;
-		try {
-			marketOperatorId = newItem.getMarketOperatorId();
-		} catch (Exception exception) {
-			throw new FieldNotValidException("failureClass", "Invalid Market Operator");
-		}
-		final MarketOperator operator = marketOperatorDAO.getMarketOperator(marketOperatorId);
+		final MarketOperator operator = marketOperatorDAO.getMarketOperator(newItem.getMarketOperatorId());
 		if (!(operator == null)) {
 			throw new FieldNotValidException("operator", "Already exists Market Operator");
 		}
@@ -112,13 +106,7 @@ public class ValidationServiceImpl implements ValidationService {
 	
 	@Override
 	public UserEquipment checkExistingUserEquipmentType(UserEquipment newItem) throws FieldNotValidException {
-		int ueId;
-		try {
-			ueId = newItem.getTac();
-		} catch (Exception exception) {
-			throw new FieldNotValidException("tac", "Invalid UE tac");
-		}
-		final UserEquipment userEquipment = userEquipmentDAO.getUserEquipment(ueId);
+		final UserEquipment userEquipment = userEquipmentDAO.getUserEquipment(newItem.getTac());
 		if (!(userEquipment == null)) {
 			throw new FieldNotValidException("ueType", "Already exists ue TAC");
 		}
@@ -143,13 +131,7 @@ public class ValidationServiceImpl implements ValidationService {
 
 	@Override
 	public FailureClass checkExistingFailureClass(final FailureClass newItem) {
-		int failureClassId;
-		try {
-			failureClassId = newItem.getFailureClass();
-		} catch (Exception exception) {
-			throw new FieldNotValidException("failureClass", "Invalid Failure Class Id");
-		}
-		final FailureClass failureClass = failureClassDAO.getFailureClass(failureClassId);
+		final FailureClass failureClass = failureClassDAO.getFailureClass(newItem.getFailureClass());
 		if (!(failureClass == null)) {
 			throw new FieldNotValidException("failureClass", "Already exists Failure Class Id");
 		}
@@ -189,10 +171,7 @@ public class ValidationServiceImpl implements ValidationService {
 
 	@Override
 	public EventCause checkExistingEventCause(EventCause newItem) throws FieldNotValidException {
-		int eventId = newItem.getEventCauseId().getEventCauseId();
-		int causeCode = newItem.getEventCauseId().getCauseCode();
-
-		EventCause eventCause = eventCauseDAO.getEventCause(new EventCausePK(eventId, causeCode));
+		EventCause eventCause = eventCauseDAO.getEventCause(new EventCausePK(newItem.getEventCauseId().getEventCauseId(), newItem.getEventCauseId().getCauseCode()));
 		if (!(eventCause == null)) {
 			throw new FieldNotValidException("eventCause", "Already exists Event and Cause Code combination");
 		}
