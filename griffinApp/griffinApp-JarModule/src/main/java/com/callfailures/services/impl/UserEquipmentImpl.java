@@ -78,10 +78,10 @@ public class UserEquipmentImpl implements UserEquipmentService {
 				cell = cellIterator.next();
 				userEquipment.setInputMode(cell.getStringCellValue());
 				try {
-				//	if (validationService.checkExistingUserEquipmentType(userEquipment) == null) {
+					if (validationService.checkExistingUserEquipmentType(userEquipment) == null) {
 						userEquipmentDAO.create(userEquipment);
 						result.addValidObject(userEquipment);
-				//	}
+					}
 				} catch (Exception e) {
 					result.addInvalidRow(new InvalidRow(cell.getRowIndex(), e.getMessage()));
 				}

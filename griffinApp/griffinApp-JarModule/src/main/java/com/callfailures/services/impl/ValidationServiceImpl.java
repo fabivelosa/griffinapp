@@ -194,7 +194,7 @@ public class ValidationServiceImpl implements ValidationService {
 
 		EventCause eventCause = eventCauseDAO.getEventCause(new EventCausePK(eventId, causeCode));
 		if (!(eventCause == null)) {
-			throw new FieldNotValidException("eventCause", "Inexistent Event and Cause Code combination");
+			throw new FieldNotValidException("eventCause", "Already exists Event and Cause Code combination");
 		}
 		return eventCause;
 	}
