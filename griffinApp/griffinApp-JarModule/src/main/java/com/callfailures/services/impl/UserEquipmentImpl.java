@@ -21,14 +21,15 @@ import com.callfailures.entity.UserEquipment;
 import com.callfailures.parsingutils.InvalidRow;
 import com.callfailures.parsingutils.ParsingResponse;
 import com.callfailures.services.UserEquipmentService;
+import com.callfailures.services.ValidationService;
 
 @Stateless
 public class UserEquipmentImpl implements UserEquipmentService {
 
 	@Inject
 	UserEquipmentDAO userEquipmentDAO;
-
-	ValidationServiceImpl validationService;
+	@Inject
+	ValidationService validationService;
 
 	@Override
 	public UserEquipment findById(int id) {

@@ -9,6 +9,11 @@ import static org.mockito.Mockito.when;
 
 import java.io.File;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
+import javax.inject.Inject;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -20,13 +25,16 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 import com.callfailures.dao.FailureClassDAO;
 import com.callfailures.entity.FailureClass;
+import com.callfailures.parsingutils.InvalidRow;
 import com.callfailures.parsingutils.ParsingResponse;
 import com.callfailures.services.FailureClassService;
+import com.callfailures.services.ValidationService;
 
 @RunWith(MockitoJUnitRunner.class)
 public class FailureClassServiceImplTest {
 
 	private final FailureClassDAO failureClassDAO = mock(FailureClassDAO.class);
+	private final ValidationService validationService = mock(ValidationService.class);
 	private static final int failureClassID = 1;
 	private FailureClass failureClass;
 	private FailureClassService failureClassService;
@@ -72,13 +80,19 @@ public class FailureClassServiceImplTest {
 	public void testSuccessForRead() {
 		final File workbookFile = new File(absolutePath + "/failureClassService/validData.xlsx");
 		Mockito.doNothing().when(failureClassDAO).create(any(FailureClass.class));
-
+		when(validationService.checkExistingFailureClass(any(FailureClass.class))).thenReturn(null);
+		final ParsingResponse<FailureClass> parseResult = failureClassServiceImpl.read(workbookFile);
+		final Collection<FailureClass> validObjects = parseResult.getValidObjects();
+		assertEquals(false, validObjects.isEmpty());
 	}
 
 	@Test
 	public void testFailureForRead() {
 		final File workbookFile = new File(absolutePath + "/failureClassService/invalidData.xlsx");
 		Mockito.doThrow(Exception.class).when(failureClassDAO).create(any(FailureClass.class));
+		ParsingResponse<FailureClass> parseResult = failureClassServiceImpl.read(workbookFile);
+		final Collection<InvalidRow> invalidRows = parseResult.getInvalidRows();
+		assertEquals(false, invalidRows.isEmpty());
 	}
 
 }
