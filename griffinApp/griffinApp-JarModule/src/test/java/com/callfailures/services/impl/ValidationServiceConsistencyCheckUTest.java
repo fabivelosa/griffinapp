@@ -1,6 +1,7 @@
 package com.callfailures.services.impl;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Matchers.anyInt;
 import static org.mockito.Matchers.anyObject;
@@ -47,6 +48,8 @@ class ValidationServiceConsistencyCheckUTest {
 	private final MarketOperatorDAO marketOperatorDAO = mock(MarketOperatorDAO.class);
 	private final String absolutePath = Paths.get("src","test","resources").toFile().getAbsolutePath();
 	private final EventCausePK eventCausePK = new EventCausePK(4098, 1);
+	private final MarketOperatorPK marketOperatorPK = new MarketOperatorPK(515,1);
+	private final MarketOperator marketOperator = new MarketOperator(marketOperatorPK, "Philippines", "Globe Telecom");
 	private final EventCause eventCause = new EventCause(eventCausePK, "S1 SIG CONN SETUP-S1 INTERFACE DOWN");
 	private final FailureClass failureClass = new FailureClass(1,"HIGH PRIORITY ACCESS");
 	private final UserEquipment userEquipment = new UserEquipment(21060800);
@@ -194,6 +197,62 @@ class ValidationServiceConsistencyCheckUTest {
 		when(userEquipmentDAO.getUserEquipment(21060800)).thenReturn(userEquipment);
 		Row row = generateRow("/importData/inexistentMarketOperator.xlsx");			Throwable exception =  assertThrows(FieldNotValidException.class, () -> validationService.checkExistingMarketOperator(row, 4,5));
 		assertEquals("Inexistent MCC and MNC combination", exception.getMessage());
+	}
+	
+	@Test
+	void testCheckExistingFailureClassByActualObjectNotExisting() {
+		FailureClass retrievedFailureClass = validationService.checkExistingFailureClass(failureClass);
+		assertNull(retrievedFailureClass);
+	}
+	
+	@Test
+	void testCheckExistingFailureClassByActualObjectExisting() {
+		when(failureClassDAO.getFailureClass(anyInt())).thenReturn(failureClass);
+		Throwable exception = assertThrows(FieldNotValidException.class, () -> validationService.checkExistingFailureClass(failureClass));
+		assertEquals("Already exists Failure Class Id", exception.getMessage());
+		assertEquals("failureClass", ((FieldNotValidException)exception).getInvalidFieldName());
+	}
+	
+	@Test
+	void testCheckExistingUserEquipmentByActualObjectNotExisting() {
+		UserEquipment retrievedUserEquipment = validationService.checkExistingUserEquipmentType(userEquipment);
+		assertNull(retrievedUserEquipment);
+	}
+	
+	@Test
+	void testCheckExistingUserEquipmentByActualObjectExisting() {
+		when(userEquipmentDAO.getUserEquipment(anyInt())).thenReturn(userEquipment);
+		Throwable exception = assertThrows(FieldNotValidException.class, () -> validationService.checkExistingUserEquipmentType(userEquipment));
+		assertEquals("Already exists ue TAC", exception.getMessage());
+		assertEquals("ueType", ((FieldNotValidException)exception).getInvalidFieldName());
+	}
+	
+	@Test
+	void testCheckExistingMarketOPeratorByActualObjectNotExisting() {
+		MarketOperator retrievedMarketOperator = validationService.checkExistingMarketOperator(marketOperator);
+		assertNull(retrievedMarketOperator);
+	}
+	
+	@Test
+	void testCheckExistingMarketOPeratorByActualObjectExisting() {
+		when(marketOperatorDAO.getMarketOperator(marketOperatorPK)).thenReturn(marketOperator);
+		Throwable exception = assertThrows(FieldNotValidException.class, () -> validationService.checkExistingMarketOperator(marketOperator));
+		assertEquals("Already exists Market Operator", exception.getMessage());
+		assertEquals("operator", ((FieldNotValidException)exception).getInvalidFieldName());
+	}
+	
+	@Test
+	void testCheckExistingEventCauseByActualObjectNotExisting() {
+		EventCause retrievedEventCause = validationService.checkExistingEventCause(eventCause);
+		assertNull(retrievedEventCause);
+	}
+	
+	@Test
+	void testCheckExistingEventCauseByActualObjectExisting() {
+		when(eventCauseDAO.getEventCause(eventCausePK)).thenReturn(eventCause);
+		Throwable exception = assertThrows(FieldNotValidException.class, () -> validationService.checkExistingEventCause(eventCause));
+		assertEquals("Already exists Event and Cause Code combination", exception.getMessage());
+		assertEquals("eventCause", ((FieldNotValidException)exception).getInvalidFieldName());
 	}
 	
 	private Row generateRow(String path) throws IOException, InvalidFormatException {

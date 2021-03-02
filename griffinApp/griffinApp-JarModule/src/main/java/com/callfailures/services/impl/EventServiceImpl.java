@@ -36,11 +36,6 @@ public class EventServiceImpl implements EventService {
 	}
 
 	@Override
-	public void create(Events event) {
-		eventDAO.create(event);
-	}
-
-	@Override
 	public ParsingResponse<Events> read(File workbookFile) {
 		final ParsingResponse<Events> parsingResult = new ParsingResponse<>();
 		try(Workbook workbook = new XSSFWorkbook(workbookFile);) {

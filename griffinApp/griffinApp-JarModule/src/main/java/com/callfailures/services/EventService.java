@@ -13,8 +13,6 @@ public interface EventService {
 
 	Events findById(final int eventId);
 
-	void create(Events obj);
-
 	ParsingResponse<Events> read(File workbookFile);
 
 }

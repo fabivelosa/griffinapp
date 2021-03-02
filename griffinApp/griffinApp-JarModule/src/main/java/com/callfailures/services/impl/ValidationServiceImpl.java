@@ -139,19 +139,6 @@ public class ValidationServiceImpl implements ValidationService {
 	}
 
 	@Override
-	public boolean checkValidFieldsFailureClass(final Row row) throws FieldNotValidException {
-		boolean isValid = true;
-		try {
-			int failureClassId = (int) row.getCell(0).getNumericCellValue();
-			String failureClassDesc = row.getCell(1).getStringCellValue();
-		} catch (Exception exception) {
-			isValid = false;
-			throw new FieldNotValidException("failureClass", "Invalid data.");
-		}
-		return isValid;
-	}
-
-	@Override
 	public EventCause checkExistingEventCause(final Row row, final int eventColumnNumber, final int causeColumnNumber)
 			throws FieldNotValidException {
 		int eventId;
@@ -231,9 +218,6 @@ public class ValidationServiceImpl implements ValidationService {
 		String imsi;
 		try {
 			imsi = BigDecimal.valueOf(row.getCell(colNumber).getNumericCellValue()).toBigInteger().toString();
-			if (imsi.toLowerCase().contains("null")) {
-				throw new FieldNotValidException("imsi", "Invalid IMSI");
-			}
 		} catch (Exception exception) {
 			throw new FieldNotValidException("IMSI", "Invalid IMSI");
 		}
@@ -245,10 +229,6 @@ public class ValidationServiceImpl implements ValidationService {
 		String imsi;
 		try {
 			imsi = BigDecimal.valueOf(row.getCell(colNumber).getNumericCellValue()).toBigInteger().toString();
-
-			if (imsi.toLowerCase().contains("null")) {
-				throw new FieldNotValidException("hier3Id", "Invalid hier3Id");
-			}
 		} catch (Exception exception) {
 			throw new FieldNotValidException("hier3Id", "Invalid hier3Id");
 		}
@@ -260,10 +240,6 @@ public class ValidationServiceImpl implements ValidationService {
 		String imsi;
 		try {
 			imsi = BigDecimal.valueOf(row.getCell(colNumber).getNumericCellValue()).toBigInteger().toString();
-
-			if (imsi.toLowerCase().contains("null")) {
-				throw new FieldNotValidException("hier32Id", "Invalid hier32Id");
-			}
 		} catch (Exception exception) {
 			throw new FieldNotValidException("hier32Id", "Invalid hier32Id");
 		}
@@ -275,9 +251,6 @@ public class ValidationServiceImpl implements ValidationService {
 		String imsi;
 		try {
 			imsi = BigDecimal.valueOf(row.getCell(colNumber).getNumericCellValue()).toBigInteger().toString();
-			if (imsi.toLowerCase().contains("null")) {
-				throw new FieldNotValidException("hier321Id", "Invalid hier321Id");
-			}
 		} catch (Exception exception) {
 			throw new FieldNotValidException("hier321Id", "Invalid hier321Id");
 		}
