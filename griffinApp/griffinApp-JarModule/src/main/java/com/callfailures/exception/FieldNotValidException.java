@@ -21,14 +21,5 @@ public class FieldNotValidException extends RuntimeException{
 
 	public String getInvalidFieldName() {
 		return invalidFieldName;
-	}
-
-	@Override
-	public String toString() {
-		return "FieldNotValidException [invalidFieldName=" + invalidFieldName + "]";
-	}
-
-
-	
-	
+	}	
 }
