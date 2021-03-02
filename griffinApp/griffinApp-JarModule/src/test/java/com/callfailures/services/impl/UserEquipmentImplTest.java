@@ -6,13 +6,9 @@ import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-
 import java.io.File;
 import java.nio.file.Paths;
 import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -20,9 +16,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mockito;
 import org.mockito.internal.verification.Times;
 import org.mockito.runners.MockitoJUnitRunner;
-
 import com.callfailures.dao.UserEquipmentDAO;
-import com.callfailures.entity.FailureClass;
 import com.callfailures.entity.UserEquipment;
 import com.callfailures.parsingutils.InvalidRow;
 import com.callfailures.parsingutils.ParsingResponse;
@@ -87,7 +81,7 @@ public class UserEquipmentImplTest {
 		final File workbookFile = new File(absolutePath + "/failureClassService/InvalidData.xlsx");
 		Mockito.doThrow(Exception.class).when(userEquipmentDAO).create(any(UserEquipment.class));
 		when(validationService.checkExistingUserEquipmentType(any(UserEquipment.class))).thenReturn(null);
-		ParsingResponse<UserEquipment> parseResult = userEquipmentImpl.read(workbookFile);
+		final ParsingResponse<UserEquipment> parseResult = userEquipmentImpl.read(workbookFile);
 		final Collection<InvalidRow> invalidRows = parseResult.getInvalidRows();
 		assertEquals(false, invalidRows.isEmpty());
 	}
