@@ -70,7 +70,7 @@ public class MarketOperatorServiceImplTest {
 
 	@Test
 	public void testSuccessForRead() {
-		final File workbookFile = new File(absolutePath + "/failureClassService/validData.xlsx");
+		final File workbookFile = new File(absolutePath + "/marketOperatorService/validData.xlsx");
 		Mockito.doNothing().when(marketOperatorDAO).create(any(MarketOperator.class));
 		when(validationService.checkExistingMarketOperator(any(MarketOperator.class))).thenReturn(null);
 		final ParsingResponse<MarketOperator> parseResult = marketOperatorServiceImpl.read(workbookFile);
@@ -80,7 +80,7 @@ public class MarketOperatorServiceImplTest {
 
 	@Test
 	public void testFailureForRead() {
-		final File workbookFile = new File(absolutePath + "/failureClassService/invalidData.xlsx");
+		final File workbookFile = new File(absolutePath + "/marketOperatorService/invalidData.xlsx");
 		Mockito.doThrow(Exception.class).when(marketOperatorDAO).create(any(MarketOperator.class));
 		final ParsingResponse<MarketOperator> parseResult = marketOperatorServiceImpl.read(workbookFile);
 		final Collection<InvalidRow> invalidRows = parseResult.getInvalidRows();
