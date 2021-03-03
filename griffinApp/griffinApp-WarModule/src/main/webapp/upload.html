@@ -15,7 +15,7 @@
 	<div class="row">
 		 <h1>JAX-RS Upload Form</h1>
 		<div class="col=md-6">
-    		<form action="api/file/upload" method="post" enctype="multipart/form-data">
+    		<form id="fileUploadForm" name="uploadInfo">
     		    	<h2>Upload Data</h2>
        			<p>
        	 			Select a file : <input type="file" name="uploadedFile" id = "uploadFile" size="50" />
@@ -25,7 +25,7 @@
     	</div>
     	<div class="col=md-6" id="sampleData">
     	<h2>Error Data </h2>
-			<button id="displayData">Generate Sample</button>
+			<input type="text" value="Did it work" id ="displayCount" disabled/>
 			<ul id="errorsList"></ul>
 		</div>
     	
