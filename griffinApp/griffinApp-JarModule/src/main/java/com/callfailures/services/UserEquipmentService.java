@@ -1,9 +1,6 @@
 package com.callfailures.services;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 
 import javax.ejb.Local;
 
@@ -13,7 +10,7 @@ import com.callfailures.parsingutils.ParsingResponse;
 @Local
 public interface UserEquipmentService {
 
-	UserEquipment findById(final int id);
+	UserEquipment findById(final int userEquipment);
 
 	void create(UserEquipment obj);
 	

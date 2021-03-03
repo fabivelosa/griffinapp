@@ -1,19 +1,17 @@
 package com.callfailures.services;
 
-import javax.ejb.Local;
 import java.io.File;
-import java.util.List;
-import java.util.Map;
 
-import com.callfailures.parsingutils.ParsingResponse;
-import com.callfailures.entity.Events;
+import javax.ejb.Local;
+
 import com.callfailures.entity.MarketOperator;
 import com.callfailures.entity.MarketOperatorPK;
+import com.callfailures.parsingutils.ParsingResponse;
 
 @Local
 public interface MarketOperatorService {
 
-	MarketOperator findById(final MarketOperatorPK id);
+	MarketOperator findById(final MarketOperatorPK marketOperatorPK);
 
 	void create(MarketOperator obj);
 	

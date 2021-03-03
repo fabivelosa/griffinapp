@@ -33,8 +33,8 @@ public class MarketOperatorServiceImpl implements MarketOperatorService {
 	ValidationService validationService;
 
 	@Override
-	public MarketOperator findById(final MarketOperatorPK id) {
-		return marketOperatorDAO.getMarketOperator(id);
+	public MarketOperator findById(final MarketOperatorPK marketOperatorPK) {
+		return marketOperatorDAO.getMarketOperator(marketOperatorPK);
 	}
 
 	@Override
@@ -50,7 +50,6 @@ public class MarketOperatorServiceImpl implements MarketOperatorService {
 		try {
 			final Workbook workbook = new XSSFWorkbook(workbookFile);
 			final Sheet sheet = workbook.getSheetAt(4);
-			final Iterator<Row> iterator = sheet.iterator();
 			final Iterator<Row> rowIterator = sheet.rowIterator();
 			MarketOperator operator = null;
 			MarketOperatorPK operatorPK = null;

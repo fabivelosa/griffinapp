@@ -32,9 +32,9 @@ public class FailureClassServiceImpl implements FailureClassService {
 	ValidationService validationService;
 
 	@Override
-	public FailureClass findById(final int id) {
+	public FailureClass findById(final int failureclassId) {
 
-		return failureClassDAO.getFailureClass(id);
+		return failureClassDAO.getFailureClass(failureclassId);
 	}
 
 	@Override
@@ -52,7 +52,6 @@ public class FailureClassServiceImpl implements FailureClassService {
 
 			final Workbook workbook = new XSSFWorkbook(workbookFile);
 			final Sheet sheet = workbook.getSheetAt(2);
-			final Iterator<Row> iterator = sheet.iterator();
 			final Iterator<Row> rowIterator = sheet.rowIterator();
 			FailureClass failureClass = null;
 			Row row = rowIterator.next();
@@ -76,11 +75,8 @@ public class FailureClassServiceImpl implements FailureClassService {
 					 }
 				} catch (Exception e) {
 					result.addInvalidRow(new InvalidRow(cell.getRowIndex(), e.getMessage()));
-
 				}
-
 			}
-
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
@@ -88,7 +84,6 @@ public class FailureClassServiceImpl implements FailureClassService {
 		} catch (InvalidFormatException e) {
 			e.printStackTrace();
 		}
-
 		return result;
 	}
 

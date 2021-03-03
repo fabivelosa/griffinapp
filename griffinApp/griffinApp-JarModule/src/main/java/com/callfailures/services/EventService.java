@@ -1,7 +1,6 @@
 package com.callfailures.services;
 
 import java.io.File;
-import java.util.List;
 
 import javax.ejb.Local;
 

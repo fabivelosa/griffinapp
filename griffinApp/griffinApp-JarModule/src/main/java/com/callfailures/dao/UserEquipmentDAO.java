@@ -12,14 +12,14 @@ import com.callfailures.entity.UserEquipment;
 public class UserEquipmentDAO {
 
 	@PersistenceContext
-	EntityManager em;
+	EntityManager entityManager;
 
 	public UserEquipment getUserEquipment(final int ueId) {
-		return em.find(UserEquipment.class, ueId);
+		return entityManager.find(UserEquipment.class, ueId);
 	}
 
 	public void create(final UserEquipment obj) {
-		em.persist(obj);
+		entityManager.persist(obj);
 	}
 
 }

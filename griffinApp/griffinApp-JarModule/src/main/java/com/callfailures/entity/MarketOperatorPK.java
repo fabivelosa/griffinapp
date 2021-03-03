@@ -38,7 +38,7 @@ public class MarketOperatorPK implements Serializable {
 		return countryCode;
 	}
 
-	public void setCountryCode(int countryCode) {
+	public void setCountryCode(final int countryCode) {
 		this.countryCode = countryCode;
 	}
 
@@ -46,7 +46,7 @@ public class MarketOperatorPK implements Serializable {
 		return operatorCode;
 	}
 
-	public void setOperatorCode(int operatorCode) {
+	public void setOperatorCode(final int operatorCode) {
 		this.operatorCode = operatorCode;
 	}
 

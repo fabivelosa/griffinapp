@@ -60,26 +60,26 @@ public class UploadFileService {
 	@Consumes("multipart/form-data")
 	public Response uploadFile(final MultipartFormDataInput input) {
 
-		long startNano = System.nanoTime();
+		final long startNano = System.nanoTime();
 
 		String fileName = "";
 
 		final Map<String, List<InputPart>> uploadForm = input.getFormDataMap();
 		final List<InputPart> inputParts = uploadForm.get("uploadedFile");
-		List<EventsUploadResponseDTO> uploadsOverallResult = new ArrayList<>();
+		final List<EventsUploadResponseDTO> uploadsOverallResult = new ArrayList<>();
 		File sheet = null;
 
-		for (InputPart inputPart : inputParts) {
+		for (final InputPart inputPart : inputParts) {
 
 			try {
 
-				MultivaluedMap<String, String> header = inputPart.getHeaders();
+				final MultivaluedMap<String, String> header = inputPart.getHeaders();
 				fileName = getFileName(header);
 
 				// convert the uploaded file to inputstream
-				InputStream inputStream = inputPart.getBody(InputStream.class, null);
+				final InputStream inputStream = inputPart.getBody(InputStream.class, null);
 
-				byte[] bytes = IOUtils.toByteArray(inputStream);
+				final byte[] bytes = IOUtils.toByteArray(inputStream);
 
 				// constructs upload file path
 				fileName = UPLOADED_FILE_PATH + fileName;
@@ -89,12 +89,12 @@ public class UploadFileService {
 				System.out.println("Done upload");
 				System.out.println("name " + sheet.getName());
 
-				ParsingResponse<EventCause> eventCauses = causeService.read(sheet);
-				ParsingResponse<FailureClass> failureClasses = failClassService.read(sheet);
-				ParsingResponse<UserEquipment> userEquipment = userEquipmentService.read(sheet);
-				ParsingResponse<MarketOperator> marketOperator =  marketOperatorService.read(sheet);
-				ParsingResponse<Events> events = eventService.read(sheet);
-				
+				final ParsingResponse<EventCause> eventCauses = causeService.read(sheet);
+				final ParsingResponse<FailureClass> failureClasses = failClassService.read(sheet);
+				final ParsingResponse<UserEquipment> userEquipment = userEquipmentService.read(sheet);
+				final ParsingResponse<MarketOperator> marketOperator = marketOperatorService.read(sheet);
+				final ParsingResponse<Events> events = eventService.read(sheet);
+
 				generateResponseEntity(uploadsOverallResult, eventCauses, failureClasses, userEquipment, marketOperator,
 						events);
 
@@ -106,25 +106,29 @@ public class UploadFileService {
 
 		}
 
-		long endNano = System.nanoTime();
+		final long endNano = System.nanoTime();
 
-		long duration = (endNano - startNano) / 1000000000;
+		final long duration = (endNano - startNano) / 1000000000;
 
 		System.out.println("It took " + duration + "seconds to validate and store the data");
 
 		return Response.status(200).entity(uploadsOverallResult).build();
 	}
 
-	
-	private void generateResponseEntity(List<EventsUploadResponseDTO> uploadsOverallResult,
-			ParsingResponse<EventCause> eventCauses, ParsingResponse<FailureClass> failureClasses,
-			ParsingResponse<UserEquipment> userEquipment, ParsingResponse<MarketOperator> marketOperator,
-			ParsingResponse<Events> events) {
-		uploadsOverallResult.add(new EventsUploadResponseDTO("Event Cause", eventCauses.getValidObjects().size(), eventCauses.getInvalidRows()));
-		uploadsOverallResult.add(new EventsUploadResponseDTO("Failure Class", failureClasses.getValidObjects().size(), failureClasses.getInvalidRows()));
-		uploadsOverallResult.add(new EventsUploadResponseDTO("User Equipment", userEquipment.getValidObjects().size(), userEquipment.getInvalidRows()));
-		uploadsOverallResult.add(new EventsUploadResponseDTO("MCC-NCC", marketOperator.getValidObjects().size(), marketOperator.getInvalidRows()));
-		uploadsOverallResult.add(new EventsUploadResponseDTO("Base Data", events.getValidObjects().size(), events.getInvalidRows()));
+	private void generateResponseEntity(final List<EventsUploadResponseDTO> uploadsOverallResult,
+			final ParsingResponse<EventCause> eventCauses, final ParsingResponse<FailureClass> failureClasses,
+			final ParsingResponse<UserEquipment> userEquipment, final ParsingResponse<MarketOperator> marketOperator,
+			final ParsingResponse<Events> events) {
+		uploadsOverallResult.add(new EventsUploadResponseDTO("Event Cause", eventCauses.getValidObjects().size(),
+				eventCauses.getInvalidRows()));
+		uploadsOverallResult.add(new EventsUploadResponseDTO("Failure Class", failureClasses.getValidObjects().size(),
+				failureClasses.getInvalidRows()));
+		uploadsOverallResult.add(new EventsUploadResponseDTO("User Equipment", userEquipment.getValidObjects().size(),
+				userEquipment.getInvalidRows()));
+		uploadsOverallResult.add(new EventsUploadResponseDTO("MCC-NCC", marketOperator.getValidObjects().size(),
+				marketOperator.getInvalidRows()));
+		uploadsOverallResult.add(
+				new EventsUploadResponseDTO("Base Data", events.getValidObjects().size(), events.getInvalidRows()));
 	}
 
 	/**
@@ -132,31 +136,31 @@ public class UploadFileService {
 	 * name="file"; filename="filename.extension"] }
 	 **/
 	// get uploaded filename
-	private String getFileName(MultivaluedMap<String, String> header) {
+	private String getFileName(final MultivaluedMap<String, String> header) {
 
-		String[] contentDisposition = header.getFirst("Content-Disposition").split(";");
+		final String[] contentDisposition = header.getFirst("Content-Disposition").split(";");
 
-		for (String filename : contentDisposition) {
+		for (final String filename : contentDisposition) {
 			if ((filename.trim().startsWith("filename"))) {
 
-				String[] name = filename.split("=");
+				final String[] name = filename.split("=");
 
-				String finalFileName = name[1].trim().replaceAll("\"", "");
+				final String finalFileName = name[1].trim().replaceAll("\"", "");
 				return finalFileName;
 			}
 		}
 		return "unknown";
 	}
 
-	private File writeFile(byte[] content, String filename) throws IOException {
+	private File writeFile(final byte[] content, final String filename) throws IOException {
 
-		File file = new File(filename);
+		final File file = new File(filename);
 
 		if (!file.exists()) {
 			file.createNewFile();
 		}
 
-		FileOutputStream fop = new FileOutputStream(file);
+		final FileOutputStream fop = new FileOutputStream(file);
 
 		fop.write(content);
 		fop.flush();

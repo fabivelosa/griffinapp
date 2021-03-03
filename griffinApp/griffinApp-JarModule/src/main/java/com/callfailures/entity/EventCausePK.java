@@ -32,7 +32,7 @@ public class EventCausePK implements Serializable {
 		return eventCauseId;
 	}
 
-	public void setEventCauseId(int eventCauseId) {
+	public void setEventCauseId(final int eventCauseId) {
 		this.eventCauseId = eventCauseId;
 	}
 
@@ -40,7 +40,7 @@ public class EventCausePK implements Serializable {
 		return causeCode;
 	}
 
-	public void setCauseCode(int causeCode) {
+	public void setCauseCode(final int causeCode) {
 		this.causeCode = causeCode;
 	}
 

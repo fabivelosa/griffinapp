@@ -33,8 +33,8 @@ public class EventCauseServiceImpl implements EventCauseService {
 	ValidationService validationService;
 
 	@Override
-	public EventCause findById(final EventCausePK id) {
-		return eventCauseDAO.getEventCause(id);
+	public EventCause findById(final EventCausePK eventCausePK) {
+		return eventCauseDAO.getEventCause(eventCausePK);
 	}
 
 	@Override
@@ -50,8 +50,6 @@ public class EventCauseServiceImpl implements EventCauseService {
 		try {
 			final Workbook workbook = new XSSFWorkbook(workbookFile);
 			final Sheet sheet = workbook.getSheetAt(1);
-			final Iterator<Row> iterator = sheet.iterator();
-			System.out.println("\n\nIterating over Rows and Columns using Iterator\n");
 			final Iterator<Row> rowIterator = sheet.rowIterator();
 			EventCause eventCause = null;
 			EventCausePK eventCausePK = null;
