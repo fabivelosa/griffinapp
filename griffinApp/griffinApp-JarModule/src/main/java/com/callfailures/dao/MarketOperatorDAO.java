@@ -12,14 +12,14 @@ import com.callfailures.entity.MarketOperator;
 public class MarketOperatorDAO {
 
 	@PersistenceContext
-	EntityManager em;
+	EntityManager entityManager;
 
 	public MarketOperator getMarketOperator(final Object marketOperatorId) {
-		return em.find(MarketOperator.class, marketOperatorId);
+		return entityManager.find(MarketOperator.class, marketOperatorId);
 	}
 
 	public void create(final MarketOperator obj) {
-		em.persist(obj);
+		entityManager.persist(obj);
 	}
 
 }

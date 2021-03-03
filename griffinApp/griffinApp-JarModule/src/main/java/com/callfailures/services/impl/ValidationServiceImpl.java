@@ -49,7 +49,7 @@ public class ValidationServiceImpl implements ValidationService {
 		validateFields(events);
 	}
 
-	private <T> void validateFields(T object) {
+	private <T> void validateFields(final T object) {
 		final Set<ConstraintViolation<T>> errors = validator.validate(object);
 
 		final Iterator<ConstraintViolation<T>> errorsIterator = errors.iterator();
@@ -72,7 +72,8 @@ public class ValidationServiceImpl implements ValidationService {
 		} catch (Exception exception) {
 			throw new FieldNotValidException("marketOperator", "Invalid  MCC and MNC combination");
 		}
-		MarketOperator marketOperator = marketOperatorDAO.getMarketOperator(new MarketOperatorPK(market, operator));
+		final MarketOperator marketOperator = marketOperatorDAO
+				.getMarketOperator(new MarketOperatorPK(market, operator));
 		if (marketOperator == null) {
 			throw new FieldNotValidException("marketOperator", "Inexistent MCC and MNC combination");
 		}
@@ -80,7 +81,7 @@ public class ValidationServiceImpl implements ValidationService {
 	}
 
 	@Override
-	public MarketOperator checkExistingMarketOperator(MarketOperator newItem) throws FieldNotValidException {
+	public MarketOperator checkExistingMarketOperator(final MarketOperator newItem) throws FieldNotValidException {
 		final MarketOperator operator = marketOperatorDAO.getMarketOperator(newItem.getMarketOperatorId());
 		if (!(operator == null)) {
 			throw new FieldNotValidException("operator", "Already exists Market Operator");
@@ -97,22 +98,21 @@ public class ValidationServiceImpl implements ValidationService {
 		} catch (Exception exception) {
 			throw new FieldNotValidException("ueType", "Invalid UE type");
 		}
-		UserEquipment userEquipment = userEquipmentDAO.getUserEquipment(ueID);
+		final UserEquipment userEquipment = userEquipmentDAO.getUserEquipment(ueID);
 		if (userEquipment == null) {
 			throw new FieldNotValidException("ueType", "Inexistent UE type");
 		}
 		return userEquipment;
 	}
-	
+
 	@Override
-	public UserEquipment checkExistingUserEquipmentType(UserEquipment newItem) throws FieldNotValidException {
+	public UserEquipment checkExistingUserEquipmentType(final UserEquipment newItem) throws FieldNotValidException {
 		final UserEquipment userEquipment = userEquipmentDAO.getUserEquipment(newItem.getTac());
 		if (!(userEquipment == null)) {
 			throw new FieldNotValidException("ueType", "Already exists ue TAC");
 		}
 		return userEquipment;
 	}
-	
 
 	@Override
 	public FailureClass checkExistingFailureClass(final Row row, final int colNumber) throws FieldNotValidException {
@@ -149,7 +149,7 @@ public class ValidationServiceImpl implements ValidationService {
 		} catch (Exception exception) {
 			throw new FieldNotValidException("eventCause", "Invalid Event and Cause Code combination");
 		}
-		EventCause eventCause = eventCauseDAO.getEventCause(new EventCausePK(eventId, causeCode));
+		final EventCause eventCause = eventCauseDAO.getEventCause(new EventCausePK(eventId, causeCode));
 		if (eventCause == null) {
 			throw new FieldNotValidException("eventCause", "Inexistent Event and Cause Code combination");
 		}
@@ -157,8 +157,9 @@ public class ValidationServiceImpl implements ValidationService {
 	}
 
 	@Override
-	public EventCause checkExistingEventCause(EventCause newItem) throws FieldNotValidException {
-		EventCause eventCause = eventCauseDAO.getEventCause(new EventCausePK(newItem.getEventCauseId().getEventCauseId(), newItem.getEventCauseId().getCauseCode()));
+	public EventCause checkExistingEventCause(final EventCause newItem) throws FieldNotValidException {
+		final EventCause eventCause = eventCauseDAO.getEventCause(new EventCausePK(
+				newItem.getEventCauseId().getEventCauseId(), newItem.getEventCauseId().getCauseCode()));
 		if (!(eventCause == null)) {
 			throw new FieldNotValidException("eventCause", "Already exists Event and Cause Code combination");
 		}

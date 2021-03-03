@@ -32,26 +32,25 @@ public class UserEquipmentImpl implements UserEquipmentService {
 	ValidationService validationService;
 
 	@Override
-	public UserEquipment findById(int id) {
-		return userEquipmentDAO.getUserEquipment(id);
+	public UserEquipment findById(final int userEquipmentid) {
+		return userEquipmentDAO.getUserEquipment(userEquipmentid);
 	}
 
 	@Override
-	public void create(UserEquipment obj) {
+	public void create(final UserEquipment obj) {
 		userEquipmentDAO.create(obj);
 	}
 
 	@Override
 	public ParsingResponse<UserEquipment> read(final File workbookFile) {
 
-		final ParsingResponse<UserEquipment> result = new ParsingResponse<>(); 
+		final ParsingResponse<UserEquipment> result = new ParsingResponse<>();
 
 		try {
 
 			final Workbook workbook = new XSSFWorkbook(workbookFile);
-			final DataFormatter df = new DataFormatter();
+			final DataFormatter dataFormatter = new DataFormatter();
 			final Sheet sheet = workbook.getSheetAt(3);
-			final Iterator<Row> iterator = sheet.iterator();
 			final Iterator<Row> rowIterator = sheet.rowIterator();
 			UserEquipment userEquipment = null;
 			Row row = rowIterator.next();
@@ -69,7 +68,7 @@ public class UserEquipmentImpl implements UserEquipmentService {
 				cell = cellIterator.next();
 				userEquipment.setAccessCapability(cell.getStringCellValue());
 				cell = cellIterator.next();
-				userEquipment.setModel(df.formatCellValue(cell));
+				userEquipment.setModel(dataFormatter.formatCellValue(cell));
 				cell = cellIterator.next();
 				userEquipment.setVendorName(cell.getStringCellValue());
 				cell = cellIterator.next();
