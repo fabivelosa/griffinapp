@@ -44,11 +44,11 @@ public class EventCauseServiceImpl implements EventCauseService {
 
 	@Override
 	public ParsingResponse<EventCause> read(final File workbookFile) {
-
+		Workbook workbook = null;
 		final ParsingResponse<EventCause> result = new ParsingResponse<>();
 
 		try {
-			final Workbook workbook = new XSSFWorkbook(workbookFile);
+			workbook = new XSSFWorkbook(workbookFile);
 			final Sheet sheet = workbook.getSheetAt(1);
 			final Iterator<Row> rowIterator = sheet.rowIterator();
 			EventCause eventCause = null;
@@ -71,23 +71,28 @@ public class EventCauseServiceImpl implements EventCauseService {
 				eventCause.setDescription(cell.getStringCellValue());
 
 				try {
-					 if (validationService.checkExistingEventCause(eventCause) == null) {
-					eventCauseDAO.create(eventCause);
-					result.addValidObject(eventCause);
-					 }
+					if (validationService.checkExistingEventCause(eventCause) == null) {
+						eventCauseDAO.create(eventCause);
+						result.addValidObject(eventCause);
+					}
 				} catch (Exception e) {
 					result.addInvalidRow(new InvalidRow(cell.getRowIndex(), e.getMessage()));
 				}
 			}
+
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
 		} catch (InvalidFormatException e) {
 			e.printStackTrace();
+		} finally {
+			try {
+				workbook.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
-
 		return result;
 	}
-
 }

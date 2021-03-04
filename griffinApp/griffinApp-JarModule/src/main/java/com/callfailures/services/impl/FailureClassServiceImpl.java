@@ -45,12 +45,11 @@ public class FailureClassServiceImpl implements FailureClassService {
 
 	@Override
 	public ParsingResponse<FailureClass> read(final File workbookFile) {
-
-		final ParsingResponse<FailureClass> result = new ParsingResponse<>(); 
+		Workbook workbook = null;
+		final ParsingResponse<FailureClass> result = new ParsingResponse<>();
 
 		try {
-
-			final Workbook workbook = new XSSFWorkbook(workbookFile);
+			workbook = new XSSFWorkbook(workbookFile);
 			final Sheet sheet = workbook.getSheetAt(2);
 			final Iterator<Row> rowIterator = sheet.rowIterator();
 			FailureClass failureClass = null;
@@ -64,15 +63,15 @@ public class FailureClassServiceImpl implements FailureClassService {
 
 				Cell cell = cellIterator.next();
 
-				failureClass.setFailureClass(new Double(cell.getNumericCellValue()).intValue()); 
+				failureClass.setFailureClass(new Double(cell.getNumericCellValue()).intValue());
 				cell = cellIterator.next();
 				failureClass.setFailureDesc(cell.getStringCellValue());
 
 				try {
-					 if (validationService.checkExistingFailureClass(failureClass) == null) {
-					failureClassDAO.create(failureClass);
-					result.addValidObject(failureClass);
-					 }
+					if (validationService.checkExistingFailureClass(failureClass) == null) {
+						failureClassDAO.create(failureClass);
+						result.addValidObject(failureClass);
+					}
 				} catch (Exception e) {
 					result.addInvalidRow(new InvalidRow(cell.getRowIndex(), e.getMessage()));
 				}
@@ -83,8 +82,13 @@ public class FailureClassServiceImpl implements FailureClassService {
 			e.printStackTrace();
 		} catch (InvalidFormatException e) {
 			e.printStackTrace();
+		} finally {
+			try {
+				workbook.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 		return result;
 	}
-
 }

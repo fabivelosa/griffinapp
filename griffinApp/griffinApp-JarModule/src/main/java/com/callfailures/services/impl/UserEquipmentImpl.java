@@ -46,10 +46,10 @@ public class UserEquipmentImpl implements UserEquipmentService {
 	public ParsingResponse<UserEquipment> read(final File workbookFile) {
 
 		final ParsingResponse<UserEquipment> result = new ParsingResponse<>();
-
+		Workbook workbook = null;
 		try {
 
-			final Workbook workbook = new XSSFWorkbook(workbookFile);
+			workbook = new XSSFWorkbook(workbookFile);
 			final DataFormatter dataFormatter = new DataFormatter();
 			final Sheet sheet = workbook.getSheetAt(3);
 			final Iterator<Row> rowIterator = sheet.rowIterator();
@@ -63,7 +63,7 @@ public class UserEquipmentImpl implements UserEquipmentService {
 				userEquipment = new UserEquipment();
 
 				Cell cell = cellIterator.next();
-				
+
 				try {
 					userEquipment.setTac((int) cell.getNumericCellValue());
 					cell = cellIterator.next();
@@ -80,21 +80,25 @@ public class UserEquipmentImpl implements UserEquipmentService {
 					userEquipment.setDeviceOS(cell.getStringCellValue());
 					cell = cellIterator.next();
 					userEquipment.setInputMode(cell.getStringCellValue());
-					
-						if (validationService.checkExistingUserEquipmentType(userEquipment) == null) {
-							userEquipmentDAO.create(userEquipment);
-							result.addValidObject(userEquipment);
-						}
+
+					if (validationService.checkExistingUserEquipmentType(userEquipment) == null) {
+						userEquipmentDAO.create(userEquipment);
+						result.addValidObject(userEquipment);
+					}
 				} catch (Exception e) {
 					result.addInvalidRow(new InvalidRow(cell.getRowIndex(), e.getMessage()));
 				}
 			}
 
-		} 
-		catch (IOException | InvalidFormatException  e) {
+		} catch (IOException | InvalidFormatException e) {
 			e.printStackTrace();
+		} finally {
+			try {
+				workbook.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
-
 		return result;
 	}
 

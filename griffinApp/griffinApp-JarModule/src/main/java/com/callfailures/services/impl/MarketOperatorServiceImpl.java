@@ -44,11 +44,11 @@ public class MarketOperatorServiceImpl implements MarketOperatorService {
 
 	@Override
 	public ParsingResponse<MarketOperator> read(final File workbookFile) {
-
+		Workbook workbook = null;
 		final ParsingResponse<MarketOperator> result = new ParsingResponse<>();
 
 		try {
-			final Workbook workbook = new XSSFWorkbook(workbookFile);
+			workbook = new XSSFWorkbook(workbookFile);
 			final Sheet sheet = workbook.getSheetAt(4);
 			final Iterator<Row> rowIterator = sheet.rowIterator();
 			MarketOperator operator = null;
@@ -87,9 +87,13 @@ public class MarketOperatorServiceImpl implements MarketOperatorService {
 			e.printStackTrace();
 		} catch (InvalidFormatException e) {
 			e.printStackTrace();
+		} finally {
+			try {
+				workbook.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
-
 		return result;
 	}
-
 }
