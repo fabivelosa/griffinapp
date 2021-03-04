@@ -10,6 +10,7 @@ import java.io.File;
 import java.nio.file.Paths;
 import java.util.Collection;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -68,7 +69,7 @@ public class UserEquipmentImplTest {
 
 	@Test
 	public void testSuccessForRead() {
-		final File workbookFile = new File(absolutePath + "/failureClassService/validData.xlsx");
+		final File workbookFile = new File(absolutePath + "/userEquipmentService/validData.xlsx");
 		Mockito.doNothing().when(userEquipmentDAO).create(any(UserEquipment.class));
 		when(validationService.checkExistingUserEquipmentType(any(UserEquipment.class))).thenReturn(null);
 		final ParsingResponse<UserEquipment> parseResult = userEquipmentImpl.read(workbookFile);
@@ -78,7 +79,7 @@ public class UserEquipmentImplTest {
 
 	@Test
 	public void testFailureForRead() {
-		final File workbookFile = new File(absolutePath + "/failureClassService/InvalidData.xlsx");
+		final File workbookFile = new File(absolutePath + "/userEquipmentService/invalidData.xlsx");
 		Mockito.doThrow(Exception.class).when(userEquipmentDAO).create(any(UserEquipment.class));
 		when(validationService.checkExistingUserEquipmentType(any(UserEquipment.class))).thenReturn(null);
 		final ParsingResponse<UserEquipment> parseResult = userEquipmentImpl.read(workbookFile);

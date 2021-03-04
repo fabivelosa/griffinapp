@@ -18,6 +18,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import com.callfailures.dao.UserEquipmentDAO;
 import com.callfailures.entity.UserEquipment;
+import com.callfailures.exception.FieldNotValidException;
 import com.callfailures.parsingutils.InvalidRow;
 import com.callfailures.parsingutils.ParsingResponse;
 import com.callfailures.services.UserEquipmentService;
@@ -62,36 +63,35 @@ public class UserEquipmentImpl implements UserEquipmentService {
 				userEquipment = new UserEquipment();
 
 				Cell cell = cellIterator.next();
-				userEquipment.setTac((int) cell.getNumericCellValue());
-				cell = cellIterator.next();
-				cell = cellIterator.next();
-				cell = cellIterator.next();
-				userEquipment.setAccessCapability(cell.getStringCellValue());
-				cell = cellIterator.next();
-				userEquipment.setModel(dataFormatter.formatCellValue(cell));
-				cell = cellIterator.next();
-				userEquipment.setVendorName(cell.getStringCellValue());
-				cell = cellIterator.next();
-				userEquipment.setUeType(cell.getStringCellValue());
-				cell = cellIterator.next();
-				userEquipment.setDeviceOS(cell.getStringCellValue());
-				cell = cellIterator.next();
-				userEquipment.setInputMode(cell.getStringCellValue());
+				
 				try {
-					if (validationService.checkExistingUserEquipmentType(userEquipment) == null) {
-						userEquipmentDAO.create(userEquipment);
-						result.addValidObject(userEquipment);
-					}
+					userEquipment.setTac((int) cell.getNumericCellValue());
+					cell = cellIterator.next();
+					cell = cellIterator.next();
+					cell = cellIterator.next();
+					userEquipment.setAccessCapability(cell.getStringCellValue());
+					cell = cellIterator.next();
+					userEquipment.setModel(dataFormatter.formatCellValue(cell));
+					cell = cellIterator.next();
+					userEquipment.setVendorName(cell.getStringCellValue());
+					cell = cellIterator.next();
+					userEquipment.setUeType(cell.getStringCellValue());
+					cell = cellIterator.next();
+					userEquipment.setDeviceOS(cell.getStringCellValue());
+					cell = cellIterator.next();
+					userEquipment.setInputMode(cell.getStringCellValue());
+					
+						if (validationService.checkExistingUserEquipmentType(userEquipment) == null) {
+							userEquipmentDAO.create(userEquipment);
+							result.addValidObject(userEquipment);
+						}
 				} catch (Exception e) {
 					result.addInvalidRow(new InvalidRow(cell.getRowIndex(), e.getMessage()));
 				}
 			}
 
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (InvalidFormatException e) {
+		} 
+		catch (IOException | InvalidFormatException  e) {
 			e.printStackTrace();
 		}
 
