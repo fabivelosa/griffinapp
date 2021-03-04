@@ -34,7 +34,7 @@
 	<main class="container">
 	
 	<div class="starter-template text-center py-5 px-3" style="margin-top: 10px;">
-		<p>Welcome To Griffen App</p>
+		<h1>Welcome To Griffen App</h1>
 	</div>
 	
 	</main><!-- /.container -->
