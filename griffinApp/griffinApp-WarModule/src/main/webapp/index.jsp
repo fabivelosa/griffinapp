@@ -14,7 +14,7 @@
     
 	<nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
 	  <div class="container-fluid">
-		<a class="navbar-brand" href="#">Griffen</a>
+		<a class="navbar-brand" href="#">Griffin</a>
 		<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
 		  <span class="navbar-toggler-icon"></span>
 		</button>
@@ -34,7 +34,7 @@
 	<main class="container">
 	
 	<div class="starter-template text-center py-5 px-3" style="margin-top: 10px;">
-		<h1>Welcome To Griffen App</h1>
+		<h1>Welcome To Griffin App</h1>
 	</div>
 	
 	</main><!-- /.container -->
