@@ -1,0 +1,23 @@
+#sampleData{
+	visibility:hidden;
+	text-align:left;
+}
+#successfulList, #errorsList{
+	list-style-type:none;
+}
+
+.storedRow{
+	color:#5cb85c;
+}
+
+.ignoredRow{
+	color:#f0ad4e;
+}
+
+.tableWithError{
+	 font-weight: bold;
+}
+
+#displayCount{
+	visibility:hidden;
+}
