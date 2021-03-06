@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.ejb.EJB;
+import javax.ejb.Stateless;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -35,6 +36,7 @@ import com.callfailures.services.MarketOperatorService;
 import com.callfailures.services.UserEquipmentService;
 
 @Path("/file")
+@Stateless
 public class UploadFileService {
 
 	@EJB
