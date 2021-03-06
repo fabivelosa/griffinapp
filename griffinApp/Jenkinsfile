@@ -43,8 +43,8 @@ pipeline {
             mineRepository()
 	        junit allowEmptyResults: true, testResults: 'griffinApp/griffinApp-JarModule/target/surefire-reports/*.xml'
 	        junit allowEmptyResults: true, testResults: 'griffinApp/griffinApp-WarModule/target/surefire-reports/*.xml'
-		    recordIssues qualityGates: [[threshold: 20, type: 'TOTAL', unstable: true]], enabledForFailure: true, sourceCodeEncoding: 'UTF-8', tools: [pmdParser()]           		
-            recordIssues enabledForFailure: true, tools: [findBugs(useRankAsPriority: true)]
+		recordIssues enabledForFailure: true, sourceCodeEncoding: 'UTF-8', tools: [pmdParser()]
+		recordIssues enabledForFailure: true, tools: [findBugs(useRankAsPriority: true)]
 	    	jacoco exclusionPattern: '**/*Test*.class', inclusionPattern: '**/*.class', runAlways: true    
          }  
          success {  

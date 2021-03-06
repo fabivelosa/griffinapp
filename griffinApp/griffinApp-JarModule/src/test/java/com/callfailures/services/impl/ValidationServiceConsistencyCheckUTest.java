@@ -26,7 +26,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
-import com.callfailures.dao.EventCauseDAO;
+import com.callfailures.dao.EventCauseDao;
 import com.callfailures.dao.EventDAO;
 import com.callfailures.dao.FailureClassDAO;
 import com.callfailures.dao.MarketOperatorDAO;
@@ -42,7 +42,7 @@ import com.callfailures.services.EventService;
 import com.callfailures.services.ValidationService;
 
 class ValidationServiceConsistencyCheckUTest {
-	private final EventCauseDAO eventCauseDAO = mock(EventCauseDAO.class);
+	private final EventCauseDao eventCauseDAO = mock(EventCauseDao.class);
 	private final FailureClassDAO failureClassDAO = mock(FailureClassDAO.class);
 	private final UserEquipmentDAO userEquipmentDAO = mock(UserEquipmentDAO.class);
 	private final MarketOperatorDAO marketOperatorDAO = mock(MarketOperatorDAO.class);

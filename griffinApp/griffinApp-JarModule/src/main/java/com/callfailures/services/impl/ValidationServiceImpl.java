@@ -12,7 +12,7 @@ import javax.validation.Validator;
 
 import org.apache.poi.ss.usermodel.Row;
 
-import com.callfailures.dao.EventCauseDAO;
+import com.callfailures.dao.EventCauseDao;
 import com.callfailures.dao.FailureClassDAO;
 import com.callfailures.dao.MarketOperatorDAO;
 import com.callfailures.dao.UserEquipmentDAO;
@@ -33,7 +33,7 @@ public class ValidationServiceImpl implements ValidationService {
 	Validator validator;
 
 	@Inject
-	EventCauseDAO eventCauseDAO;
+	EventCauseDao eventCauseDAO;
 
 	@Inject
 	FailureClassDAO failureClassDAO;

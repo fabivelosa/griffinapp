@@ -16,16 +16,18 @@ import com.callfailures.entity.views.IMSISummary;
 @Stateless
 @LocalBean
 public class EventDAO {
-	private final static String FIND_CALL_FAILURES_BY_IMSI_AND_DATE = "SELECT NEW com.callfailures.entity.views.IMSISummary(e.imsi, COUNT(e), SUM(e.duration)) "
-												+ "FROM event e "
-												+ "WHERE (e.dateTime BETWEEN :startTime AND :endTime) "
-												+ "AND e.imsi = :imsi "
-												+ "GROUP BY e.imsi";
-	private static final String FIND_ALL_EVENTS = "SELECT e FROM event e";
+	private static final String FIND_ALL_EVENTS = "SELECT e FROM event e",
+			FIND_CALL_FAILURES_BY_IMSI_AND_DATE = "SELECT NEW com.callfailures.entity.views.IMSISummary(e.imsi, COUNT(e), SUM(e.duration)) "
+					+ "FROM event e "
+					+ "WHERE (e.dateTime BETWEEN :startTime AND :endTime) "
+					+ "AND e.imsi = :imsi "
+					+ "GROUP BY e.imsi";
 
+	
 	@PersistenceContext
 	EntityManager entityManager;
-	
+
+
 	/**
 	 * Stores the Events object to the database
 	 * @param event - the object to be persisted
@@ -33,6 +35,7 @@ public class EventDAO {
 	public void create(final Events event) {
 		entityManager.persist(event);
 	}
+
 
 	/**
 	 * Queries all the Events stored in the database
@@ -43,7 +46,8 @@ public class EventDAO {
 		final Query query = entityManager.createQuery(FIND_ALL_EVENTS, Events.class);
 		return query.getResultList();
 	}
-	
+
+
 	/**
 	 * Queries the IMSISummary object which includes the count of call failures and total duration in a given period
 	 * @param imsi
@@ -62,5 +66,5 @@ public class EventDAO {
 			return null;
 		}
 	}
-	
+
 }

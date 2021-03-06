@@ -1,22 +1,19 @@
 package com.callfailures.services.impl;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Matchers.anyInt;
 import static org.mockito.Matchers.anyObject;
-import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 import java.io.File;
 import java.nio.file.Paths;
+import java.time.LocalDateTime;
 import java.util.Iterator;
 
 import javax.validation.Validation;
 import javax.validation.Validator;
 
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import com.callfailures.dao.EventCauseDao;
@@ -31,13 +28,18 @@ import com.callfailures.entity.FailureClass;
 import com.callfailures.entity.MarketOperator;
 import com.callfailures.entity.MarketOperatorPK;
 import com.callfailures.entity.UserEquipment;
-import com.callfailures.exception.FieldNotValidException;
+import com.callfailures.entity.views.IMSISummary;
 import com.callfailures.parsingutils.InvalidRow;
 import com.callfailures.parsingutils.ParsingResponse;
 import com.callfailures.services.EventService;
 import com.callfailures.services.ValidationService;
 
 class ReadandPersisteEventsUTest {
+	private static final LocalDateTime VALID_END_TIME = LocalDateTime.of(2021,3,18,12,1);
+	private static final LocalDateTime VALID_START_TIME = LocalDateTime.of(2021,3,18,12,0);
+	private static final String VALID_IMSI = "344930000000011";
+	private static final String LONG_IMSI = "3449300000000111";
+	private static final String INVALID_IMSI = "A44930000000011";
 	private final EventCauseDao eventCauseDAO = mock(EventCauseDao.class);
 	private final FailureClassDAO failureClassDAO = mock(FailureClassDAO.class);
 	private final UserEquipmentDAO userEquipmentDAO = mock(UserEquipmentDAO.class);
@@ -69,6 +71,45 @@ class ReadandPersisteEventsUTest {
 		eventService = new EventServiceImpl();
 		((EventServiceImpl) eventService).eventDAO = eventDAO;
 		((EventServiceImpl) eventService).validationService = validationService;
+	}
+	
+	
+	@Test
+	public void findCallFailuresCountByIMSIAndDateValidRequest() {
+		when(eventDAO.findCallFailuresCountByIMSIAndDate(VALID_IMSI, VALID_START_TIME, VALID_END_TIME)).thenReturn(new IMSISummary());
+		assertNotNull(eventService.findCallFailuresCountByIMSIAndDate(VALID_IMSI, VALID_START_TIME, VALID_END_TIME));
+		verify(eventDAO, times(1)).findCallFailuresCountByIMSIAndDate(VALID_IMSI, VALID_START_TIME, VALID_END_TIME);
+	}
+	
+	
+	@Test
+	public void findCallFailuresCountByIMSIAndDateNullIMSI() {
+		assertNull(eventService.findCallFailuresCountByIMSIAndDate(null, VALID_START_TIME, VALID_END_TIME));
+		verify(eventDAO, never()).findCallFailuresCountByIMSIAndDate(anyObject(), anyObject(), anyObject());
+	}
+	
+	@Test
+	public void findCallFailuresCountByIMSIAndDateNullStartTime() {
+		assertNull(eventService.findCallFailuresCountByIMSIAndDate(VALID_IMSI, null, VALID_END_TIME));
+		verify(eventDAO, never()).findCallFailuresCountByIMSIAndDate(anyObject(), anyObject(), anyObject());
+	}
+	
+	@Test
+	public void findCallFailuresCountByIMSIAndDateNullEndTime() {
+		assertNull(eventService.findCallFailuresCountByIMSIAndDate(VALID_IMSI, VALID_START_TIME, null));
+		verify(eventDAO, never()).findCallFailuresCountByIMSIAndDate(anyObject(), anyObject(), anyObject());
+	}
+	
+	@Test
+	public void findCallFailuresCountByIMSIAndDateLongIMSI() {
+		assertNull(eventService.findCallFailuresCountByIMSIAndDate(LONG_IMSI, VALID_START_TIME, VALID_END_TIME));
+		verify(eventDAO, never()).findCallFailuresCountByIMSIAndDate(anyObject(), anyObject(), anyObject());
+	}
+	
+	@Test
+	public void findCallFailuresCountByIMSIAndDateInvalidIMSI() {
+		assertNull(eventService.findCallFailuresCountByIMSIAndDate(INVALID_IMSI, VALID_START_TIME, VALID_END_TIME));
+		verify(eventDAO, never()).findCallFailuresCountByIMSIAndDate(anyObject(), anyObject(), anyObject());
 	}
 	
 	@Test

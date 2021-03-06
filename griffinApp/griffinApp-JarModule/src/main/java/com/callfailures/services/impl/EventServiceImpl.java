@@ -2,6 +2,7 @@ package com.callfailures.services.impl;
 
 import java.io.File;
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.Iterator;
 
 import javax.ejb.Stateless;
@@ -15,6 +16,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import com.callfailures.dao.EventDAO;
 import com.callfailures.entity.Events;
+import com.callfailures.entity.views.IMSISummary;
 import com.callfailures.exception.FieldNotValidException;
 import com.callfailures.parsingutils.InvalidRow;
 import com.callfailures.parsingutils.ParsingResponse;
@@ -30,6 +32,21 @@ public class EventServiceImpl implements EventService {
 	@Inject
 	ValidationService validationService;
 
+	
+	@Override
+	public IMSISummary findCallFailuresCountByIMSIAndDate(final String imsi, final LocalDateTime startTime, final LocalDateTime endTime) {
+		if(startTime == null || endTime == null) {
+			return null;
+		}
+	
+		if(!isValidIMSI(imsi)) {
+			return null;
+		}
+		
+		return eventDAO.findCallFailuresCountByIMSIAndDate(imsi, startTime, endTime);
+	}
+	
+	
 	@Override
 	public ParsingResponse<Events> read(final File workbookFile) {
 		final ParsingResponse<Events> parsingResult = new ParsingResponse<>();
@@ -55,6 +72,21 @@ public class EventServiceImpl implements EventService {
 		return parsingResult;
 	}
 
+	
+	private boolean isValidIMSI(final String imsi) {
+		if(imsi == null || imsi.length() > 15) {
+			return false;
+		}
+
+		for(int i = 0; i < imsi.length(); i++) {
+			if(!Character.isDigit(imsi.charAt(0))) {
+				return false;
+			}
+		}
+		return true;
+	}
+	
+	
 	private Events createEventObject(final Row row) {
 		final Events events = new Events();
 		validateNonDatabaseDependentFields(row, events);
