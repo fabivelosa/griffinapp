@@ -15,7 +15,7 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
-import com.callfailures.dao.EventCauseDAO;
+import com.callfailures.dao.EventCauseDao;
 import com.callfailures.entity.EventCause;
 import com.callfailures.entity.EventCausePK;
 import com.callfailures.parsingutils.InvalidRow;
@@ -27,7 +27,7 @@ import com.callfailures.services.ValidationService;
 public class EventCauseServiceImpl implements EventCauseService {
 
 	@Inject
-	EventCauseDAO eventCauseDAO;
+	EventCauseDao eventCauseDAO;
 
 	@Inject
 	ValidationService validationService;

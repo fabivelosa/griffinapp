@@ -26,7 +26,7 @@ public class EventCauseDAOIntegrationTest {
 	   @Deployment
 	   public static JavaArchive createTestArchive() {
 	      return ShrinkWrap.create(JavaArchive.class, "test.jar")
-	         .addClasses(EventCauseDAO.class, Events.class, EventCause.class, 
+	         .addClasses(EventCauseDao.class, Events.class, EventCause.class, 
 	        		 MarketOperator.class, UserEquipment.class, EventCause.class, FailureClass.class,
 	        		 EventCausePK.class, MarketOperatorPK.class, EntityGenerator.class)
 	         .addAsManifestResource(
@@ -36,7 +36,7 @@ public class EventCauseDAOIntegrationTest {
 
 
 	   @Inject
-	   private EventCauseDAO eventCauseDAO;
+	   private EventCauseDao eventCauseDAO;
 	   
 	   private EventCause eventCause = new EventCause();
 	   private final EntityGenerator entityGenerator = new EntityGenerator();

@@ -10,8 +10,6 @@ import com.callfailures.parsingutils.ParsingResponse;
 @Local
 public interface EventService {
 
-	Events findById(final int eventId);
-
 	ParsingResponse<Events> read(File workbookFile);
 
 }

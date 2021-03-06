@@ -16,7 +16,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mockito;
 import org.mockito.internal.verification.Times;
 import org.mockito.runners.MockitoJUnitRunner;
-import com.callfailures.dao.EventCauseDAO;
+import com.callfailures.dao.EventCauseDao;
 import com.callfailures.entity.EventCause;
 import com.callfailures.entity.EventCausePK;
 import com.callfailures.parsingutils.InvalidRow;
@@ -26,7 +26,7 @@ import com.callfailures.services.ValidationService;
 @RunWith(MockitoJUnitRunner.class)
 public class EventCauseServiceImplTest {
 
-	private final EventCauseDAO eventCauseDAO = mock(EventCauseDAO.class);
+	private final EventCauseDao eventCauseDAO = mock(EventCauseDao.class);
 	private final ValidationService validationService = mock(ValidationService.class);
 	private EventCause eventCause;
 	private EventCausePK eventCausePK;
