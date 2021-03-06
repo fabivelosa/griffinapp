@@ -23,8 +23,8 @@ public class Events {
 
 	@ManyToOne
 	@JoinColumns({
-			@JoinColumn(name = "eventCauseId", referencedColumnName = "eventCauseId", insertable = false, updatable = false),
-			@JoinColumn(name = "causeCode", referencedColumnName = "causeCode", insertable = false, updatable = false)
+			@JoinColumn(name = "eventCauseId", referencedColumnName = "eventCauseId"),
+			@JoinColumn(name = "causeCode", referencedColumnName = "causeCode")
 
 	})
 	@NotNull
@@ -45,8 +45,8 @@ public class Events {
 
 	@ManyToOne
 	@JoinColumns({
-			@JoinColumn(name = "countryCode", referencedColumnName = "countryCode", insertable = false, updatable = false),
-			@JoinColumn(name = "operatorCode", referencedColumnName = "operatorCode", insertable = false, updatable = false)
+			@JoinColumn(name = "countryCode", referencedColumnName = "countryCode"),
+			@JoinColumn(name = "operatorCode", referencedColumnName = "operatorCode")
 
 	})
 	@NotNull
@@ -196,4 +196,15 @@ public class Events {
 	public void setEventCause(final EventCause eventCause) {
 		this.eventCause = eventCause;
 	}
+
+	@Override
+	public String toString() {
+		return "Events [eventCause=" + eventCause + ", dateTime=" + dateTime + ", failureClass=" + failureClass
+				+ ", ueType=" + ueType + ", marketOperator=" + marketOperator + ", cellId=" + cellId + ", duration="
+				+ duration + ", neVersion=" + neVersion + ", imsi=" + imsi + ", hier3Id=" + hier3Id + ", hier32Id="
+				+ hier32Id + ", hier321Id=" + hier321Id + "]";
+	}
+	
+	
+	
 }

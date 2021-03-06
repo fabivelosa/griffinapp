@@ -22,7 +22,7 @@ public class UserEquipment {
 
 	public UserEquipment() {}
 	
-	public UserEquipment(int tac) {
+	public UserEquipment(final int tac) {
 		this.tac = tac;
 	}
 
@@ -30,7 +30,7 @@ public class UserEquipment {
 		return tac;
 	}
 
-	public void setTac(int tac) {
+	public void setTac(final int tac) {
 		this.tac = tac;
 
 	}
@@ -55,7 +55,7 @@ public class UserEquipment {
 		return accessCapability;
 	}
 
-	public void setAccessCapability(String accessCapability) {
+	public void setAccessCapability(final String accessCapability) {
 		this.accessCapability = accessCapability;
 	}
 
@@ -71,7 +71,7 @@ public class UserEquipment {
 		return ueType;
 	}
 
-	public void setUeType(String ueType) {
+	public void setUeType(final String ueType) {
 		this.ueType = ueType;
 	}
 
@@ -87,7 +87,7 @@ public class UserEquipment {
 		return inputMode;
 	}
 
-	public void setInputMode(String inputMode) {
+	public void setInputMode(final String inputMode) {
 		this.inputMode = inputMode;
 	}
 	

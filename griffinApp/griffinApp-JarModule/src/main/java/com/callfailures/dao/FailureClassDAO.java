@@ -14,15 +14,15 @@ public class FailureClassDAO {
 
 
 	@PersistenceContext
-	private EntityManager em;
+	EntityManager entityManager;
 
 
 	public FailureClass getFailureClass(final int failClassId) {
-		return em.find(FailureClass.class, failClassId);
+		return entityManager.find(FailureClass.class, failClassId);
 	}
 
 
 	public void create(final FailureClass obj) {
-		em.persist(obj);
+		entityManager.persist(obj);
 	}
 }

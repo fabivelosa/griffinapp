@@ -12,13 +12,13 @@ import com.callfailures.entity.EventCause;
 public class EventCauseDAO {
 
 	@PersistenceContext
-	private EntityManager em;
+	EntityManager entityManager;
 
 	public EventCause getEventCause(final Object eventCauseId) {
-		return em.find(EventCause.class, eventCauseId);
+		return entityManager.find(EventCause.class, eventCauseId);
 	}
 
 	public void create(final EventCause obj) {
-		em.persist(obj);
+		entityManager.persist(obj);
 	}
 }

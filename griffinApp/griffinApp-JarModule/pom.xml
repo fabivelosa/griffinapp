@@ -23,7 +23,7 @@
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
-			<version>4.11</version>
+			<version>4.12</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
@@ -65,18 +65,17 @@
 		<dependency>
 			<groupId>javax</groupId>
 			<artifactId>javaee-api</artifactId>
-			</dependency>
+		</dependency>
 		<dependency>
 			<groupId>org.apache.poi</groupId>
 			<artifactId>poi-ooxml</artifactId>
-			<version>3.15</version>
+			<version>4.1.2</version>
 		</dependency>
-		
 		<dependency>
-    <groupId>org.apache.poi</groupId>
-    <artifactId>poi</artifactId>
-    <version>4.1.2</version>
-</dependency>
+		    <groupId>org.apache.poi</groupId>
+		    <artifactId>poi</artifactId>
+		    <version>4.1.2</version>
+		</dependency>
 	</dependencies>
 	<build>
 		<plugins>
@@ -110,5 +109,12 @@
 					</execution> </executions> -->
 			</plugin>
 		</plugins>
+		
+	      <testResources>
+	      	<testResource>
+	      		<directory>src/test/resources</directory>
+	      		 <filtering>true</filtering>
+	      	</testResource>
+	      </testResources>
 	</build>
 </project>

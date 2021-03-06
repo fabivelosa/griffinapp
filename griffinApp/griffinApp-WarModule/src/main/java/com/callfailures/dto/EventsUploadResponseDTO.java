@@ -1,11 +1,9 @@
 package com.callfailures.dto;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.LinkedHashSet;
 
-import com.callfailures.errors.DataErrorMessage;
+import com.callfailures.parsingutils.InvalidRow;
 
 public class EventsUploadResponseDTO implements Serializable{
 	
@@ -14,53 +12,41 @@ public class EventsUploadResponseDTO implements Serializable{
 	 */
 	private static final long serialVersionUID = -8000035356725939818L;
 
+	
+	/**
+	 * The name of the excel tab
+	 */
+	private final String tabName;
 
 	/**
-	 * The unique and ordered collection of valid extracted data
+	 * The count of valid rows
 	 */
-	private final Collection<Integer> validRowNumbers = new ArrayList<>();
+	private final int validRowCount;
 	
 	
 	/**
 	 * The unique and ordered collection of erroneous data messages
 	 */
-	private final Collection<DataErrorMessage> erroneousData = new LinkedHashSet<>();
-	
-	
-	/**
-	 * Adds a valid call failure data
-	 * @param callFailure, a validated callFailure object
-	 */
-	public void addValidDataRowNumber(final int rowNumber) {
-		validRowNumbers.add(rowNumber);
-	}
-	
-	
-	/**
-	 * Adds a data error object containing the row number of invalid data, and the error message
-	 * @param dataErrorMessage
-	 */
-	public void addErroneousData(final DataErrorMessage dataErrorMessage) {
-		erroneousData.add(dataErrorMessage);
+	private final Collection<InvalidRow> erroneousData;
+
+
+	public EventsUploadResponseDTO(String tabName, int validRowCount, Collection<InvalidRow> erroneousData) {
+		this.tabName = tabName;
+		this.validRowCount = validRowCount;
+		this.erroneousData = erroneousData;
 	}
 
 	
-	/**
-	 * Required call failure getter method for serialization into JSON
-	 * @return
-	 */
-	public Collection<Integer> getValidRowNumbers() {
-		return validRowNumbers;
+	public String getTabName() {
+		return tabName;
 	}
 
-	
-	/**
-	 * Required erroneous data getter method for serialization into JSON
-	 * @return
-	 */
-	public Collection<DataErrorMessage> getErroneousData() {
+	public int getValidRowCount() {
+		return validRowCount;
+	}
+
+
+	public Collection<InvalidRow> getErroneousData() {
 		return erroneousData;
 	}
-	
-
 }

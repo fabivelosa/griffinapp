@@ -28,6 +28,22 @@ public class EventCausePK implements Serializable {
 		this.causeCode = causeCode;
 	}
 
+	public int getEventCauseId() {
+		return eventCauseId;
+	}
+
+	public void setEventCauseId(final int eventCauseId) {
+		this.eventCauseId = eventCauseId;
+	}
+
+	public int getCauseCode() {
+		return causeCode;
+	}
+
+	public void setCauseCode(final int causeCode) {
+		this.causeCode = causeCode;
+	}
+
 	@Override
 	public int hashCode() {
 		return Objects.hash(causeCode, eventCauseId);

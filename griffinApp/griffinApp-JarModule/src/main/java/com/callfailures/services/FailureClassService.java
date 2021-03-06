@@ -1,18 +1,18 @@
 package com.callfailures.services;
 
 import java.io.File;
-import java.util.List;
 
 import javax.ejb.Local;
 
 import com.callfailures.entity.FailureClass;
+import com.callfailures.parsingutils.ParsingResponse;
 
 @Local
 public interface FailureClassService {
 
-	public FailureClass findById(final int id);
+	FailureClass findById(final int failureClass);
 
-	public void create(FailureClass obj);
-	
-	public List<FailureClass> read(File workbookFile);
+	void create(FailureClass obj);
+
+	ParsingResponse<FailureClass> read(File workbookFile);
 }

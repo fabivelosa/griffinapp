@@ -3,9 +3,7 @@ package com.callfailures.services.impl;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.List;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -19,6 +17,8 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import com.callfailures.dao.FailureClassDAO;
 import com.callfailures.entity.FailureClass;
+import com.callfailures.parsingutils.InvalidRow;
+import com.callfailures.parsingutils.ParsingResponse;
 import com.callfailures.services.FailureClassService;
 import com.callfailures.services.ValidationService;
 
@@ -31,60 +31,64 @@ public class FailureClassServiceImpl implements FailureClassService {
 	@Inject
 	ValidationService validationService;
 
-
 	@Override
-	public FailureClass findById(final int id) {
+	public FailureClass findById(final int failureclassId) {
 
-		return failureClassDAO.getFailureClass(id);
+		return failureClassDAO.getFailureClass(failureclassId);
 	}
 
 	@Override
-	public void create(FailureClass obj) {
+	public void create(final FailureClass obj) {
 		failureClassDAO.create(obj);
 
 	}
 
 	@Override
-	public List<FailureClass> read(File workbookFile) {
-		List<FailureClass> list = new ArrayList<FailureClass>();
+	public ParsingResponse<FailureClass> read(final File workbookFile) {
+		Workbook workbook = null;
+		final ParsingResponse<FailureClass> result = new ParsingResponse<>();
 
 		try {
-
-			Workbook workbook = new XSSFWorkbook(workbookFile);
-			Sheet sheet = workbook.getSheetAt(2);
-			Iterator<Row> iterator = sheet.iterator();
-			System.out.println("\n\nIterating over Rows and Columns using Iterator\n");
-			Iterator<Row> rowIterator = sheet.rowIterator();
-
+			workbook = new XSSFWorkbook(workbookFile);
+			final Sheet sheet = workbook.getSheetAt(2);
+			final Iterator<Row> rowIterator = sheet.rowIterator();
+			FailureClass failureClass = null;
 			Row row = rowIterator.next();
 			while (rowIterator.hasNext()) {
 				row = rowIterator.next();
 
-				Iterator<Cell> cellIterator = row.cellIterator();
+				final Iterator<Cell> cellIterator = row.cellIterator();
+
+				failureClass = new FailureClass();
 
 				Cell cell = cellIterator.next();
-				System.out.print(cell + "\t");
-				FailureClass failureClass = new FailureClass();
 
-				failureClass.setFailureClass(new Double((cell.getNumericCellValue())).intValue());
-
+				failureClass.setFailureClass(new Double(cell.getNumericCellValue()).intValue());
 				cell = cellIterator.next();
 				failureClass.setFailureDesc(cell.getStringCellValue());
-				list.add(failureClass);
-				failureClassDAO.create(failureClass);
 
+				try {
+					if (validationService.checkExistingFailureClass(failureClass) == null) {
+						failureClassDAO.create(failureClass);
+						result.addValidObject(failureClass);
+					}
+				} catch (Exception e) {
+					result.addInvalidRow(new InvalidRow(cell.getRowIndex(), e.getMessage()));
+				}
 			}
-			System.out.println();
-
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
 		} catch (InvalidFormatException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
+		} finally {
+			try {
+				workbook.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
-		return list;
+		return result;
 	}
-
 }

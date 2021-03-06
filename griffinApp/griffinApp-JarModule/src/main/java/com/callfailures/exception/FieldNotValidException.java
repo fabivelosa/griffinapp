@@ -1,5 +1,8 @@
 package com.callfailures.exception;
 
+import javax.ejb.ApplicationException;
+
+@ApplicationException
 public class FieldNotValidException extends RuntimeException{
 	/**
 	 * 
@@ -18,14 +21,5 @@ public class FieldNotValidException extends RuntimeException{
 
 	public String getInvalidFieldName() {
 		return invalidFieldName;
-	}
-
-	@Override
-	public String toString() {
-		return "FieldNotValidException [invalidFieldName=" + invalidFieldName + "]";
-	}
-
-
-	
-	
+	}	
 }
