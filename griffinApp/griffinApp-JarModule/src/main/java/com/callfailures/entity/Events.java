@@ -196,15 +196,5 @@ public class Events {
 	public void setEventCause(final EventCause eventCause) {
 		this.eventCause = eventCause;
 	}
-
-	@Override
-	public String toString() {
-		return "Events [eventCause=" + eventCause + ", dateTime=" + dateTime + ", failureClass=" + failureClass
-				+ ", ueType=" + ueType + ", marketOperator=" + marketOperator + ", cellId=" + cellId + ", duration="
-				+ duration + ", neVersion=" + neVersion + ", imsi=" + imsi + ", hier3Id=" + hier3Id + ", hier32Id="
-				+ hier32Id + ", hier321Id=" + hier321Id + "]";
-	}
-	
-	
 	
 }

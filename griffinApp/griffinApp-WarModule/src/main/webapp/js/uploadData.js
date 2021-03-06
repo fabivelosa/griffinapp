@@ -48,11 +48,10 @@ var submitdata = function(){
 		},
 		error: function(){
 			console.log('error');
-			$('#displayCount').css("visibility", "visible");
-			$('#displayCount').val('fail');
-			//display error message here
+/*			$('#displayCount').css("visibility", "visible");
+*//*			$('#displayCount').val('fail');
+*/			//display error message here
 		}		
-		
 	});
 	}else{
 		console.log('Please select file');

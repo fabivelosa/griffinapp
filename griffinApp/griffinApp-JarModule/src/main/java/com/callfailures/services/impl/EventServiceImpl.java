@@ -31,11 +31,6 @@ public class EventServiceImpl implements EventService {
 	ValidationService validationService;
 
 	@Override
-	public Events findById(final int eventId) {
-		return eventDAO.getEvent(eventId);
-	}
-
-	@Override
 	public ParsingResponse<Events> read(final File workbookFile) {
 		final ParsingResponse<Events> parsingResult = new ParsingResponse<>();
 		try (Workbook workbook = new XSSFWorkbook(workbookFile);) {

@@ -33,6 +33,9 @@ public class EntityGenerator {
 	
 	public UserEquipment parseUE(final Integer ueId) {
 		final UserEquipment userEquipment = ueId == null ? null : new UserEquipment(ueId);
+		userEquipment.setModel("G410");
+		userEquipment.setVendorName("Mitsubishi");
+		userEquipment.setAccessCapability("GSM 1800, GSM 900");
 		return userEquipment;
 	}
 
