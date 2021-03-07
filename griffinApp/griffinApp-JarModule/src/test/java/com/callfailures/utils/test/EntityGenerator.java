@@ -24,9 +24,19 @@ public class EntityGenerator {
 		final MarketOperator marketOperator = parseMobileCountryNetworkCode(mCc, mNc, country, operator);
 		final UserEquipment ueType = parseUE(ueId);
 		
-		final Events events = new Events(eventCause, dateTime, failureClass, ueType, marketOperator, cellId, duration, neVersion,
-				IMSI, hier3Id, hier32Id, hier321Id);
-		
+		final Events events = new Events();
+		events.setEventCause(eventCause);
+		events.setDateTime(dateTime);
+		events.setFailureClass(failureClass);
+		events.setUeType(ueType);
+		events.setMarketOperator(marketOperator);
+		events.setCellId(cellId);
+		events.setDuration(duration);
+		events.setNeVersion(neVersion);
+		events.setImsi(IMSI);
+		events.setHier3Id(hier3Id);
+		events.setHier32Id(hier32Id);
+		events.setHier321Id(hier321Id);
 		return events;
 	}
 

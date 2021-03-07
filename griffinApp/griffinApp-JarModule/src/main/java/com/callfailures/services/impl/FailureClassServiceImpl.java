@@ -45,11 +45,9 @@ public class FailureClassServiceImpl implements FailureClassService {
 
 	@Override
 	public ParsingResponse<FailureClass> read(final File workbookFile) {
-		Workbook workbook = null;
 		final ParsingResponse<FailureClass> result = new ParsingResponse<>();
 
-		try {
-			workbook = new XSSFWorkbook(workbookFile);
+		try(Workbook workbook = new XSSFWorkbook(workbookFile)){
 			final Sheet sheet = workbook.getSheetAt(2);
 			final Iterator<Row> rowIterator = sheet.rowIterator();
 			FailureClass failureClass = null;
@@ -63,31 +61,22 @@ public class FailureClassServiceImpl implements FailureClassService {
 
 				Cell cell = cellIterator.next();
 
+				try {
 				failureClass.setFailureClass(new Double(cell.getNumericCellValue()).intValue());
 				cell = cellIterator.next();
 				failureClass.setFailureDesc(cell.getStringCellValue());
 
-				try {
 					if (validationService.checkExistingFailureClass(failureClass) == null) {
 						failureClassDAO.create(failureClass);
 						result.addValidObject(failureClass);
 					}
+					
 				} catch (Exception e) {
 					result.addInvalidRow(new InvalidRow(cell.getRowIndex(), e.getMessage()));
 				}
 			}
-		} catch (FileNotFoundException e) {
+		} catch (IOException | InvalidFormatException  e) {
 			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (InvalidFormatException e) {
-			e.printStackTrace();
-		} finally {
-			try {
-				workbook.close();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
 		}
 		return result;
 	}

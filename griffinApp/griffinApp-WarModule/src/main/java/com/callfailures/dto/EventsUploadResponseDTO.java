@@ -30,7 +30,7 @@ public class EventsUploadResponseDTO implements Serializable{
 	private final Collection<InvalidRow> erroneousData;
 
 
-	public EventsUploadResponseDTO(String tabName, int validRowCount, Collection<InvalidRow> erroneousData) {
+	public EventsUploadResponseDTO(final String tabName, final int validRowCount, final Collection<InvalidRow> erroneousData) {
 		this.tabName = tabName;
 		this.validRowCount = validRowCount;
 		this.erroneousData = erroneousData;
