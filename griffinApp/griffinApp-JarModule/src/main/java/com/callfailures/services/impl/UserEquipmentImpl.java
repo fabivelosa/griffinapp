@@ -1,7 +1,6 @@
 package com.callfailures.services.impl;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Iterator;
 
@@ -18,7 +17,6 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import com.callfailures.dao.UserEquipmentDAO;
 import com.callfailures.entity.UserEquipment;
-import com.callfailures.exception.FieldNotValidException;
 import com.callfailures.parsingutils.InvalidRow;
 import com.callfailures.parsingutils.ParsingResponse;
 import com.callfailures.services.UserEquipmentService;
@@ -80,7 +78,7 @@ public class UserEquipmentImpl implements UserEquipmentService {
 		return result;
 	}
 
-	private Cell readCellValue(final DataFormatter dataFormatter, UserEquipment userEquipment,
+	private Cell readCellValue(final DataFormatter dataFormatter, final UserEquipment userEquipment,
 			final Iterator<Cell> cellIterator, Cell cell) {
 		userEquipment.setTac((int) cell.getNumericCellValue());
 		cell = cellIterator.next();
