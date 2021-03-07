@@ -46,10 +46,8 @@ public class UserEquipmentImpl implements UserEquipmentService {
 	public ParsingResponse<UserEquipment> read(final File workbookFile) {
 
 		final ParsingResponse<UserEquipment> result = new ParsingResponse<>();
-		Workbook workbook = null;
-		try {
+		try(Workbook workbook = new XSSFWorkbook(workbookFile)) {
 
-			workbook = new XSSFWorkbook(workbookFile);
 			final DataFormatter dataFormatter = new DataFormatter();
 			final Sheet sheet = workbook.getSheetAt(3);
 			final Iterator<Row> rowIterator = sheet.rowIterator();
@@ -65,21 +63,7 @@ public class UserEquipmentImpl implements UserEquipmentService {
 				Cell cell = cellIterator.next();
 
 				try {
-					userEquipment.setTac((int) cell.getNumericCellValue());
-					cell = cellIterator.next();
-					cell = cellIterator.next();
-					cell = cellIterator.next();
-					userEquipment.setAccessCapability(cell.getStringCellValue());
-					cell = cellIterator.next();
-					userEquipment.setModel(dataFormatter.formatCellValue(cell));
-					cell = cellIterator.next();
-					userEquipment.setVendorName(cell.getStringCellValue());
-					cell = cellIterator.next();
-					userEquipment.setUeType(cell.getStringCellValue());
-					cell = cellIterator.next();
-					userEquipment.setDeviceOS(cell.getStringCellValue());
-					cell = cellIterator.next();
-					userEquipment.setInputMode(cell.getStringCellValue());
+					cell = readCellValue(dataFormatter, userEquipment, cellIterator, cell);
 
 					if (validationService.checkExistingUserEquipmentType(userEquipment) == null) {
 						userEquipmentDAO.create(userEquipment);
@@ -92,14 +76,28 @@ public class UserEquipmentImpl implements UserEquipmentService {
 
 		} catch (IOException | InvalidFormatException e) {
 			e.printStackTrace();
-		} finally {
-			try {
-				workbook.close();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
 		}
 		return result;
+	}
+
+	private Cell readCellValue(final DataFormatter dataFormatter, UserEquipment userEquipment,
+			final Iterator<Cell> cellIterator, Cell cell) {
+		userEquipment.setTac((int) cell.getNumericCellValue());
+		cell = cellIterator.next();
+		cell = cellIterator.next();
+		cell = cellIterator.next();
+		userEquipment.setAccessCapability(cell.getStringCellValue());
+		cell = cellIterator.next();
+		userEquipment.setModel(dataFormatter.formatCellValue(cell));
+		cell = cellIterator.next();
+		userEquipment.setVendorName(cell.getStringCellValue());
+		cell = cellIterator.next();
+		userEquipment.setUeType(cell.getStringCellValue());
+		cell = cellIterator.next();
+		userEquipment.setDeviceOS(cell.getStringCellValue());
+		cell = cellIterator.next();
+		userEquipment.setInputMode(cell.getStringCellValue());
+		return cell;
 	}
 
 }

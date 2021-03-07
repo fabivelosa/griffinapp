@@ -76,23 +76,6 @@ public class Events {
 	public Events() {
 	}
 
-	public Events(final EventCause eventCause, final LocalDateTime dateTime, final FailureClass failureClass,
-			final UserEquipment ueType, final MarketOperator marketOperator, final int cellId, final int duration,
-			final String neVersion, final String imsi, final String hier3Id, final String hier32Id, final String hier321Id) {
-		this.eventCause = eventCause;
-		this.dateTime = dateTime;
-		this.failureClass = failureClass;
-		this.ueType = ueType;
-		this.marketOperator = marketOperator;
-		this.cellId = cellId;
-		this.duration = duration;
-		this.neVersion = neVersion;
-		this.imsi = imsi;
-		this.hier3Id = hier3Id;
-		this.hier32Id = hier32Id;
-		this.hier321Id = hier321Id;
-	}
-
 	public UserEquipment getUeType() {
 		return ueType;
 	}

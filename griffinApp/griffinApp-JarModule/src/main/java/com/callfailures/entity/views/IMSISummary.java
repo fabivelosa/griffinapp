@@ -19,7 +19,7 @@ public class IMSISummary {
 	public IMSISummary() {
 	}
 
-	public IMSISummary(String imsi, long callFailuresCount, long totalDurationMs) {
+	public IMSISummary(final String imsi, final long callFailuresCount, final long totalDurationMs) {
 		this.imsi = imsi;
 		this.callFailuresCount = callFailuresCount;
 		this.totalDurationMs = totalDurationMs;

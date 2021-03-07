@@ -44,11 +44,9 @@ public class EventCauseServiceImpl implements EventCauseService {
 
 	@Override
 	public ParsingResponse<EventCause> read(final File workbookFile) {
-		Workbook workbook = null;
 		final ParsingResponse<EventCause> result = new ParsingResponse<>();
 
-		try {
-			workbook = new XSSFWorkbook(workbookFile);
+		try(Workbook workbook = new XSSFWorkbook(workbookFile)){
 			final Sheet sheet = workbook.getSheetAt(1);
 			final Iterator<Row> rowIterator = sheet.rowIterator();
 			EventCause eventCause = null;
@@ -80,19 +78,9 @@ public class EventCauseServiceImpl implements EventCauseService {
 				}
 			}
 
-		} catch (FileNotFoundException e) {
+		} catch (IOException | InvalidFormatException e) {
 			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (InvalidFormatException e) {
-			e.printStackTrace();
-		} finally {
-			try {
-				workbook.close();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
+		} 
 		return result;
 	}
 }

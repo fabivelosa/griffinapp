@@ -6,10 +6,7 @@ import java.util.Collection;
 public class ParsingResponse<T> {
 	private final Collection<InvalidRow> invalidRows = new ArrayList<>();
 	private final Collection<T> validObjects = new ArrayList<>();
-	
-	public ParsingResponse() {}
-
-	
+		
 	public Collection<InvalidRow> getInvalidRows() {
 		return invalidRows;
 	}
@@ -18,11 +15,11 @@ public class ParsingResponse<T> {
 		return validObjects;
 	}
 	
-	public void addInvalidRow(InvalidRow row) {
+	public void addInvalidRow(final InvalidRow row) {
 		invalidRows.add(row);
 	}
 	
-	public void addValidObject(T object) {
+	public void addValidObject(final T object) {
 		validObjects.add(object);
 	}	
 }
