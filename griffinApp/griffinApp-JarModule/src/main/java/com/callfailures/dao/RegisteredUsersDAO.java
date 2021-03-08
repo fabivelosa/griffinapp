@@ -1,4 +1,4 @@
-package com.users.dao;
+package com.callfailures.dao;
 
 import java.util.List;
 
@@ -8,28 +8,28 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
-import com.users.entity.User;
+import com.callfailures.entity.User;
 
 @Stateless
 @LocalBean
 public class RegisteredUsersDAO {
-	
+
 	@PersistenceContext
 	private EntityManager em;
-	
-	public List<User> getRegisteredUsers(){
+
+	public List<User> getRegisteredUsers() {
 		Query query = em.createQuery("SELECT u FROM User u");
 		return query.getResultList();
 	}
-	
+
 	public User getUserById(String id) {
 		return em.find(User.class, id);
 	}
-	
+
 	public void addUser(User user) {
 		em.persist(user);
 	}
-	
+
 	public void updateUser(User user) {
 		em.merge(user);
 	}
