@@ -1,8 +1,7 @@
 package com.callfailures.commontests.utils;
 
 public enum ResourceDefinitions {
-	USERS("users"),
-	YOGA_CLASSES("yoga-classes");
+	EVENTS("events");
 	
 	private final String resourceName;
 
