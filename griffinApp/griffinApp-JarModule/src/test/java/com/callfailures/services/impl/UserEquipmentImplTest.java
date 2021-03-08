@@ -6,17 +6,19 @@ import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+
 import java.io.File;
 import java.nio.file.Paths;
 import java.util.Collection;
+
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mockito;
 import org.mockito.internal.verification.Times;
 import org.mockito.runners.MockitoJUnitRunner;
+
 import com.callfailures.dao.UserEquipmentDAO;
 import com.callfailures.entity.UserEquipment;
 import com.callfailures.parsingutils.InvalidRow;

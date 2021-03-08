@@ -1,7 +1,6 @@
 package com.callfailures.services.impl;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Iterator;
 
@@ -18,7 +17,6 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import com.callfailures.dao.UserEquipmentDAO;
 import com.callfailures.entity.UserEquipment;
-import com.callfailures.exception.FieldNotValidException;
 import com.callfailures.parsingutils.InvalidRow;
 import com.callfailures.parsingutils.ParsingResponse;
 import com.callfailures.services.UserEquipmentService;
@@ -46,7 +44,7 @@ public class UserEquipmentImpl implements UserEquipmentService {
 	public ParsingResponse<UserEquipment> read(final File workbookFile) {
 
 		final ParsingResponse<UserEquipment> result = new ParsingResponse<>();
-		try(Workbook workbook = new XSSFWorkbook(workbookFile)) {
+		try (Workbook workbook = new XSSFWorkbook(workbookFile)) {
 
 			final DataFormatter dataFormatter = new DataFormatter();
 			final Sheet sheet = workbook.getSheetAt(3);

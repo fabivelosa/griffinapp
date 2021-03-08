@@ -1,7 +1,6 @@
 package com.callfailures.services.impl;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Iterator;
 
@@ -46,7 +45,7 @@ public class EventCauseServiceImpl implements EventCauseService {
 	public ParsingResponse<EventCause> read(final File workbookFile) {
 		final ParsingResponse<EventCause> result = new ParsingResponse<>();
 
-		try(Workbook workbook = new XSSFWorkbook(workbookFile)){
+		try (Workbook workbook = new XSSFWorkbook(workbookFile)) {
 			final Sheet sheet = workbook.getSheetAt(1);
 			final Iterator<Row> rowIterator = sheet.rowIterator();
 			EventCause eventCause = null;
@@ -80,7 +79,7 @@ public class EventCauseServiceImpl implements EventCauseService {
 
 		} catch (IOException | InvalidFormatException e) {
 			e.printStackTrace();
-		} 
+		}
 		return result;
 	}
 }
