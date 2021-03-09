@@ -26,7 +26,7 @@ import com.google.gson.JsonObject;
 
 
 @RunWith(Arquillian.class)
-public class EventsResourceIntegrationTest {
+public class EventsResourceIntTest {
 	private final static String imsi = "344930000000011";
 	private final static String invalid_imsi = "3449300000000119";
 	private final static String inexistent_imsi= "244930000000011";
