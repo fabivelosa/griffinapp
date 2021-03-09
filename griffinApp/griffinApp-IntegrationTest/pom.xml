@@ -36,7 +36,6 @@
 		<dependency>
 			<groupId>com.callfailures</groupId>
 			<artifactId>griffinApp-WarModule</artifactId>
-			<type>war</type>
 			<scope>test</scope>
 		</dependency>
 		<dependency>

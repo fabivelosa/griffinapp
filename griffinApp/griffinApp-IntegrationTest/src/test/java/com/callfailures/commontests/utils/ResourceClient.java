@@ -44,6 +44,7 @@ public class ResourceClient {
 
 	private Builder buildClient() {
 		final Client resourceClient = ClientBuilder.newClient();
+		System.out.println("THE URL IS " + getFullURL(resourcePath));
 		
 		return resourceClient.target(getFullURL(resourcePath)).request();
 	}

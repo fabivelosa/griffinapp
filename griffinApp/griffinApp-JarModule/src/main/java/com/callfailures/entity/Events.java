@@ -33,7 +33,7 @@ public class Events {
 	@NotNull
 	private EventCause eventCause;
 
-	@Column
+	@NotNull
 	@Type(type= "org.hibernate.type.LocalDateTimeType")
 	private LocalDateTime dateTime;
 

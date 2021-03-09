@@ -29,6 +29,8 @@ import com.callfailures.entity.MarketOperator;
 import com.callfailures.entity.MarketOperatorPK;
 import com.callfailures.entity.UserEquipment;
 import com.callfailures.entity.views.IMSISummary;
+import com.callfailures.exception.InvalidDateException;
+import com.callfailures.exception.InvalidIMSIException;
 import com.callfailures.parsingutils.InvalidRow;
 import com.callfailures.parsingutils.ParsingResponse;
 import com.callfailures.services.EventService;
@@ -84,31 +86,25 @@ class ReadandPersisteEventsUTest {
 	
 	@Test
 	public void findCallFailuresCountByIMSIAndDateNullIMSI() {
-		assertNull(eventService.findCallFailuresCountByIMSIAndDate(null, VALID_START_TIME, VALID_END_TIME));
-		verify(eventDAO, never()).findCallFailuresCountByIMSIAndDate(anyObject(), anyObject(), anyObject());
-	}
-	
-	@Test
-	public void findCallFailuresCountByIMSIAndDateNullStartTime() {
-		assertNull(eventService.findCallFailuresCountByIMSIAndDate(VALID_IMSI, null, VALID_END_TIME));
+		assertThrows(InvalidIMSIException.class, () -> eventService.findCallFailuresCountByIMSIAndDate(null, VALID_START_TIME, VALID_END_TIME));
 		verify(eventDAO, never()).findCallFailuresCountByIMSIAndDate(anyObject(), anyObject(), anyObject());
 	}
 	
 	@Test
 	public void findCallFailuresCountByIMSIAndDateNullEndTime() {
-		assertNull(eventService.findCallFailuresCountByIMSIAndDate(VALID_IMSI, VALID_START_TIME, null));
+		assertThrows(InvalidDateException.class, () -> eventService.findCallFailuresCountByIMSIAndDate(VALID_IMSI, VALID_END_TIME, VALID_START_TIME));
 		verify(eventDAO, never()).findCallFailuresCountByIMSIAndDate(anyObject(), anyObject(), anyObject());
 	}
 	
 	@Test
 	public void findCallFailuresCountByIMSIAndDateLongIMSI() {
-		assertNull(eventService.findCallFailuresCountByIMSIAndDate(LONG_IMSI, VALID_START_TIME, VALID_END_TIME));
+		assertThrows(InvalidIMSIException.class, () -> eventService.findCallFailuresCountByIMSIAndDate(LONG_IMSI, VALID_START_TIME, VALID_END_TIME));
 		verify(eventDAO, never()).findCallFailuresCountByIMSIAndDate(anyObject(), anyObject(), anyObject());
 	}
 	
 	@Test
 	public void findCallFailuresCountByIMSIAndDateInvalidIMSI() {
-		assertNull(eventService.findCallFailuresCountByIMSIAndDate(INVALID_IMSI, VALID_START_TIME, VALID_END_TIME));
+		assertThrows(InvalidIMSIException.class, () -> eventService.findCallFailuresCountByIMSIAndDate(INVALID_IMSI, VALID_START_TIME, VALID_END_TIME));
 		verify(eventDAO, never()).findCallFailuresCountByIMSIAndDate(anyObject(), anyObject(), anyObject());
 	}
 	
