@@ -1,4 +1,4 @@
-package com.callfailures.common.exception;
+package com.callfailures.commontests.utils;
 
 import javax.ejb.ApplicationException;
 
