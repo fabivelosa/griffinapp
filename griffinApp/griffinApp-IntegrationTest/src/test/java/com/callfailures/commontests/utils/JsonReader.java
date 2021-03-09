@@ -1,6 +1,5 @@
 package com.callfailures.commontests.utils;
 
-import com.callfailures.common.exception.InvalidJsonException;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
