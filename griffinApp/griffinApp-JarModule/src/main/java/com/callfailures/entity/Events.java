@@ -73,8 +73,6 @@ public class Events {
 	@NotNull
 	private String hier321Id;
 
-	public Events() {
-	}
 
 	public UserEquipment getUeType() {
 		return ueType;
