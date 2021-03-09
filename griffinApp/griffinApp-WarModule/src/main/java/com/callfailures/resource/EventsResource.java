@@ -28,6 +28,19 @@ public class EventsResource {
 	@EJB
 	private EventService eventService;
 	
+	
+	
+	
+	
+	
+	/**
+	 * Network Engineer: Count call failures for a given IMSI during a certain period
+	 * @param imsi - the IMSI parameter
+	 * @param fromEpoch - the starting Date paramater converted to long or UNIX timestamp
+	 * @param toEpoch - the starting Date parameter converted to long or UNIX timestamp
+	 * @param summary - boolean parameter which checks if summary is required or not
+	 * @return Returns IMSISummary entity which contains the (1) total failure count and (2) total duration of failues 
+	 */
 	@GET
     @Path("/query")
 	@Produces({ MediaType.APPLICATION_JSON })
@@ -38,11 +51,8 @@ public class EventsResource {
 			@QueryParam("summary") final boolean summary
 			) {
 		
-		LocalDateTime startTime = convertLongToLocalDateTime(fromEpoch); 
-		LocalDateTime endTime = convertLongToLocalDateTime(toEpoch); 
-		
-		System.out.println("CONVERTED FROM TIME IS : " + startTime);
-		
+		final LocalDateTime startTime = convertLongToLocalDateTime(fromEpoch); 
+		final LocalDateTime endTime = convertLongToLocalDateTime(toEpoch); 	
 		try {	
 			IMSISummary imsiSummary = eventService.findCallFailuresCountByIMSIAndDate(imsi, startTime, endTime);
 			if(imsiSummary == null) {
@@ -59,13 +69,6 @@ public class EventsResource {
 
 	private LocalDateTime convertLongToLocalDateTime(final Long startEpoch) {
 			return LocalDateTime.ofInstant(Instant.ofEpochMilli(startEpoch), TimeZone.getDefault().toZoneId());
-	}
-	
-	@GET
-	@Produces({ MediaType.APPLICATION_JSON })
-	public Response hello() {
-		System.out.println("Hello");
-		return Response.status(200).build();
 	}
 	
 }
