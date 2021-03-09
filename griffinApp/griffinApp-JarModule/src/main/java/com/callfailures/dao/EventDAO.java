@@ -18,7 +18,9 @@ import com.callfailures.entity.views.IMSISummary;
 @LocalBean
 public class EventDAO {
 	private static final String FIND_ALL_EVENTS = "SELECT e FROM event e",
-			FIND_CALL_FAILURES_BY_IMSI = "SELECT NEW e FROM event e",
+			FIND_CALL_FAILURES_BY_IMSI = "SELECT NEW com.callfailures.entity.views.IMSIEvent(e.imsi,e.eventId,e.eventCause.causeCode) "
+			+"FROM event e "
+			+"WHERE e.imsi = :imsi",
 			FIND_CALL_FAILURES_BY_IMSI_AND_DATE = "SELECT NEW com.callfailures.entity.views.IMSISummary(e.imsi, COUNT(e), SUM(e.duration)) "
 					+ "FROM event e "
 					+ "WHERE (e.dateTime BETWEEN :startTime AND :endTime) "
@@ -74,9 +76,11 @@ public class EventDAO {
 	 * @param imsi
 	 * @return list of failures with Event ID and Cause Code for given IMSI
 	 */
+	@SuppressWarnings("unchecked")
 	public List<IMSIEvent> findEventsByIMSI(final String IMSI){
-		//final Query query = entityManager.createQuery(qlString);
-		return null;
+		final Query query = entityManager.createQuery(FIND_CALL_FAILURES_BY_IMSI,IMSIEvent.class);
+		query.setParameter("imsi", IMSI);
+		return query.getResultList();
 	}
 	
 
