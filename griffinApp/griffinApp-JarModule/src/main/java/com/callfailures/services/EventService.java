@@ -8,6 +8,8 @@ import javax.ejb.Local;
 import com.callfailures.entity.Events;
 import com.callfailures.entity.views.IMSISummary;
 import com.callfailures.entity.views.PhoneModelSummary;
+import com.callfailures.exception.InvalidDateException;
+import com.callfailures.exception.InvalidIMSIException;
 import com.callfailures.parsingutils.ParsingResponse;
 
 @Local
@@ -19,8 +21,11 @@ public interface EventService {
 	 * @param startTime
 	 * @param endTime
 	 * @return the IMSI summary, returns <b> null </b> if the parameter is invalid or no record is found
+	 * @throws InvalidIMSIException for invalid or <b>null</b> values 
+	 * @throws InvalidDateException for null values
 	 */
-	IMSISummary findCallFailuresCountByIMSIAndDate(final String imsi, final LocalDateTime startTime, final LocalDateTime endTime);
+	IMSISummary findCallFailuresCountByIMSIAndDate(final String imsi, final LocalDateTime startTime, final LocalDateTime endTime)
+		throws InvalidIMSIException, InvalidDateException;
 	
 	/**
 	 * Validates the PhoneModelSUmmary request parameters and retrieves PhoneModelSUmmary object from DAO layer
