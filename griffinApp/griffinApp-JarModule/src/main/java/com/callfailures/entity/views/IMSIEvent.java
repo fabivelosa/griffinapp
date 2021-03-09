@@ -27,4 +27,17 @@ public class IMSIEvent {
 		this.causeCode = causeCode;
 	}
 	
+	public String getImsi() {
+		return imsi;
+	}
+
+	public long getEventID() {
+		return eventID;
+	}
+
+	public long getCauseCode() {
+		return causeCode;
+	}
+
+	
 }
