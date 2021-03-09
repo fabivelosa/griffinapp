@@ -13,7 +13,7 @@ import com.callfailures.parsingutils.ParsingResponse;
 public interface EventService {
 
 	/**
-	 * Validates the IMSISUmmary request parameters and retrieves IMSISUmmary object from DAO layes
+	 * Validates the IMSISUmmary request parameters and retrieves IMSISUmmary object from DAO layers
 	 * @param imsi
 	 * @param startTime
 	 * @param endTime

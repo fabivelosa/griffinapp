@@ -17,6 +17,7 @@ public class RegisteredUsersDAO {
 	@PersistenceContext
 	private EntityManager em;
 
+	@SuppressWarnings("unchecked")
 	public List<User> getRegisteredUsers() {
 		Query query = em.createQuery("SELECT u FROM User u");
 		return query.getResultList();
