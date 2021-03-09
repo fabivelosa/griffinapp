@@ -11,12 +11,14 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
 import com.callfailures.entity.Events;
+import com.callfailures.entity.views.IMSIEvent;
 import com.callfailures.entity.views.IMSISummary;
 
 @Stateless
 @LocalBean
 public class EventDAO {
 	private static final String FIND_ALL_EVENTS = "SELECT e FROM event e",
+			FIND_CALL_FAILURES_BY_IMSI = "SELECT NEW e FROM event e",
 			FIND_CALL_FAILURES_BY_IMSI_AND_DATE = "SELECT NEW com.callfailures.entity.views.IMSISummary(e.imsi, COUNT(e), SUM(e.duration)) "
 					+ "FROM event e "
 					+ "WHERE (e.dateTime BETWEEN :startTime AND :endTime) "
@@ -66,5 +68,16 @@ public class EventDAO {
 			return null;
 		}
 	}
+	
+	/**
+	 * Query Database for all events of an inputted IMSI
+	 * @param imsi
+	 * @return list of failures with Event ID and Cause Code for given IMSI
+	 */
+	public List<IMSIEvent> findEventsByIMSI(final String IMSI){
+		//final Query query = entityManager.createQuery(qlString);
+		return null;
+	}
+	
 
 }

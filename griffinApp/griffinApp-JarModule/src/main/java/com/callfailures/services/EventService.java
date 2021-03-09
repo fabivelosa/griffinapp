@@ -2,16 +2,26 @@ package com.callfailures.services;
 
 import java.io.File;
 import java.time.LocalDateTime;
+import java.util.List;
 
 import javax.ejb.Local;
 
 import com.callfailures.entity.Events;
 import com.callfailures.entity.views.IMSISummary;
+import com.callfailures.entity.views.IMSIEvent;
 import com.callfailures.parsingutils.ParsingResponse;
 
 @Local
 public interface EventService {
 
+	
+	/**
+	 * Retreives from DAO a list of event ids and cause codes of failures for given IMSI
+	 * @param imsi
+	 * @return list of IMSI Events, returns <b> null </b> if no failures found.
+	 */
+	List<IMSIEvent> findFailuresByImsi(final String imsi);
+	
 	/**
 	 * Validates the IMSISUmmary request parameters and retrieves IMSISUmmary object from DAO layes
 	 * @param imsi
@@ -28,4 +38,6 @@ public interface EventService {
 	 */
 	ParsingResponse<Events> read(File workbookFile);
 
+
+	
 }
