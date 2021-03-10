@@ -12,6 +12,7 @@ import javax.persistence.Query;
 
 import com.callfailures.entity.Events;
 import com.callfailures.entity.views.IMSISummary;
+import com.callfailures.entity.views.PhoneModelSummary;
 
 @Stateless
 @LocalBean
@@ -21,7 +22,11 @@ public class EventDAO {
 					+ "FROM event e "
 					+ "WHERE (e.dateTime BETWEEN :startTime AND :endTime) "
 					+ "AND e.imsi = :imsi "
-					+ "GROUP BY e.imsi";
+					+ "GROUP BY e.imsi",
+		    FIND_CALL_FAILURES_BY_PHONEMODEL_AND_DATE = "SELECT NEW com.callfailures.entity.views.PhoneModelSummary(e.ueType.model, COUNT(e)) "
+							+ "FROM event e "
+							+ "WHERE (e.dateTime BETWEEN :startTime AND :endTime) "
+							+ "AND e.ueType.model = :model ";
 
 	
 	@PersistenceContext
@@ -62,6 +67,26 @@ public class EventDAO {
 		query.setParameter("endTime", endTime);
 		try {
 			return (IMSISummary) query.getSingleResult();
+		}catch(NoResultException  exception) {
+			return null;
+		}
+	}
+	
+	/**
+	 * Queries the PhoneModelSummary object which includes the count of call failures  in a given period
+	 * @param ueType
+	 * @param startTime (inclusive) - the start of the period
+	 * @param endTime (inclusive) - the end of the period
+	 * @return the PhoneModelSummary object
+	 */
+	public PhoneModelSummary findCallFailuresCountByPhoneModelAndDate(final String model, final LocalDateTime startTime, final LocalDateTime endTime) {
+		final Query query = entityManager.createQuery(FIND_CALL_FAILURES_BY_PHONEMODEL_AND_DATE, PhoneModelSummary.class);
+		query.setParameter("model", model);
+		query.setParameter("startTime", startTime);
+		query.setParameter("endTime", endTime);
+		try {
+			Object queryResult = query.getSingleResult();
+			return (PhoneModelSummary) query.getSingleResult();
 		}catch(NoResultException  exception) {
 			return null;
 		}

@@ -17,6 +17,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import com.callfailures.dao.EventDAO;
 import com.callfailures.entity.Events;
 import com.callfailures.entity.views.IMSISummary;
+import com.callfailures.entity.views.PhoneModelSummary;
 import com.callfailures.exception.FieldNotValidException;
 import com.callfailures.parsingutils.InvalidRow;
 import com.callfailures.parsingutils.ParsingResponse;
@@ -44,6 +45,19 @@ public class EventServiceImpl implements EventService {
 		}
 		
 		return eventDAO.findCallFailuresCountByIMSIAndDate(imsi, startTime, endTime);
+	}
+	
+	@Override
+	public	PhoneModelSummary findCallFailuresCountByPhoneModelAndDate(final String model, final LocalDateTime startTime, final LocalDateTime endTime) {
+		if(startTime == null || endTime == null) {
+			return null;
+		}
+	
+//		if(!isValidPhoneModel(ueType)) {
+//			return null;
+//		}
+//		
+		return eventDAO.findCallFailuresCountByPhoneModelAndDate(model, startTime, endTime);
 	}
 	
 	
@@ -80,6 +94,20 @@ public class EventServiceImpl implements EventService {
 
 		for(int i = 0; i < imsi.length(); i++) {
 			if(!Character.isDigit(imsi.charAt(0))) {
+				return false;
+			}
+		}
+		return true;
+	}
+	
+
+	private boolean isValidPhoneModel(final String ueType) {
+		if(ueType == null || ueType.length() > 15) {
+			return false;
+		}
+
+		for(int i = 0; i < ueType.length(); i++) {
+			if(!Character.isDigit(ueType.charAt(0))) {
 				return false;
 			}
 		}
