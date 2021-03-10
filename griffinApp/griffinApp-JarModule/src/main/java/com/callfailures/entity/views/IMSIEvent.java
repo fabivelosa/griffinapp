@@ -14,25 +14,26 @@ public class IMSIEvent {
 	@Id
 	private String imsi;
 	
-	//private EventCause ecause;
+	private EventCause eventCause;
  
 	
 	public IMSIEvent() {
 		
 	}
 	
-	
-	/*
-	public IMSIEvent(final String imsi, final EventCause ecause) {
+	public IMSIEvent(final String imsi, final EventCause eventCause) {
 		this.imsi = imsi;
-		this.ecause = ecause;
+		this.eventCause = eventCause;
 	}
-	*/
+	
 	public String getImsi() {
 		return imsi;
 	}
 
-	
+	public EventCause getEventCause() {
+		return eventCause;
+	}
+
 
 	
 }
