@@ -20,6 +20,8 @@ import com.callfailures.entity.Events;
 import com.callfailures.entity.views.IMSIEvent;
 import com.callfailures.entity.views.IMSISummary;
 import com.callfailures.exception.FieldNotValidException;
+import com.callfailures.exception.InvalidDateException;
+import com.callfailures.exception.InvalidIMSIException;
 import com.callfailures.parsingutils.InvalidRow;
 import com.callfailures.parsingutils.ParsingResponse;
 import com.callfailures.services.EventService;
@@ -47,12 +49,12 @@ public class EventServiceImpl implements EventService {
 	
 	@Override
 	public IMSISummary findCallFailuresCountByIMSIAndDate(final String imsi, final LocalDateTime startTime, final LocalDateTime endTime) {
-		if(startTime == null || endTime == null) {
-			return null;
+		if(startTime.isAfter(endTime)) {
+			throw new InvalidDateException();
 		}
 	
 		if(!isValidIMSI(imsi)) {
-			return null;
+			throw new InvalidIMSIException();
 		}
 		
 		return eventDAO.findCallFailuresCountByIMSIAndDate(imsi, startTime, endTime);
