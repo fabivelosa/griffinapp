@@ -1,5 +1,7 @@
 package com.callfailures.dao;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.time.LocalDateTime;
@@ -13,6 +15,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import com.callfailures.entity.Events;
+import com.callfailures.entity.views.IMSIEvent;
 import com.callfailures.entity.views.IMSISummary;
 import com.callfailures.utils.test.DBCommandTransactionalExecutor;
 import com.callfailures.utils.test.EntityGenerator;
@@ -127,6 +130,35 @@ class EventDAOInMemoryUTest {
 	   assertNull(imsiSummary);
 	}
 	
+	
+	@Test
+	void testfindEventsByIMSI() {
+		dBCommandTransactionalExecutor.executeCommand(() -> {
+			events = eventGenerator.generateCallFailureInstance(localDateTime, eventId, failureId, ueId, mCc, mNc,
+					cellId, duration, causeCode, neVersion, IMSI , hier3Id, hier32Id, hier321Id, eventCauseDescription,
+					failureClassDescription, country, operator);
+		   failureClassDAO.create(events.getFailureClass());
+		   marketOperatorDAO.create(events.getMarketOperator());
+		   eventCauseDAO.create(events.getEventCause());
+		   userEquipmentDaO.create(events.getUeType());
+		   eventDAO.create(events);
+		   return null;
+		});
+		
+		final String validIMSI = "344930000000011";
+		List<IMSIEvent> IMSIevents = eventDAO.findEventsByIMSI(validIMSI);
+		assertNotNull(IMSIevents);
+		assertEquals(1,IMSIevents.size());
+		
+		IMSIEvent IMSIEvent = IMSIevents.get(0);
+		assertEquals(validIMSI,IMSIEvent.getImsi());
+		
+		assertNotNull(IMSIEvent.getEventCause());
+		
+		assertEquals(eventId, IMSIEvent.getEventCause().getEventCauseId().getEventCauseId());
+		assertEquals(causeCode, IMSIEvent.getEventCause().getEventCauseId().getCauseCode());
+		
+	}
 }
 
 

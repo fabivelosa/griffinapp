@@ -7,11 +7,10 @@ import org.hibernate.annotations.Immutable;
 
 import com.callfailures.entity.EventCause;
 
-@Entity(name = "imsiEvent")
-@Immutable
+
 public class IMSIEvent {
 
-	@Id
+	
 	private String imsi;
 	
 	private EventCause eventCause;
