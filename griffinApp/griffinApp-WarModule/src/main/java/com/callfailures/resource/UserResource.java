@@ -1,7 +1,5 @@
 package com.callfailures.resource;
 
-import java.util.List;
-
 import javax.ejb.EJB;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
@@ -15,8 +13,9 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import com.callfailures.dao.RegisteredUsersDAO;
+import com.callfailures.dao.UsersDAO;
 import com.callfailures.entity.User;
+import com.callfailures.services.UserService;
 
 @Path("/users")
 @Stateless
@@ -24,28 +23,21 @@ import com.callfailures.entity.User;
 public class UserResource {
 
 	@EJB
-	private RegisteredUsersDAO userDao;
+	private UserService userService;
 
-	@GET
-	@Produces({ MediaType.APPLICATION_JSON })
-	public Response findAll() {
-		System.out.println("Show registered users");
-		List<User> users = userDao.getRegisteredUsers();
-		return Response.status(200).entity(users).build();
-	}
-
+	
 	@GET
 	@Produces({ MediaType.APPLICATION_JSON })
 	@Path("/{id}")
-	public Response findUserById(@PathParam("id") String id) {
-		User user = userDao.getUserById(id);
+	public Response findUserById(final @PathParam("id") String userId) {
+		final User user = userService.getUserById(userId);
 		return Response.status(200).entity(user).build();
 	}
 
 	@POST
 	@Produces({ MediaType.APPLICATION_JSON })
-	public Response addUser(User user) {
-		userDao.addUser(user);
+	public Response addUser(final User user) {
+		userService.addUser(user);
 		return Response.status(200).entity(user).build();
 	}
 
@@ -53,8 +45,8 @@ public class UserResource {
 	@Path("/{id}")
 	@Consumes("application/json")
 	@Produces({ MediaType.APPLICATION_JSON })
-	public Response updateUser(User user) {
-		userDao.updateUser(user);
+	public Response updateUser(final User user) {
+		userService.updateUser(user);
 		return Response.status(200).entity(user).build();
 
 	}
