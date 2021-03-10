@@ -18,7 +18,7 @@ import com.callfailures.entity.views.IMSISummary;
 @LocalBean
 public class EventDAO {
 	private static final String FIND_ALL_EVENTS = "SELECT e FROM event e",
-			FIND_CALL_FAILURES_BY_IMSI = "SELECT NEW com.callfailures.entity.views.IMSIEvent(e.imsi,e.eventId,e.eventCause.causeCode) "
+			FIND_CALL_FAILURES_BY_IMSI = "SELECT NEW com.callfailures.entity.views.IMSIEvent(e.imsi,e.e.eventCause.eventCauseId.eventCauseId) "
 			+"FROM event e "
 			+"WHERE e.imsi = :imsi",
 			FIND_CALL_FAILURES_BY_IMSI_AND_DATE = "SELECT NEW com.callfailures.entity.views.IMSISummary(e.imsi, COUNT(e), SUM(e.duration)) "

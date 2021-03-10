@@ -34,19 +34,28 @@ public class QueryIMSI {
 	@EJB
 	private  EventService eventService = new EventServiceImpl();
 	
+	@GET
+	@Produces({MediaType.APPLICATION_JSON})
+	public Response findEventsByIMISI() {
+		System.out.println("Called");
+		
+		List<IMSIEvent> events = eventService.findFailuresByImsi("344930000000011");
+		if (events !=null) {
+			return Response.status(200).entity(events).build();
+		}
+		return Response.status(400).build();
+		
+	}
 	
 	@GET
 	@Produces({MediaType.APPLICATION_JSON})
-	@Path("search/{IMSI}")
-	public Response findIMSIByDates(@PathParam("IMSI") String IMSI) {
-		
-		//Get List of all failures for that IMSI
-		//Events
-		if (eventService.isValidIMSI(IMSI)) {
-			List<IMSIEvent> events = new ArrayList<IMSIEvent>();
+	@Path("search/IMSI")
+	public Response findEventsByIMISI(@PathParam("IMSI") String IMSI) {
+		System.out.println("Called");
+		List<IMSIEvent> events = eventService.findFailuresByImsi(IMSI);
+		if (events !=null) {
 			return Response.status(200).build();
 		}
-		
 		return Response.status(400).build();
 	}
 	
