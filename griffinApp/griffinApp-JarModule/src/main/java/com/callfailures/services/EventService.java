@@ -7,6 +7,7 @@ import java.util.List;
 import javax.ejb.Local;
 
 import com.callfailures.entity.Events;
+import com.callfailures.entity.views.IMSIEvent;
 import com.callfailures.entity.views.IMSISummary;
 import com.callfailures.exception.InvalidIMSIException;
 import com.callfailures.exception.InvalidDateException;
