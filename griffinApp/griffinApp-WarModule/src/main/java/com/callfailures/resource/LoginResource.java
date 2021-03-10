@@ -21,19 +21,17 @@ public class LoginResource {
 	@Inject
 	@EJB
 	private UserService userService;
-	
+
 	@POST
 	@Path("/auth")
 	@Produces({ MediaType.APPLICATION_JSON })
-	public Response auth(@FormParam("username") String username , @FormParam("password") String password   ) {
-		Boolean user = userService.validateUser(username, password);
-		if(user == Boolean.TRUE) {
+	public Response auth(@FormParam("username") final String username, @FormParam("password") final String password) {
+		final Boolean user = userService.validateUser(username, password);
+		if (user == Boolean.TRUE) {
 			return Response.status(200).entity(user).build();
 		}
-		
+
 		return Response.status(401).build();
 	}
-
-	 
 
 }

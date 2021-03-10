@@ -13,7 +13,6 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import com.callfailures.dao.UsersDAO;
 import com.callfailures.entity.User;
 import com.callfailures.services.UserService;
 
@@ -25,7 +24,6 @@ public class UserResource {
 	@EJB
 	private UserService userService;
 
-	
 	@GET
 	@Produces({ MediaType.APPLICATION_JSON })
 	@Path("/{id}")

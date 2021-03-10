@@ -8,15 +8,11 @@ import com.callfailures.entity.User;
 public interface UserService {
 
 	Boolean validateUser(final String username, String password);
-	
-	public User getUserById(String id);
-		
 
-	public void addUser(User user);
-		
+	User getUserById(String userId);
 
-	public void updateUser(User user);
-	
+	void addUser(User user);
 
+	void updateUser(User user);
 
 }
