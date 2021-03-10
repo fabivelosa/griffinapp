@@ -15,8 +15,8 @@ public class PhoneFailures {
 	public PhoneFailures() {
 	}
 
-	public PhoneFailures(UserEquipment imsi, EventCause eventCause, long count) {
-		this.userEquipment = imsi;
+	public PhoneFailures(UserEquipment userEquipment, EventCause eventCause, long count) {
+		this.userEquipment = userEquipment;
 		this.eventCause = eventCause;
 		this.count = count;
 	}
