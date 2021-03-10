@@ -72,7 +72,11 @@ public class EventDAO {
 		}
 	}
 	
-	
+	/**
+	 * Queries the Unique EventID, and CauseCode combinations, and their count by phone model
+	 * @param tac - the unique identifier of the phone model
+	 * @return
+	 */
 	public List<PhoneFailures> findUniqueEventCauseCountByPhoneModel(final int tac) {
 		final Query query = entityManager.createQuery(FIND_UNIQUE_EVENT_ID_AND_CAUSE_CODE_COUNT, PhoneFailures.class);
 		query.setParameter("tac", tac);
