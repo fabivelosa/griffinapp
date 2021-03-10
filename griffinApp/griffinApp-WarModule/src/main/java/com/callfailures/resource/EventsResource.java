@@ -28,15 +28,10 @@ public class EventsResource {
 	@EJB
 	private EventService eventService;
 	
-	
-	
-	
-	
-	
 	/**
 	 * Network Engineer: Count call failures for a given IMSI during a certain period
 	 * @param imsi - the IMSI parameter
-	 * @param fromEpoch - the starting Date paramater converted to long or UNIX timestamp
+	 * @param fromEpoch - the starting Date parameter converted to long or UNIX timestamp
 	 * @param toEpoch - the starting Date parameter converted to long or UNIX timestamp
 	 * @param summary - boolean parameter which checks if summary is required or not
 	 * @return Returns IMSISummary entity which contains the (1) total failure count and (2) total duration of failues 
@@ -62,7 +57,6 @@ public class EventsResource {
 		}catch(InvalidIMSIException exception) {
 			return Response.status(404).entity(new ErrorMessages(ErrorMessage.INVALID_IMSI.getMessage())).build();
 		}catch(InvalidDateException exception) {
-			System.out.println("Exception is caught");
 			return Response.status(404).entity(new ErrorMessages(ErrorMessage.INVALID_DATE.getMessage())).build();
 		}
 	}
