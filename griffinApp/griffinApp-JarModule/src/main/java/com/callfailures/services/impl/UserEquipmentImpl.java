@@ -3,6 +3,7 @@ package com.callfailures.services.impl;
 import java.io.File;
 import java.io.IOException;
 import java.util.Iterator;
+import java.util.List;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -40,6 +41,10 @@ public class UserEquipmentImpl implements UserEquipmentService {
 		userEquipmentDAO.create(obj);
 	}
 
+	public List<UserEquipment> findAll(){
+		return userEquipmentDAO.findAll();
+	}
+	
 	@Override
 	public ParsingResponse<UserEquipment> read(final File workbookFile) {
 
