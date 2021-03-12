@@ -22,11 +22,13 @@ import org.junit.runner.RunWith;
 import com.callfailures.commontests.utils.JsonReader;
 import com.callfailures.commontests.utils.ResourceClient;
 import com.callfailures.errors.ErrorMessage;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
 
 @RunWith(Arquillian.class)
 public class EventsResourceIntTest {
+	private final static int tac = 21060800;
 	private final static String imsi = "344930000000011";
 	private final static String invalid_imsi = "3449300000000119";
 	private final static String inexistent_imsi= "244930000000011";
@@ -34,7 +36,7 @@ public class EventsResourceIntTest {
 	private final static String toTime = "1616065200000"; // March 18, 2021 11:00AM
 	private final static boolean summary = true;
 	private final static String IMSI_SUMMARY_BY_DATE = "events/query?imsi=" + imsi + "&from=" + fromTime + "&to=" + toTime + "&summary=" + summary;
-
+	private final static String PHONE_FAILURES = "events/query?tac=" + tac;
 	
 	@ArquillianResource
 	private URL url; 
@@ -112,5 +114,26 @@ public class EventsResourceIntTest {
 		assertEquals(inexistent_imsi, imsiSummaryJSON.get("imsi").getAsString());
 		assertEquals(0, imsiSummaryJSON.get("callFailuresCount").getAsLong());
 		assertEquals(0, imsiSummaryJSON.get("totalDurationMs").getAsLong());
+	}
+	
+	
+	@Test
+	@RunAsClient
+	public void testfindUniqueEventCauseCountByPhoneModel() {
+		final Response responseGet = resourceClient.resourcePath(PHONE_FAILURES).get();
+		assertEquals(200, responseGet.getStatus());
+		
+		final JsonArray result = JsonReader.readAsJsonArray(responseGet.readEntity(String.class));
+		assertEquals(1, result.size());
+		JsonObject phoneFailure = result.get(0).getAsJsonObject();
+		
+		
+		assertEquals(3L, phoneFailure.get("count").getAsLong());
+		JsonObject userEquipment = phoneFailure.get("userEquipment").getAsJsonObject();
+		assertEquals(tac, userEquipment.get("tac").getAsInt());
+		
+		JsonObject eventCause = phoneFailure.get("eventCause").getAsJsonObject();
+		assertEquals(4098, eventCause.get("eventCauseId").getAsJsonObject().get("eventCauseId").getAsInt());
+		assertEquals(1, eventCause.get("eventCauseId").getAsJsonObject().get("causeCode").getAsInt());
 	}
 }

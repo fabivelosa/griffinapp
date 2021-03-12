@@ -3,6 +3,7 @@ package com.callfailures.resource;
 import java.time.DateTimeException;
 import java.time.Instant;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.TimeZone;
 
 import javax.ejb.EJB;
@@ -15,6 +16,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import com.callfailures.entity.views.IMSISummary;
+import com.callfailures.entity.views.PhoneFailures;
 import com.callfailures.errors.ErrorMessage;
 import com.callfailures.errors.ErrorMessages;
 import com.callfailures.exception.InvalidDateException;
@@ -63,6 +65,16 @@ public class EventsResource {
 
 	private LocalDateTime convertLongToLocalDateTime(final Long startEpoch) {
 			return LocalDateTime.ofInstant(Instant.ofEpochMilli(startEpoch), TimeZone.getDefault().toZoneId());
+	}
+	
+	@GET
+    @Path("/query")
+	@Produces({ MediaType.APPLICATION_JSON })
+	public Response findUniqueEventCauseCountByPhoneModel(
+			@QueryParam("tac") final int tac
+			) {
+		List<PhoneFailures> phoneFailures =  eventService.findUniqueEventCauseCountByPhoneModel(tac);
+		return Response.status(200).entity(phoneFailures).build();
 	}
 	
 }
