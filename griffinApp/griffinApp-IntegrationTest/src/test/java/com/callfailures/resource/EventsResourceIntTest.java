@@ -36,7 +36,6 @@ public class EventsResourceIntTest {
 	private final static String toTime = "1616065200000"; // March 18, 2021 11:00AM
 	private final static boolean summary = true;
 	private final static String IMSI_SUMMARY_BY_DATE = "events/query?imsi=" + imsi + "&from=" + fromTime + "&to=" + toTime + "&summary=" + summary;
-	private final static String PHONE_FAILURES = "events/query?tac=" + tac;
 	
 	@ArquillianResource
 	private URL url; 
@@ -117,23 +116,5 @@ public class EventsResourceIntTest {
 	}
 	
 	
-	@Test
-	@RunAsClient
-	public void testfindUniqueEventCauseCountByPhoneModel() {
-		final Response responseGet = resourceClient.resourcePath(PHONE_FAILURES).get();
-		assertEquals(200, responseGet.getStatus());
-		
-		final JsonArray result = JsonReader.readAsJsonArray(responseGet.readEntity(String.class));
-		assertEquals(1, result.size());
-		JsonObject phoneFailure = result.get(0).getAsJsonObject();
-		
-		
-		assertEquals(3L, phoneFailure.get("count").getAsLong());
-		JsonObject userEquipment = phoneFailure.get("userEquipment").getAsJsonObject();
-		assertEquals(tac, userEquipment.get("tac").getAsInt());
-		
-		JsonObject eventCause = phoneFailure.get("eventCause").getAsJsonObject();
-		assertEquals(4098, eventCause.get("eventCauseId").getAsJsonObject().get("eventCauseId").getAsInt());
-		assertEquals(1, eventCause.get("eventCauseId").getAsJsonObject().get("causeCode").getAsInt());
-	}
+
 }

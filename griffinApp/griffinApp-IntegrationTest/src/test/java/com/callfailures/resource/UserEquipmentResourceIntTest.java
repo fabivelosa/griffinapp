@@ -36,7 +36,10 @@ import com.google.gson.JsonObject;
 
 @RunWith(Arquillian.class)
 public class UserEquipmentResourceIntTest {
+	private final static int tac = 21060800;
 	private final static String ALL_USER_EQUIPMENT = "userEquipment/";
+	private final static String PHONE_FAILURES = "userEquipment/query?tac=" + tac;
+
 
 	
 	@ArquillianResource
@@ -50,7 +53,7 @@ public class UserEquipmentResourceIntTest {
 				.create(WebArchive.class)
 				.addPackages(true, "com.callfailures")
 				.addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml")
-				.addAsResource("importUserEquipment.sql", "META-INF/import.sql")
+				.addAsResource("import.sql", "META-INF/import.sql")
 				.addAsResource("persistence-integration.xml", "META-INF/persistence.xml")
 				.setWebXML(new File("src/test/resources/web.xml"))
 				.addAsLibraries(
@@ -78,6 +81,26 @@ public class UserEquipmentResourceIntTest {
 		JsonObject userEquipment = result.get(0).getAsJsonObject();
 		assertEquals(21060800, userEquipment.get("tac").getAsInt());
 		assertEquals("VEA3", userEquipment.get("model").getAsString());
+	}
+	
+	@Test
+	@RunAsClient
+	public void testfindUniqueEventCauseCountByPhoneModel() {
+		final Response responseGet = resourceClient.resourcePath(PHONE_FAILURES).get();
+		assertEquals(200, responseGet.getStatus());
+		
+		final JsonArray result = JsonReader.readAsJsonArray(responseGet.readEntity(String.class));
+		assertEquals(1, result.size());
+		JsonObject phoneFailure = result.get(0).getAsJsonObject();
+		
+		
+		assertEquals(3L, phoneFailure.get("count").getAsLong());
+		JsonObject userEquipment = phoneFailure.get("userEquipment").getAsJsonObject();
+		assertEquals(tac, userEquipment.get("tac").getAsInt());
+		
+		JsonObject eventCause = phoneFailure.get("eventCause").getAsJsonObject();
+		assertEquals(4098, eventCause.get("eventCauseId").getAsJsonObject().get("eventCauseId").getAsInt());
+		assertEquals(1, eventCause.get("eventCauseId").getAsJsonObject().get("causeCode").getAsInt());
 	}
 	
 }

@@ -67,14 +67,5 @@ public class EventsResource {
 			return LocalDateTime.ofInstant(Instant.ofEpochMilli(startEpoch), TimeZone.getDefault().toZoneId());
 	}
 	
-	@GET
-    @Path("/query")
-	@Produces({ MediaType.APPLICATION_JSON })
-	public Response findUniqueEventCauseCountByPhoneModel(
-			@QueryParam("tac") final int tac
-			) {
-		List<PhoneFailures> phoneFailures =  eventService.findUniqueEventCauseCountByPhoneModel(tac);
-		return Response.status(200).entity(phoneFailures).build();
-	}
 	
 }
