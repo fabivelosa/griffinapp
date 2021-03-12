@@ -24,7 +24,7 @@ import com.callfailures.services.UserEquipmentService;
 import com.callfailures.services.ValidationService;
 
 @Stateless
-public class UserEquipmentImpl implements UserEquipmentService {
+public class UserEquipmentServceImpl implements UserEquipmentService {
 
 	@Inject
 	UserEquipmentDAO userEquipmentDAO;

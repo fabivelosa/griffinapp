@@ -37,7 +37,7 @@ public class UserEquipmentImplTest {
 	private final String absolutePath = Paths.get("src", "test", "resources").toFile().getAbsolutePath();
 
 	@InjectMocks
-	private UserEquipmentImpl userEquipmentImpl;
+	private UserEquipmentServceImpl userEquipmentImpl;
 
 	@Before
 	public void setUp() throws Exception {
