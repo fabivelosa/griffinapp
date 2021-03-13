@@ -15,6 +15,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import com.callfailures.entity.views.IMSISummary;
+import com.callfailures.entity.views.PhoneModelSummary;
 import com.callfailures.errors.ErrorMessage;
 import com.callfailures.errors.ErrorMessages;
 import com.callfailures.exception.InvalidDateException;
@@ -64,6 +65,39 @@ public class EventsResource {
 		}catch(InvalidDateException exception) {
 			System.out.println("Exception is caught");
 			return Response.status(404).entity(new ErrorMessages(ErrorMessage.INVALID_DATE.getMessage())).build();
+		}
+	}
+	
+	/**
+	 * Support Engineer: Count call failures for a given IMSI during a certain period
+	 * @param model - the phone model
+	 * @param fromEpoch - the starting Date parameter converted to long or UNIX timestamp
+	 * @param toEpoch - the starting Date parameter converted to long or UNIX timestamp
+	 * @return Returns PhoneModelSummary entity which contains the (1) total failure count and (2) phone model
+	 */
+	@GET
+    @Path("/query/ue")
+	@Produces({ MediaType.APPLICATION_JSON })
+	public Response getPhoneModelCallFailureSummary(
+			@QueryParam("model") final String model,
+			@QueryParam("from") final Long fromEpoch,
+			@QueryParam("to") final Long toEpoch
+			) {
+		
+		final LocalDateTime startTime = convertLongToLocalDateTime(fromEpoch); 
+		final LocalDateTime endTime = convertLongToLocalDateTime(toEpoch); 	
+		try {	
+			PhoneModelSummary phoneModelSummary = eventService.findCallFailuresCountByPhoneModelAndDate(model, startTime, endTime);
+			if(phoneModelSummary == null || phoneModelSummary.getModel() == null ) {
+				phoneModelSummary = new PhoneModelSummary (model, 0);
+			}
+			return Response.status(200).entity(phoneModelSummary).build();
+		}
+		catch(InvalidDateException exception) {
+			return Response.status(404).entity(new ErrorMessages(ErrorMessage.INVALID_DATE.getMessage())).build();
+		}
+		catch(Exception exception) {
+			return Response.status(404).build();
 		}
 	}
 

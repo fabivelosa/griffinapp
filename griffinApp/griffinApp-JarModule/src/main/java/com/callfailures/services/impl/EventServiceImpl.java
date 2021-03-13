@@ -51,14 +51,10 @@ public class EventServiceImpl implements EventService {
 	
 	@Override
 	public	PhoneModelSummary findCallFailuresCountByPhoneModelAndDate(final String model, final LocalDateTime startTime, final LocalDateTime endTime) {
-		if(startTime == null || endTime == null) {
+		if(startTime == null || endTime == null ) {
 			return null;
 		}
 	
-//		if(!isValidPhoneModel(ueType)) {
-//			return null;
-//		}
-//		
 		return eventDAO.findCallFailuresCountByPhoneModelAndDate(model, startTime, endTime);
 	}
 	

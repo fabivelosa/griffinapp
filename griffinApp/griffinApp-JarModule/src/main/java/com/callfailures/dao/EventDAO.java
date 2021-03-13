@@ -85,7 +85,6 @@ public class EventDAO {
 		query.setParameter("startTime", startTime);
 		query.setParameter("endTime", endTime);
 		try {
-			Object queryResult = query.getSingleResult();
 			return (PhoneModelSummary) query.getSingleResult();
 		}catch(NoResultException  exception) {
 			return null;
