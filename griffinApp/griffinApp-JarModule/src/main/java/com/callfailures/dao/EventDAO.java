@@ -26,7 +26,8 @@ public class EventDAO {
 		    FIND_CALL_FAILURES_BY_PHONEMODEL_AND_DATE = "SELECT NEW com.callfailures.entity.views.PhoneModelSummary(e.ueType.model, COUNT(e)) "
 							+ "FROM event e "
 							+ "WHERE (e.dateTime BETWEEN :startTime AND :endTime) "
-							+ "AND e.ueType.model = :model ";
+							+ "AND e.ueType.model = :model "
+							+ "GROUP BY e.ueType.model";
 
 	
 	@PersistenceContext

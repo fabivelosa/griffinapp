@@ -14,6 +14,7 @@ import org.junit.jupiter.api.Test;
 
 import com.callfailures.entity.Events;
 import com.callfailures.entity.views.IMSISummary;
+import com.callfailures.entity.views.PhoneModelSummary;
 import com.callfailures.utils.test.DBCommandTransactionalExecutor;
 import com.callfailures.utils.test.EntityGenerator;
 
@@ -33,6 +34,7 @@ class EventDAOInMemoryUTest {
 	private final static LocalDateTime endTime = LocalDateTime.of(2020,3,18,23,50);
 	private final static int eventId = 4098, failureId = 1, ueId = 21060800, mCc = 100, mNc = 930, cellId = 4, duration = 1000,  causeCode = 0 ;
 	private final static String neVersion = "11B", hier3Id = "4809532081614990000", hier32Id = "8226896360947470000", hier321Id = "1150444940909480000", IMSI = "344930000000011" ;
+	private final static String phoneModel = "G410";
 	private final static String eventCauseDescription = "S1 SIG CONN SETUP-SUCCESS";
 	private final static String failureClassDescription = "HIGH PRIORITY ACCESS";
 	private final static String country = "Antigua and Barbuda";
@@ -125,6 +127,77 @@ class EventDAOInMemoryUTest {
 	   
 	   IMSISummary imsiSummary = eventDAO.findCallFailuresCountByIMSIAndDate(IMSI, startTime.plusMinutes(6), endTime);
 	   assertNull(imsiSummary);
+	}
+	
+	@Test
+	void testSuccessFindCallFailuresCountByPhoneModelAndDate() {
+		dBCommandTransactionalExecutor.executeCommand(() -> {
+			events = eventGenerator.generateCallFailureInstance(localDateTime, eventId, failureId, ueId, mCc, mNc,
+					cellId, duration, causeCode, neVersion, IMSI , hier3Id, hier32Id, hier321Id, eventCauseDescription,
+					failureClassDescription, country, operator);
+		   failureClassDAO.create(events.getFailureClass());
+		   marketOperatorDAO.create(events.getMarketOperator());
+		   eventCauseDAO.create(events.getEventCause());
+		   userEquipmentDaO.create(events.getUeType());
+		   eventDAO.create(events);
+		   return null;
+		});
+		
+
+	   List<Events> events = eventDAO.findAllEvents();
+	   
+	   assertEquals(1, events.size());
+	   
+	   PhoneModelSummary phoneModelSummary = eventDAO.findCallFailuresCountByPhoneModelAndDate(phoneModel, startTime, endTime);
+	   assertEquals(phoneModel, phoneModelSummary.getModel());
+	   assertEquals(1, phoneModelSummary.getCallFailuresCount());
+	   assertNotNull(phoneModelSummary);
+	}
+	
+	@Test
+	void testFailureFindCallFailuresCountByPhoneModelAndDate() {
+		dBCommandTransactionalExecutor.executeCommand(() -> {
+			events = eventGenerator.generateCallFailureInstance(localDateTime, eventId, failureId, ueId, mCc, mNc,
+					cellId, duration, causeCode, neVersion, IMSI , hier3Id, hier32Id, hier321Id, eventCauseDescription,
+					failureClassDescription, country, operator);
+		   failureClassDAO.create(events.getFailureClass());
+		   marketOperatorDAO.create(events.getMarketOperator());
+		   eventCauseDAO.create(events.getEventCause());
+		   userEquipmentDaO.create(events.getUeType());
+		   eventDAO.create(events);
+		   return null;
+		});
+		
+
+	   List<Events> events = eventDAO.findAllEvents();
+	   
+	   assertEquals(1, events.size());
+	   
+	   PhoneModelSummary phoneModelSummary = eventDAO.findCallFailuresCountByPhoneModelAndDate(phoneModel, startTime.plusMinutes(6), endTime);
+	   assertNull(phoneModelSummary);
+	}
+	
+	@Test
+	void testFailureFindCallFailuresCountByInvalidPhoneModel() {
+		dBCommandTransactionalExecutor.executeCommand(() -> {
+			events = eventGenerator.generateCallFailureInstance(localDateTime, eventId, failureId, ueId, mCc, mNc,
+					cellId, duration, causeCode, neVersion, IMSI , hier3Id, hier32Id, hier321Id, eventCauseDescription,
+					failureClassDescription, country, operator);
+		   failureClassDAO.create(events.getFailureClass());
+		   marketOperatorDAO.create(events.getMarketOperator());
+		   eventCauseDAO.create(events.getEventCause());
+		   userEquipmentDaO.create(events.getUeType());
+		   eventDAO.create(events);
+		   return null;
+		});
+		
+
+	   List<Events> events = eventDAO.findAllEvents();
+	   
+	   assertEquals(1, events.size());
+	   
+	   PhoneModelSummary phoneModelSummary = eventDAO.findCallFailuresCountByPhoneModelAndDate("abc", startTime, endTime);
+	   assertNull(phoneModelSummary);
 	}
 	
 }
