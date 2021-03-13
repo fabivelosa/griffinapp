@@ -20,6 +20,7 @@ import com.callfailures.errors.ErrorMessage;
 import com.callfailures.errors.ErrorMessages;
 import com.callfailures.exception.InvalidDateException;
 import com.callfailures.exception.InvalidIMSIException;
+import com.callfailures.exception.InvalidPhoneModelException;
 import com.callfailures.services.EventService;
 
 @Path("/events")
@@ -92,6 +93,9 @@ public class EventsResource {
 				phoneModelSummary = new PhoneModelSummary (model, 0);
 			}
 			return Response.status(200).entity(phoneModelSummary).build();
+		}
+		catch(InvalidPhoneModelException exception) {
+			return Response.status(404).entity(new ErrorMessages(ErrorMessage.INVALID_PHONE_MODEL.getMessage())).build();
 		}
 		catch(InvalidDateException exception) {
 			return Response.status(404).entity(new ErrorMessages(ErrorMessage.INVALID_DATE.getMessage())).build();

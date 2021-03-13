@@ -21,6 +21,7 @@ import com.callfailures.entity.views.PhoneModelSummary;
 import com.callfailures.exception.FieldNotValidException;
 import com.callfailures.exception.InvalidDateException;
 import com.callfailures.exception.InvalidIMSIException;
+import com.callfailures.exception.InvalidPhoneModelException;
 import com.callfailures.parsingutils.InvalidRow;
 import com.callfailures.parsingutils.ParsingResponse;
 import com.callfailures.services.EventService;
@@ -51,8 +52,12 @@ public class EventServiceImpl implements EventService {
 	
 	@Override
 	public	PhoneModelSummary findCallFailuresCountByPhoneModelAndDate(final String model, final LocalDateTime startTime, final LocalDateTime endTime) {
-		if(startTime == null || endTime == null ) {
-			return null;
+		if(startTime.isAfter(endTime)) {
+			throw new InvalidDateException();
+		}
+		
+		if(!isValidPhoneModel(model)) {
+			throw new InvalidPhoneModelException();
 		}
 	
 		return eventDAO.findCallFailuresCountByPhoneModelAndDate(model, startTime, endTime);
@@ -99,16 +104,11 @@ public class EventServiceImpl implements EventService {
 	}
 	
 
-	private boolean isValidPhoneModel(final String ueType) {
-		if(ueType == null || ueType.length() > 15) {
+	private boolean isValidPhoneModel(final String model) {
+		if(model == null || model.length() < 1) {
 			return false;
 		}
 
-		for(int i = 0; i < ueType.length(); i++) {
-			if(!Character.isDigit(ueType.charAt(0))) {
-				return false;
-			}
-		}
 		return true;
 	}
 	
