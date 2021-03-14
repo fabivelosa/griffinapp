@@ -33,8 +33,11 @@ public class EventsResourceIntTest {
 	private final static String fromTime = "1616061600000"; // March 18, 2021 10:00AM
 	private final static String toTime = "1616065200000"; // March 18, 2021 11:00AM
 	private final static boolean summary = true;
+	private final static String model = "VEA3";
+	private final static String invalidModel = "";
+	private final static String nonExistentModel = "ABCDEF";
 	private final static String IMSI_SUMMARY_BY_DATE = "events/query?imsi=" + imsi + "&from=" + fromTime + "&to=" + toTime + "&summary=" + summary;
-
+	private final static String EVENTS_SUMMARY_BY_PHONE_MODEL = "events/query/ue?model=" + model + "&from=" + fromTime + "&to=" + toTime;
 	
 	@ArquillianResource
 	private URL url; 
@@ -112,5 +115,56 @@ public class EventsResourceIntTest {
 		assertEquals(inexistent_imsi, imsiSummaryJSON.get("imsi").getAsString());
 		assertEquals(0, imsiSummaryJSON.get("callFailuresCount").getAsLong());
 		assertEquals(0, imsiSummaryJSON.get("totalDurationMs").getAsLong());
+	}
+	
+
+
+	@Test
+	@RunAsClient
+	public void testGetPhoneModelEventsSummary() {	
+		final Response responseGet = resourceClient.resourcePath(EVENTS_SUMMARY_BY_PHONE_MODEL).get();
+		assertEquals(200, responseGet.getStatus());
+
+		final JsonObject phoneModelSummaryJSON = JsonReader.readAsJsonObject(responseGet.readEntity(String.class));
+		assertEquals(model, phoneModelSummaryJSON.get("model").getAsString());
+		assertEquals(3L, phoneModelSummaryJSON.get("callFailuresCount").getAsLong());
+	}
+	
+	@Test
+	@RunAsClient
+	public void testGetPhoneModelEventSummaryByInvalidModel() {	
+		final String INVALID_PHONE_MODEL_SUMMARY = "events/query/ue?model=" + invalidModel + "&from=" + fromTime + "&to=" + toTime;
+
+		final Response responseGet = resourceClient.resourcePath(INVALID_PHONE_MODEL_SUMMARY).get();
+		assertEquals(404, responseGet.getStatus());
+
+		final JsonObject phoneModelSummaryJSON = JsonReader.readAsJsonObject(responseGet.readEntity(String.class));
+		assertEquals(ErrorMessage.INVALID_PHONE_MODEL.getMessage(), phoneModelSummaryJSON.get("errorMessage").getAsString());
+	}
+	
+	@Test
+	@RunAsClient
+	public void testGetPhoneModelEventSummaryByDateInvalidDate() {	
+		final String INVALID_DATE_PHONE_MODEL = "events/query/ue?model=" + model + "&from=" + toTime + "&to=" + fromTime;
+
+		final Response responseGet = resourceClient.resourcePath(INVALID_DATE_PHONE_MODEL).get();
+		assertEquals(404, responseGet.getStatus());
+
+		final JsonObject phoneModelSummaryJSON = JsonReader.readAsJsonObject(responseGet.readEntity(String.class));
+		assertEquals(ErrorMessage.INVALID_DATE.getMessage(), phoneModelSummaryJSON.get("errorMessage").getAsString());
+	}
+	
+	@Test
+	@RunAsClient
+	public void testGetPhoneModelEventSummaryByDateZeroResult() {	
+		final String IMSI_SUMMARY_BY_DATE = "events/query/ue?model=" + nonExistentModel + "&from=" + fromTime + "&to=" + toTime;
+		
+		final Response responseGet = resourceClient.resourcePath(IMSI_SUMMARY_BY_DATE).get();
+		assertEquals(200, responseGet.getStatus());
+
+		final JsonObject phoneModelSummaryJSON = JsonReader.readAsJsonObject(responseGet.readEntity(String.class));
+		assertEquals(nonExistentModel, phoneModelSummaryJSON.get("model").getAsString());
+		assertEquals(0, phoneModelSummaryJSON.get("callFailuresCount").getAsLong());
+
 	}
 }
