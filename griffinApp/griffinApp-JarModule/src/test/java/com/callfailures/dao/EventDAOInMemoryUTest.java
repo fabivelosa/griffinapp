@@ -74,10 +74,10 @@ class EventDAOInMemoryUTest {
 		   return null;
 		});
 		
-	   List<Events> events = eventDAO.findAllEvents();
+	   final List<Events> events = eventDAO.findAllEvents();
 	   	   
 	   assertEquals(1, events.size());
-	   Events retrievedEvent = events.iterator().next();
+	   final Events retrievedEvent = events.iterator().next();
 	   
 	   assertEquals(IMSI, retrievedEvent.getImsi());
 	   assertEquals(eventTime, retrievedEvent.getDateTime());
@@ -98,7 +98,7 @@ class EventDAOInMemoryUTest {
 	   assertEquals(hier32Id, retrievedEvent.getHier32Id());
 	   assertEquals(hier321Id, retrievedEvent.getHier321Id());
 
-	   IMSISummary imsiSummary = eventDAO.findCallFailuresCountByIMSIAndDate(IMSI, startTime, endTime);
+	   final IMSISummary imsiSummary = eventDAO.findCallFailuresCountByIMSIAndDate(IMSI, startTime, endTime);
 	   assertEquals(IMSI, imsiSummary.getImsi());
 	   assertEquals(1, imsiSummary.getCallFailuresCount());
 	   assertEquals(1000, imsiSummary.getTotalDurationMs());
@@ -121,11 +121,11 @@ class EventDAOInMemoryUTest {
 		});
 		
 
-	   List<Events> events = eventDAO.findAllEvents();
+	   final List<Events> events = eventDAO.findAllEvents();
 	   
 	   assertEquals(1, events.size());
 	   
-	   IMSISummary imsiSummary = eventDAO.findCallFailuresCountByIMSIAndDate(IMSI, startTime.plusMinutes(6), endTime);
+	   final IMSISummary imsiSummary = eventDAO.findCallFailuresCountByIMSIAndDate(IMSI, startTime.plusMinutes(6), endTime);
 	   assertNull(imsiSummary);
 	}
 	
@@ -144,11 +144,11 @@ class EventDAOInMemoryUTest {
 		});
 		
 
-	   List<Events> events = eventDAO.findAllEvents();
+	   final List<Events> events = eventDAO.findAllEvents();
 	   
 	   assertEquals(1, events.size());
 	   
-	   PhoneModelSummary phoneModelSummary = eventDAO.findCallFailuresCountByPhoneModelAndDate(phoneModel, startTime, endTime);
+	   final PhoneModelSummary phoneModelSummary = eventDAO.findCallFailuresCountByPhoneModelAndDate(phoneModel, startTime, endTime);
 	   assertEquals(phoneModel, phoneModelSummary.getModel());
 	   assertEquals(1, phoneModelSummary.getCallFailuresCount());
 	   assertNotNull(phoneModelSummary);
@@ -169,11 +169,11 @@ class EventDAOInMemoryUTest {
 		});
 		
 
-	   List<Events> events = eventDAO.findAllEvents();
+	   final List<Events> events = eventDAO.findAllEvents();
 	   
 	   assertEquals(1, events.size());
 	   
-	   PhoneModelSummary phoneModelSummary = eventDAO.findCallFailuresCountByPhoneModelAndDate(phoneModel, startTime.plusMinutes(6), endTime);
+	   final PhoneModelSummary phoneModelSummary = eventDAO.findCallFailuresCountByPhoneModelAndDate(phoneModel, startTime.plusMinutes(6), endTime);
 	   assertNull(phoneModelSummary);
 	}
 	
@@ -192,11 +192,11 @@ class EventDAOInMemoryUTest {
 		});
 		
 
-	   List<Events> events = eventDAO.findAllEvents();
+	   final List<Events> events = eventDAO.findAllEvents();
 	   
 	   assertEquals(1, events.size());
 	   
-	   PhoneModelSummary phoneModelSummary = eventDAO.findCallFailuresCountByPhoneModelAndDate("abc", startTime, endTime);
+	   final PhoneModelSummary phoneModelSummary = eventDAO.findCallFailuresCountByPhoneModelAndDate("abc", startTime, endTime);
 	   assertNull(phoneModelSummary);
 	}
 	

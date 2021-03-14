@@ -10,7 +10,6 @@ import com.callfailures.entity.views.IMSISummary;
 import com.callfailures.entity.views.PhoneModelSummary;
 import com.callfailures.exception.InvalidDateException;
 import com.callfailures.exception.InvalidIMSIException;
-import com.callfailures.entity.views.PhoneModelSummary;
 import com.callfailures.parsingutils.ParsingResponse;
 
 @Local

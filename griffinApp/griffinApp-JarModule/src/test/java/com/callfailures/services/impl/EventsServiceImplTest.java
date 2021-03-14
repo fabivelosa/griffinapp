@@ -40,10 +40,7 @@ import com.callfailures.services.ValidationService;
 class ReadandPersisteEventsUTest {
 	private static final LocalDateTime VALID_END_TIME = LocalDateTime.of(2021,3,18,12,1);
 	private static final LocalDateTime VALID_START_TIME = LocalDateTime.of(2021,3,18,12,0);
-	private static final String VALID_IMSI = "344930000000011";
-	private static final String LONG_IMSI = "3449300000000111";
-	private static final String INVALID_IMSI = "A44930000000011";
-	private static final String VALID_PHONE_MODEL = "VEA3";
+	private static final String VALID_IMSI = "344930000000011", LONG_IMSI = "3449300000000111", INVALID_IMSI = "A44930000000011", VALID_PHONE_MODEL = "VEA3";
 	private final EventCauseDao eventCauseDAO = mock(EventCauseDao.class);
 	private final FailureClassDAO failureClassDAO = mock(FailureClassDAO.class);
 	private final UserEquipmentDAO userEquipmentDAO = mock(UserEquipmentDAO.class);
@@ -146,7 +143,7 @@ class ReadandPersisteEventsUTest {
 		when(marketOperatorDAO.getMarketOperator(marketOperatorPK)).thenReturn(marketOperator);
 		file = new File(absolutePath + "/importData/validData.xlsx");
 		eventService.read(file);
-		ParsingResponse<Events> parsingResults = eventService.read(file);
+		final ParsingResponse<Events> parsingResults = eventService.read(file);
 		assertEquals(4, parsingResults.getValidObjects().size());
 		assertEquals(0, parsingResults.getInvalidRows().size());
 	}
@@ -265,11 +262,11 @@ class ReadandPersisteEventsUTest {
 		assertInvalidRowMessage("Inexistent MCC and MNC combination");
 	}
 	
-	private void assertInvalidRowMessage(String invalidRowMessage) {
-		ParsingResponse<Events> parsingResults = eventService.read(file);
+	private void assertInvalidRowMessage(final String invalidRowMessage) {
+		final ParsingResponse<Events> parsingResults = eventService.read(file);
 		assertEquals(0, parsingResults.getValidObjects().size());
 		assertEquals(1, parsingResults.getInvalidRows().size());
-		Iterator<InvalidRow> eventsIterator = parsingResults.getInvalidRows().iterator();
+		final Iterator<InvalidRow> eventsIterator = parsingResults.getInvalidRows().iterator();
 		assertEquals(invalidRowMessage, eventsIterator.next().getErrorMessage());
 	}
 }

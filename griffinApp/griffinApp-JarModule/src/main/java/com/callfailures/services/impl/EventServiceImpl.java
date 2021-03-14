@@ -55,8 +55,8 @@ public class EventServiceImpl implements EventService {
 		if(startTime.isAfter(endTime)) {
 			throw new InvalidDateException();
 		}
-		
-		if(!isValidPhoneModel(model)) {
+			
+		if (model.isEmpty()) {
 			throw new InvalidPhoneModelException();
 		}
 	
@@ -104,15 +104,6 @@ public class EventServiceImpl implements EventService {
 	}
 	
 
-	private boolean isValidPhoneModel(final String model) {
-		if(model == null || model.length() < 1) {
-			return false;
-		}
-
-		return true;
-	}
-	
-	
 	private Events createEventObject(final Row row) {
 		final Events events = new Events();
 		validateNonDatabaseDependentFields(row, events);
