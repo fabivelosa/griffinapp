@@ -9,7 +9,7 @@ import javax.persistence.Persistence;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-
+import com.callfailures.entity.User;
 import com.callfailures.utils.test.DBCommandTransactionalExecutor;
 
 class UsersDAOInMemoryUTest {
@@ -30,15 +30,18 @@ class UsersDAOInMemoryUTest {
 
 	
 	@Test
-	void testAddUsert() {
+	void testAddUser() {
 		
 		System.out.println("I am running");
-//		dBCommandTransactionalExecutor.executeCommand(() -> {
-//
-//		   return null;
-//		});
 		
-	   	   
+		dBCommandTransactionalExecutor.executeCommand(() -> {
+			User user = new User();
+			user.setUserName("wilmir");
+			user.setUserPassword("password");
+			user.setUserType("network engineer");
+			usersDAO.addUser(user);
+		   return null;
+		});
 
 	}
 	
