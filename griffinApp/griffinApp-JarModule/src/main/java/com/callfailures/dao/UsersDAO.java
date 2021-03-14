@@ -15,7 +15,7 @@ import com.callfailures.entity.User;
 public class UsersDAO {
 
 	@PersistenceContext
-	private EntityManager entityManager;
+	EntityManager entityManager;
 
 	@SuppressWarnings("unchecked")
 	public List<User> getRegisteredUsers() {
