@@ -87,8 +87,8 @@ public class EventsOfIMSITest {
 		final Response responseGet = resourceClient.resourcePath(validImsiURI).get();
 		assertEquals(404, responseGet.getStatus());
 
-		final JsonObject IMSIeventResponseObject = JsonReader.readAsJsonObject(responseGet.readEntity(String.class));
-		assertEquals(ErrorMessage.INVALID_IMSI.getMessage(), IMSIeventResponseObject.get("errorMessage").getAsString());
+		final JsonObject imsievent = JsonReader.readAsJsonObject(responseGet.readEntity(String.class));
+		assertEquals(ErrorMessage.INVALID_IMSI.getMessage(), imsievent.get("errorMessage").getAsString());
 	}
 	
 }
