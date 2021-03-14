@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>Upload</title>
+	<script src="js/jquery-3.5.1.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js" integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0" crossorigin="anonymous"></script>
+    <script src="js/networkEngineer.js"></script>
+</head>
+<body>
+<main class = "container">
+    <div>
+        <div class="card">
+            <div class="card-header">
+              IMSI Diagnostics Summary
+            </div>
+            <div class="card-body" id="imsiSummaryCard">
+                <div class = "row">
+                    <form id = "imsiSummaryForm">
+                        <div class = "row">
+                            <div class = "col">
+                                <label for="imsiOnIMSISummaryForm" class="form-label fw-bold small">IMSI</label>
+                                <input required type="text" class="form-control" id="imsiOnIMSISummaryForm" placeholder="IMSI">
+                            </div>
+                            <div class = "col">
+                                <label for="startDateOnIMSISummaryForm" class="form-label fw-bold small">From</label>
+                                <input required type="datetime-local" class="form-control" id="startDateOnIMSISummaryForm" placeholder="name@example.com">
+                            </div>
+                            <div class = "col">
+                                <label for="endDateOnIMSISummaryForm" class="form-label fw-bold small">To</label>
+                                <input required type="datetime-local" class="form-control" id="endDateOnIMSISummaryForm" placeholder="name@example.com">
+                            </div>
+                            <div class = "col">
+                                <label for="exampleFormControlInput1" class="form-label fw-bold small">Query</label>
+                                <input required type="submit" class="form-control btn btn-success" value="Submit"/>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class = "row" id = "imsiSummaryFormResult">
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+<!-- <script src="/docs/5.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0" crossorigin="anonymous"></script>	   -->
+</body>
+</html>
