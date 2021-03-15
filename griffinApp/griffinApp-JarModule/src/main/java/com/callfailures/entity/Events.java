@@ -13,6 +13,8 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import org.hibernate.annotations.Type;
+
 @Entity(name = "event")
 @XmlRootElement
 @Table(name = "event")
@@ -31,6 +33,7 @@ public class Events {
 	private EventCause eventCause;
 
 	@NotNull
+	@Type(type= "org.hibernate.type.LocalDateTimeType")
 	private LocalDateTime dateTime;
 
 	@ManyToOne
@@ -73,8 +76,6 @@ public class Events {
 	@NotNull
 	private String hier321Id;
 
-	public Events() {
-	}
 
 	public UserEquipment getUeType() {
 		return ueType;
