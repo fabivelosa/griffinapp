@@ -2,6 +2,8 @@ package com.callfailures.dao;
 
 
 
+import static org.junit.Assert.assertEquals;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -56,7 +58,7 @@ class UsersDAOInMemoryUTest {
 
 		dBCommandTransactionalExecutor.executeCommand(() -> {
 			User user = new User();
-			//user.setUserId("A100");
+			user.setUserId("A100");
 			user.setUserName("wilmir");
 			user.setUserPassword("password");
 			user.setUserType("network engineer");
@@ -83,6 +85,7 @@ class UsersDAOInMemoryUTest {
 
 			usersDAO.getUserByUserId("A100");
 			return user;
+			
 		});
 	}
 
@@ -95,12 +98,14 @@ class UsersDAOInMemoryUTest {
 		dBCommandTransactionalExecutor.executeCommand(() -> {
 
 			User user1 = new User();
+			user1.setUserId("A1");
 			user1.setUserName("example1");
 			user1.setUserPassword("access");
 			user1.setUserType("cust. service");
 			usersDAO.addUser(user1);
 
 			User user2 = new User();
+			user2.setUserId("A2");
 			user2.setUserName("example1");
 			user2.setUserPassword("access");
 			user2.setUserType("cust. service");
