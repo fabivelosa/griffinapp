@@ -39,7 +39,7 @@ public class EventServiceImpl implements EventService {
 	
 	
     @Override
-	public List<IMSIEvent> findFailuresByImsi(String imsi) {
+	public List<IMSIEvent> findFailuresByImsi(final String imsi) {
 		// TODO Auto-generated method stub
     	if (!isValidIMSI(imsi)) {
     		return null;

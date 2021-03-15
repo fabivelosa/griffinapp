@@ -81,7 +81,12 @@ public class EventDAO {
 	public List<IMSIEvent> findEventsByIMSI(final String IMSI){
 		final Query query = entityManager.createQuery(FIND_CALL_FAILURES_BY_IMSI,IMSIEvent.class);
 		query.setParameter("imsi", IMSI);
-		return query.getResultList();
+		
+		try {
+			return query.getResultList();
+		} catch (NoResultException e) {
+			return null;
+		}
 	}
 	
 
