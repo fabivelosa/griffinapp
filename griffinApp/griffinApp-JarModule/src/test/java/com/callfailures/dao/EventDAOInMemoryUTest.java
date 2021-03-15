@@ -121,17 +121,6 @@ class EventDAOInMemoryUTest {
 	
 	@Test
 	void testfindEventsByIMSI() {
-		dBCommandTransactionalExecutor.executeCommand(() -> {
-			events = eventGenerator.generateCallFailureInstance(localDateTime, eventId, failureId, tac, mCc, mNc,
-					cellId, duration, causeCode, neVersion, IMSI , hier3Id, hier32Id, hier321Id, eventCauseDescription,
-					failureClassDescription, country, operator);
-		   failureClassDAO.create(events.getFailureClass());
-		   marketOperatorDAO.create(events.getMarketOperator());
-		   eventCauseDAO.create(events.getEventCause());
-		   userEquipmentDaO.create(events.getUeType());
-		   eventDAO.create(events);
-		   return null;
-		});
 		
 		final String validIMSI = "344930000000011";
 		List<IMSIEvent> IMSIevents = eventDAO.findEventsByIMSI(validIMSI);
