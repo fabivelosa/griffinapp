@@ -109,7 +109,7 @@ class UsersDAOInMemoryUTest {
 			List<User> users = usersDAO.getRegisteredUsers();
 			//new ArrayList<User>();
 
-
+ 
 			return users;
 		});
 	}
