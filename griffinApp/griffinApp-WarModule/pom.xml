@@ -8,7 +8,6 @@
 		<groupId>com.callfailures</groupId>
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
-
 	<artifactId>griffinApp-WarModule</artifactId>
 	<packaging>war</packaging>
 	<dependencies>
@@ -16,22 +15,18 @@
 			<groupId>com.callfailures</groupId>
 			<artifactId>griffinApp-JarModule</artifactId>
 			<scope>provided</scope>
-
 		</dependency>
-
 		<dependency>
 			<groupId>javax</groupId>
 			<artifactId>javaee-api</artifactId>
 			<scope>provided</scope>
 		</dependency>
-
 		<dependency>
 			<groupId>javax</groupId>
 			<artifactId>javaee-web-api</artifactId>
 			<version>6.0</version>
 			<scope>provided</scope>
 		</dependency>
-
 		<dependency>
 			<groupId>org.jboss.resteasy</groupId>
 			<artifactId>resteasy-multipart-provider</artifactId>
@@ -39,7 +34,5 @@
 			<scope>provided</scope>
 		</dependency>
 
-
 	</dependencies>
-
 </project>

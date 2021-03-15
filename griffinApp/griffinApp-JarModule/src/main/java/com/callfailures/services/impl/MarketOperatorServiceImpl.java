@@ -45,7 +45,7 @@ public class MarketOperatorServiceImpl implements MarketOperatorService {
 	public ParsingResponse<MarketOperator> read(final File workbookFile) {
 		final ParsingResponse<MarketOperator> result = new ParsingResponse<>();
 
-		try(Workbook workbook = new XSSFWorkbook(workbookFile)) {
+		try (Workbook workbook = new XSSFWorkbook(workbookFile)) {
 			final Sheet sheet = workbook.getSheetAt(4);
 			final Iterator<Row> rowIterator = sheet.rowIterator();
 			MarketOperator operator = null;

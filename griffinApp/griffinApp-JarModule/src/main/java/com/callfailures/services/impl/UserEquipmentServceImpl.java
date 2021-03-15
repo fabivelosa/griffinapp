@@ -49,7 +49,7 @@ public class UserEquipmentServceImpl implements UserEquipmentService {
 	public ParsingResponse<UserEquipment> read(final File workbookFile) {
 
 		final ParsingResponse<UserEquipment> result = new ParsingResponse<>();
-		try(Workbook workbook = new XSSFWorkbook(workbookFile)) {
+		try (Workbook workbook = new XSSFWorkbook(workbookFile)) {
 
 			final DataFormatter dataFormatter = new DataFormatter();
 			final Sheet sheet = workbook.getSheetAt(3);

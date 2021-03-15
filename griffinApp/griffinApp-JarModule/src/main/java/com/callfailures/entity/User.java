@@ -1,24 +1,23 @@
-package com.users.entity;
+package com.callfailures.entity;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import org.hibernate.annotations.GenericGenerator;
 
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
-
-@Entity (name= "users")
+@Entity(name = "users")
 @XmlRootElement
-@Table (name = "users")
+@Table(name = "users")
 public class User {
 
 	@Id
-	@GeneratedValue(generator = "uuid")
-	@GenericGenerator(name = "uuid", strategy = "uuid2")
+	private int id;
+	
 	private String userId;
+	
 	private String userName;
 	private String userType;
 	private String userPassword;
