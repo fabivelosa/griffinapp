@@ -1,6 +1,5 @@
 const rootURL = "http://localhost:8080/callfailures/api";
 
-
 const displayIMSISummary = function(imsiSummary, textStatus, jqXHR){
     $("#errorAlertOnSummaryForm").hide();
     $("#imsiSummaryTable").show();
@@ -10,7 +9,6 @@ const displayIMSISummary = function(imsiSummary, textStatus, jqXHR){
     $("#imsiSummaryCallFailureCount").text(imsiSummary.callFailuresCount);
     $("#imsiSummaryTotalDuration").text(imsiSummary.totalDurationMs/1000 + " s");
 }
-
 
 const displayErrorOnIMSISummary = function(jqXHR, textStatus, errorThrown){
     $("#imsiSummaryTable").hide();
@@ -37,8 +35,5 @@ $(document).ready(function(){
         const to = new Date($('#endDateOnIMSISummaryForm').val()).valueOf();
         queryIMSISUmmary(imsi, from, to);
     });
-
-
-
-    
+ 
 });
