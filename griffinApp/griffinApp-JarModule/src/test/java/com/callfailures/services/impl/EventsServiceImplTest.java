@@ -160,7 +160,7 @@ class ReadandPersisteEventsUTest {
 	void testFailurefindFailuresByIMSI() {
 		when(eventDAO.findEventsByIMSI(INVALID_IMSI)).thenThrow(InvalidIMSIException.class);
 		assertEquals(null,eventService.findFailuresByImsi(INVALID_IMSI));
-		verify(eventDAO,times(1)).findEventsByIMSI(INVALID_IMSI);
+		verify(eventDAO,times(0)).findEventsByIMSI(INVALID_IMSI);
 	}
 	
 	@Test
