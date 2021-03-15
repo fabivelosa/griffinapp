@@ -136,6 +136,25 @@ class EventDAOInMemoryUTest {
 		assertEquals(causeCode, IMSIEvent.getEventCause().getEventCauseId().getCauseCode());
 		
 	}
+	
+	@Test
+	void testFindUniqueEventCauseCountByPhoneModel() {
+		List<Events> events = eventDAO.findAllEvents();
+		
+		assertEquals(1,events.size());
+		
+		List<PhoneFailures> phoneFailures = eventDAO.findUniqueEventCauseCountByPhoneModel(tac);
+		
+		assertEquals(1,phoneFailures.size());
+		
+		PhoneFailures retrievedPhoneFailure = phoneFailures.get(0);
+		
+		assertEquals(tac,retrievedPhoneFailure.getUserEquipment().getTac());
+		assertEquals(eventId,retrievedPhoneFailure.getEventCause().getEventCauseId().getEventCauseId());
+		assertEquals(causeCode,retrievedPhoneFailure.getEventCause().getEventCauseId().getCauseCode());
+		assertEquals(1L,retrievedPhoneFailure.getCount());
+		
+	}
 }
 
 
