@@ -22,11 +22,13 @@ import org.junit.runner.RunWith;
 import com.callfailures.commontests.utils.JsonReader;
 import com.callfailures.commontests.utils.ResourceClient;
 import com.callfailures.errors.ErrorMessage;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
 
 @RunWith(Arquillian.class)
 public class EventsResourceIntTest {
+	private final static int tac = 21060800;
 	private final static String imsi = "344930000000011";
 	private final static String invalid_imsi = "3449300000000119";
 	private final static String inexistent_imsi= "244930000000011";
@@ -34,7 +36,6 @@ public class EventsResourceIntTest {
 	private final static String toTime = "1616065200000"; // March 18, 2021 11:00AM
 	private final static boolean summary = true;
 	private final static String IMSI_SUMMARY_BY_DATE = "events/query?imsi=" + imsi + "&from=" + fromTime + "&to=" + toTime + "&summary=" + summary;
-
 	
 	@ArquillianResource
 	private URL url; 
@@ -113,4 +114,7 @@ public class EventsResourceIntTest {
 		assertEquals(0, imsiSummaryJSON.get("callFailuresCount").getAsLong());
 		assertEquals(0, imsiSummaryJSON.get("totalDurationMs").getAsLong());
 	}
+	
+	
+
 }
