@@ -1,5 +1,57 @@
 const rootURL = "http://localhost:8080/callfailures/api";
 
+
+const displayPhoneEquipmentFailures = function(phoneFailures){
+    $("#phoneFailuresTable").show();
+    const table = $('#phoneFailuresTable').DataTable();
+    table.clear();
+    $(phoneFailures).each(function(index, phoneFailure){
+        console.log(phoneFailure);
+        table.row.add([phoneFailure.userEquipment.model, 
+            phoneFailure.eventCause.eventCauseId.eventCauseId, 
+            phoneFailure.eventCause.eventCauseId.causeCode,
+            phoneFailure.eventCause.description,
+            phoneFailure.count
+        ]);
+    });
+    table.draw();
+}
+
+
+const queryPhoneEquipmentFailures = function(tac){
+    $.ajax({
+        type:'GET',
+        dataType:'json',
+        url:`${rootURL}/userEquipment/query?tac=${tac}`,
+        success: displayPhoneEquipmentFailures,
+        error: function(jqXHR, textStatus, errorThrown){
+            console.log(jqXHR);
+        }
+    });
+}
+
+
+const addUserEquipmentOptions = function(userEquipments){
+    $("#selectUserEquipmentDropdown").empty();    
+    let options = "";
+    $(userEquipments).each(function(index, userEquipment){
+        options += `<option value=\"${userEquipment.tac}\">${userEquipment.model}</option>`
+    });
+    $("#selectUserEquipmentDropdown").append(options);
+}
+
+const setUserQuipmentDropdownOptions = function(){
+    $.ajax({
+        type:'GET',
+        dataType:'json',
+        url:`${rootURL}/userEquipment`,
+        success: addUserEquipmentOptions,
+        error: function(){
+            alert("Failed to fetch user equipment options");
+        }
+    });
+}
+
 const displayIMSISummary = function(imsiSummary, textStatus, jqXHR){
     $("#errorAlertOnSummaryForm").hide();
     $("#imsiSummaryTable").show();
@@ -28,6 +80,8 @@ const queryIMSISUmmary = function(imsi, from, to){
 
 $(document).ready(function(){		
     
+    setUserQuipmentDropdownOptions();
+
     $('#imsiSummaryForm').submit(function(event){
         event.preventDefault();
         const imsi = $('#imsiOnIMSISummaryForm').val();
@@ -36,4 +90,11 @@ $(document).ready(function(){
         queryIMSISUmmary(imsi, from, to);
     });
  
+    $("#userEquipmentFailuresForm").submit(function(event){
+        event.preventDefault();
+        const tac = $("#selectUserEquipmentDropdown").val();
+        queryPhoneEquipmentFailures(tac);
+    });
+
+
 });

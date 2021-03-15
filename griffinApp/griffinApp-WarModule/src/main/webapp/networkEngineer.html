@@ -6,13 +6,16 @@
 	<script src="js/jquery-3.5.1.min.js"></script>
     <link href="css/networkEngineer.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
-	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js" integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0" crossorigin="anonymous"></script>
+    <link href="https://cdn.datatables.net/1.10.22/css/dataTables.bootstrap4.min.css" rel="stylesheet" crossorigin="anonymous" />
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js" integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0" crossorigin="anonymous"></script>
+    <script src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.datatables.net/1.10.22/js/dataTables.bootstrap4.min.js" crossorigin="anonymous"></script>
     <script src="js/networkEngineer.js"></script>
 </head>
 <body>
 <main class = "container">
     <div>
-        <div class="card">
+        <div class="card mt-4">
             <div class="card-header">
               IMSI Diagnostics Summary
             </div>
@@ -66,8 +69,42 @@
                 </div>
             </div>
         </div>
+        <div class="card mt-4">
+            <div class="card-header">
+                User Equipment Failures
+            </div>
+            <div class="card-body" id="userEquipmentFailures">
+                <form id = "userEquipmentFailuresForm">
+                    <div class = "row">
+                        <div class = "col">
+                            <label for="selectUserEquipmentDropdown" class="form-label fw-bold small">IMSI</label>
+                            <select class="form-select" aria-label="Default select example" id="selectUserEquipmentDropdown">
+                            </select>
+                            </div>
+                        <div class = "col">
+                            <label for="exampleFormControlInput1" class="form-label fw-bold small">Query</label>
+                            <input required type="submit" class="form-control btn btn-primary" value="Submit"/>
+                        </div>
+                    </div>
+                </form>
+                <div class = "row mt-4 p-4" id = "userEquipmentFailuresFormResult">
+                    <table id="phoneFailuresTable" class="table table-hover table-bordered">
+                        <thead>
+                            <tr>
+                              <th>User Equipment</th>
+                              <th>Event ID</th>
+                              <th>Cause Code</th>
+                              <th>Description</th>
+                              <th>Count</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                          </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
     </div>
 </main>
-<!-- <script src="/docs/5.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0" crossorigin="anonymous"></script>	   -->
 </body>
 </html>
