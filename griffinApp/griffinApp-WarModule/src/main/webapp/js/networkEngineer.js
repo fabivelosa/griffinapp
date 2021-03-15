@@ -1,21 +1,21 @@
 const rootURL = "http://localhost:8080/callfailures/api";
 
 
-const displayIMSISummary = function(data, textStatus, jqXHR){
-    $("#imsiSummaryFormResult").empty();
-    
-
-
-
-
-
-
-    console.log(data);
+const displayIMSISummary = function(imsiSummary, textStatus, jqXHR){
+    $("#errorAlertOnSummaryForm").hide();
+    $("#imsiSummaryTable").show();
+    $("#imsiSummaryNumber").text(imsiSummary.imsi);
+    $("#imsiSummaryFromDate").text($('#startDateOnIMSISummaryForm').val());
+    $("#imsiSummaryToDate").text($('#endDateOnIMSISummaryForm').val());
+    $("#imsiSummaryCallFailureCount").text(imsiSummary.callFailuresCount);
+    $("#imsiSummaryTotalDuration").text(imsiSummary.totalDurationMs/1000 + " s");
 }
 
 
 const displayErrorOnIMSISummary = function(jqXHR, textStatus, errorThrown){
-    console.log(data);
+    $("#imsiSummaryTable").hide();
+    $("#errorAlertOnSummaryForm").show();
+    $("#errorAlertOnSummaryForm").text(jqXHR.responseJSON.errorMessage);
 }
 
 const queryIMSISUmmary = function(imsi, from, to){
@@ -37,6 +37,8 @@ $(document).ready(function(){
         const to = new Date($('#endDateOnIMSISummaryForm').val()).valueOf();
         queryIMSISUmmary(imsi, from, to);
     });
+
+
 
     
 });
