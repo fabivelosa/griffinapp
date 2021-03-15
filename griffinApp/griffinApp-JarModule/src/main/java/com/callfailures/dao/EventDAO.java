@@ -27,10 +27,7 @@ public class EventDAO {
 					+ "FROM event e "
 					+ "WHERE e.ueType.tac = :tac "
 					+ "GROUP BY e.ueType, e.eventCause";
-	FIND_UNIQUE_EVENT_ID_AND_CAUSE_CODE_COUNT = "SELECT NEW com.callfailures.entity.views.PhoneFailures(e.ueType, e.eventCause, COUNT(e)) "
-			+ "FROM event e "
-			+ "WHERE e.ueType.tac = :tac "
-			+ "GROUP BY e.ueType, e.eventCause";
+	
 
 
 	
