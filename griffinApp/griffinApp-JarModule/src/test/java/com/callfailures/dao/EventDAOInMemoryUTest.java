@@ -1,5 +1,7 @@
 package com.callfailures.dao;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.time.LocalDateTime;
@@ -13,6 +15,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import com.callfailures.entity.Events;
+import com.callfailures.entity.views.IMSIEvent;
 import com.callfailures.entity.views.IMSISummary;
 import com.callfailures.entity.views.PhoneFailures;
 import com.callfailures.utils.test.DBCommandTransactionalExecutor;
@@ -115,25 +118,35 @@ class EventDAOInMemoryUTest {
 	   assertNull(imsiSummary);
 	}
 	
-	@Test
-	void testFindUniqueEventCauseCountByPhoneModel() {
-	   List<Events> events = eventDAO.findAllEvents();
-	   
-	   assertEquals(1, events.size());
-	   
-	   List<PhoneFailures> phoneFailures = eventDAO.findUniqueEventCauseCountByPhoneModel(tac);
-	   
-	   assertEquals(1, phoneFailures.size());
-	   
-	   PhoneFailures retrievedPhoneFailure = phoneFailures.get(0);
-	   
-	   assertEquals(tac, retrievedPhoneFailure.getUserEquipment().getTac());
-	   assertEquals(eventId, retrievedPhoneFailure.getEventCause().getEventCauseId().getEventCauseId());
-	   assertEquals(causeCode, retrievedPhoneFailure.getEventCause().getEventCauseId().getCauseCode());
-	   assertEquals(1L, retrievedPhoneFailure.getCount());
-
-	}
 	
+	@Test
+	void testfindEventsByIMSI() {
+		dBCommandTransactionalExecutor.executeCommand(() -> {
+			events = eventGenerator.generateCallFailureInstance(localDateTime, eventId, failureId, tac, mCc, mNc,
+					cellId, duration, causeCode, neVersion, IMSI , hier3Id, hier32Id, hier321Id, eventCauseDescription,
+					failureClassDescription, country, operator);
+		   failureClassDAO.create(events.getFailureClass());
+		   marketOperatorDAO.create(events.getMarketOperator());
+		   eventCauseDAO.create(events.getEventCause());
+		   userEquipmentDaO.create(events.getUeType());
+		   eventDAO.create(events);
+		   return null;
+		});
+		
+		final String validIMSI = "344930000000011";
+		List<IMSIEvent> IMSIevents = eventDAO.findEventsByIMSI(validIMSI);
+		assertNotNull(IMSIevents);
+		assertEquals(1,IMSIevents.size());
+		
+		IMSIEvent IMSIEvent = IMSIevents.get(0);
+		assertEquals(validIMSI,IMSIEvent.getImsi());
+		
+		assertNotNull(IMSIEvent.getEventCause());
+		
+		assertEquals(eventId, IMSIEvent.getEventCause().getEventCauseId().getEventCauseId());
+		assertEquals(causeCode, IMSIEvent.getEventCause().getEventCauseId().getCauseCode());
+		
+	}
 }
 
 

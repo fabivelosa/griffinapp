@@ -11,6 +11,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
 import com.callfailures.entity.Events;
+import com.callfailures.entity.views.IMSIEvent;
 import com.callfailures.entity.views.IMSISummary;
 import com.callfailures.entity.views.PhoneFailures;
 
@@ -18,6 +19,14 @@ import com.callfailures.entity.views.PhoneFailures;
 @LocalBean
 public class EventDAO {
 	private static final String FIND_ALL_EVENTS = "SELECT e FROM event e",
+			FIND_IMSI_BY_DATE="SELECT e.imsi" 
+					+ "FROM event e "
+					+ "WHERE (e.dateTime BETWEEN :startTime AND :endTime)"  
+					+ "GROUP BY e.imsi",
+			FIND_CALL_FAILURES_BY_IMSI = "SELECT NEW com.callfailures.entity.views.IMSIEvent(e.imsi,e.eventCause) "
+					+"FROM event e "
+					+"WHERE e.imsi = :imsi "
+					+"GROUP BY e.imsi, e.eventCause",
 			FIND_CALL_FAILURES_BY_IMSI_AND_DATE = "SELECT NEW com.callfailures.entity.views.IMSISummary(e.imsi, COUNT(e), SUM(e.duration)) "
 					+ "FROM event e "
 					+ "WHERE (e.dateTime BETWEEN :startTime AND :endTime) "
@@ -53,6 +62,28 @@ public class EventDAO {
 	}
 
 
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	/**
+	 * Queries the Unique EventID, and CauseCode combinations, and their count by phone model
+	 * @param tac - the unique identifier of the phone model
+	 * @return
+	 */
+	public List<PhoneFailures> findUniqueEventCauseCountByPhoneModel(final int tac) {
+		final Query query = entityManager.createQuery(FIND_UNIQUE_EVENT_ID_AND_CAUSE_CODE_COUNT, PhoneFailures.class);
+		query.setParameter("tac", tac);
+		return query.getResultList();
+	}
+	
+	
 	/**
 	 * Queries the IMSISummary object which includes the count of call failures and total duration in a given period
 	 * @param imsi
@@ -73,14 +104,38 @@ public class EventDAO {
 	}
 	
 	/**
-	 * Queries the Unique EventID, and CauseCode combinations, and their count by phone model
-	 * @param tac - the unique identifier of the phone model
-	 * @return
+	 * Query Database for all events of an inputted IMSI
+	 * @param imsi
+	 * @return list of failures with Event ID and Cause Code for given IMSI
 	 */
-	public List<PhoneFailures> findUniqueEventCauseCountByPhoneModel(final int tac) {
-		final Query query = entityManager.createQuery(FIND_UNIQUE_EVENT_ID_AND_CAUSE_CODE_COUNT, PhoneFailures.class);
-		query.setParameter("tac", tac);
-		return query.getResultList();
+	@SuppressWarnings("unchecked")
+	public List<IMSIEvent> findEventsByIMSI(final String IMSI){
+		final Query query = entityManager.createQuery(FIND_CALL_FAILURES_BY_IMSI,IMSIEvent.class);
+		query.setParameter("imsi", IMSI);
+		
+		try {
+			return query.getResultList();
+		} catch (NoResultException e) {
+			return null;
+		}
+	}
+	
+	/**
+	 * Query Database for all IMSI with failures between Start and End time submitted
+	 * @param startTime (inclusive) - the start of the period
+	 * @param endTime (inclusive) - the end of the period
+	 * @return list of IMSI for given time period
+	 */
+	public List<String> findIMSISBetweenDates(final LocalDateTime startTime, final LocalDateTime endTime){
+		final Query query = entityManager.createQuery(FIND_IMSI_BY_DATE,Events.class);
+		query.setParameter("startTime", startTime);
+		query.setParameter("endTime", endTime);
+		try {
+			return query.getResultList();
+		} catch (NoResultException e) {
+			return null;
+		}
+		
 	}
 
 }

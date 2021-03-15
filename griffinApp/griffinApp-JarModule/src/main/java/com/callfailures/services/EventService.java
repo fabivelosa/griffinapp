@@ -7,6 +7,7 @@ import java.util.List;
 import javax.ejb.Local;
 
 import com.callfailures.entity.Events;
+import com.callfailures.entity.views.IMSIEvent;
 import com.callfailures.entity.views.IMSISummary;
 import com.callfailures.entity.views.PhoneFailures;
 import com.callfailures.exception.InvalidDateException;
@@ -16,6 +17,7 @@ import com.callfailures.parsingutils.ParsingResponse;
 @Local
 public interface EventService {
 
+	
 	/**
 	 * Validates the IMSISUmmary request parameters and retrieves IMSISUmmary object from DAO layers
 	 * @param imsi
@@ -43,4 +45,14 @@ public interface EventService {
 	 */
 	ParsingResponse<Events> read(File workbookFile);
 
+	/**
+	 * Query Database for all IMSI with failures between Start and End time submitted
+	 * @param startTime (inclusive) - the start of the period
+	 * @param endTime (inclusive) - the end of the period
+	 * @return list of IMSI for given time period
+	 */
+	List<String> findIMSISBetweenDates(final LocalDateTime startTime, final LocalDateTime endTime);
+
+	List<IMSIEvent> findFailuresByImsi(final String imsi);
+	
 }
