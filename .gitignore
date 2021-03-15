@@ -60,3 +60,4 @@ Thumbs.db
 *.pmd
 
 **/arquillian.xml
+**/*.xlsx
