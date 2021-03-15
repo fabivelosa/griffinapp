@@ -2,6 +2,7 @@ package com.callfailures.entity;
 
 import java.time.LocalDateTime;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -12,6 +13,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlRootElement;
+
+import org.hibernate.annotations.Type;
 
 @Entity(name = "event")
 @XmlRootElement
@@ -31,6 +34,7 @@ public class Events {
 	private EventCause eventCause;
 
 	@NotNull
+	@Type(type= "org.hibernate.type.LocalDateTimeType")
 	private LocalDateTime dateTime;
 
 	@ManyToOne
