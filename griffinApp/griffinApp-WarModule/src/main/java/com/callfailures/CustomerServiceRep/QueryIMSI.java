@@ -18,12 +18,12 @@ import com.callfailures.services.impl.EventServiceImpl;
 public class QueryIMSI {
 
 	@EJB
-	private  EventService eventService = new EventServiceImpl();
+	private  final EventService eventService = new EventServiceImpl();
 	
 	@GET @Path("{imsi}")
 	@Produces({MediaType.APPLICATION_JSON})
-	public Response findEventsByIMISI(@PathParam("imsi") String imsi) {
-		List<IMSIEvent> events = eventService.findFailuresByImsi(imsi);
+	public Response findEventsByIMISI(@PathParam("imsi") final String imsi) {
+		final List<IMSIEvent> events = eventService.findFailuresByImsi(imsi);
 		if (events !=null) {
 			return Response.status(200).entity(events).build();
 		}
