@@ -15,7 +15,7 @@ pipeline {
         }    
         stage('Unit Test') { 
             steps {
-		sh "mvn test -f griffinApp"
+		    sh "mvn test -f griffinApp"
             }
         }
         stage('Integration Test') { 
@@ -26,9 +26,14 @@ pipeline {
         }
         stage('Build') { 
             steps {
-		sh "mvn install -f griffinApp"
+		sh "mvn clean install -f griffinApp"
             }
         }
+        stage ('Static Code Analysis') {
+            steps {
+             sh "mvn pmd:pmd -f griffinApp -pl -griffinApp-IntegrationTest"
+            }
+        } 
         stage('Findbugs Analysis'){
             steps{
             sh "mvn findbugs:findbugs -f griffinApp"

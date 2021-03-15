@@ -3,6 +3,7 @@ package com.callfailures.resource;
 import java.time.DateTimeException;
 import java.time.Instant;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.TimeZone;
 
 import javax.ejb.EJB;
@@ -16,6 +17,7 @@ import javax.ws.rs.core.Response;
 
 import com.callfailures.entity.views.IMSISummary;
 import com.callfailures.entity.views.PhoneModelSummary;
+import com.callfailures.entity.views.PhoneFailures;
 import com.callfailures.errors.ErrorMessage;
 import com.callfailures.errors.ErrorMessages;
 import com.callfailures.exception.InvalidDateException;
@@ -39,6 +41,10 @@ public class EventsResource {
 	 * Network Engineer: Count call failures for a given IMSI during a certain period
 	 * @param imsi - the IMSI parameter
 	 * @param fromEpoch - the starting Date paramater converted to long or UNIX timestamp
+	/**
+	 * Network Engineer: Count call failures for a given IMSI during a certain period
+	 * @param imsi - the IMSI parameter
+	 * @param fromEpoch - the starting Date parameter converted to long or UNIX timestamp
 	 * @param toEpoch - the starting Date parameter converted to long or UNIX timestamp
 	 * @param summary - boolean parameter which checks if summary is required or not
 	 * @return Returns IMSISummary entity which contains the (1) total failure count and (2) total duration of failues 
@@ -102,6 +108,9 @@ public class EventsResource {
 		}
 		catch(Exception exception) {
 			return Response.status(404).build();
+		}
+	}
+			return Response.status(404).entity(new ErrorMessages(ErrorMessage.INVALID_DATE.getMessage())).build();
 		}
 	}
 

@@ -12,7 +12,7 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<maven.compiler.source>1.8</maven.compiler.source>
 		<maven.compiler.target>1.8</maven.compiler.target>
-		<jboss.home>/Users/wilmirnicanor/Desktop/wildfly-8.2.1.Final</jboss.home>
+		<jboss.home>{jbossHomePath}</jboss.home>
 	</properties>
 
 	<build>

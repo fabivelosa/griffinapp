@@ -1,5 +1,6 @@
 package com.callfailures.services.impl;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Matchers.anyInt;
 import static org.mockito.Matchers.anyObject;
@@ -8,7 +9,9 @@ import static org.mockito.Mockito.*;
 import java.io.File;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 import javax.validation.Validation;
 import javax.validation.Validator;
@@ -30,12 +33,17 @@ import com.callfailures.entity.MarketOperatorPK;
 import com.callfailures.entity.UserEquipment;
 import com.callfailures.entity.views.IMSISummary;
 import com.callfailures.entity.views.PhoneModelSummary;
+import com.callfailures.entity.views.PhoneFailures;
 import com.callfailures.exception.InvalidDateException;
 import com.callfailures.exception.InvalidIMSIException;
 import com.callfailures.parsingutils.InvalidRow;
 import com.callfailures.parsingutils.ParsingResponse;
 import com.callfailures.services.EventService;
 import com.callfailures.services.ValidationService;
+import com.callfailures.entity.views.IMSIEvent;
+
+
+
 
 class ReadandPersisteEventsUTest {
 	private static final LocalDateTime VALID_END_TIME = LocalDateTime.of(2021,3,18,12,1);
@@ -55,7 +63,7 @@ class ReadandPersisteEventsUTest {
 	private final MarketOperator marketOperator = new MarketOperator(marketOperatorPK, "Antigua and Barbuda", "AT&T Wireless-Antigua AG");
 	private Validator validator;
 	private ValidationService validationService;
-
+	private List<IMSIEvent> imsiEvents = new ArrayList<>();
 	private EventService eventService;
 	private File file;
 	
@@ -73,6 +81,25 @@ class ReadandPersisteEventsUTest {
 		((EventServiceImpl) eventService).eventDAO = eventDAO;
 		((EventServiceImpl) eventService).validationService = validationService;
 	}
+	
+	
+	@Test
+	public void findUniqueEventCauseCountByPhoneModel() {
+		PhoneFailures phoneFailures = new PhoneFailures(userEquipment, eventCause, 10);
+		List<PhoneFailures> testList = new ArrayList<>();
+		testList.add(phoneFailures);		
+		
+		 when(eventDAO.findUniqueEventCauseCountByPhoneModel(1)).thenReturn(testList);
+		 
+		 List<PhoneFailures> retrievedPhoneFailures = eventService.findUniqueEventCauseCountByPhoneModel(1);
+		 PhoneFailures retrievedPhoneFailues = retrievedPhoneFailures.get(0);
+		 
+		 assertEquals(phoneFailures, retrievedPhoneFailues);
+		 assertEquals(userEquipment, retrievedPhoneFailues.getUserEquipment());
+		 assertEquals(eventCause, retrievedPhoneFailues.getEventCause());
+		 assertEquals(10, retrievedPhoneFailues.getCount());
+	}
+	
 	
 	
 	@Test
@@ -146,6 +173,21 @@ class ReadandPersisteEventsUTest {
 		final ParsingResponse<Events> parsingResults = eventService.read(file);
 		assertEquals(4, parsingResults.getValidObjects().size());
 		assertEquals(0, parsingResults.getInvalidRows().size());
+	}
+	
+	@Test
+	void testSucessfindFailuresByIMSI() {
+		IMSIEvent imsiEvent = new IMSIEvent(VALID_IMSI,eventCause);
+		imsiEvents.add(imsiEvent);
+		when(eventDAO.findEventsByIMSI(VALID_IMSI)).thenReturn(imsiEvents);
+		assertEquals(1,eventService.findFailuresByImsi(VALID_IMSI).size());
+		verify(eventDAO,times(1)).findEventsByIMSI(VALID_IMSI);
+	}
+	@Test
+	void testFailurefindFailuresByIMSI() {
+		when(eventDAO.findEventsByIMSI(INVALID_IMSI)).thenThrow(InvalidIMSIException.class);
+		assertEquals(null,eventService.findFailuresByImsi(INVALID_IMSI));
+		verify(eventDAO,times(0)).findEventsByIMSI(INVALID_IMSI);
 	}
 	
 	@Test

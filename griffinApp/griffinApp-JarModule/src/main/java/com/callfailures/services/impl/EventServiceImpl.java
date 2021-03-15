@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.Iterator;
+import java.util.List;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -16,12 +17,17 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import com.callfailures.dao.EventDAO;
 import com.callfailures.entity.Events;
+import com.callfailures.entity.views.IMSIEvent;
 import com.callfailures.entity.views.IMSISummary;
 import com.callfailures.entity.views.PhoneModelSummary;
 import com.callfailures.exception.FieldNotValidException;
 import com.callfailures.exception.InvalidDateException;
 import com.callfailures.exception.InvalidIMSIException;
 import com.callfailures.exception.InvalidPhoneModelException;
+import com.callfailures.entity.views.PhoneFailures;
+import com.callfailures.exception.FieldNotValidException;
+import com.callfailures.exception.InvalidDateException;
+import com.callfailures.exception.InvalidIMSIException;
 import com.callfailures.parsingutils.InvalidRow;
 import com.callfailures.parsingutils.ParsingResponse;
 import com.callfailures.services.EventService;
@@ -36,6 +42,16 @@ public class EventServiceImpl implements EventService {
 	@Inject
 	ValidationService validationService;
 
+	
+	
+    @Override
+	public List<IMSIEvent> findFailuresByImsi(final String imsi) {
+		// TODO Auto-generated method stub
+    	if (!isValidIMSI(imsi)) {
+    		return null;
+		}
+    	return eventDAO.findEventsByIMSI(imsi);
+	}
 	
 	@Override
 	public IMSISummary findCallFailuresCountByIMSIAndDate(final String imsi, final LocalDateTime startTime, final LocalDateTime endTime) {
@@ -61,6 +77,12 @@ public class EventServiceImpl implements EventService {
 		}
 	
 		return eventDAO.findCallFailuresCountByPhoneModelAndDate(model, startTime, endTime);
+	}
+	
+	
+	@Override
+	public List<PhoneFailures> findUniqueEventCauseCountByPhoneModel(final int tac) {
+		return eventDAO.findUniqueEventCauseCountByPhoneModel(tac);
 	}
 	
 	
@@ -128,6 +150,12 @@ public class EventServiceImpl implements EventService {
 		events.setImsi(validationService.checkIMSI(row, 10));
 		events.setHier3Id(validationService.checkhier3Id(row, 11));
 		events.setHier32Id(validationService.checkhier32Id(row, 12));
+	}
+
+	@Override
+	public List<String> findIMSISBetweenDates(LocalDateTime startTime, LocalDateTime endTime) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }
