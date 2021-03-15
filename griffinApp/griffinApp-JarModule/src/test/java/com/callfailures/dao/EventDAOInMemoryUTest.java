@@ -122,7 +122,7 @@ class EventDAOInMemoryUTest {
 	@Test
 	void testfindEventsByIMSI() {
 		dBCommandTransactionalExecutor.executeCommand(() -> {
-			events = eventGenerator.generateCallFailureInstance(localDateTime, eventId, failureId, ueId, mCc, mNc,
+			events = eventGenerator.generateCallFailureInstance(localDateTime, eventId, failureId, tac, mCc, mNc,
 					cellId, duration, causeCode, neVersion, IMSI , hier3Id, hier32Id, hier321Id, eventCauseDescription,
 					failureClassDescription, country, operator);
 		   failureClassDAO.create(events.getFailureClass());

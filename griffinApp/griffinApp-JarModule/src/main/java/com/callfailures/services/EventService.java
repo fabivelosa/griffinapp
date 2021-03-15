@@ -11,6 +11,7 @@ import com.callfailures.entity.views.IMSIEvent;
 import com.callfailures.entity.views.IMSISummary;
 import com.callfailures.entity.views.PhoneFailures;
 import com.callfailures.exception.InvalidDateException;
+import com.callfailures.exception.InvalidIMSIException;
 import com.callfailures.parsingutils.ParsingResponse;
 
 @Local
@@ -52,5 +53,6 @@ public interface EventService {
 	 */
 	List<String> findIMSISBetweenDates(final LocalDateTime startTime, final LocalDateTime endTime);
 
+	List<IMSIEvent> findFailuresByImsi(final String imsi);
 	
 }
