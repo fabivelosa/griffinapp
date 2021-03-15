@@ -23,6 +23,11 @@ public class QueryIMSI {
 	@EJB
 	private  final EventService eventService = new EventServiceImpl();
 	
+	/**
+	 * Customer Representative: Count call failures for a given IMSI during a certain period
+	 * @param imsi - the IMSI parameter
+	 * @return Returns IMSIEvents entity which contains the Cause Code and Event ID
+	 */
 	@GET @Path("{imsi}")
 	@Produces({MediaType.APPLICATION_JSON})
 

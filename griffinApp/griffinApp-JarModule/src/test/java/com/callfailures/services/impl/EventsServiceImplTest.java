@@ -1,5 +1,6 @@
 package com.callfailures.services.impl;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Matchers.anyInt;
 import static org.mockito.Matchers.anyObject;
@@ -8,7 +9,9 @@ import static org.mockito.Mockito.*;
 import java.io.File;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 import javax.validation.Validation;
 import javax.validation.Validator;
@@ -35,7 +38,7 @@ import com.callfailures.parsingutils.InvalidRow;
 import com.callfailures.parsingutils.ParsingResponse;
 import com.callfailures.services.EventService;
 import com.callfailures.services.ValidationService;
-
+import com.callfailures.entity.views.IMSIEvent;
 class ReadandPersisteEventsUTest {
 	private static final LocalDateTime VALID_END_TIME = LocalDateTime.of(2021,3,18,12,1);
 	private static final LocalDateTime VALID_START_TIME = LocalDateTime.of(2021,3,18,12,0);
@@ -56,7 +59,7 @@ class ReadandPersisteEventsUTest {
 	private final MarketOperator marketOperator = new MarketOperator(marketOperatorPK, "Antigua and Barbuda", "AT&T Wireless-Antigua AG");
 	private Validator validator;
 	private ValidationService validationService;
-
+	private List<IMSIEvent> imsiEvents = new ArrayList<>();
 	private EventService eventService;
 	private File file;
 	
@@ -119,6 +122,24 @@ class ReadandPersisteEventsUTest {
 		ParsingResponse<Events> parsingResults = eventService.read(file);
 		assertEquals(4, parsingResults.getValidObjects().size());
 		assertEquals(0, parsingResults.getInvalidRows().size());
+	}
+	
+	@Test
+	void testSucessfindFailuresByIMSI() {
+		IMSIEvent imsiEvent = new IMSIEvent(VALID_IMSI,eventCause);
+		imsiEvents.add(imsiEvent);
+		when(eventDAO.findEventsByIMSI(VALID_IMSI)).thenReturn(imsiEvents);
+		assertEquals(1,eventDAO.findEventsByIMSI(VALID_IMSI).size());
+		verify(eventDAO,times(1)).findEventsByIMSI(VALID_IMSI);
+	}
+	@Test
+	void testFailurefindFailuresByIMSI() {
+		when(eventDAO.findEventsByIMSI(INVALID_IMSI)).thenThrow(InvalidIMSIException.class);
+		Throwable exception = assertThrows(InvalidIMSIException.class, () -> {
+			eventDAO.findEventsByIMSI(INVALID_IMSI);
+		});
+		assertEquals(InvalidIMSIException.class,exception.getClass());
+		verify(eventDAO,times(1)).findEventsByIMSI(INVALID_IMSI);
 	}
 	
 	@Test

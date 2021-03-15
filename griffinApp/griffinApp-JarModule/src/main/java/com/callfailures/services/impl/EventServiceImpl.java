@@ -127,4 +127,10 @@ public class EventServiceImpl implements EventService {
 		events.setHier32Id(validationService.checkhier32Id(row, 12));
 	}
 
+	@Override
+	public List<String> findIMSISBetweenDates(LocalDateTime startTime, LocalDateTime endTime) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

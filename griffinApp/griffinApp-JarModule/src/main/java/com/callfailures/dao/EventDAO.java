@@ -18,10 +18,14 @@ import com.callfailures.entity.views.IMSISummary;
 @LocalBean
 public class EventDAO {
 	private static final String FIND_ALL_EVENTS = "SELECT e FROM event e",
+			FIND_IMSI_BY_DATE="SELECT e.imsi" 
+					+ "FROM event e "
+					+ "WHERE (e.dateTime BETWEEN :startTime AND :endTime)"  
+					+ "GROUP BY e.imsi",
 			FIND_CALL_FAILURES_BY_IMSI = "SELECT NEW com.callfailures.entity.views.IMSIEvent(e.imsi,e.eventCause) "
-			+"FROM event e "
-			+"WHERE e.imsi = :imsi "
-			+"GROUP BY e.imsi, e.eventCause",
+					+"FROM event e "
+					+"WHERE e.imsi = :imsi "
+					+"GROUP BY e.imsi, e.eventCause",
 			FIND_CALL_FAILURES_BY_IMSI_AND_DATE = "SELECT NEW com.callfailures.entity.views.IMSISummary(e.imsi, COUNT(e), SUM(e.duration)) "
 					+ "FROM event e "
 					+ "WHERE (e.dateTime BETWEEN :startTime AND :endTime) "
@@ -89,5 +93,22 @@ public class EventDAO {
 		}
 	}
 	
+	/**
+	 * Query Database for all IMSI with failures between Start and End time submitted
+	 * @param startTime (inclusive) - the start of the period
+	 * @param endTime (inclusive) - the end of the period
+	 * @return list of IMSI for given time period
+	 */
+	public List<String> findIMSISBetweenDates(final LocalDateTime startTime, final LocalDateTime endTime){
+		final Query query = entityManager.createQuery(FIND_IMSI_BY_DATE,Events.class);
+		query.setParameter("startTime", startTime);
+		query.setParameter("endTime", endTime);
+		try {
+			return query.getResultList();
+		} catch (NoResultException e) {
+			return null;
+		}
+		
+	}
 
 }

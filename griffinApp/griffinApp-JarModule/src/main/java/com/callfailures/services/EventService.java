@@ -43,6 +43,13 @@ public interface EventService {
 	 */
 	ParsingResponse<Events> read(File workbookFile);
 
+	/**
+	 * Query Database for all IMSI with failures between Start and End time submitted
+	 * @param startTime (inclusive) - the start of the period
+	 * @param endTime (inclusive) - the end of the period
+	 * @return list of IMSI for given time period
+	 */
+	List<String> findIMSISBetweenDates(final LocalDateTime startTime, final LocalDateTime endTime);
 
 	
 }
