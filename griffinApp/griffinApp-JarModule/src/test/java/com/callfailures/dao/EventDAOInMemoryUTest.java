@@ -17,6 +17,7 @@ import org.junit.jupiter.api.Test;
 import com.callfailures.entity.Events;
 import com.callfailures.entity.views.IMSIEvent;
 import com.callfailures.entity.views.IMSISummary;
+import com.callfailures.entity.views.PhoneFailures;
 import com.callfailures.utils.test.DBCommandTransactionalExecutor;
 import com.callfailures.utils.test.EntityGenerator;
 
@@ -34,7 +35,7 @@ class EventDAOInMemoryUTest {
 	private final static LocalDateTime eventTime = LocalDateTime.of(2020,3,18,23,45);
 	private final static LocalDateTime startTime = LocalDateTime.of(2020,3,18,23,40);
 	private final static LocalDateTime endTime = LocalDateTime.of(2020,3,18,23,50);
-	private final static int eventId = 4098, failureId = 1, ueId = 21060800, mCc = 100, mNc = 930, cellId = 4, duration = 1000,  causeCode = 0 ;
+	private final static int eventId = 4098, failureId = 1, tac = 21060800, mCc = 100, mNc = 930, cellId = 4, duration = 1000,  causeCode = 0 ;
 	private final static String neVersion = "11B", hier3Id = "4809532081614990000", hier32Id = "8226896360947470000", hier321Id = "1150444940909480000", IMSI = "344930000000011" ;
 	private final static String eventCauseDescription = "S1 SIG CONN SETUP-SUCCESS";
 	private final static String failureClassDescription = "HIGH PRIORITY ACCESS";
@@ -58,13 +59,9 @@ class EventDAOInMemoryUTest {
 		marketOperatorDAO.entityManager = entityManager;
 		eventCauseDAO.entityManager = entityManager;
 		userEquipmentDaO.entityManager = entityManager;
-	}
-
-	
-	@Test
-	void testFindCallFailuresCountByIMSIAndDateOneResult() {
+		
 		dBCommandTransactionalExecutor.executeCommand(() -> {
-			events = eventGenerator.generateCallFailureInstance(localDateTime, eventId, failureId, ueId, mCc, mNc,
+			events = eventGenerator.generateCallFailureInstance(localDateTime, eventId, failureId, tac, mCc, mNc,
 					cellId, duration, causeCode, neVersion, IMSI , hier3Id, hier32Id, hier321Id, eventCauseDescription,
 					failureClassDescription, country, operator);
 		   failureClassDAO.create(events.getFailureClass());
@@ -74,7 +71,11 @@ class EventDAOInMemoryUTest {
 		   eventDAO.create(events);
 		   return null;
 		});
-		
+	}
+
+	
+	@Test
+	void testFindCallFailuresCountByIMSIAndDateOneResult() {
 	   List<Events> events = eventDAO.findAllEvents();
 	   	   
 	   assertEquals(1, events.size());
@@ -87,7 +88,7 @@ class EventDAOInMemoryUTest {
 	   assertEquals(eventCauseDescription, retrievedEvent.getEventCause().getDescription());
 	   assertEquals(failureClassDescription, retrievedEvent.getFailureClass().getFailureDesc());
 	   assertEquals(failureId, retrievedEvent.getFailureClass().getFailureClass());
-	   assertEquals(ueId, retrievedEvent.getUeType().getTac());
+	   assertEquals(tac, retrievedEvent.getUeType().getTac());
 	   assertEquals(mCc, retrievedEvent.getMarketOperator().getMarketOperatorId().getCountryCode());
 	   assertEquals(country, retrievedEvent.getMarketOperator().getCountryDesc());
 	   assertEquals(mNc, retrievedEvent.getMarketOperator().getMarketOperatorId().getOperatorCode());
@@ -109,19 +110,6 @@ class EventDAOInMemoryUTest {
 	
 	@Test
 	void testFindCallFailuresCountByIMSIAndDateEmptyResult() {
-		dBCommandTransactionalExecutor.executeCommand(() -> {
-			events = eventGenerator.generateCallFailureInstance(localDateTime, eventId, failureId, ueId, mCc, mNc,
-					cellId, duration, causeCode, neVersion, IMSI , hier3Id, hier32Id, hier321Id, eventCauseDescription,
-					failureClassDescription, country, operator);
-		   failureClassDAO.create(events.getFailureClass());
-		   marketOperatorDAO.create(events.getMarketOperator());
-		   eventCauseDAO.create(events.getEventCause());
-		   userEquipmentDaO.create(events.getUeType());
-		   eventDAO.create(events);
-		   return null;
-		});
-		
-
 	   List<Events> events = eventDAO.findAllEvents();
 	   
 	   assertEquals(1, events.size());

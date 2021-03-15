@@ -13,6 +13,7 @@ import javax.persistence.Query;
 import com.callfailures.entity.Events;
 import com.callfailures.entity.views.IMSIEvent;
 import com.callfailures.entity.views.IMSISummary;
+import com.callfailures.entity.views.PhoneFailures;
 
 @Stateless
 @LocalBean
@@ -30,7 +31,11 @@ public class EventDAO {
 					+ "FROM event e "
 					+ "WHERE (e.dateTime BETWEEN :startTime AND :endTime) "
 					+ "AND e.imsi = :imsi "
-					+ "GROUP BY e.imsi";
+					+ "GROUP BY e.imsi",
+			FIND_UNIQUE_EVENT_ID_AND_CAUSE_CODE_COUNT = "SELECT NEW com.callfailures.entity.views.PhoneFailures(e.ueType, e.eventCause, COUNT(e)) "
+					+ "FROM event e "
+					+ "WHERE e.ueType.tac = :tac "
+					+ "GROUP BY e.ueType, e.eventCause";
 
 	
 	@PersistenceContext

@@ -4,19 +4,24 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+
 import java.io.File;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
+
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mockito;
 import org.mockito.internal.verification.Times;
 import org.mockito.runners.MockitoJUnitRunner;
+
 import com.callfailures.dao.UserEquipmentDAO;
 import com.callfailures.entity.UserEquipment;
 import com.callfailures.parsingutils.InvalidRow;
@@ -33,13 +38,25 @@ public class UserEquipmentImplTest {
 	private final String absolutePath = Paths.get("src", "test", "resources").toFile().getAbsolutePath();
 
 	@InjectMocks
-	private UserEquipmentImpl userEquipmentImpl;
+	private UserEquipmentServceImpl userEquipmentImpl;
 
 	@Before
 	public void setUp() throws Exception {
 		userEquipment = new UserEquipment();
 	}
-
+	
+	@Test
+	public void testFindAll() {
+		userEquipment.setTac(0);
+		userEquipment.setModel("Sample");
+		List<UserEquipment> equipmentList = new ArrayList<>();
+		equipmentList.add(userEquipment);
+		when(userEquipmentDAO.findAll()).thenReturn(equipmentList);
+		List<UserEquipment> retrievedEquipmentList = userEquipmentImpl.findAll();
+		assertEquals(1, retrievedEquipmentList.size());
+		verify(userEquipmentDAO, times(1)).findAll();
+	}
+	
 	@Test
 	public void testSuccessForFindById() {
 		userEquipment.setTac(0);

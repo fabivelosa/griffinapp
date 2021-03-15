@@ -9,7 +9,7 @@ import javax.ejb.Local;
 import com.callfailures.entity.Events;
 import com.callfailures.entity.views.IMSIEvent;
 import com.callfailures.entity.views.IMSISummary;
-import com.callfailures.exception.InvalidIMSIException;
+import com.callfailures.entity.views.PhoneFailures;
 import com.callfailures.exception.InvalidDateException;
 import com.callfailures.parsingutils.ParsingResponse;
 
@@ -18,14 +18,7 @@ public interface EventService {
 
 	
 	/**
-	 * Retreives from DAO a list of event ids and cause codes of failures for given IMSI
-	 * @param imsi
-	 * @return list of IMSI Events, returns <b> null </b> if no failures found.
-	 */
-	List<IMSIEvent> findFailuresByImsi(final String imsi);
-	
-	/**
-	 * Validates the IMSISUmmary request parameters and retrieves IMSISUmmary object from DAO layes
+	 * Validates the IMSISUmmary request parameters and retrieves IMSISUmmary object from DAO layers
 	 * @param imsi
 	 * @param startTime
 	 * @param endTime
@@ -35,6 +28,14 @@ public interface EventService {
 	 */
 	IMSISummary findCallFailuresCountByIMSIAndDate(final String imsi, final LocalDateTime startTime, final LocalDateTime endTime)
 		throws InvalidIMSIException, InvalidDateException;
+	
+	/**
+	 * Returns the list of PhoneFailures
+	 * @param tac - the phone model's unique identifier
+	 * @return a collection of PhoneFailures which contains the unique cause code and event id combinations including their respective counts
+	 */
+	List<PhoneFailures> findUniqueEventCauseCountByPhoneModel(final int tac);
+	
 	
 	/**
 	 * Validates all the fields of Base Data tab in the excel file 

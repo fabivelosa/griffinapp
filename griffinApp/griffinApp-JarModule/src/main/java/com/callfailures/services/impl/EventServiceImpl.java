@@ -19,6 +19,7 @@ import com.callfailures.dao.EventDAO;
 import com.callfailures.entity.Events;
 import com.callfailures.entity.views.IMSIEvent;
 import com.callfailures.entity.views.IMSISummary;
+import com.callfailures.entity.views.PhoneFailures;
 import com.callfailures.exception.FieldNotValidException;
 import com.callfailures.exception.InvalidDateException;
 import com.callfailures.exception.InvalidIMSIException;
@@ -58,6 +59,12 @@ public class EventServiceImpl implements EventService {
 		}
 		
 		return eventDAO.findCallFailuresCountByIMSIAndDate(imsi, startTime, endTime);
+	}
+	
+	
+	@Override
+	public List<PhoneFailures> findUniqueEventCauseCountByPhoneModel(final int tac) {
+		return eventDAO.findUniqueEventCauseCountByPhoneModel(tac);
 	}
 	
 	

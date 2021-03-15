@@ -32,6 +32,7 @@ import com.callfailures.entity.MarketOperator;
 import com.callfailures.entity.MarketOperatorPK;
 import com.callfailures.entity.UserEquipment;
 import com.callfailures.entity.views.IMSISummary;
+import com.callfailures.entity.views.PhoneFailures;
 import com.callfailures.exception.InvalidDateException;
 import com.callfailures.exception.InvalidIMSIException;
 import com.callfailures.parsingutils.InvalidRow;
@@ -77,6 +78,25 @@ class ReadandPersisteEventsUTest {
 		((EventServiceImpl) eventService).eventDAO = eventDAO;
 		((EventServiceImpl) eventService).validationService = validationService;
 	}
+	
+	
+	@Test
+	public void findUniqueEventCauseCountByPhoneModel() {
+		PhoneFailures phoneFailures = new PhoneFailures(userEquipment, eventCause, 10);
+		List<PhoneFailures> testList = new ArrayList<>();
+		testList.add(phoneFailures);		
+		
+		 when(eventDAO.findUniqueEventCauseCountByPhoneModel(1)).thenReturn(testList);
+		 
+		 List<PhoneFailures> retrievedPhoneFailures = eventService.findUniqueEventCauseCountByPhoneModel(1);
+		 PhoneFailures retrievedPhoneFailues = retrievedPhoneFailures.get(0);
+		 
+		 assertEquals(phoneFailures, retrievedPhoneFailues);
+		 assertEquals(userEquipment, retrievedPhoneFailues.getUserEquipment());
+		 assertEquals(eventCause, retrievedPhoneFailues.getEventCause());
+		 assertEquals(10, retrievedPhoneFailues.getCount());
+	}
+	
 	
 	
 	@Test
