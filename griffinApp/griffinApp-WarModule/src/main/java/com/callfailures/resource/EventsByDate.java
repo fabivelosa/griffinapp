@@ -1,7 +1,10 @@
 package com.callfailures.resource;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.TimeZone;
+
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.ws.rs.PathParam;
@@ -32,11 +35,14 @@ public class EventsByDate {
 	@Produces({ MediaType.APPLICATION_JSON })
 	public Response getIMSIsByDate(@QueryParam("from") final Long fromEpoch,
 			@QueryParam("to") final Long toEpoch) {
-		List<String> imsis = eventService
+	
 		final LocalDateTime startTime = convertLongToLocalDateTime(fromEpoch); 
 		final LocalDateTime endTime = convertLongToLocalDateTime(toEpoch); 
-		
+		List<String> imsis = eventService.findIMSISBetweenDates(startTime, endTime);
 		return Response.status(400).build();
 	}
+	private LocalDateTime convertLongToLocalDateTime(final Long startEpoch) {
+		return LocalDateTime.ofInstant(Instant.ofEpochMilli(startEpoch), TimeZone.getDefault().toZoneId());
+}
 	
 }
