@@ -3,6 +3,7 @@ package com.callfailures.services.impl;
 import java.io.File;
 import java.io.IOException;
 import java.util.Iterator;
+import java.util.List;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -23,7 +24,7 @@ import com.callfailures.services.UserEquipmentService;
 import com.callfailures.services.ValidationService;
 
 @Stateless
-public class UserEquipmentImpl implements UserEquipmentService {
+public class UserEquipmentServceImpl implements UserEquipmentService {
 
 	@Inject
 	UserEquipmentDAO userEquipmentDAO;
@@ -40,6 +41,10 @@ public class UserEquipmentImpl implements UserEquipmentService {
 		userEquipmentDAO.create(obj);
 	}
 
+	public List<UserEquipment> findAll(){
+		return userEquipmentDAO.findAll();
+	}
+	
 	@Override
 	public ParsingResponse<UserEquipment> read(final File workbookFile) {
 
@@ -78,7 +83,7 @@ public class UserEquipmentImpl implements UserEquipmentService {
 		return result;
 	}
 
-	private Cell readCellValue(final DataFormatter dataFormatter, UserEquipment userEquipment,
+	private Cell readCellValue(final DataFormatter dataFormatter, final UserEquipment userEquipment,
 			final Iterator<Cell> cellIterator, Cell cell) {
 		userEquipment.setTac((int) cell.getNumericCellValue());
 		cell = cellIterator.next();

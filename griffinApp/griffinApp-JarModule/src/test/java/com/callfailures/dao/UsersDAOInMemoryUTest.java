@@ -30,19 +30,18 @@ class UsersDAOInMemoryUTest {
 
 	
 	@Test
-	void testAddUsert() {
+	void testAddUser() {
 		
 		System.out.println("I am running");
+		
 		dBCommandTransactionalExecutor.executeCommand(() -> {
 			User user = new User();
-			user.setUserName("john");
-			user.setUserType("admin");
+			user.setUserName("wilmir");
 			user.setUserPassword("password");
+			user.setUserType("network engineer");
 			usersDAO.addUser(user);
 		   return null;
 		});
-		
-	   	   
 
 	}
 	

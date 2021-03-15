@@ -12,7 +12,7 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<maven.compiler.source>1.8</maven.compiler.source>
 		<maven.compiler.target>1.8</maven.compiler.target>
-		<jboss.home>C:\Users\Dan\wildfly-8.2.1.Final</jboss.home>
+		<jboss.home>{jbossHomePath}</jboss.home>
 	</properties>
 
 	<build>
@@ -151,19 +151,18 @@
 			</dependency>
 			<dependency>
 				<groupId>org.jboss.resteasy</groupId>
-				<artifactId>resteasy-jaxrs</artifactId>
-				<version>3.0.13.Final</version>
-			</dependency>
-			<!-- Below dependency is for JAXB integration -->
-			<dependency>
-				<groupId>org.jboss.resteasy</groupId>
 				<artifactId>resteasy-jaxb-provider</artifactId>
 				<version>3.0.13.Final</version>
-			</dependency>
-
+			</dependency>			
 			<dependency>
 				<groupId>com.callfailures</groupId>
 				<artifactId>griffinApp-JarModule</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.callfailures</groupId>
+				<artifactId>griffinApp-JarModule</artifactId>
+				<type>test-jar</type>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
@@ -297,5 +296,6 @@
 		<module>griffinApp-WarModule</module>
 		<module>griffinApp-EarModule</module>
 		<module>griffinApp-SeleniumTest</module>
+		<module>griffinApp-IntegrationTest</module>
 	</modules>
 </project>

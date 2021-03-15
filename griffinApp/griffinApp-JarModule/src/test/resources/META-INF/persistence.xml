@@ -9,8 +9,8 @@
 		<class>com.callfailures.entity.FailureClass</class>
 		<class>com.callfailures.entity.MarketOperator</class>
 		<class>com.callfailures.entity.UserEquipment</class>	
-		<class>com.callfailures.entity.Events</class>	
-		<class>com.callfailures.entity.User</class>		
+		<class>com.callfailures.entity.Events</class>
+		<class>com.callfailures.entity.User</class>						
 		<properties>
 			<property name="hibernate.show_sql" value="false" />
 			<property name="hibernate.format_sql" value="true" />

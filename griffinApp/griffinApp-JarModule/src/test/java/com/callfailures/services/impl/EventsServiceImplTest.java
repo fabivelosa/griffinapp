@@ -8,7 +8,9 @@ import static org.mockito.Mockito.*;
 import java.io.File;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 import javax.validation.Validation;
 import javax.validation.Validator;
@@ -29,6 +31,9 @@ import com.callfailures.entity.MarketOperator;
 import com.callfailures.entity.MarketOperatorPK;
 import com.callfailures.entity.UserEquipment;
 import com.callfailures.entity.views.IMSISummary;
+import com.callfailures.entity.views.PhoneFailures;
+import com.callfailures.exception.InvalidDateException;
+import com.callfailures.exception.InvalidIMSIException;
 import com.callfailures.parsingutils.InvalidRow;
 import com.callfailures.parsingutils.ParsingResponse;
 import com.callfailures.services.EventService;
@@ -75,6 +80,25 @@ class ReadandPersisteEventsUTest {
 	
 	
 	@Test
+	public void findUniqueEventCauseCountByPhoneModel() {
+		PhoneFailures phoneFailures = new PhoneFailures(userEquipment, eventCause, 10);
+		List<PhoneFailures> testList = new ArrayList<>();
+		testList.add(phoneFailures);		
+		
+		 when(eventDAO.findUniqueEventCauseCountByPhoneModel(1)).thenReturn(testList);
+		 
+		 List<PhoneFailures> retrievedPhoneFailures = eventService.findUniqueEventCauseCountByPhoneModel(1);
+		 PhoneFailures retrievedPhoneFailues = retrievedPhoneFailures.get(0);
+		 
+		 assertEquals(phoneFailures, retrievedPhoneFailues);
+		 assertEquals(userEquipment, retrievedPhoneFailues.getUserEquipment());
+		 assertEquals(eventCause, retrievedPhoneFailues.getEventCause());
+		 assertEquals(10, retrievedPhoneFailues.getCount());
+	}
+	
+	
+	
+	@Test
 	public void findCallFailuresCountByIMSIAndDateValidRequest() {
 		when(eventDAO.findCallFailuresCountByIMSIAndDate(VALID_IMSI, VALID_START_TIME, VALID_END_TIME)).thenReturn(new IMSISummary());
 		assertNotNull(eventService.findCallFailuresCountByIMSIAndDate(VALID_IMSI, VALID_START_TIME, VALID_END_TIME));
@@ -84,31 +108,25 @@ class ReadandPersisteEventsUTest {
 	
 	@Test
 	public void findCallFailuresCountByIMSIAndDateNullIMSI() {
-		assertNull(eventService.findCallFailuresCountByIMSIAndDate(null, VALID_START_TIME, VALID_END_TIME));
-		verify(eventDAO, never()).findCallFailuresCountByIMSIAndDate(anyObject(), anyObject(), anyObject());
-	}
-	
-	@Test
-	public void findCallFailuresCountByIMSIAndDateNullStartTime() {
-		assertNull(eventService.findCallFailuresCountByIMSIAndDate(VALID_IMSI, null, VALID_END_TIME));
+		assertThrows(InvalidIMSIException.class, () -> eventService.findCallFailuresCountByIMSIAndDate(null, VALID_START_TIME, VALID_END_TIME));
 		verify(eventDAO, never()).findCallFailuresCountByIMSIAndDate(anyObject(), anyObject(), anyObject());
 	}
 	
 	@Test
 	public void findCallFailuresCountByIMSIAndDateNullEndTime() {
-		assertNull(eventService.findCallFailuresCountByIMSIAndDate(VALID_IMSI, VALID_START_TIME, null));
+		assertThrows(InvalidDateException.class, () -> eventService.findCallFailuresCountByIMSIAndDate(VALID_IMSI, VALID_END_TIME, VALID_START_TIME));
 		verify(eventDAO, never()).findCallFailuresCountByIMSIAndDate(anyObject(), anyObject(), anyObject());
 	}
 	
 	@Test
 	public void findCallFailuresCountByIMSIAndDateLongIMSI() {
-		assertNull(eventService.findCallFailuresCountByIMSIAndDate(LONG_IMSI, VALID_START_TIME, VALID_END_TIME));
+		assertThrows(InvalidIMSIException.class, () -> eventService.findCallFailuresCountByIMSIAndDate(LONG_IMSI, VALID_START_TIME, VALID_END_TIME));
 		verify(eventDAO, never()).findCallFailuresCountByIMSIAndDate(anyObject(), anyObject(), anyObject());
 	}
 	
 	@Test
 	public void findCallFailuresCountByIMSIAndDateInvalidIMSI() {
-		assertNull(eventService.findCallFailuresCountByIMSIAndDate(INVALID_IMSI, VALID_START_TIME, VALID_END_TIME));
+		assertThrows(InvalidIMSIException.class, () -> eventService.findCallFailuresCountByIMSIAndDate(INVALID_IMSI, VALID_START_TIME, VALID_END_TIME));
 		verify(eventDAO, never()).findCallFailuresCountByIMSIAndDate(anyObject(), anyObject(), anyObject());
 	}
 	
