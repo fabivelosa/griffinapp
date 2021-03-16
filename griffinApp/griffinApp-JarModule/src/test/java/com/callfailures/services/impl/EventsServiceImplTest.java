@@ -1,5 +1,6 @@
 package com.callfailures.services.impl;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Matchers.anyInt;
 import static org.mockito.Matchers.anyObject;
@@ -31,6 +32,7 @@ import com.callfailures.entity.MarketOperator;
 import com.callfailures.entity.MarketOperatorPK;
 import com.callfailures.entity.UserEquipment;
 import com.callfailures.entity.views.IMSISummary;
+import com.callfailures.entity.views.PhoneModelSummary;
 import com.callfailures.entity.views.PhoneFailures;
 import com.callfailures.exception.InvalidDateException;
 import com.callfailures.exception.InvalidIMSIException;
@@ -38,13 +40,15 @@ import com.callfailures.parsingutils.InvalidRow;
 import com.callfailures.parsingutils.ParsingResponse;
 import com.callfailures.services.EventService;
 import com.callfailures.services.ValidationService;
+import com.callfailures.entity.views.IMSIEvent;
+
+
+
 
 class ReadandPersisteEventsUTest {
 	private static final LocalDateTime VALID_END_TIME = LocalDateTime.of(2021,3,18,12,1);
 	private static final LocalDateTime VALID_START_TIME = LocalDateTime.of(2021,3,18,12,0);
-	private static final String VALID_IMSI = "344930000000011";
-	private static final String LONG_IMSI = "3449300000000111";
-	private static final String INVALID_IMSI = "A44930000000011";
+	private static final String VALID_IMSI = "344930000000011", LONG_IMSI = "3449300000000111", INVALID_IMSI = "A44930000000011", VALID_PHONE_MODEL = "VEA3";
 	private final EventCauseDao eventCauseDAO = mock(EventCauseDao.class);
 	private final FailureClassDAO failureClassDAO = mock(FailureClassDAO.class);
 	private final UserEquipmentDAO userEquipmentDAO = mock(UserEquipmentDAO.class);
@@ -59,7 +63,7 @@ class ReadandPersisteEventsUTest {
 	private final MarketOperator marketOperator = new MarketOperator(marketOperatorPK, "Antigua and Barbuda", "AT&T Wireless-Antigua AG");
 	private Validator validator;
 	private ValidationService validationService;
-
+	private List<IMSIEvent> imsiEvents = new ArrayList<>();
 	private EventService eventService;
 	private File file;
 	
@@ -130,6 +134,34 @@ class ReadandPersisteEventsUTest {
 		verify(eventDAO, never()).findCallFailuresCountByIMSIAndDate(anyObject(), anyObject(), anyObject());
 	}
 	
+		
+			
+	@Test
+	public void findCallFailuresCountByPhoneModel() {
+		when(eventDAO.findCallFailuresCountByPhoneModelAndDate(VALID_PHONE_MODEL, VALID_START_TIME, VALID_END_TIME)).thenReturn(new PhoneModelSummary());
+		assertNotNull(eventService.findCallFailuresCountByPhoneModelAndDate(VALID_PHONE_MODEL, VALID_START_TIME, VALID_END_TIME));
+		verify(eventDAO, times(1)).findCallFailuresCountByPhoneModelAndDate(VALID_PHONE_MODEL, VALID_START_TIME, VALID_END_TIME);
+	}
+	
+	
+	@Test
+	public void findCallFailuresCountByInvalidPhoneModel() {
+		assertThrows(InvalidIMSIException.class, () -> eventService.findCallFailuresCountByIMSIAndDate(null, VALID_START_TIME, VALID_END_TIME));
+		verify(eventDAO, never()).findCallFailuresCountByIMSIAndDate(anyObject(), anyObject(), anyObject());
+	}
+	
+	@Test
+	public void findCallFailuresCountByPhoneModelAndInvalidDate() {
+		assertThrows(InvalidDateException.class, () -> eventService.findCallFailuresCountByPhoneModelAndDate(VALID_IMSI, VALID_END_TIME, VALID_START_TIME));
+		verify(eventDAO, never()).findCallFailuresCountByIMSIAndDate(anyObject(), anyObject(), anyObject());
+	}
+	
+	@Test
+	public void findCallFailuresCountByPhoneModelAndDateLongIMSI() {
+		assertThrows(InvalidIMSIException.class, () -> eventService.findCallFailuresCountByIMSIAndDate(LONG_IMSI, VALID_START_TIME, VALID_END_TIME));
+		verify(eventDAO, never()).findCallFailuresCountByIMSIAndDate(anyObject(), anyObject(), anyObject());
+	}
+	
 	@Test
 	void testSuccessfuleReadOfFile() {
 		when(eventCauseDAO.getEventCause(anyObject())).thenReturn(eventCause);
@@ -138,9 +170,24 @@ class ReadandPersisteEventsUTest {
 		when(marketOperatorDAO.getMarketOperator(marketOperatorPK)).thenReturn(marketOperator);
 		file = new File(absolutePath + "/importData/validData.xlsx");
 		eventService.read(file);
-		ParsingResponse<Events> parsingResults = eventService.read(file);
+		final ParsingResponse<Events> parsingResults = eventService.read(file);
 		assertEquals(4, parsingResults.getValidObjects().size());
 		assertEquals(0, parsingResults.getInvalidRows().size());
+	}
+	
+	@Test
+	void testSucessfindFailuresByIMSI() {
+		IMSIEvent imsiEvent = new IMSIEvent(VALID_IMSI,eventCause);
+		imsiEvents.add(imsiEvent);
+		when(eventDAO.findEventsByIMSI(VALID_IMSI)).thenReturn(imsiEvents);
+		assertEquals(1,eventService.findFailuresByImsi(VALID_IMSI).size());
+		verify(eventDAO,times(1)).findEventsByIMSI(VALID_IMSI);
+	}
+	@Test
+	void testFailurefindFailuresByIMSI() {
+		when(eventDAO.findEventsByIMSI(INVALID_IMSI)).thenThrow(InvalidIMSIException.class);
+		assertEquals(null,eventService.findFailuresByImsi(INVALID_IMSI));
+		verify(eventDAO,times(0)).findEventsByIMSI(INVALID_IMSI);
 	}
 	
 	@Test
@@ -257,11 +304,11 @@ class ReadandPersisteEventsUTest {
 		assertInvalidRowMessage("Inexistent MCC and MNC combination");
 	}
 	
-	private void assertInvalidRowMessage(String invalidRowMessage) {
-		ParsingResponse<Events> parsingResults = eventService.read(file);
+	private void assertInvalidRowMessage(final String invalidRowMessage) {
+		final ParsingResponse<Events> parsingResults = eventService.read(file);
 		assertEquals(0, parsingResults.getValidObjects().size());
 		assertEquals(1, parsingResults.getInvalidRows().size());
-		Iterator<InvalidRow> eventsIterator = parsingResults.getInvalidRows().iterator();
+		final Iterator<InvalidRow> eventsIterator = parsingResults.getInvalidRows().iterator();
 		assertEquals(invalidRowMessage, eventsIterator.next().getErrorMessage());
 	}
 }
