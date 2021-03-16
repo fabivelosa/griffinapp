@@ -13,6 +13,7 @@ import javax.persistence.Query;
 import com.callfailures.entity.Events;
 import com.callfailures.entity.views.IMSIEvent;
 import com.callfailures.entity.views.IMSISummary;
+import com.callfailures.entity.views.PhoneModelSummary;
 import com.callfailures.entity.views.PhoneFailures;
 
 @Stateless
@@ -32,6 +33,11 @@ public class EventDAO {
 					+ "WHERE (e.dateTime BETWEEN :startTime AND :endTime) "
 					+ "AND e.imsi = :imsi "
 					+ "GROUP BY e.imsi",
+		        FIND_CALL_FAILURES_BY_PHONEMODEL_AND_DATE = "SELECT NEW com.callfailures.entity.views.PhoneModelSummary(e.ueType.model, COUNT(e)) "
+							+ "FROM event e "
+							+ "WHERE (e.dateTime BETWEEN :startTime AND :endTime) "
+							+ "AND e.ueType.model = :model "
+							+ "GROUP BY e.ueType.model",
 			FIND_UNIQUE_EVENT_ID_AND_CAUSE_CODE_COUNT = "SELECT NEW com.callfailures.entity.views.PhoneFailures(e.ueType, e.eventCause, COUNT(e)) "
 					+ "FROM event e "
 					+ "WHERE e.ueType.tac = :tac "
@@ -61,16 +67,6 @@ public class EventDAO {
 		return query.getResultList();
 	}
 
-
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	
 	/**
 	 * Queries the Unique EventID, and CauseCode combinations, and their count by phone model
@@ -104,6 +100,24 @@ public class EventDAO {
 	}
 	
 	/**
+	 * Queries the PhoneModelSummary object which includes the count of call failures  in a given period
+	 * @param ueType
+	 * @param startTime (inclusive) - the start of the period
+	 * @param endTime (inclusive) - the end of the period
+	 * @return the PhoneModelSummary object
+	 */
+	public PhoneModelSummary findCallFailuresCountByPhoneModelAndDate(final String model, final LocalDateTime startTime, final LocalDateTime endTime) {
+		final Query query = entityManager.createQuery(FIND_CALL_FAILURES_BY_PHONEMODEL_AND_DATE, PhoneModelSummary.class);
+		query.setParameter("model", model);
+		query.setParameter("startTime", startTime);
+		query.setParameter("endTime", endTime);
+		try {
+			return (PhoneModelSummary) query.getSingleResult();
+		}catch(NoResultException  exception) {
+			return null;
+		}
+	}
+	/**	
 	 * Query Database for all events of an inputted IMSI
 	 * @param imsi
 	 * @return list of failures with Event ID and Cause Code for given IMSI

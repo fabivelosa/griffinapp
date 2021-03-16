@@ -33,7 +33,7 @@ public class QueryIMSI {
 
 	public Response findEventsByIMISI(@PathParam("imsi") final String imsi) {
 		try {
-			List<IMSIEvent> events = eventService.findFailuresByImsi(imsi);
+			final List<IMSIEvent> events = eventService.findFailuresByImsi(imsi);
 			if (events == null) {
 				throw new InvalidIMSIException();
 			}
