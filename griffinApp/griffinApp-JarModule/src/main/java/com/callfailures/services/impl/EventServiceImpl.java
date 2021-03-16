@@ -19,6 +19,11 @@ import com.callfailures.dao.EventDAO;
 import com.callfailures.entity.Events;
 import com.callfailures.entity.views.IMSIEvent;
 import com.callfailures.entity.views.IMSISummary;
+import com.callfailures.entity.views.PhoneModelSummary;
+import com.callfailures.exception.FieldNotValidException;
+import com.callfailures.exception.InvalidDateException;
+import com.callfailures.exception.InvalidIMSIException;
+import com.callfailures.exception.InvalidPhoneModelException;
 import com.callfailures.entity.views.PhoneFailures;
 import com.callfailures.exception.FieldNotValidException;
 import com.callfailures.exception.InvalidDateException;
@@ -59,6 +64,19 @@ public class EventServiceImpl implements EventService {
 		}
 		
 		return eventDAO.findCallFailuresCountByIMSIAndDate(imsi, startTime, endTime);
+	}
+	
+	@Override
+	public	PhoneModelSummary findCallFailuresCountByPhoneModelAndDate(final String model, final LocalDateTime startTime, final LocalDateTime endTime) {
+		if(startTime.isAfter(endTime)) {
+			throw new InvalidDateException();
+		}
+			
+		if (model.isEmpty()) {
+			throw new InvalidPhoneModelException();
+		}
+	
+		return eventDAO.findCallFailuresCountByPhoneModelAndDate(model, startTime, endTime);
 	}
 	
 	
@@ -107,7 +125,7 @@ public class EventServiceImpl implements EventService {
 		return true;
 	}
 	
-	
+
 	private Events createEventObject(final Row row) {
 		final Events events = new Events();
 		validateNonDatabaseDependentFields(row, events);
@@ -135,7 +153,7 @@ public class EventServiceImpl implements EventService {
 	}
 
 	@Override
-	public List<String> findIMSISBetweenDates(LocalDateTime startTime, LocalDateTime endTime) {
+	public List<String> findIMSISBetweenDates(final LocalDateTime startTime, final LocalDateTime endTime) {
 		// TODO Auto-generated method stub
 		return null;
 	}

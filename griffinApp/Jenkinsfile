@@ -6,7 +6,13 @@ pipeline {
         jdk 'jdk8' 
     }
     
-    stages {   
+    stages {
+	stage ('Static Code Analysis') {
+            steps {
+	         sh "mvn clean -f griffinApp"
+             sh "mvn pmd:pmd -f griffinApp -pl -griffinApp-IntegrationTest"
+            }
+        }    
         stage('Unit Test') { 
             steps {
 		    sh "mvn test -f griffinApp"
