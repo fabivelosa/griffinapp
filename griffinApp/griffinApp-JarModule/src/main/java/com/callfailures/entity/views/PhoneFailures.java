@@ -15,7 +15,7 @@ public class PhoneFailures {
 	public PhoneFailures() {
 	}
 
-	public PhoneFailures(UserEquipment userEquipment, EventCause eventCause, long count) {
+	public PhoneFailures(final UserEquipment userEquipment, final EventCause eventCause, final long count) {
 		this.userEquipment = userEquipment;
 		this.eventCause = eventCause;
 		this.count = count;
