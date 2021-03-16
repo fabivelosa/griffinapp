@@ -37,7 +37,7 @@ public class EventDAO {
 							+ "FROM event e "
 							+ "WHERE (e.dateTime BETWEEN :startTime AND :endTime) "
 							+ "AND e.ueType.model = :model "
-							+ "GROUP BY e.ueType.model";
+							+ "GROUP BY e.ueType.model",
 			FIND_UNIQUE_EVENT_ID_AND_CAUSE_CODE_COUNT = "SELECT NEW com.callfailures.entity.views.PhoneFailures(e.ueType, e.eventCause, COUNT(e)) "
 					+ "FROM event e "
 					+ "WHERE e.ueType.tac = :tac "
@@ -116,6 +116,7 @@ public class EventDAO {
 		}catch(NoResultException  exception) {
 			return null;
 		}
+	}
 	/**	
 	 * Query Database for all events of an inputted IMSI
 	 * @param imsi
