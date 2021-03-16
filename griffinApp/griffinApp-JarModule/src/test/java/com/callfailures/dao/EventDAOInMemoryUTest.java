@@ -73,8 +73,6 @@ class EventDAOInMemoryUTest {
 		   eventDAO.create(events);
 		   return null;
 		});
-		
-	   final List<Events> events = eventDAO.findAllEvents();
 	}
 
 	
@@ -114,19 +112,6 @@ class EventDAOInMemoryUTest {
 	
 	@Test
 	void testFindCallFailuresCountByIMSIAndDateEmptyResult() {
-		dBCommandTransactionalExecutor.executeCommand(() -> {
-			events = eventGenerator.generateCallFailureInstance(localDateTime, eventId, failureId, tac, mCc, mNc,
-					cellId, duration, causeCode, neVersion, IMSI , hier3Id, hier32Id, hier321Id, eventCauseDescription,
-					failureClassDescription, country, operator);
-		   failureClassDAO.create(events.getFailureClass());
-		   marketOperatorDAO.create(events.getMarketOperator());
-		   eventCauseDAO.create(events.getEventCause());
-		   userEquipmentDaO.create(events.getUeType());
-		   eventDAO.create(events);
-		   return null;
-		});
-		
-
 	   final List<Events> events = eventDAO.findAllEvents();
 	   
 	   assertEquals(1, events.size());
@@ -137,19 +122,6 @@ class EventDAOInMemoryUTest {
 	
 	@Test
 	void testSuccessFindCallFailuresCountByPhoneModelAndDate() {
-		dBCommandTransactionalExecutor.executeCommand(() -> {
-			events = eventGenerator.generateCallFailureInstance(localDateTime, eventId, failureId, tac, mCc, mNc,
-					cellId, duration, causeCode, neVersion, IMSI , hier3Id, hier32Id, hier321Id, eventCauseDescription,
-					failureClassDescription, country, operator);
-		   failureClassDAO.create(events.getFailureClass());
-		   marketOperatorDAO.create(events.getMarketOperator());
-		   eventCauseDAO.create(events.getEventCause());
-		   userEquipmentDaO.create(events.getUeType());
-		   eventDAO.create(events);
-		   return null;
-		});
-		
-
 	   final List<Events> events = eventDAO.findAllEvents();
 	   
 	   assertEquals(1, events.size());
@@ -162,19 +134,6 @@ class EventDAOInMemoryUTest {
 	
 	@Test
 	void testFailureFindCallFailuresCountByPhoneModelAndDate() {
-		dBCommandTransactionalExecutor.executeCommand(() -> {
-			events = eventGenerator.generateCallFailureInstance(localDateTime, eventId, failureId, tac, mCc, mNc,
-					cellId, duration, causeCode, neVersion, IMSI , hier3Id, hier32Id, hier321Id, eventCauseDescription,
-					failureClassDescription, country, operator);
-		   failureClassDAO.create(events.getFailureClass());
-		   marketOperatorDAO.create(events.getMarketOperator());
-		   eventCauseDAO.create(events.getEventCause());
-		   userEquipmentDaO.create(events.getUeType());
-		   eventDAO.create(events);
-		   return null;
-		});
-		
-
 	   final List<Events> events = eventDAO.findAllEvents();
 	   
 	   assertEquals(1, events.size());
@@ -185,19 +144,6 @@ class EventDAOInMemoryUTest {
 	
 	@Test
 	void testFailureFindCallFailuresCountByInvalidPhoneModel() {
-		dBCommandTransactionalExecutor.executeCommand(() -> {
-			events = eventGenerator.generateCallFailureInstance(localDateTime, eventId, failureId, tac, mCc, mNc,
-					cellId, duration, causeCode, neVersion, IMSI , hier3Id, hier32Id, hier321Id, eventCauseDescription,
-					failureClassDescription, country, operator);
-		   failureClassDAO.create(events.getFailureClass());
-		   marketOperatorDAO.create(events.getMarketOperator());
-		   eventCauseDAO.create(events.getEventCause());
-		   userEquipmentDaO.create(events.getUeType());
-		   eventDAO.create(events);
-		   return null;
-		});
-		
-
 	   final List<Events> events = eventDAO.findAllEvents();
 	   
 	   assertEquals(1, events.size());
