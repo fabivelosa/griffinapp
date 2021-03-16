@@ -18,6 +18,7 @@ import com.callfailures.entity.Events;
 import com.callfailures.entity.views.IMSIEvent;
 import com.callfailures.entity.views.IMSISummary;
 import com.callfailures.entity.views.PhoneFailures;
+import com.callfailures.entity.views.UniqueIMSI;
 import com.callfailures.utils.test.DBCommandTransactionalExecutor;
 import com.callfailures.utils.test.EntityGenerator;
 
@@ -154,6 +155,19 @@ class EventDAOInMemoryUTest {
 		assertEquals(causeCode,retrievedPhoneFailure.getEventCause().getEventCauseId().getCauseCode());
 		assertEquals(1L,retrievedPhoneFailure.getCount());
 		
+	}
+	
+	@Test
+	void testFundUniqueIMSIByDates() throws InterruptedException {
+	
+		List<Events> events = eventDAO.findAllEvents();
+		assertEquals(1,events.size());
+		
+		List<UniqueIMSI> imsis = eventDAO.findIMSISBetweenDates(startTime, endTime);
+		assertEquals(1,imsis.size());
+		UniqueIMSI uniqueIMSI = imsis.get(0);
+		assertNotNull(uniqueIMSI.getImsi());
+		assertEquals(IMSI,uniqueIMSI.getImsi());
 	}
 }
 
