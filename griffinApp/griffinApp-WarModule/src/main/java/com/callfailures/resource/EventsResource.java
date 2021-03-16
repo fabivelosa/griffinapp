@@ -110,10 +110,8 @@ public class EventsResource {
 			return Response.status(404).build();
 		}
 	}
-			return Response.status(404).entity(new ErrorMessages(ErrorMessage.INVALID_DATE.getMessage())).build();
-		}
-	}
-
+	
+	
 	private LocalDateTime convertLongToLocalDateTime(final Long startEpoch) {
 			return LocalDateTime.ofInstant(Instant.ofEpochMilli(startEpoch), TimeZone.getDefault().toZoneId());
 	}

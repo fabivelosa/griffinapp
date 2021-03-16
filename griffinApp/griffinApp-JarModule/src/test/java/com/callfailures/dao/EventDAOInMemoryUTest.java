@@ -115,7 +115,7 @@ class EventDAOInMemoryUTest {
 	@Test
 	void testFindCallFailuresCountByIMSIAndDateEmptyResult() {
 		dBCommandTransactionalExecutor.executeCommand(() -> {
-			events = eventGenerator.generateCallFailureInstance(localDateTime, eventId, failureId, ueId, mCc, mNc,
+			events = eventGenerator.generateCallFailureInstance(localDateTime, eventId, failureId, tac, mCc, mNc,
 					cellId, duration, causeCode, neVersion, IMSI , hier3Id, hier32Id, hier321Id, eventCauseDescription,
 					failureClassDescription, country, operator);
 		   failureClassDAO.create(events.getFailureClass());
@@ -128,7 +128,6 @@ class EventDAOInMemoryUTest {
 		
 
 	   final List<Events> events = eventDAO.findAllEvents();
-	   List<Events> events = eventDAO.findAllEvents();
 	   
 	   assertEquals(1, events.size());
 	   
@@ -139,7 +138,7 @@ class EventDAOInMemoryUTest {
 	@Test
 	void testSuccessFindCallFailuresCountByPhoneModelAndDate() {
 		dBCommandTransactionalExecutor.executeCommand(() -> {
-			events = eventGenerator.generateCallFailureInstance(localDateTime, eventId, failureId, ueId, mCc, mNc,
+			events = eventGenerator.generateCallFailureInstance(localDateTime, eventId, failureId, tac, mCc, mNc,
 					cellId, duration, causeCode, neVersion, IMSI , hier3Id, hier32Id, hier321Id, eventCauseDescription,
 					failureClassDescription, country, operator);
 		   failureClassDAO.create(events.getFailureClass());
@@ -164,7 +163,7 @@ class EventDAOInMemoryUTest {
 	@Test
 	void testFailureFindCallFailuresCountByPhoneModelAndDate() {
 		dBCommandTransactionalExecutor.executeCommand(() -> {
-			events = eventGenerator.generateCallFailureInstance(localDateTime, eventId, failureId, ueId, mCc, mNc,
+			events = eventGenerator.generateCallFailureInstance(localDateTime, eventId, failureId, tac, mCc, mNc,
 					cellId, duration, causeCode, neVersion, IMSI , hier3Id, hier32Id, hier321Id, eventCauseDescription,
 					failureClassDescription, country, operator);
 		   failureClassDAO.create(events.getFailureClass());
@@ -187,7 +186,7 @@ class EventDAOInMemoryUTest {
 	@Test
 	void testFailureFindCallFailuresCountByInvalidPhoneModel() {
 		dBCommandTransactionalExecutor.executeCommand(() -> {
-			events = eventGenerator.generateCallFailureInstance(localDateTime, eventId, failureId, ueId, mCc, mNc,
+			events = eventGenerator.generateCallFailureInstance(localDateTime, eventId, failureId, tac, mCc, mNc,
 					cellId, duration, causeCode, neVersion, IMSI , hier3Id, hier32Id, hier321Id, eventCauseDescription,
 					failureClassDescription, country, operator);
 		   failureClassDAO.create(events.getFailureClass());
