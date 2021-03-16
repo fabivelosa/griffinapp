@@ -1,7 +1,5 @@
 package com.callfailures.dao;
 
-
-
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -17,9 +15,8 @@ import com.callfailures.utils.test.DBCommandTransactionalExecutor;
 class UsersDAOInMemoryUTest {
 	private EntityManagerFactory emf;
 	private EntityManager entityManager;
-	private UsersDAO usersDAO = new UsersDAO();
+	private final UsersDAO usersDAO = new UsersDAO();
 	private DBCommandTransactionalExecutor dBCommandTransactionalExecutor;
-
 
 	@BeforeEach
 	public void initTestCase() {
@@ -30,14 +27,14 @@ class UsersDAOInMemoryUTest {
 
 	}
 
-	//one
+	// one
 	@Test
 	void testAddUser() {
 
 		System.out.println("I am running");
 
 		dBCommandTransactionalExecutor.executeCommand(() -> {
-			User user = new User();
+			final User user = new User();
 			user.setUserId("A100");
 			user.setUserName("wilmir");
 			user.setUserPassword("password");
@@ -48,14 +45,13 @@ class UsersDAOInMemoryUTest {
 
 	}
 
-	
-	//two
+	// two
 	@Test
 	void testGetUserByName() {
 		System.out.println("Me too!");
 
 		dBCommandTransactionalExecutor.executeCommand(() -> {
-			User user = new User();
+			final User user = new User();
 			user.setUserId("A100");
 			user.setUserName("wilmir");
 			user.setUserPassword("password");
@@ -67,14 +63,14 @@ class UsersDAOInMemoryUTest {
 		});
 	}
 
-	//three
+	// three
 	@Test
 	void testGetUserByUserId() {
 		System.out.println("Me three!");
 
 		dBCommandTransactionalExecutor.executeCommand(() -> {
 
-			User user = new User();
+			final User user = new User();
 			user.setUserId("A100");
 			user.setUserName("wilmir");
 			user.setUserPassword("password");
@@ -83,11 +79,11 @@ class UsersDAOInMemoryUTest {
 
 			usersDAO.getUserByUserId("A100");
 			return user;
-			
+
 		});
 	}
 
-	//four
+	// four
 	@Test
 	void testGetRegisteredUsers() {
 
@@ -95,24 +91,23 @@ class UsersDAOInMemoryUTest {
 
 		dBCommandTransactionalExecutor.executeCommand(() -> {
 
-			User user1 = new User();
+			final User user1 = new User();
 			user1.setUserId("A1");
 			user1.setUserName("example1");
 			user1.setUserPassword("access");
 			user1.setUserType("cust. service");
 			usersDAO.addUser(user1);
 
-			User user2 = new User();
+			final User user2 = new User();
 			user2.setUserId("A2");
 			user2.setUserName("example1");
 			user2.setUserPassword("access");
 			user2.setUserType("cust. service");
 			usersDAO.addUser(user2);
 
-			List<User> users = usersDAO.getRegisteredUsers();
-			//new ArrayList<User>();
+			final List<User> users = usersDAO.getRegisteredUsers();
+			// new ArrayList<User>();
 
- 
 			return users;
 		});
 	}
@@ -123,14 +118,12 @@ class UsersDAOInMemoryUTest {
 
 		dBCommandTransactionalExecutor.executeCommand(() -> {
 
-
-			User user = new User();
+			final User user = new User();
 			user.setUserId("A100");
 			user.setUserName("wilmir");
 			user.setUserPassword("password");
 			user.setUserType("network engineer");
 			usersDAO.addUser(user);
-
 			user.setUserName("My Boo");
 			usersDAO.updateUser(user);
 
@@ -138,5 +131,3 @@ class UsersDAOInMemoryUTest {
 		});
 	}
 }
-
-
