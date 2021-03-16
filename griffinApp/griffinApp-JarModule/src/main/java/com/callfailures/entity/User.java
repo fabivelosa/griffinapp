@@ -1,21 +1,17 @@
 package com.callfailures.entity;
 
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
-
-import org.hibernate.annotations.GenericGenerator;
 
 @Entity(name = "users")
 @XmlRootElement
 @Table(name = "users")
 public class User {
 
-	@Id
-	private int id;
 	
+	@Id
 	private String userId;
 	
 	private String userName;
@@ -26,7 +22,7 @@ public class User {
 		return userName;
 	}
 
-	public void setUserName(String userName) {
+	public void setUserName(final String userName) {
 		this.userName = userName;
 	}
 
@@ -34,7 +30,7 @@ public class User {
 		return userId;
 	}
 
-	public void setUserId(String userId) {
+	public void setUserId(final String userId) {
 		this.userId = userId;
 	}
 
@@ -42,7 +38,7 @@ public class User {
 		return userType;
 	}
 
-	public void setUserType(String userType) {
+	public void setUserType(final String userType) {
 		this.userType = userType;
 	}
 
@@ -50,7 +46,7 @@ public class User {
 		return userPassword;
 	}
 
-	public void setUserPassword(String userPassword) {
+	public void setUserPassword(final String userPassword) {
 		this.userPassword = userPassword;
 	}
 }
