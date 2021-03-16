@@ -40,7 +40,6 @@ public class EventsResourceIntTest {
 	private final static String nonExistentModel = "ABCDEF";
 	private final static String IMSI_SUMMARY_BY_DATE = "events/query?imsi=" + imsi + "&from=" + fromTime + "&to=" + toTime + "&summary=" + summary;
 	private final static String EVENTS_SUMMARY_BY_PHONE_MODEL = "events/query/ue?model=" + model + "&from=" + fromTime + "&to=" + toTime;
-	private final static String IMSI_SUMMARY_BY_DATE = "events/query?imsi=" + imsi + "&from=" + fromTime + "&to=" + toTime + "&summary=" + summary;
 	
 	@ArquillianResource
 	private URL url; 
