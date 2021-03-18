@@ -7,7 +7,7 @@ import com.callfailures.entity.User;
 @Local
 public interface UserService {
 
-	Boolean validateUser(final String username, String password);
+	Boolean validateUser(User user);
 
 	User getUserById(String userId);
 
