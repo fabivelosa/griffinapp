@@ -1,5 +1,7 @@
 package com.callfailures.dao;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -10,6 +12,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import com.callfailures.entity.User;
+import com.callfailures.entity.UserEquipment;
 import com.callfailures.utils.test.DBCommandTransactionalExecutor;
 
 class UsersDAOInMemoryUTest {
@@ -30,9 +33,6 @@ class UsersDAOInMemoryUTest {
 	// one
 	@Test
 	void testAddUser() {
-
-		System.out.println("I am running");
-
 		dBCommandTransactionalExecutor.executeCommand(() -> {
 			final User user = new User();
 			user.setUserId("A100");
@@ -48,8 +48,6 @@ class UsersDAOInMemoryUTest {
 	// two
 	@Test
 	void testGetUserByName() {
-		System.out.println("Me too!");
-
 		dBCommandTransactionalExecutor.executeCommand(() -> {
 			final User user = new User();
 			user.setUserId("A100");
@@ -57,7 +55,6 @@ class UsersDAOInMemoryUTest {
 			user.setUserPassword("password");
 			user.setUserType("network engineer");
 			usersDAO.addUser(user);
-
 			usersDAO.getUserByName("wilmir");
 			return user;
 		});
@@ -66,29 +63,22 @@ class UsersDAOInMemoryUTest {
 	// three
 	@Test
 	void testGetUserByUserId() {
-		System.out.println("Me three!");
-
 		dBCommandTransactionalExecutor.executeCommand(() -> {
-
 			final User user = new User();
 			user.setUserId("A100");
 			user.setUserName("wilmir");
 			user.setUserPassword("password");
 			user.setUserType("network engineer");
 			usersDAO.addUser(user);
-
 			usersDAO.getUserByUserId("A100");
-			return user;
 
+			return user;
 		});
 	}
 
 	// four
 	@Test
 	void testGetRegisteredUsers() {
-
-		System.out.println("Four is running");
-
 		dBCommandTransactionalExecutor.executeCommand(() -> {
 
 			final User user1 = new User();
@@ -106,15 +96,12 @@ class UsersDAOInMemoryUTest {
 			usersDAO.addUser(user2);
 
 			final List<User> users = usersDAO.getRegisteredUsers();
-			// new ArrayList<User>();
-
 			return users;
 		});
 	}
 
 	@Test
 	void testUpdateUser() {
-		System.out.println("Five is too");
 
 		dBCommandTransactionalExecutor.executeCommand(() -> {
 
@@ -126,8 +113,14 @@ class UsersDAOInMemoryUTest {
 			usersDAO.addUser(user);
 			user.setUserName("My Boo");
 			usersDAO.updateUser(user);
-
+			assertEquals("A100", user.getUserId());
+			assertEquals("My Boo", user.getUserName());
+			assertEquals("password", user.getUserPassword());
+			assertEquals("network engineer", user.getUserType());
 			return user;
+			
 		});
 	}
+	
+	
 }
