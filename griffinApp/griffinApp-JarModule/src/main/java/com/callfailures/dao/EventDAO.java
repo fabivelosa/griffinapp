@@ -132,7 +132,6 @@ public class EventDAO {
 		query.setParameter("startTime", startTime);
 		query.setParameter("endTime", endTime);
 		try {
-	
 			return query.getResultList();
 		} catch (NoResultException e) {
 			return null;
