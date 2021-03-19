@@ -25,7 +25,7 @@ import com.callfailures.services.impl.EventServiceImpl;
 
 @Path("/IMSIs")
 @Stateless
-public class EventsByDate {
+public class IMSIByDate {
 
 	//As a Support Engineer I want to see a list of all IMSIs with call failures during a given time period
 	//http://localhost:8080/callfailures/api/IMSIs/query?from=1578762900000&to=1578763800000
@@ -53,11 +53,9 @@ public class EventsByDate {
 		final LocalDateTime endTime = convertLongToLocalDateTime(toEpoch); 
 		try {
 			List<UniqueIMSI> imsis = eventService.findIMSISBetweenDates(startTime, endTime);
-			System.out.println(imsis.size());
 			return Response.status(200).entity(imsis).build();
 		} catch (InvalidDateException exception) {
-			return Response.status(404).entity("Issues: "+startTime+"\n"+endTime+"\n" +new ErrorMessages(ErrorMessage.INVALID_DATE.getMessage())).build();
-			//return Response.status(404).entity("Issue\n "+ startTime + "\n " +endTime).build();
+			return Response.status(404).entity(new ErrorMessages(ErrorMessage.INVALID_DATE.getMessage())).build();
 		}		
 	}
 	

@@ -1,6 +1,7 @@
 package com.callfailures.resource;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import java.io.File;
@@ -30,11 +31,14 @@ import com.google.gson.JsonObject;
 @RunWith(Arquillian.class)
 public class UniqueIMSIRetreival {
 
-	private final static String fromTime = "1546300800000"; // March 18, 2021 10:00AM
-	private final static String toTime = "1616065200000"; // March 18, 2021 11:00AM
-	private final static String ALL_USER_EQUIPMENT = "userEquipment/";
-	private final static String UNIQUE_IMSIS = "IMSIs/query?from=";
+	private final static String FROM_TIME = "1616061600000"; // March 18, 2021 10:00AM
+	private final static String TO_TIME = "1616065200000"; // March 18, 2021 11:00AM
+	private final static String FROM_TIME_INVALID = "1516061600000"; 
+	private final static String TO_TIME_INVALID = "1516065200000"; 
+	private final static String INVALID_TIME = "151600000";
+	private final static String UNIQUE_IMSIS_URL = "IMSIs/query?from=";
 	//IMSIs/query?from=1546300800000&to=1616065200000
+	
 	
 	@ArquillianResource
 	private URL url; 
@@ -65,20 +69,40 @@ public class UniqueIMSIRetreival {
 	
 	@Test
 	@RunAsClient
-	public void testGetIMSISummaryByDate() {	
-		final String urlForIMSI = UNIQUE_IMSIS + fromTime + "&to" + toTime;
-		System.out.println(urlForIMSI);
+	public void testGetUniqueIMSIByDate() {	
+		final String urlForIMSI = UNIQUE_IMSIS_URL + FROM_TIME + "&to=" + TO_TIME;
 		final Response responseGet = resourceClient.resourcePath(urlForIMSI).get();
 		assertEquals(200, responseGet.getStatus());
-
+		
 		final JsonArray uniqueImsis = JsonReader.readAsJsonArray(responseGet.readEntity(String.class));	
-		assertEquals(1,uniqueImsis.size());
-		JsonObject uniqueImsi = uniqueImsis.get(0).getAsJsonObject();
-		System.out.println(uniqueImsi);
-		//Assert Count = x
-		//assert not null
-		//Assert Date
-		//assertEquals(imsi, imsiSummaryJSON.get("imsi").getAsString());
+		assertEquals(2,uniqueImsis.size());
+		JsonObject uniqueIMSI = uniqueImsis.get(0).getAsJsonObject();
+		
+		
+		final String imsiOne = uniqueIMSI.get("imsi").getAsString();
+		final String imsiTwo = uniqueImsis.get(1).getAsJsonObject().get("imsi").getAsString();
+		assertFalse(imsiOne.equals(imsiTwo));
+	}
+	
+	@Test
+	@RunAsClient
+	public void testGetUniqueIMSI_No_Unique() {	
+		final String urlForIMSI = UNIQUE_IMSIS_URL + FROM_TIME_INVALID + "&to=" + TO_TIME_INVALID;
+		final Response responseGet = resourceClient.resourcePath(urlForIMSI).get();
+		assertEquals(200, responseGet.getStatus());
+		final JsonArray uniqueImsis = JsonReader.readAsJsonArray(responseGet.readEntity(String.class));	
+		assertEquals(0,uniqueImsis.size());
+	}
+	
+	@Test
+	@RunAsClient
+	public void testGetUniqueIMSI_Invalid_Date() {	
+		final String urlForIMSI = UNIQUE_IMSIS_URL + FROM_TIME_INVALID + "&to=" + INVALID_TIME;
+		final Response responseGet = resourceClient.resourcePath(urlForIMSI).get();
+		assertEquals(404, responseGet.getStatus());
+		
+		final JsonObject uniqueImsis = JsonReader.readAsJsonObject(responseGet.readEntity(String.class));
+		assertEquals(ErrorMessage.INVALID_DATE.getMessage(), uniqueImsis.get("errorMessage").getAsString());
 	}
 	
 	
