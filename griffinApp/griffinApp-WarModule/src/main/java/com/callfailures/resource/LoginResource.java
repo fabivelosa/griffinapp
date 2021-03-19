@@ -29,8 +29,9 @@ public class LoginResource {
 	@Produces({ MediaType.APPLICATION_JSON })
 	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	public Response auth(final User user) {
-		final User authUser = userService.getUserByName(user.getUserName());
+		User authUser = userService.getUserByName(user.getUserName());
 		if (authUser != null && authUser.getUserPassword().equals(user.getUserPassword())) {
+			Token.issueNewToken(authUser);
 			return Response.status(200).entity(authUser).build();
 		}
 		return Response.status(401).build();
