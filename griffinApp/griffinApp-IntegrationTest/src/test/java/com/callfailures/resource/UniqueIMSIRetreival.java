@@ -27,13 +27,13 @@ import com.callfailures.errors.ErrorMessage;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
-
+@RunWith(Arquillian.class)
 public class UniqueIMSIRetreival {
 
 	private final static String fromTime = "1546300800000"; // March 18, 2021 10:00AM
 	private final static String toTime = "1616065200000"; // March 18, 2021 11:00AM
 	private final static String ALL_USER_EQUIPMENT = "userEquipment/";
-	private final static String UNIQUE_IMSIS = "IMSIs/query?from=" + fromTime + "&to=" + toTime;
+	private final static String UNIQUE_IMSIS = "IMSIs/query?from=";
 	//IMSIs/query?from=1546300800000&to=1616065200000
 	
 	@ArquillianResource
@@ -66,8 +66,9 @@ public class UniqueIMSIRetreival {
 	@Test
 	@RunAsClient
 	public void testGetIMSISummaryByDate() {	
-		System.out.println(UNIQUE_IMSIS);
-		final Response responseGet = resourceClient.resourcePath(UNIQUE_IMSIS).get();
+		final String urlForIMSI = UNIQUE_IMSIS + fromTime + "&to" + toTime;
+		System.out.println(urlForIMSI);
+		final Response responseGet = resourceClient.resourcePath(urlForIMSI).get();
 		assertEquals(200, responseGet.getStatus());
 
 		final JsonArray uniqueImsis = JsonReader.readAsJsonArray(responseGet.readEntity(String.class));	
