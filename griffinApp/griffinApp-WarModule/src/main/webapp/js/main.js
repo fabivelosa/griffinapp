@@ -36,7 +36,7 @@ function authenticateUser() {
 			} else if (authInfo.userType == 'NETWORKMNG') {
 				renderNetwManagContent();
 			}
-			initLogout();
+			//initLogout();
 		},
 		error: function() {
 			console.log("Unsuccessful user authentication.");
@@ -47,8 +47,5 @@ function authenticateUser() {
 // subpage for the specific user category
 function renderSysAdminContent() {
 	console.log('Display SysAdmin content');
-	$.get('sysadmin.html', function(response) {
-		$('#main-container').html(response);
-		initSysAdmin();
-	});
+	  window.location.replace('sysadmin.html');
 }
