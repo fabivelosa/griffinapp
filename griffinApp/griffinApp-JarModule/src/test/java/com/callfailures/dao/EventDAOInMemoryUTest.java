@@ -17,6 +17,7 @@ import org.junit.jupiter.api.Test;
 import com.callfailures.entity.Events;
 import com.callfailures.entity.views.IMSIEvent;
 import com.callfailures.entity.views.IMSISummary;
+import com.callfailures.entity.views.PhoneModelSummary;
 import com.callfailures.entity.views.PhoneFailures;
 import com.callfailures.entity.views.UniqueIMSI;
 import com.callfailures.utils.test.DBCommandTransactionalExecutor;
@@ -38,6 +39,7 @@ class EventDAOInMemoryUTest {
 	private final static LocalDateTime endTime = LocalDateTime.of(2020,3,18,23,50);
 	private final static int eventId = 4098, failureId = 1, tac = 21060800, mCc = 100, mNc = 930, cellId = 4, duration = 1000,  causeCode = 0 ;
 	private final static String neVersion = "11B", hier3Id = "4809532081614990000", hier32Id = "8226896360947470000", hier321Id = "1150444940909480000", IMSI = "344930000000011" ;
+	private final static String phoneModel = "G410";
 	private final static String eventCauseDescription = "S1 SIG CONN SETUP-SUCCESS";
 	private final static String failureClassDescription = "HIGH PRIORITY ACCESS";
 	private final static String country = "Antigua and Barbuda";
@@ -80,7 +82,7 @@ class EventDAOInMemoryUTest {
 	   List<Events> events = eventDAO.findAllEvents();
 	   	   
 	   assertEquals(1, events.size());
-	   Events retrievedEvent = events.iterator().next();
+	   final Events retrievedEvent = events.iterator().next();
 	   
 	   assertEquals(IMSI, retrievedEvent.getImsi());
 	   assertEquals(eventTime, retrievedEvent.getDateTime());
@@ -101,7 +103,7 @@ class EventDAOInMemoryUTest {
 	   assertEquals(hier32Id, retrievedEvent.getHier32Id());
 	   assertEquals(hier321Id, retrievedEvent.getHier321Id());
 
-	   IMSISummary imsiSummary = eventDAO.findCallFailuresCountByIMSIAndDate(IMSI, startTime, endTime);
+	   final IMSISummary imsiSummary = eventDAO.findCallFailuresCountByIMSIAndDate(IMSI, startTime, endTime);
 	   assertEquals(IMSI, imsiSummary.getImsi());
 	   assertEquals(1, imsiSummary.getCallFailuresCount());
 	   assertEquals(1000, imsiSummary.getTotalDurationMs());
@@ -111,12 +113,44 @@ class EventDAOInMemoryUTest {
 	
 	@Test
 	void testFindCallFailuresCountByIMSIAndDateEmptyResult() {
-	   List<Events> events = eventDAO.findAllEvents();
+	   final List<Events> events = eventDAO.findAllEvents();
 	   
 	   assertEquals(1, events.size());
 	   
-	   IMSISummary imsiSummary = eventDAO.findCallFailuresCountByIMSIAndDate(IMSI, startTime.plusMinutes(6), endTime);
+	   final IMSISummary imsiSummary = eventDAO.findCallFailuresCountByIMSIAndDate(IMSI, startTime.plusMinutes(6), endTime);
 	   assertNull(imsiSummary);
+	}
+	
+	@Test
+	void testSuccessFindCallFailuresCountByPhoneModelAndDate() {
+	   final List<Events> events = eventDAO.findAllEvents();
+	   
+	   assertEquals(1, events.size());
+	   
+	   final PhoneModelSummary phoneModelSummary = eventDAO.findCallFailuresCountByPhoneModelAndDate(phoneModel, startTime, endTime);
+	   assertEquals(phoneModel, phoneModelSummary.getModel());
+	   assertEquals(1, phoneModelSummary.getCallFailuresCount());
+	   assertNotNull(phoneModelSummary);
+	}
+	
+	@Test
+	void testFailureFindCallFailuresCountByPhoneModelAndDate() {
+	   final List<Events> events = eventDAO.findAllEvents();
+	   
+	   assertEquals(1, events.size());
+	   
+	   final PhoneModelSummary phoneModelSummary = eventDAO.findCallFailuresCountByPhoneModelAndDate(phoneModel, startTime.plusMinutes(6), endTime);
+	   assertNull(phoneModelSummary);
+	}
+	
+	@Test
+	void testFailureFindCallFailuresCountByInvalidPhoneModel() {
+	   final List<Events> events = eventDAO.findAllEvents();
+	   
+	   assertEquals(1, events.size());
+	   
+	   final PhoneModelSummary phoneModelSummary = eventDAO.findCallFailuresCountByPhoneModelAndDate("abc", startTime, endTime);
+	   assertNull(phoneModelSummary);
 	}
 	
 	

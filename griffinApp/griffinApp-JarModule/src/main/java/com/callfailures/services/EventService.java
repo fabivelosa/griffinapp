@@ -9,6 +9,7 @@ import javax.ejb.Local;
 import com.callfailures.entity.Events;
 import com.callfailures.entity.views.IMSIEvent;
 import com.callfailures.entity.views.IMSISummary;
+import com.callfailures.entity.views.PhoneModelSummary;
 import com.callfailures.entity.views.PhoneFailures;
 import com.callfailures.entity.views.UniqueIMSI;
 import com.callfailures.exception.InvalidDateException;
@@ -20,7 +21,7 @@ public interface EventService {
 
 	
 	/**
-	 * Validates the IMSISUmmary request parameters and retrieves IMSISUmmary object from DAO layers
+	 * Validates the IMSISUmmary request parameters and retrieves IMSISUmmary object from DAO layer
 	 * @param imsi
 	 * @param startTime
 	 * @param endTime
@@ -32,6 +33,15 @@ public interface EventService {
 		throws InvalidIMSIException, InvalidDateException;
 	
 	/**
+	 * Validates the PhoneModelSUmmary request parameters and retrieves PhoneModelSUmmary object from DAO layer
+	 * @param ueType
+	 * @param startTime
+	 * @param endTime
+	 * @return the PhoneModel summary, returns <b> null </b> if the parameter is invalid or no record is found
+	 */
+	PhoneModelSummary findCallFailuresCountByPhoneModelAndDate(final String model, final LocalDateTime startTime, final LocalDateTime endTime);
+
+	/**
 	 * Returns the list of PhoneFailures
 	 * @param tac - the phone model's unique identifier
 	 * @return a collection of PhoneFailures which contains the unique cause code and event id combinations including their respective counts
@@ -42,7 +52,7 @@ public interface EventService {
 	/**
 	 * Validates all the fields of Base Data tab in the excel file 
 	 * @param workbookFile
-	 * @return and returns the validation result, ParsingResponse,  fof the Base Data tab
+	 * @return and returns the validation result, ParsingResponse,  for the Base Data tab
 	 */
 	ParsingResponse<Events> read(File workbookFile);
 

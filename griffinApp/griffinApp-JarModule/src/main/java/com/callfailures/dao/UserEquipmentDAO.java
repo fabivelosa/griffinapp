@@ -27,7 +27,7 @@ public class UserEquipmentDAO {
 	}
 
 	public List<UserEquipment> findAll(){
-		Query query = entityManager.createQuery(FIND_ALL_USER_EQUIPMENT, UserEquipment.class);
+		final Query query = entityManager.createQuery(FIND_ALL_USER_EQUIPMENT, UserEquipment.class);
 		return query.getResultList();
 	}
 	

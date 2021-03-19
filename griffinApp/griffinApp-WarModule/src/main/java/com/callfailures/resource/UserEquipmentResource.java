@@ -29,7 +29,7 @@ public class UserEquipmentResource {
 	@GET
 	@Produces({MediaType.APPLICATION_JSON})
 	public Response findAll() {
-		List<UserEquipment> allPhoneModels = userEquipmentService.findAll();
+		final List<UserEquipment> allPhoneModels = userEquipmentService.findAll();
 		return Response.status(200).entity(allPhoneModels).build();
 	}
 	
@@ -40,7 +40,7 @@ public class UserEquipmentResource {
 	public Response findUniqueEventCauseCountByPhoneModel(
 			@QueryParam("tac") final int tac
 			) {
-		List<PhoneFailures> phoneFailures =  eventService.findUniqueEventCauseCountByPhoneModel(tac);
+		final List<PhoneFailures> phoneFailures =  eventService.findUniqueEventCauseCountByPhoneModel(tac);
 		return Response.status(200).entity(phoneFailures).build();
 	}
 }

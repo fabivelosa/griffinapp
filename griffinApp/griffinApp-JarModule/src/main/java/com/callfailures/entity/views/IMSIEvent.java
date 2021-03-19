@@ -1,10 +1,5 @@
 package com.callfailures.entity.views;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-
-import org.hibernate.annotations.Immutable;
-
 import com.callfailures.entity.EventCause;
 
 
