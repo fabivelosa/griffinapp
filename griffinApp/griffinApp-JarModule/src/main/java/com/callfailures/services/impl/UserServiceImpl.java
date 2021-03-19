@@ -13,20 +13,15 @@ public class UserServiceImpl implements UserService {
 	@Inject
 	UsersDAO userDao;
 
-	@Override
-	public Boolean validateUser(final User user) {
-		final User userDb = userDao.getUserByName(user.getUserName());
-
-		if (userDb.getUserPassword().equals(user.getUserPassword())) {
-			System.out.println(user.getUserName());
-			return Boolean.TRUE;
-		}
-		return Boolean.FALSE;
-	}
-
+	
 	@Override
 	public User getUserById(final String UserId) {
 		return userDao.getUserByUserId(UserId);
+	}
+	
+	@Override
+	public User getUserByName(final String username) {
+		return userDao.getUserByName(username);
 	}
 
 	@Override

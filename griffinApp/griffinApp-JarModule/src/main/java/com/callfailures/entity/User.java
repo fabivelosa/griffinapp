@@ -13,10 +13,10 @@ public class User {
 	
 	@Id
 	private String userId;
-	
 	private String userName;
 	private String userType;
 	private String userPassword;
+	private String token;
 
 	public String getUserName() {
 		return userName;
@@ -48,5 +48,13 @@ public class User {
 
 	public void setUserPassword(final String userPassword) {
 		this.userPassword = userPassword;
+	}
+
+	public String getToken() {
+		return token;
+	}
+
+	public void setToken(String token) {
+		this.token = token;
 	}
 }
