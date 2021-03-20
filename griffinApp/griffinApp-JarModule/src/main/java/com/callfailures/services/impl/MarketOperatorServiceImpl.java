@@ -60,9 +60,9 @@ public class MarketOperatorServiceImpl implements MarketOperatorService {
 				Cell cell = cellIterator.next();
 				operator = new MarketOperator();
 				operatorPK = new MarketOperatorPK();
-				operatorPK.setCountryCode(new Double(cell.getNumericCellValue()).intValue());
+				operatorPK.setCountryCode((int) cell.getNumericCellValue());
 				cell = cellIterator.next();
-				operatorPK.setOperatorCode(new Double(cell.getNumericCellValue()).intValue());
+				operatorPK.setOperatorCode((int) cell.getNumericCellValue());
 				cell = cellIterator.next();
 
 				operator.setMarketOperatorId(operatorPK);
