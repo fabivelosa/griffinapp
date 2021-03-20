@@ -156,13 +156,16 @@ public class UploadFileService {
 		final File file = new File(filename);
 
 		try(final FileOutputStream fop = new FileOutputStream(file)){
+			
 			if (!file.exists()) {
-				file.createNewFile();
+				if(!file.createNewFile()) {
+					throw new Exception("File is not created");
+				};
 			}
 			
 			fop.write(content);
 			fop.flush();
-		}catch(IOException e) {
+		}catch(Exception e) {
 			e.printStackTrace();
 		}
 
