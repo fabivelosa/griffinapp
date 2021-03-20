@@ -57,7 +57,7 @@ Thumbs.db
 */prodigiesApp/resources/chromedriver/*
 
 # PMD
-*.pmd
+**/*.pmd
 
 **/arquillian.xml
 **/*.xlsx
