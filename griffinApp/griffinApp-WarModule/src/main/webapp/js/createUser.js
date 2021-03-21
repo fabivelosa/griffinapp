@@ -1,23 +1,40 @@
-var createUser = function(){
-  console.log('create user called"');
-	var formData = new FormData();
-	var formData = new FormData($('#createUserForm'));
-  var enter = $('.entry');
+var rootURL = "http://localhost:8080/callfailures/api/";
 
-  if(entry.length > 0){
-    console.log('Valid input');
-    
-  }
+
+$(function() {
+	initCreateUserForm();
+});
+
+function initCreateUserForm() {
+	$('#createUserForm').submit(function(event) {
+		event.preventDefault();
+		createNewUser();
+	});
 }
 
-$(document).ready(function(){
-	//Assign button to call function on click
-	//$('#uploadBtn').click(function(){submitdata();});
-
-	$('#createUserForm').create(function(user){
-
- 	console.log('Clicked create user');
- 	createUser();
+function createNewUser() {
+	console.log("Creating the user.");
+	var userID = $('#userId').val();
+	var userName = $('#userName').val();
+	var userType = $('#userType').val();
+	var passwd = $('#userPassword').val();
+	var confirm = $('#confirmPassword').val();
+	var formData = { userName: userName, userPassword: passwd };
+	$.ajax({
+		type: 'POST',
+		url: rootURL + "/create",
+		data: JSON.stringify(formData),
+		Accept: "application/json",
+		contentType: "application/json",
+		dataType: "json",
+		success: function(createInfo) {
+			console.log("Successful user creation." + createInfo.userType);
+			
+		},
+		error: function() {
+			console.log("Unsuccessful user creation.");
+			$("#creation-failure").addClass('show');
+		}
 	});
 
-});
+}
