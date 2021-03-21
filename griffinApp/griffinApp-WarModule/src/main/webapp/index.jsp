@@ -31,6 +31,9 @@
 			<li class="nav-item">
 				<a class="nav-link">Customer Rep</a>
 			</li>
+			<li class="nav-item">
+				<a class="nav-link" href="createUser.html">Create User</a>
+			</li>
 		</ul>
 		</div>
 	  </div>
