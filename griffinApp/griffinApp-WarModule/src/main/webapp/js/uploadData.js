@@ -38,13 +38,13 @@ var submitdata = function(){
 
 				if(invalidRowCount > 0){
 					$('#errorsList').append(`<li class = "tableWithError"> Table Name : ${EventsUploadResponseDTO.tabName} has ${invalidRowCount} Ignored Rows</li>`);
-					errorLog += 'Table: ' + EventsUploadResponseDTO.tabName + ', has ' +EventsUploadResponseDTO.tabName + 'Ignored Rows' ;
+					errorLog += 'Table: ' + EventsUploadResponseDTO.tabName + ', has ' +EventsUploadResponseDTO.tabName + 'Ignored Rows,' ;
 				}
 				
 				$.each(EventsUploadResponseDTO.erroneousData,function(index,InvalidRow){
 						$('#errorsList')
 						.append('<li class = "rowWithError"> Error at Row'+InvalidRow.rowNumber + ', Cause of Error: '+ InvalidRow.errorMessage  +'</li>');
-						errorLog += 'Row: ' + InvalidRow.rowNumber + ', Cause: ' +InvalidRow.errorMessage;
+						errorLog += 'Row: ' + InvalidRow.rowNumber + ', Cause: ' +InvalidRow.errorMessage + ',';
 						});
 			});		
 			$('#errorBtn').data('errorLogs', errorLog );	
@@ -69,6 +69,16 @@ var renderErrors = function(data){
 				});
 }
 
+var downloadErrorLog = function(){
+	var fileName = "Error Logs";
+	
+	var blob = new Blob([$('#errorBtn').data('errorLogs')],{
+		type: "text/plain;charset=utf-8"
+	});
+	
+	saveAs(blob,fileName);
+}
+
 $(document).ready(function(){
 	//Assign button to call function on click
 	//$('#uploadBtn').click(function(){submitdata();});
@@ -78,6 +88,8 @@ $(document).ready(function(){
  	console.log('Clicked upload');
  	submitdata(); 
 	});
+	
+	$('#errorBtn').click(function(){downloadErrorLog();});
 	
 	verifyLoaded();
 	
