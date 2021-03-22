@@ -12,6 +12,7 @@
 	<container qualifier="wildfly" default="true">
 		<configuration>
 		<!--  	<property name="jbossHome">${jboss.home}</property>-->
+		<!--  C:\Users\Peter\Documents\College work\AIT\MASE\Semester2\Web Technologies\Week1\L1 Server setup\Lab1-1\wildfly-8.2.1.Final-->
 			<property name="jbossHome">/Users/wilmirnicanor/Desktop/wildfly-8.2.1.Final</property>
 			<property name="serverConfig">standalone-full.xml</property>
 			<property name="javaVmArguments">-Xmx512m -Djava.util.logging.manager=org.jboss.logmanager.LogManager</property>

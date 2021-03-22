@@ -1,6 +1,13 @@
 package com.callfailures.parsingutils;
 
-public class InvalidRow {
+import java.io.Serializable;
+
+public class InvalidRow implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -6781738419227065827L;
+	
 	private final int rowNumber;
 	private final String errorMessage;
 	
