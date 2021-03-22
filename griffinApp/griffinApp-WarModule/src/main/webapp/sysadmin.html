@@ -23,7 +23,27 @@
 </head>
 
 <body id="page-top">
+<nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
+		<div class="container-fluid">
+			<a class="navbar-brand" href="#">Griffin</a>
+			<button class="navbar-toggler" type="button"
+				data-bs-toggle="collapse" data-bs-target="#navbarsExampleDefault"
+				aria-controls="navbarsExampleDefault" aria-expanded="false"
+				aria-label="Toggle navigation">
+				<span class="navbar-toggler-icon"></span>
+			</button>
 
+			<div class="collapse navbar-collapse" id="navbarsExampleDefault">
+				<ul class="navbar-nav me-auto mb-2 mb-md-0">
+					<li class="nav-item"><a class="nav-link" aria-current="page" href="index.jsp">Home</a></li>
+					<li class="nav-item"><a class="nav-link" aria-current="page" href="upload.html">Upload</a></li>
+					<li class="nav-item"><a class="nav-link active" href="createUser.html">Create User</a></li>
+					<li class="nav-item"><a class="nav-link" aria-current="page" href="login.html">Login</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</nav>
     <!-- Page Wrapper -->
     <div id="wrapper">
 
@@ -214,39 +234,27 @@
                                     <h6 class="m-0 font-weight-bold text-primary">Create User</h6>
                                 </div>
                                 <div class="card-body">
+                                	<div class="input-group mb-3">
+                                		<span class="input-group-text" id="basic-addon1">User ID</span>
+                                        <input type="text" class="form-control" placeholder="User ID" aria-label="User ID" aria-describedby="basic-addon1">                            
+                                	</div>
+									<div class="input-group mb-3">
+                                		<span class="input-group-text" id="basic-addon1">User Name</span>
+                                        <input type="text" class="form-control" placeholder="User name" aria-label="User name" aria-describedby="basic-addon1">                            
+                                	</div>
+									<div class="input-group mb-3">
+                                		<span class="input-group-text" id="basic-addon1">User Type</span>
+                                        <input type="text" class="form-control" placeholder="User type" aria-label="User type" aria-describedby="basic-addon1">                            
+                                	</div>
                                     <div class="input-group mb-3">
-                                        <span class="input-group-text" id="basic-addon1">@</span>
-                                        <input type="text" class="form-control" placeholder="Username" aria-label="Username" aria-describedby="basic-addon1">
+                                        <span class="input-group-text" id="basic-addon1">Password</span>
+                                        <input type="password" id="pass" class="form-control" placeholder="Password" aria-label="Password" aria-describedby="basic-addon1">
                                       </div>
-                                      
                                       <div class="input-group mb-3">
-                                        <input type="text" class="form-control" placeholder="Recipient's username" aria-label="Recipient's username" aria-describedby="basic-addon2">
-                                        <span class="input-group-text" id="basic-addon2">@example.com</span>
+                                        <span class="input-group-text" id="basic-addon1">Confirm Password</span>
+                                        <input type="password" id="passConfirm" class="form-control" placeholder="Password" aria-label="Password" aria-describedby="basic-addon1">
                                       </div>
-                                      
-                                      <label for="basic-url" class="form-label">Your vanity URL</label>
-                                      <div class="input-group mb-3">
-                                        <span class="input-group-text" id="basic-addon3">https://example.com/users/</span>
-                                        <input type="text" class="form-control" id="basic-url" aria-describedby="basic-addon3">
-                                      </div>
-                                      
-                                      <div class="input-group mb-3">
-                                        <span class="input-group-text">$</span>
-                                        <input type="text" class="form-control" aria-label="Amount (to the nearest dollar)">
-                                        <span class="input-group-text">.00</span>
-                                      </div>
-                                      
-                                      <div class="input-group mb-3">
-                                        <input type="text" class="form-control" placeholder="Username" aria-label="Username">
-                                        <span class="input-group-text">@</span>
-                                        <input type="text" class="form-control" placeholder="Server" aria-label="Server">
-                                      </div>
-                                      
-                                      <div class="input-group">
-                                        <span class="input-group-text">With textarea</span>
-                                        <textarea class="form-control" aria-label="With textarea"></textarea>
-                                      </div>
-                                      <br>
+                                  
                                       <div class="input-group">
                                         <button type="button" class="btn btn-primary">Create User</button>
                                       </div>
