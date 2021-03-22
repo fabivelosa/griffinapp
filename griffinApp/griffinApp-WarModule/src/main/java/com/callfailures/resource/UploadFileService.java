@@ -7,13 +7,19 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.container.AsyncResponse;
+import javax.ws.rs.container.Suspended;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
@@ -22,11 +28,13 @@ import org.apache.commons.io.IOUtils;
 import org.jboss.resteasy.plugins.providers.multipart.InputPart;
 import org.jboss.resteasy.plugins.providers.multipart.MultipartFormDataInput;
 
+import com.callfailures.dao.UploadDAO;
 import com.callfailures.dto.EventsUploadResponseDTO;
 import com.callfailures.entity.EventCause;
 import com.callfailures.entity.Events;
 import com.callfailures.entity.FailureClass;
 import com.callfailures.entity.MarketOperator;
+import com.callfailures.entity.Upload;
 import com.callfailures.entity.UserEquipment;
 import com.callfailures.parsingutils.ParsingResponse;
 import com.callfailures.services.EventCauseService;
@@ -53,29 +61,33 @@ public class UploadFileService {
 
 	@EJB
 	private MarketOperatorService marketOperatorService;
+	
+	@EJB
+	private UploadDAO uploadDAO;
 
 	private final String UPLOADED_FILE_PATH = System.getProperty("user.dir") + "/fileUploads/";
+
+	protected File sheet;
 
 	@POST
 	@Path("/upload")
 	@Produces({ MediaType.APPLICATION_JSON })
 	@Consumes("multipart/form-data")
+	@Context
 	public Response uploadFile(final MultipartFormDataInput input) {
-
-		final long startNano = System.nanoTime();
-
-		String fileName = "";
-
+		
+		UUID uploadUUID = UUID.randomUUID();
+		Upload upload = new Upload();
+		upload.setUploadID(uploadUUID);
+		upload.setUploadStatus("started");
+		uploadDAO.create(upload);
+		Upload currentUpload = uploadDAO.getUploadByRef(uploadUUID);
 		final Map<String, List<InputPart>> uploadForm = input.getFormDataMap();
 		final List<InputPart> inputParts = uploadForm.get("uploadedFile");
-		final List<EventsUploadResponseDTO> uploadsOverallResult = new ArrayList<>();
-		File sheet = null;
-
+		
 		for (final InputPart inputPart : inputParts) {
-
 			final MultivaluedMap<String, String> header = inputPart.getHeaders();
-			fileName = getFileName(header);
-			
+			String fileName = getFileName(header);
 			try(final InputStream inputStream = inputPart.getBody(InputStream.class, null);){
 				
 				final byte[] bytes = IOUtils.toByteArray(inputStream);
@@ -84,36 +96,76 @@ public class UploadFileService {
 				fileName = UPLOADED_FILE_PATH + fileName;
 				System.out.println(fileName);
 				sheet = writeFile(bytes, fileName);
-
+			}
+			catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+			
+		//File sheet = null;
+		try {
+			Thread.sleep(3 * 1000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		new Thread() {
+			public void run() {
+				final List<EventsUploadResponseDTO> uploadsOverallResult = new ArrayList<>();
+				final long startNano = System.nanoTime();
+				
+	
 				System.out.println("Done upload");
 				System.out.println("name " + sheet.getName());
+				
 
+				
 				final ParsingResponse<EventCause> eventCauses = causeService.read(sheet);
+				currentUpload.setUploadStatus("eventCause inprogress");
+				uploadDAO.update(currentUpload);
+				currentUpload.setUploadStatus("failureClass inprogress");
+				uploadDAO.update(currentUpload);
 				final ParsingResponse<FailureClass> failureClasses = failClassService.read(sheet);
+				currentUpload.setUploadStatus("userEquipment inprogress");
+				uploadDAO.update(currentUpload);
 				final ParsingResponse<UserEquipment> userEquipment = userEquipmentService.read(sheet);
+				currentUpload.setUploadStatus("marketOperator inprogress");
+				uploadDAO.update(currentUpload);
 				final ParsingResponse<MarketOperator> marketOperator = marketOperatorService.read(sheet);
+				currentUpload.setUploadStatus("event inprogress");
+				uploadDAO.update(currentUpload);
 				final ParsingResponse<Events> events = eventService.read(sheet);
 
 				generateResponseEntity(uploadsOverallResult, eventCauses, failureClasses, userEquipment, marketOperator,
 						events);
 
 				System.out.println("Done read");
-
-			} catch (IOException e) {
-				e.printStackTrace();
+				currentUpload.setUploadStatus("completed");
+				uploadDAO.update(currentUpload);
+		
+				final long endNano = System.nanoTime();
+		
+				final long duration = (endNano - startNano) / 1000000000;
+		
+				System.out.println("It took " + duration + "seconds to validate and store the data");
+		
+				//Response response = Response.status(200).entity(uploadsOverallResult).build();
+				//((AsyncResponse) response).resume(response);
 			}
-
-		}
-
-		final long endNano = System.nanoTime();
-
-		final long duration = (endNano - startNano) / 1000000000;
-
-		System.out.println("It took " + duration + "seconds to validate and store the data");
-
-		return Response.status(200).entity(uploadsOverallResult).build();
+		}.start();
+		return Response.status(200).entity(currentUpload).build();
 	}
-
+	
+    @GET
+   	@Produces({ MediaType.APPLICATION_JSON })
+    @Path("upload/{id}")
+    public Response findUploadById(@PathParam("id") String uuid) {
+    	UUID uploadRef = UUID.fromString(uuid);
+    	Upload requestedUpload = uploadDAO.getUploadByRef(uploadRef);
+    	return Response.status(200).entity(requestedUpload).build();
+    	
+    }
+	
 	private void generateResponseEntity(final List<EventsUploadResponseDTO> uploadsOverallResult,
 			final ParsingResponse<EventCause> eventCauses, final ParsingResponse<FailureClass> failureClasses,
 			final ParsingResponse<UserEquipment> userEquipment, final ParsingResponse<MarketOperator> marketOperator,
