@@ -154,7 +154,7 @@ public class EventServiceImpl implements EventService {
 	}
 
 	@Override
-	public List<UniqueIMSI> findIMSISBetweenDates(LocalDateTime startTime, LocalDateTime endTime) {
+	public List<UniqueIMSI> findIMSISBetweenDates(final LocalDateTime startTime,final LocalDateTime endTime) {
 		if (startTime.isAfter(endTime)) {
 			throw new InvalidDateException();
 		}
