@@ -6,14 +6,14 @@ Feature: As a Network Management Engineer
 
   Scenario Outline: Retrieval of Unique EventID, Cause Code and Count by Phone Model
     Given The network engineer is on the  main page
-    When The network engineer selected the Phone Model "<tac>" from the dropdown
-    And The network engineer clicked on the Search button
-		Then The correct "<EventID", "<CauseCode>" and "<Count>" are displayed in the table
+    When The network engineer selected the Phone Model "<phoneModel>" from the dropdown
+    And The network engineer clicked on the User Equipment Failures Search button
+		Then The correct "<Count>" is displayed in the table
 
     Examples: 
-      | tac				| EventID  | CauseCode | Count     |
-      | 21060800  |   4098   |     0 		 | 60        | 
-
+      | phoneModel				| Count 													 |	
+      | VEA3  				    |  Showing 1 to 10 of 19 entries   | 
+ 
       
       
        
