@@ -27,7 +27,7 @@ public class LoginResource {
 	@Produces({ MediaType.APPLICATION_JSON })
 	public Response auth(@FormParam("username") final String username, @FormParam("password") final String password) {
 		final Boolean user = userService.validateUser(username, password);
-		if (user == Boolean.TRUE) {
+		if (user) {
 			return Response.status(200).entity(user).build();
 		}
 

@@ -28,15 +28,13 @@ public class UsersDAO {
 	}
 
 	public User getUserByName(final String name) {
-
-		User user = null;
+		User user;
 		final Query query = entityManager.createQuery("SELECT u FROM users u WHERE u.userName=:userName");
 		query.setParameter("userName", name);
 		try {
 			user = (User) query.getSingleResult();
-
 		} catch (Exception e) {
-			e.getMessage();
+			user = null;
 		}
 		return user;
 	}
