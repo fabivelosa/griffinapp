@@ -38,13 +38,13 @@ var submitdata = function(){
 
 				if(invalidRowCount > 0){
 					$('#errorsList').append(`<li class = "tableWithError"> Table Name : ${EventsUploadResponseDTO.tabName} has ${invalidRowCount} Ignored Rows</li>`);
-					errorLog += 'Table: ' + EventsUploadResponseDTO.tabName + ', has ' +EventsUploadResponseDTO.tabName + 'Ignored Rows,' ;
+					errorLog += '\nTable: ' + EventsUploadResponseDTO.tabName + ', has ' +EventsUploadResponseDTO.tabName + 'Ignored Rows,\n' ;
 				}
 				
 				$.each(EventsUploadResponseDTO.erroneousData,function(index,InvalidRow){
 						$('#errorsList')
 						.append('<li class = "rowWithError"> Error at Row'+InvalidRow.rowNumber + ', Cause of Error: '+ InvalidRow.errorMessage  +'</li>');
-						errorLog += 'Row: ' + InvalidRow.rowNumber + ', Cause: ' +InvalidRow.errorMessage + ',';
+						errorLog += 'Row: ' + InvalidRow.rowNumber + ', Cause: ' +InvalidRow.errorMessage + ',\n';
 						});
 			});		
 			$('#errorBtn').data('errorLogs', errorLog );	
