@@ -25,6 +25,10 @@ import com.callfailures.exception.InvalidDateException;
 import com.callfailures.exception.InvalidIMSIException;
 import com.callfailures.exception.InvalidPhoneModelException;
 import com.callfailures.entity.views.PhoneFailures;
+import com.callfailures.entity.views.UniqueIMSI;
+import com.callfailures.exception.FieldNotValidException;
+import com.callfailures.exception.InvalidDateException;
+import com.callfailures.exception.InvalidIMSIException;
 import com.callfailures.parsingutils.InvalidRow;
 import com.callfailures.parsingutils.ParsingResponse;
 import com.callfailures.services.EventService;
@@ -150,9 +154,12 @@ public class EventServiceImpl implements EventService {
 	}
 
 	@Override
-	public List<String> findIMSISBetweenDates(final LocalDateTime startTime, final LocalDateTime endTime) {
-		// TODO Auto-generated method stub
-		return null;
+	public List<UniqueIMSI> findIMSISBetweenDates(final LocalDateTime startTime,final LocalDateTime endTime) {
+		if (startTime.isAfter(endTime)) {
+			throw new InvalidDateException();
+		}
+		
+		return eventDAO.findIMSISBetweenDates(startTime, endTime);
 	}
 
 }
