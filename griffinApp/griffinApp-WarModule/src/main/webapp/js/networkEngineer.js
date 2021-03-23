@@ -1,5 +1,9 @@
 const rootURL = "http://localhost:8080/callfailures/api";
+const authToken = 'Bearer ' + sessionStorage.getItem("auth-token");
 
+const setAuthHeader = function(xhr){
+    xhr.setRequestHeader('Authorization', authToken);
+}
 
 const displayPhoneEquipmentFailures = function(phoneFailures){
     $("#phoneFailuresTable").show();
@@ -17,19 +21,18 @@ const displayPhoneEquipmentFailures = function(phoneFailures){
     table.draw();
 }
 
-
 const queryPhoneEquipmentFailures = function(tac){
     $.ajax({
         type:'GET',
         dataType:'json',
         url:`${rootURL}/userEquipment/query?tac=${tac}`,
+        beforeSend: setAuthHeader,
         success: displayPhoneEquipmentFailures,
         error: function(jqXHR, textStatus, errorThrown){
             console.log(jqXHR);
         }
     });
 }
-
 
 const addUserEquipmentOptions = function(userEquipments){
     $("#selectUserEquipmentDropdown").empty();    
@@ -45,6 +48,7 @@ const setUserQuipmentDropdownOptions = function(){
         type:'GET',
         dataType:'json',
         url:`${rootURL}/userEquipment`,
+        beforeSend: setAuthHeader,
         success: addUserEquipmentOptions,
         error: function(){
             alert("Failed to fetch user equipment options");
@@ -73,13 +77,13 @@ const queryIMSISUmmary = function(imsi, from, to){
         type: "GET",
         dataType: "json",
         url: `${rootURL}/events/query?imsi=${imsi}&from=${from}&to=${to}&summary=true`,
+        beforeSend: setAuthHeader,
         success: displayIMSISummary,
         error: displayErrorOnIMSISummary
     })
 }
 
 $(document).ready(function(){		
-    
     setUserQuipmentDropdownOptions();
 
     $('#imsiSummaryForm').submit(function(event){
@@ -95,6 +99,4 @@ $(document).ready(function(){
         const tac = $("#selectUserEquipmentDropdown").val();
         queryPhoneEquipmentFailures(tac);
     });
-
-
 });
