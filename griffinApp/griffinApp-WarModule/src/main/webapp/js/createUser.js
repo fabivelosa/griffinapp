@@ -19,7 +19,7 @@ function createNewUser() {
 	var userType = $('#userType').val();
 	var passwd = $('#userPassword').val();
 	var confirm = $('#confirmPassword').val();
-	var formData = { userName: userName, userPassword: passwd };
+	var formData = { userID: id, userName: name, userType: type, userPassword: passwd };
 	$.ajax({
 		type: 'POST',
 		url: rootURL + "/create",
