@@ -21,6 +21,8 @@ import com.callfailures.entity.views.UniqueIMSI;
 @LocalBean
 public class EventDAO {
 	private static final String FIND_ALL_EVENTS = "SELECT e FROM event e",
+			FIND_ALL_IMSI="SELECT DISTINCT NEW com.callfailures.entity.views.UniqueIMSI(e.imsi) " 
+					+ "FROM event e ",
 			FIND_IMSI_BY_DATE="SELECT DISTINCT NEW com.callfailures.entity.views.UniqueIMSI(e.imsi) " 
 					+ "FROM event e "
 					+ "WHERE (e.dateTime BETWEEN :startTime AND :endTime)",
@@ -147,6 +149,21 @@ public class EventDAO {
 		final Query query = entityManager.createQuery(FIND_IMSI_BY_DATE,UniqueIMSI.class);
 		query.setParameter("startTime", startTime);
 		query.setParameter("endTime", endTime);
+		try {
+			return query.getResultList();
+		} catch (NoResultException e) {
+			return null;
+		}
+		
+	}
+	
+	/**
+	 * Query Database for all IMSI with failures
+	 * @return list of IMSI for given time period
+	 */
+	@SuppressWarnings("unchecked")
+	public List<UniqueIMSI> findIMSIS(){
+		final Query query = entityManager.createQuery(FIND_ALL_IMSI,UniqueIMSI.class);
 		try {
 			return query.getResultList();
 		} catch (NoResultException e) {
