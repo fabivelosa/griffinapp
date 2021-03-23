@@ -8,7 +8,7 @@ public class UniqueIMSI {
 		
 	}
 	
-	public UniqueIMSI(String imsi) {
+	public UniqueIMSI(final String imsi) {
 		this.imsi = imsi;
 	}
 	
