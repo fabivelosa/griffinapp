@@ -69,7 +69,7 @@
             <li class="nav-item">
                 <a class="nav-link" href="#">
                     <i class="fas fa-fw fa-table"></i>
-                    <span>Network Engineer</span></a>
+                    <span>Customer Representative</span></a>
             </li>
 
             <!-- Divider -->
@@ -130,7 +130,7 @@
                         <li class="nav-item dropdown no-arrow">
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">Customer Service Rep</span>
+                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">Network Engineer</span>
                                 <img class="img-profile rounded-circle"
                                     src="img/undraw_profile.svg">
                             </a>
@@ -195,7 +195,6 @@
                                                   <th scope="col">From</th>
                                                   <th scope="col">To</th>
                                                   <th scope="col">Call Failures Count</th>
-                                                  
                                                 </tr>
                                               </thead>
                                               <tbody>
@@ -204,7 +203,6 @@
                                                   <td id="imsiSummaryFromDate">NaN</td>
                                                   <td id="imsiSummaryToDate">NaN</td>
                                                   <td id="imsiSummaryCallFailureCount">NaN</td>
-                                                  
                                                 </tr>
                                               </tbody>
                                         </table>
@@ -218,10 +216,10 @@
                         <div class="col-lg-6 mb-4">
                             <div class="card mt-4">
                                 <div class="card-header">
-                                    Cause Code and Event ID
+                                    User Equipment Failures
                                 </div>
-                                <div class="card-body" id="causeCodeAndEventId">
-                                    <form id = "causeCodeAndEventIdForm">
+                                <div class="card-body" id="userEquipmentFailures">
+                                    <form id = "userEquipmentFailuresForm">
                                         <div class = "row">
                                             <div class = "col">
                                                 <label for="selectUserEquipmentDropdown" class="form-label fw-bold small">IMSI</label>
@@ -235,13 +233,12 @@
                                         </div>
                                     </form>
                                     <div class = "row mt-4 p-4" id = "userEquipmentFailuresFormResult">
-                                        <table id="eventCauseTable" class="table table-hover table-bordered">
+                                        <table id="phoneFailuresTable" class="table table-hover table-bordered">
                                             <thead>
                                                 <tr>
-                                                  <th>User Equipment</th>
+                                                  <th>IMSI</th>
                                                   <th>Event ID</th>
                                                   <th>Cause Code</th>
-                                             
                                                 </tr>
                                               </thead>
                                               <tbody>
@@ -327,7 +324,7 @@
     <script src="https://cdn.datatables.net/1.10.22/js/dataTables.bootstrap4.min.js" crossorigin="anonymous"></script>
 
     <!-- Network Engineer Speciifc JS-->
-    <script src="js/networkEngineer.js"></script>
+    <script src="js/customerSupport.js"></script>
 
 </body>
 

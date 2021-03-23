@@ -1,29 +1,27 @@
 const rootURL = "http://localhost:8080/callfailures/api";
 
 
-const displayPhoneEquipmentFailures = function(phoneFailures){
+const displayIMSIByFailures = function(IMSIfailures){
     $("#phoneFailuresTable").show();
     const table = $('#phoneFailuresTable').DataTable();
     table.clear();
-    $(phoneFailures).each(function(index, phoneFailure){
-        console.log(phoneFailure);
-        table.row.add([phoneFailure.userEquipment.model, 
-            phoneFailure.eventCause.eventCauseId.eventCauseId, 
-            phoneFailure.eventCause.eventCauseId.causeCode,
-            phoneFailure.eventCause.description,
-            phoneFailure.count
+    $(IMSIfailures).each(function(index, IMSIfailure){
+        console.log(IMSIfailure);
+        table.row.add([IMSIfailure.imsi, 
+            IMSIfailure.eventCause.eventCauseId.eventCauseId, 
+            IMSIfailure.eventCause.eventCauseId.causeCode
         ]);
     });
     table.draw();
 }
 
 
-const queryPhoneEquipmentFailures = function(tac){
+const queryFailuresByIMSI = function(imsi){
     $.ajax({
         type:'GET',
         dataType:'json',
-        url:`${rootURL}/userEquipment/query?tac=${tac}`,
-        success: displayPhoneEquipmentFailures,
+        url:`${rootURL}/failures/${imsi}`,
+        success: displayIMSIByFailures,
         error: function(jqXHR, textStatus, errorThrown){
             console.log(jqXHR);
         }
@@ -31,11 +29,11 @@ const queryPhoneEquipmentFailures = function(tac){
 }
 
 
-const addUserEquipmentOptions = function(userEquipments){
+const addUserEquipmentOptions = function(IMSIs){
     $("#selectUserEquipmentDropdown").empty();    
     let options = "";
-    $(userEquipments).each(function(index, userEquipment){
-        options += `<option value=\"${userEquipment.tac}\">${userEquipment.model}</option>`
+    $(IMSIs).each(function(index, IMSI){
+        options += `<option value=\"${IMSI.imsi}\">${IMSI.imsi}</option>`
     });
     $("#selectUserEquipmentDropdown").append(options);
 }
@@ -44,7 +42,7 @@ const setUserQuipmentDropdownOptions = function(){
     $.ajax({
         type:'GET',
         dataType:'json',
-        url:`${rootURL}/userEquipment`,
+        url:`${rootURL}/IMSIs/query/all`,
         success: addUserEquipmentOptions,
         error: function(){
             alert("Failed to fetch user equipment options");
@@ -92,8 +90,8 @@ $(document).ready(function(){
  
     $("#userEquipmentFailuresForm").submit(function(event){
         event.preventDefault();
-        const tac = $("#selectUserEquipmentDropdown").val();
-        queryPhoneEquipmentFailures(tac);
+        const imsi = $("#selectUserEquipmentDropdown").val();
+        queryFailuresByIMSI(imsi);
     });
 
 
