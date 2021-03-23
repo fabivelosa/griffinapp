@@ -12,6 +12,21 @@ function initLoginForm() {
 	});
 }
 
+function initLogout() {
+	$("#btn-logout").show();
+
+	$('#btn-logout').click(function() {
+		console.log('btn-logout');
+		var authToken = sessionStorage.getItem("auth-token");
+		$.ajax({
+			type : 'GET',
+			url : 'logout/' + authToken,
+			success : renderLoginContent
+		});
+	});
+}
+
+
 function authenticateUser() {
 	console.log("Authenticating the user.");
 	var userName = $('#InputUsername').val();
@@ -26,6 +41,8 @@ function authenticateUser() {
 		dataType: "json",
 		success: function(authInfo) {
 			console.log("Successful user authentication." + authInfo.userType);
+			sessionStorage.setItem("auth-token", authInfo.token);
+			sessionStorage.setItem("auth-id", authInfo.userId);
 			// render the subpage for the specific user category
 			if (authInfo.userType == 'SYSADMIN') {
 				renderSysAdminContent();
