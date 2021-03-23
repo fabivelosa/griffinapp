@@ -60,9 +60,9 @@ public class EventCauseServiceImpl implements EventCauseService {
 				Cell cell = cellIterator.next();
 				eventCause = new EventCause();
 				eventCausePK = new EventCausePK();
-				eventCausePK.setCauseCode(new Double(cell.getNumericCellValue()).intValue());
+				eventCausePK.setCauseCode((int) cell.getNumericCellValue());
 				cell = cellIterator.next();
-				eventCausePK.setEventCauseId(new Double(cell.getNumericCellValue()).intValue());
+				eventCausePK.setEventCauseId((int) cell.getNumericCellValue());
 				cell = cellIterator.next();
 				eventCause.setEventCauseId(eventCausePK);
 				eventCause.setDescription(cell.getStringCellValue());

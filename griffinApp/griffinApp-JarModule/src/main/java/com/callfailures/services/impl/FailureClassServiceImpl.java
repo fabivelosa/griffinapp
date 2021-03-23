@@ -61,7 +61,7 @@ public class FailureClassServiceImpl implements FailureClassService {
 				Cell cell = cellIterator.next();
 
 				try {
-					failureClass.setFailureClass(new Double(cell.getNumericCellValue()).intValue());
+					failureClass.setFailureClass((int) cell.getNumericCellValue());
 					cell = cellIterator.next();
 					failureClass.setFailureDesc(cell.getStringCellValue());
 

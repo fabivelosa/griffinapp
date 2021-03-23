@@ -73,14 +73,11 @@ public class UploadFileService {
 
 		for (final InputPart inputPart : inputParts) {
 
-			try {
-
-				final MultivaluedMap<String, String> header = inputPart.getHeaders();
-				fileName = getFileName(header);
-
-				// convert the uploaded file to inputstream
-				final InputStream inputStream = inputPart.getBody(InputStream.class, null);
-
+			final MultivaluedMap<String, String> header = inputPart.getHeaders();
+			fileName = getFileName(header);
+			
+			try(final InputStream inputStream = inputPart.getBody(InputStream.class, null);){
+				
 				final byte[] bytes = IOUtils.toByteArray(inputStream);
 
 				// constructs upload file path
@@ -154,19 +151,23 @@ public class UploadFileService {
 		return "unknown";
 	}
 
-	private File writeFile(final byte[] content, final String filename) throws IOException {
+	private File writeFile(final byte[] content, final String filename){
 
 		final File file = new File(filename);
 
-		if (!file.exists()) {
-			file.createNewFile();
+		try(final FileOutputStream fop = new FileOutputStream(file)){
+			
+			if (!file.exists()) {
+				if(!file.createNewFile()) {
+					throw new Exception("File is not created");
+				};
+			}
+			
+			fop.write(content);
+			fop.flush();
+		}catch(Exception e) {
+			e.printStackTrace();
 		}
-
-		final FileOutputStream fop = new FileOutputStream(file);
-
-		fop.write(content);
-		fop.flush();
-		fop.close();
 
 		return file;
 
