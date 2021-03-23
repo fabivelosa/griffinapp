@@ -42,6 +42,8 @@ public class EventDAO {
 					+ "FROM event e "
 					+ "WHERE e.ueType.tac = :tac "
 					+ "GROUP BY e.ueType, e.eventCause";
+	
+
 
 	
 	@PersistenceContext

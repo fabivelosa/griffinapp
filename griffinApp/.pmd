@@ -1,8 +1,263 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <pmd>
-    <workingSet>Aggregate for window 1613842929861</workingSet>
-    <useProjectRuleSet>true</useProjectRuleSet>
-    <ruleSetFile>/Users/fabi/Desktop/MASE/Agile Design &amp; Testing/SonarCube/Ericsson JavaSE Ruleset/CDS_pmd_ruleset_jse-1.0.xml</ruleSetFile>
+    <useProjectRuleSet>false</useProjectRuleSet>
+    <ruleSetFile>.ruleset</ruleSetFile>
+    <excludePatterns/>
+    <includePatterns/>
+    <rules>
+        <rule>
+            <name>AvoidDollarSigns</name>
+            <ruleset>Code Style</ruleset>
+        </rule>
+        <rule>
+            <name>NPathComplexity</name>
+            <ruleset>Design</ruleset>
+        </rule>
+        <rule>
+            <name>ExcessiveMethodLength</name>
+            <ruleset>Design</ruleset>
+        </rule>
+        <rule>
+            <name>ExceptionAsFlowControl</name>
+            <ruleset>Design</ruleset>
+        </rule>
+        <rule>
+            <name>SuspiciousConstantFieldName</name>
+            <ruleset>Code Style</ruleset>
+        </rule>
+        <rule>
+            <name>ModifiedCyclomaticComplexity</name>
+            <ruleset>Design</ruleset>
+        </rule>
+        <rule>
+            <name>UnusedLocalVariable</name>
+            <ruleset>Best Practices</ruleset>
+        </rule>
+        <rule>
+            <name>FinalFieldCouldBeStatic</name>
+            <ruleset>Design</ruleset>
+        </rule>
+        <rule>
+            <name>UseCollectionIsEmpty</name>
+            <ruleset>Best Practices</ruleset>
+        </rule>
+        <rule>
+            <name>UnnecessaryConversionTemporary</name>
+            <ruleset>Error Prone</ruleset>
+        </rule>
+        <rule>
+            <name>OverrideBothEqualsAndHashcode</name>
+            <ruleset>Error Prone</ruleset>
+        </rule>
+        <rule>
+            <name>FinalizeDoesNotCallSuperFinalize</name>
+            <ruleset>Error Prone</ruleset>
+        </rule>
+        <rule>
+            <name>UnnecessaryModifier</name>
+            <ruleset>Code Style</ruleset>
+        </rule>
+        <rule>
+            <name>CyclomaticComplexity</name>
+            <ruleset>Design</ruleset>
+        </rule>
+        <rule>
+            <name>AvoidThrowingNullPointerException</name>
+            <ruleset>Design</ruleset>
+        </rule>
+        <rule>
+            <name>ImportFromSamePackage</name>
+            <ruleset>Error Prone</ruleset>
+        </rule>
+        <rule>
+            <name>InstantiationToGetClass</name>
+            <ruleset>Error Prone</ruleset>
+        </rule>
+        <rule>
+            <name>AvoidCallingFinalize</name>
+            <ruleset>Error Prone</ruleset>
+        </rule>
+        <rule>
+            <name>SimplifyBooleanReturns</name>
+            <ruleset>Design</ruleset>
+        </rule>
+        <rule>
+            <name>StdCyclomaticComplexity</name>
+            <ruleset>Design</ruleset>
+        </rule>
+        <rule>
+            <name>ExcessivePublicCount</name>
+            <ruleset>Design</ruleset>
+        </rule>
+        <rule>
+            <name>ReturnFromFinallyBlock</name>
+            <ruleset>Error Prone</ruleset>
+        </rule>
+        <rule>
+            <name>StringInstantiation</name>
+            <ruleset>Performance</ruleset>
+        </rule>
+        <rule>
+            <name>UseEqualsToCompareStrings</name>
+            <ruleset>Error Prone</ruleset>
+        </rule>
+        <rule>
+            <name>DontImportSun</name>
+            <ruleset>Error Prone</ruleset>
+        </rule>
+        <rule>
+            <name>AvoidCatchingThrowable</name>
+            <ruleset>Error Prone</ruleset>
+        </rule>
+        <rule>
+            <name>LocalVariableCouldBeFinal</name>
+            <ruleset>Code Style</ruleset>
+        </rule>
+        <rule>
+            <name>NcssCount</name>
+            <ruleset>Design</ruleset>
+        </rule>
+        <rule>
+            <name>DuplicateImports</name>
+            <ruleset>Code Style</ruleset>
+        </rule>
+        <rule>
+            <name>ShortMethodName</name>
+            <ruleset>Code Style</ruleset>
+        </rule>
+        <rule>
+            <name>NcssTypeCount</name>
+            <ruleset>Design</ruleset>
+        </rule>
+        <rule>
+            <name>PositionLiteralsFirstInComparisons</name>
+            <ruleset>Best Practices</ruleset>
+        </rule>
+        <rule>
+            <name>MethodWithSameNameAsEnclosingClass</name>
+            <ruleset>Error Prone</ruleset>
+        </rule>
+        <rule>
+            <name>SignatureDeclareThrowsException</name>
+            <ruleset>Design</ruleset>
+        </rule>
+        <rule>
+            <name>NcssConstructorCount</name>
+            <ruleset>Design</ruleset>
+        </rule>
+        <rule>
+            <name>ConstructorCallsOverridableMethod</name>
+            <ruleset>Error Prone</ruleset>
+        </rule>
+        <rule>
+            <name>IfStmtsMustUseBraces</name>
+            <ruleset>Code Style</ruleset>
+        </rule>
+        <rule>
+            <name>DontImportJavaLang</name>
+            <ruleset>Code Style</ruleset>
+        </rule>
+        <rule>
+            <name>WhileLoopsMustUseBraces</name>
+            <ruleset>Code Style</ruleset>
+        </rule>
+        <rule>
+            <name>UnusedImports</name>
+            <ruleset>Best Practices</ruleset>
+        </rule>
+        <rule>
+            <name>AvoidInstanceofChecksInCatchClause</name>
+            <ruleset>Error Prone</ruleset>
+        </rule>
+        <rule>
+            <name>DefaultLabelNotLastInSwitchStmt</name>
+            <ruleset>Best Practices</ruleset>
+        </rule>
+        <rule>
+            <name>AvoidThrowingRawExceptionTypes</name>
+            <ruleset>Design</ruleset>
+        </rule>
+        <rule>
+            <name>CloseResource</name>
+            <ruleset>Error Prone</ruleset>
+        </rule>
+        <rule>
+            <name>ClassNamingConventions</name>
+            <ruleset>Code Style</ruleset>
+        </rule>
+        <rule>
+            <name>BooleanGetMethodName</name>
+            <ruleset>Code Style</ruleset>
+        </rule>
+        <rule>
+            <name>ShortVariable</name>
+            <ruleset>Code Style</ruleset>
+        </rule>
+        <rule>
+            <name>NcssMethodCount</name>
+            <ruleset>Design</ruleset>
+        </rule>
+        <rule>
+            <name>ForLoopsMustUseBraces</name>
+            <ruleset>Code Style</ruleset>
+        </rule>
+        <rule>
+            <name>UnnecessaryConstructor</name>
+            <ruleset>Code Style</ruleset>
+        </rule>
+        <rule>
+            <name>UnusedFormalParameter</name>
+            <ruleset>Best Practices</ruleset>
+        </rule>
+        <rule>
+            <name>UnusedPrivateMethod</name>
+            <ruleset>Best Practices</ruleset>
+        </rule>
+        <rule>
+            <name>GenericsNaming</name>
+            <ruleset>Code Style</ruleset>
+        </rule>
+        <rule>
+            <name>IfElseStmtsMustUseBraces</name>
+            <ruleset>Code Style</ruleset>
+        </rule>
+        <rule>
+            <name>UnusedPrivateField</name>
+            <ruleset>Best Practices</ruleset>
+        </rule>
+        <rule>
+            <name>FinalizeShouldBeProtected</name>
+            <ruleset>Error Prone</ruleset>
+        </rule>
+        <rule>
+            <name>MethodArgumentCouldBeFinal</name>
+            <ruleset>Code Style</ruleset>
+        </rule>
+        <rule>
+            <name>ExcessiveParameterList</name>
+            <ruleset>Design</ruleset>
+        </rule>
+        <rule>
+            <name>SimplifyBooleanExpressions</name>
+            <ruleset>Design</ruleset>
+        </rule>
+        <rule>
+            <name>ImmutableField</name>
+            <ruleset>Design</ruleset>
+        </rule>
+        <rule>
+            <name>AvoidProtectedFieldInFinalClass</name>
+            <ruleset>Code Style</ruleset>
+        </rule>
+        <rule>
+            <name>TooManyFields</name>
+            <ruleset>Design</ruleset>
+        </rule>
+        <rule>
+            <name>LooseCoupling</name>
+            <ruleset>Best Practices</ruleset>
+        </rule>
+    </rules>
     <includeDerivedFiles>false</includeDerivedFiles>
     <violationsAsErrors>true</violationsAsErrors>
     <fullBuildEnabled>true</fullBuildEnabled>

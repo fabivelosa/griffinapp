@@ -5,26 +5,24 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 
-
 @Entity(name = "users")
 @XmlRootElement
 @Table(name = "users")
 public class User {
 
+	
 	@Id
-	private int id;
-	
 	private String userId;
-	
 	private String userName;
 	private String userType;
 	private String userPassword;
+	private String token;
 
 	public String getUserName() {
 		return userName;
 	}
 
-	public void setUserName(String userName) {
+	public void setUserName(final String userName) {
 		this.userName = userName;
 	}
 
@@ -32,7 +30,7 @@ public class User {
 		return userId;
 	}
 
-	public void setUserId(String userId) {
+	public void setUserId(final String userId) {
 		this.userId = userId;
 	}
 
@@ -40,7 +38,7 @@ public class User {
 		return userType;
 	}
 
-	public void setUserType(String userType) {
+	public void setUserType(final String userType) {
 		this.userType = userType;
 	}
 
@@ -48,7 +46,15 @@ public class User {
 		return userPassword;
 	}
 
-	public void setUserPassword(String userPassword) {
+	public void setUserPassword(final String userPassword) {
 		this.userPassword = userPassword;
+	}
+
+	public String getToken() {
+		return token;
+	}
+
+	public void setToken(String token) {
+		this.token = token;
 	}
 }
