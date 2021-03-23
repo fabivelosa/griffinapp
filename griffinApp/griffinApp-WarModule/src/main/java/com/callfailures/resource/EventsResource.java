@@ -13,6 +13,7 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import com.callfailures.entity.Secured;
 import com.callfailures.entity.views.IMSISummary;
 import com.callfailures.entity.views.PhoneModelSummary;
 import com.callfailures.errors.ErrorMessage;
@@ -30,10 +31,6 @@ public class EventsResource {
 	private EventService eventService;
 	
 	
-	
-	
-	
-	
 	/**
 	 * Network Engineer: Count call failures for a given IMSI during a certain period
 	 * @param imsi - the IMSI parameter
@@ -46,6 +43,7 @@ public class EventsResource {
 	 * @param summary - boolean parameter which checks if summary is required or not
 	 * @return Returns IMSISummary entity which contains the (1) total failure count and (2) total duration of failues 
 	 */
+	@Secured
 	@GET
     @Path("/query")
 	@Produces({ MediaType.APPLICATION_JSON })
@@ -79,6 +77,7 @@ public class EventsResource {
 	 * @param toEpoch - the starting Date parameter converted to long or UNIX timestamp
 	 * @return Returns PhoneModelSummary entity which contains the (1) total failure count and (2) phone model
 	 */
+	@Secured
 	@GET
     @Path("/query/ue")
 	@Produces({ MediaType.APPLICATION_JSON })
