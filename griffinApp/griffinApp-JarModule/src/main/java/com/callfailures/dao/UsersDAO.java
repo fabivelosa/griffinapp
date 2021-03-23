@@ -19,13 +19,14 @@ public class UsersDAO {
 
 	@SuppressWarnings("unchecked")
 	public List<User> getRegisteredUsers() {
-		final Query query = entityManager.createQuery("SELECT u FROM User u");
+		final Query query = entityManager.createQuery("SELECT u FROM users u");
 		return query.getResultList();
 	}
 
-	public User getUserById(final String userId) {
+	public User getUserByUserId(final String userId) {
 		return entityManager.find(User.class, userId);
 	}
+	
 
 	public User getUserByName(final String name) {
 
