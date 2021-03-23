@@ -22,10 +22,6 @@ import com.callfailures.entity.views.IMSISummary;
 import com.callfailures.entity.views.PhoneFailures;
 import com.callfailures.entity.views.PhoneModelSummary;
 import com.callfailures.entity.views.UniqueIMSI;
-import com.callfailures.exception.FieldNotValidException;
-import com.callfailures.exception.InvalidDateException;
-import com.callfailures.exception.InvalidIMSIException;
-import com.callfailures.exception.InvalidPhoneModelException;
 import com.callfailures.parsingutils.InvalidRow;
 import com.callfailures.parsingutils.ParsingResponse;
 import com.callfailures.services.EventService;
@@ -40,50 +36,47 @@ public class EventServiceImpl implements EventService {
 	@Inject
 	ValidationService validationService;
 
-	
-	
-    @Override
-	public List<IMSIEvent> findFailuresByImsi(final String imsi) {
-		// TODO Auto-generated method stub
-    	if (!isValidIMSI(imsi)) {
-    		return null;
-		}
-    	return eventDAO.findEventsByIMSI(imsi);
-	}
-	
 	@Override
-	public IMSISummary findCallFailuresCountByIMSIAndDate(final String imsi, final LocalDateTime startTime, final LocalDateTime endTime) {
-		if(startTime.isAfter(endTime)) {
+	public List<IMSIEvent> findFailuresByImsi(final String imsi) {
+		if (!isValidIMSI(imsi)) {
+			return null;
+		}
+		return eventDAO.findEventsByIMSI(imsi);
+	}
+
+	@Override
+	public IMSISummary findCallFailuresCountByIMSIAndDate(final String imsi, final LocalDateTime startTime,
+			final LocalDateTime endTime) {
+		if (startTime.isAfter(endTime)) {
 			throw new InvalidDateException();
 		}
-	
-		if(!isValidIMSI(imsi)) {
+
+		if (!isValidIMSI(imsi)) {
 			throw new InvalidIMSIException();
 		}
-		
+
 		return eventDAO.findCallFailuresCountByIMSIAndDate(imsi, startTime, endTime);
 	}
-	
+
 	@Override
-	public	PhoneModelSummary findCallFailuresCountByPhoneModelAndDate(final String model, final LocalDateTime startTime, final LocalDateTime endTime) {
-		if(startTime.isAfter(endTime)) {
+	public PhoneModelSummary findCallFailuresCountByPhoneModelAndDate(final String model, final LocalDateTime startTime,
+			final LocalDateTime endTime) {
+		if (startTime.isAfter(endTime)) {
 			throw new InvalidDateException();
 		}
-			
+
 		if (model.isEmpty()) {
 			throw new InvalidPhoneModelException();
 		}
-	
+
 		return eventDAO.findCallFailuresCountByPhoneModelAndDate(model, startTime, endTime);
 	}
-	
-	
+
 	@Override
 	public List<PhoneFailures> findUniqueEventCauseCountByPhoneModel(final int tac) {
 		return eventDAO.findUniqueEventCauseCountByPhoneModel(tac);
 	}
-	
-	
+
 	@Override
 	public ParsingResponse<Events> read(final File workbookFile) {
 		final ParsingResponse<Events> parsingResult = new ParsingResponse<>();
@@ -109,20 +102,18 @@ public class EventServiceImpl implements EventService {
 		return parsingResult;
 	}
 
-	
 	private boolean isValidIMSI(final String imsi) {
-		if(imsi == null || imsi.length() > 15) {
+		if (imsi == null || imsi.length() > 15) {
 			return false;
 		}
 
-		for(int i = 0; i < imsi.length(); i++) {
-			if(!Character.isDigit(imsi.charAt(0))) {
+		for (int i = 0; i < imsi.length(); i++) {
+			if (!Character.isDigit(imsi.charAt(0))) {
 				return false;
 			}
 		}
 		return true;
 	}
-	
 
 	private Events createEventObject(final Row row) {
 		final Events events = new Events();
@@ -151,11 +142,11 @@ public class EventServiceImpl implements EventService {
 	}
 
 	@Override
-	public List<UniqueIMSI> findIMSISBetweenDates(final LocalDateTime startTime,final LocalDateTime endTime) {
+	public List<UniqueIMSI> findIMSISBetweenDates(final LocalDateTime startTime, final LocalDateTime endTime) {
 		if (startTime.isAfter(endTime)) {
 			throw new InvalidDateException();
 		}
-		
+
 		return eventDAO.findIMSISBetweenDates(startTime, endTime);
 	}
 

@@ -4,6 +4,9 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
+import javax.ejb.Singleton;
+
+@Singleton
 public class Token {
 
 	private static final Map<String, User> TOKEN_HOLDER = new ConcurrentHashMap<>();
@@ -16,7 +19,13 @@ public class Token {
 	}
 
 	public static boolean validateToken(String token) {
-		User authenticationInfo = TOKEN_HOLDER.get(token);
+
+		String tokenId = token;
+		if (token.startsWith("Bearer ")) {
+			tokenId = token.substring(7, token.length());
+		}
+
+		User authenticationInfo = TOKEN_HOLDER.get(tokenId);
 		if (authenticationInfo != null) {
 			return true;
 		} else {
