@@ -153,5 +153,10 @@ public class EventServiceImpl implements EventService {
 
 		return eventDAO.findIMSISBetweenDates(startTime, endTime);
 	}
+	
+	@Override
+	public List<UniqueIMSI> findIMSIS() {
+		return eventDAO.findIMSIS();
+	}
 
 }
