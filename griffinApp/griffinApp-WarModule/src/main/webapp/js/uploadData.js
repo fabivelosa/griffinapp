@@ -3,7 +3,7 @@ var submitdata = function(){
 	console.log('submit called"');
 	var formData = new FormData();
 	var formData = new FormData($('#fileUploadForm')[0]); 
-	var files = $('#uploadFile')[0].files;
+	var files = $('#formFile')[0].files;
 
 	if(files.length >0){
 		console.log('file found');
@@ -20,7 +20,7 @@ var submitdata = function(){
 			$('#errorsList').empty();
 			
 			$.each(data,function(index,EventsUploadResponseDTO){
-			   
+			   console.log('func called 23');
 			    var validRowCount = EventsUploadResponseDTO.validRowCount;
 				var invalidRowCount = EventsUploadResponseDTO.erroneousData.length;
 
@@ -32,6 +32,7 @@ var submitdata = function(){
 					$('#successfulList').append('<li class = "ignoredRow"> Ignored ' + invalidRowCount + ' Row' + (invalidRowCount > 1?'s' : '') +' in the ' + EventsUploadResponseDTO.tabName + ' Table.</li>');
 				}
 			});
+			console.log('file found35');
 			var errorLog = '';
 			$.each(data,function(index,EventsUploadResponseDTO){
 				var invalidRowCount = EventsUploadResponseDTO.erroneousData.length;
@@ -77,15 +78,16 @@ var downloadErrorLog = function(){
 
 $(document).ready(function(){
 		
-	$('#fileUploadForm').submit(function(event){ 
- 	event.preventDefault();
- 	console.log('Clicked upload');
- 	submitdata(); 
-	});
+	//$('#uploadBtn').submit(function(event){ 
+ //	event.preventDefault();
+ //	console.log('Clicked upload');
+// 	submitdata(); 
+//	});
+	
+	$('#uploadBtn').click(function(){submitdata();});
 	
 	$('#errorBtn').click(function(){downloadErrorLog();});
 	
-	verifyLoaded();
 	
 });
 
