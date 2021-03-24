@@ -26,11 +26,11 @@ var addUser = function () {
 	});
 };
 
-var renderDetails=function(user){
-	$('#userId').val(user.userId);
-	$('#userName').val(user.userName);
-	$('#userType').val(user.userType);
-	$('#userPassword').val(user.userPassword);
+var renderDetails=function(users){
+	$('#userId').val(users.userId);
+	$('#userName').val(users.userName);
+	$('#userType').val(users.userType);
+	$('#userPassword').val(users.userPassword);
 }
 
 var formToJSON=function () {
