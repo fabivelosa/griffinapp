@@ -175,8 +175,9 @@
 				<groupId>com.callfailures</groupId>
 				<artifactId>griffinApp-WarModule</artifactId>
 				<version>${project.version}</version>
+				 <classifier>classes</classifier>
+ 				<scope>test</scope>
 			</dependency>
-
 			<dependency>
 				<groupId>com.callfailures</groupId>
 				<artifactId>griffinApp-WarModule</artifactId>

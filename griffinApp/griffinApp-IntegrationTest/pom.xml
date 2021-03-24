@@ -260,7 +260,8 @@
 				<dependency>
 					<groupId>com.callfailures</groupId>
 					<artifactId>griffinApp-WarModule</artifactId>
-					<scope>test</scope>
+					 <classifier>classes</classifier>
+	 				<scope>test</scope>
 				</dependency>
 				<dependency>
 					<groupId>org.jboss.resteasy</groupId>
