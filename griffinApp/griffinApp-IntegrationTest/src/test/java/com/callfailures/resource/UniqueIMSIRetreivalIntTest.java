@@ -27,7 +27,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
 @RunWith(Arquillian.class)
-public class UniqueIMSIRetreival {
+public class UniqueIMSIRetreivalIntTest {
 
 	private final static String FROM_TIME = "1616061600000"; // March 18, 2021 10:00AM
 	private final static String TO_TIME = "1616065200000"; // March 18, 2021 11:00AM
