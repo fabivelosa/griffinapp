@@ -14,8 +14,7 @@ Feature: As an administrator
     Then The error log file is downloaded
 
     Examples: 
-      | fileName                                               | parseMessage                       | storageMessage    |
-      | /resources/testdatasets/complete_dataset_zero_row.xlsx | Parsing Complete: Read 0 row.      | No new data saved |
-      | /resources/testdatasets/complete_dataset_one_row.xlsx  | Parsing Complete: Read 1 row.      | Saved 1 row       |
-      | /resources/testdatasets/complete_dataset.xlsx          | Parsing Complete: Read 1000 rows.  | Saved 1000 rows   |
-      | /resources/testdatasets/empty_dataset.xlsx  
+      | fileName             																	 |
+      | /resources/testdatasets/full_dataset.xlsx 						 |
+			| /resources/testdatasets/mini_dataset.xlsx 						 |	
+      

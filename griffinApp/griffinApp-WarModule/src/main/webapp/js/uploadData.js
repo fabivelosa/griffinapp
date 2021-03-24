@@ -20,7 +20,7 @@ var submitdata = function(){
 			$('#errorsList').empty();
 			
 			$.each(data,function(index,EventsUploadResponseDTO){
-			    console.log(EventsUploadResponseDTO.validRowCount);
+			   
 			    var validRowCount = EventsUploadResponseDTO.validRowCount;
 				var invalidRowCount = EventsUploadResponseDTO.erroneousData.length;
 
@@ -48,13 +48,9 @@ var submitdata = function(){
 						});
 			});		
 			$('#errorBtn').data('errorLogs', errorLog );	
-			console.log($('#errorBtn').data('errorLogs'));
 		},
 		error: function(){
-			console.log('error');
-/*			$('#displayCount').css("visibility", "visible");
-*//*			$('#displayCount').val('fail');
-*/			//display error message here
+			console.log('error occured, could not upload file');
 		}		
 	});
 	}else{
@@ -80,8 +76,6 @@ var downloadErrorLog = function(){
 }
 
 $(document).ready(function(){
-	//Assign button to call function on click
-	//$('#uploadBtn').click(function(){submitdata();});
 		
 	$('#fileUploadForm').submit(function(event){ 
  	event.preventDefault();
