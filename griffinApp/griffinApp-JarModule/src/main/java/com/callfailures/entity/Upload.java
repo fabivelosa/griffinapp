@@ -17,7 +17,7 @@ public class Upload {
 	@Type(type = "org.hibernate.type.UUIDCharType")
 	private UUID uploadID;
 
-	private String uploadStatus;
+	private int uploadStatus;
 
 	public UUID getUploadID() {
 		return uploadID;
@@ -27,11 +27,11 @@ public class Upload {
 		this.uploadID = uploadID;
 	}
 
-	public String getUploadStatus() {
+	public int getUploadStatus() {
 		return uploadStatus;
 	}
 
-	public void setUploadStatus(final String uploadStatus) {
+	public void setUploadStatus(final int uploadStatus) {
 		this.uploadStatus = uploadStatus;
 	}
 

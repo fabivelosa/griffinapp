@@ -25,7 +25,7 @@ var uuid = data.uploadID;
 	console.log('if novo"');
     width = 1;
     var elem = document.getElementById("myBar");
-    var id = setInterval(frame, 10);
+    var id = setInterval(frame, 20);
     function frame() {
       if (width >= 100) {
         clearInterval(id);

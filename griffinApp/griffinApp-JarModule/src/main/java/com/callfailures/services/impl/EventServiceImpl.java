@@ -7,6 +7,8 @@ import java.util.Iterator;
 import java.util.List;
 
 import javax.ejb.Stateless;
+import javax.ejb.TransactionAttribute;
+import javax.ejb.TransactionAttributeType;
 import javax.inject.Inject;
 
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
@@ -16,20 +18,23 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import com.callfailures.dao.EventDAO;
+import com.callfailures.dao.UploadDAO;
 import com.callfailures.entity.Events;
+import com.callfailures.entity.Upload;
 import com.callfailures.entity.views.IMSIEvent;
 import com.callfailures.entity.views.IMSISummary;
+import com.callfailures.entity.views.PhoneFailures;
 import com.callfailures.entity.views.PhoneModelSummary;
 import com.callfailures.exception.FieldNotValidException;
 import com.callfailures.exception.InvalidDateException;
 import com.callfailures.exception.InvalidIMSIException;
 import com.callfailures.exception.InvalidPhoneModelException;
-import com.callfailures.entity.views.PhoneFailures;
 import com.callfailures.parsingutils.InvalidRow;
 import com.callfailures.parsingutils.ParsingResponse;
 import com.callfailures.services.EventService;
 import com.callfailures.services.ValidationService;
 
+@TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
 @Stateless
 public class EventServiceImpl implements EventService {
 
@@ -37,63 +42,79 @@ public class EventServiceImpl implements EventService {
 	EventDAO eventDAO;
 
 	@Inject
+	UploadDAO uploadDAO;
+
+	@Inject
 	ValidationService validationService;
 
-	
-	
-    @Override
+	@Override
 	public List<IMSIEvent> findFailuresByImsi(final String imsi) {
 		// TODO Auto-generated method stub
-    	if (!isValidIMSI(imsi)) {
-    		return null;
+		if (!isValidIMSI(imsi)) {
+			return null;
 		}
-    	return eventDAO.findEventsByIMSI(imsi);
+		return eventDAO.findEventsByIMSI(imsi);
 	}
-	
+
 	@Override
-	public IMSISummary findCallFailuresCountByIMSIAndDate(final String imsi, final LocalDateTime startTime, final LocalDateTime endTime) {
-		if(startTime.isAfter(endTime)) {
+	public IMSISummary findCallFailuresCountByIMSIAndDate(final String imsi, final LocalDateTime startTime,
+			final LocalDateTime endTime) {
+		if (startTime.isAfter(endTime)) {
 			throw new InvalidDateException();
 		}
-	
-		if(!isValidIMSI(imsi)) {
+
+		if (!isValidIMSI(imsi)) {
 			throw new InvalidIMSIException();
 		}
-		
+
 		return eventDAO.findCallFailuresCountByIMSIAndDate(imsi, startTime, endTime);
 	}
-	
+
 	@Override
-	public	PhoneModelSummary findCallFailuresCountByPhoneModelAndDate(final String model, final LocalDateTime startTime, final LocalDateTime endTime) {
-		if(startTime.isAfter(endTime)) {
+	public PhoneModelSummary findCallFailuresCountByPhoneModelAndDate(final String model, final LocalDateTime startTime,
+			final LocalDateTime endTime) {
+		if (startTime.isAfter(endTime)) {
 			throw new InvalidDateException();
 		}
-			
+
 		if (model.isEmpty()) {
 			throw new InvalidPhoneModelException();
 		}
-	
+
 		return eventDAO.findCallFailuresCountByPhoneModelAndDate(model, startTime, endTime);
 	}
-	
-	
+
 	@Override
 	public List<PhoneFailures> findUniqueEventCauseCountByPhoneModel(final int tac) {
 		return eventDAO.findUniqueEventCauseCountByPhoneModel(tac);
 	}
-	
-	
+
 	@Override
-	public ParsingResponse<Events> read(final File workbookFile) {
+	public ParsingResponse<Events> read(final File workbookFile, final Upload currentUpload) {
+
 		final ParsingResponse<Events> parsingResult = new ParsingResponse<>();
 		try (Workbook workbook = new XSSFWorkbook(workbookFile);) {
 			final Sheet sheet = workbook.getSheetAt(0);
+
+			int rowTotal = sheet.getLastRowNum();
+
+			if ((rowTotal > 0) || sheet.getPhysicalNumberOfRows() > 0) {
+				rowTotal++;
+			}
+
 			final Iterator<Row> rowIterator = sheet.rowIterator();
 			Row row = rowIterator.next();
 			int rowNumber = 0;
 			while (rowIterator.hasNext()) {
 				rowNumber++;
 				row = rowIterator.next();
+				if (rowNumber == rowTotal / 8) {
+					updateProgress(currentUpload, 45);
+				} else if (rowNumber == rowTotal / 4) {
+					updateProgress(currentUpload, 55);
+				} else if (rowNumber == rowTotal / 2) {
+					updateProgress(currentUpload, 75);
+				}
 				try {
 					final Events events = createEventObject(row);
 					eventDAO.create(events);
@@ -108,20 +129,26 @@ public class EventServiceImpl implements EventService {
 		return parsingResult;
 	}
 
-	
+	@TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
+	private void updateProgress(final Upload currentUpload, int percent) {
+		currentUpload.setUploadStatus(percent);
+		Upload newobject = uploadDAO.getUploadByRef(currentUpload.getUploadID());
+		newobject.setUploadStatus(percent);
+		uploadDAO.update(newobject);
+	}
+
 	private boolean isValidIMSI(final String imsi) {
-		if(imsi == null || imsi.length() > 15) {
+		if (imsi == null || imsi.length() > 15) {
 			return false;
 		}
 
-		for(int i = 0; i < imsi.length(); i++) {
-			if(!Character.isDigit(imsi.charAt(0))) {
+		for (int i = 0; i < imsi.length(); i++) {
+			if (!Character.isDigit(imsi.charAt(0))) {
 				return false;
 			}
 		}
 		return true;
 	}
-	
 
 	private Events createEventObject(final Row row) {
 		final Events events = new Events();

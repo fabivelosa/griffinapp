@@ -77,7 +77,7 @@ public class UploadFileService {
 		final UUID uploadUUID = UUID.randomUUID();
 		final Upload upload = new Upload();
 		upload.setUploadID(uploadUUID);
-		upload.setUploadStatus("0");
+		upload.setUploadStatus(0);
 		uploadDAO.create(upload);
 		final Upload currentUpload = uploadDAO.getUploadByRef(uploadUUID);
 		final Map<String, List<InputPart>> uploadForm = input.getFormDataMap();
@@ -87,9 +87,7 @@ public class UploadFileService {
 			final MultivaluedMap<String, String> header = inputPart.getHeaders();
 			String fileName = getFileName(header);
 			try (InputStream inputStream = inputPart.getBody(InputStream.class, null);) {
-
 				final byte[] bytes = IOUtils.toByteArray(inputStream);
-
 				// constructs upload file path
 				fileName = UPLOADED_FILE_PATH + fileName;
 				System.out.println(fileName);
@@ -98,7 +96,6 @@ public class UploadFileService {
 				e.printStackTrace();
 			}
 		}
-
 		// File sheet = null;
 		try {
 			Thread.sleep(3 * 1000);
@@ -115,26 +112,28 @@ public class UploadFileService {
 				System.out.println("name " + sheet.getName());
 
 				final ParsingResponse<EventCause> eventCauses = causeService.read(sheet);
-				currentUpload.setUploadStatus("5");
+				currentUpload.setUploadStatus(5);
 				uploadDAO.update(currentUpload);
-				currentUpload.setUploadStatus("10");
+				currentUpload.setUploadStatus(10);
 				uploadDAO.update(currentUpload);
 				final ParsingResponse<FailureClass> failureClasses = failClassService.read(sheet);
-				currentUpload.setUploadStatus("15");
+				currentUpload.setUploadStatus(15);
 				uploadDAO.update(currentUpload);
 				final ParsingResponse<UserEquipment> userEquipment = userEquipmentService.read(sheet);
-				currentUpload.setUploadStatus("20");
+				currentUpload.setUploadStatus(20);
 				uploadDAO.update(currentUpload);
 				final ParsingResponse<MarketOperator> marketOperator = marketOperatorService.read(sheet);
-				currentUpload.setUploadStatus("25");
+				currentUpload.setUploadStatus(25);
 				uploadDAO.update(currentUpload);
-				final ParsingResponse<Events> events = eventService.read(sheet);
+				final ParsingResponse<Events> events = eventService.read(sheet, currentUpload);
+				currentUpload.setUploadStatus(95);
+				uploadDAO.update(currentUpload);
 
 				generateResponseEntity(uploadsOverallResult, eventCauses, failureClasses, userEquipment, marketOperator,
 						events);
 
 				System.out.println("Done read");
-				currentUpload.setUploadStatus("100");
+				currentUpload.setUploadStatus(100);
 				uploadDAO.update(currentUpload);
 
 				final long endNano = System.nanoTime();
