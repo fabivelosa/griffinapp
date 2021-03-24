@@ -1,10 +1,15 @@
 package com.callfailures.services.impl;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Matchers.anyInt;
 import static org.mockito.Matchers.anyObject;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import java.io.File;
 import java.nio.file.Paths;
@@ -12,6 +17,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.UUID;
 
 import javax.validation.Validation;
 import javax.validation.Validator;
@@ -23,6 +29,7 @@ import com.callfailures.dao.EventCauseDao;
 import com.callfailures.dao.EventDAO;
 import com.callfailures.dao.FailureClassDAO;
 import com.callfailures.dao.MarketOperatorDAO;
+import com.callfailures.dao.UploadDAO;
 import com.callfailures.dao.UserEquipmentDAO;
 import com.callfailures.entity.EventCause;
 import com.callfailures.entity.EventCausePK;
@@ -30,17 +37,18 @@ import com.callfailures.entity.Events;
 import com.callfailures.entity.FailureClass;
 import com.callfailures.entity.MarketOperator;
 import com.callfailures.entity.MarketOperatorPK;
+import com.callfailures.entity.Upload;
 import com.callfailures.entity.UserEquipment;
+import com.callfailures.entity.views.IMSIEvent;
 import com.callfailures.entity.views.IMSISummary;
-import com.callfailures.entity.views.PhoneModelSummary;
 import com.callfailures.entity.views.PhoneFailures;
+import com.callfailures.entity.views.PhoneModelSummary;
 import com.callfailures.exception.InvalidDateException;
 import com.callfailures.exception.InvalidIMSIException;
 import com.callfailures.parsingutils.InvalidRow;
 import com.callfailures.parsingutils.ParsingResponse;
 import com.callfailures.services.EventService;
 import com.callfailures.services.ValidationService;
-import com.callfailures.entity.views.IMSIEvent;
 
 
 
@@ -53,6 +61,7 @@ class ReadandPersisteEventsUTest {
 	private final FailureClassDAO failureClassDAO = mock(FailureClassDAO.class);
 	private final UserEquipmentDAO userEquipmentDAO = mock(UserEquipmentDAO.class);
 	private final MarketOperatorDAO marketOperatorDAO = mock(MarketOperatorDAO.class);
+	private final UploadDAO uploadDAO = mock(UploadDAO.class);
 	private final EventDAO eventDAO = mock(EventDAO.class);
 	private final String absolutePath = Paths.get("src","test","resources").toFile().getAbsolutePath();
 	private final EventCausePK eventCausePK = new EventCausePK(4098, 1);
@@ -66,6 +75,8 @@ class ReadandPersisteEventsUTest {
 	private List<IMSIEvent> imsiEvents = new ArrayList<>();
 	private EventService eventService;
 	private File file;
+	private final UUID uuid = UUID.fromString("427e8708-8cdb-11eb-8dcd-0242ac130003");
+	private final Upload upload = new Upload();
 	
 	@BeforeEach
 	public void setUp() {				
@@ -80,6 +91,9 @@ class ReadandPersisteEventsUTest {
 		eventService = new EventServiceImpl();
 		((EventServiceImpl) eventService).eventDAO = eventDAO;
 		((EventServiceImpl) eventService).validationService = validationService;
+		((EventServiceImpl) eventService).uploadDAO = uploadDAO;
+		
+		upload.setUploadID(uuid);
 	}
 	
 	
@@ -168,9 +182,11 @@ class ReadandPersisteEventsUTest {
 		when(failureClassDAO.getFailureClass(anyInt())).thenReturn(failureClass);
 		when(userEquipmentDAO.getUserEquipment(21060800)).thenReturn(userEquipment);
 		when(marketOperatorDAO.getMarketOperator(marketOperatorPK)).thenReturn(marketOperator);
+		when(uploadDAO.getUploadByRef(uuid)).thenReturn(upload);
 		file = new File(absolutePath + "/importData/validData.xlsx");
-		eventService.read(file);
-		final ParsingResponse<Events> parsingResults = eventService.read(file);
+		upload.setUploadStatus(10);
+		
+		final ParsingResponse<Events> parsingResults = eventService.read(file, upload);
 		assertEquals(4, parsingResults.getValidObjects().size());
 		assertEquals(0, parsingResults.getInvalidRows().size());
 	}
@@ -192,42 +208,49 @@ class ReadandPersisteEventsUTest {
 	
 	@Test
 	void testInvalidDate() {
+		when(uploadDAO.getUploadByRef(uuid)).thenReturn(upload);
 		file = new File(absolutePath + "/importData/invalidDate.xlsx");
 		assertInvalidRowMessage("Invalid Date");
 	}
 	
 	@Test
 	void testInvalidCellID() {
+		when(uploadDAO.getUploadByRef(uuid)).thenReturn(upload);
 		file = new File(absolutePath + "/importData/invalidCellId.xlsx");
 		assertInvalidRowMessage("Invalid Cell ID");
 	}
 	
 	@Test
 	void testInvalidDuration() {
+		when(uploadDAO.getUploadByRef(uuid)).thenReturn(upload);
 		file = new File(absolutePath + "/importData/invalidDuration.xlsx");
 		assertInvalidRowMessage("Invalid Duration");
 	}
 	
 	@Test
 	void testInvalidNEVersion() {
+		when(uploadDAO.getUploadByRef(uuid)).thenReturn(upload);
 		file = new File(absolutePath + "/importData/invalidNEVersion.xlsx");
 		assertInvalidRowMessage("Invalid NE Version");
 	}
 	
 	@Test
 	void testInvalidIMSI() {
+		when(uploadDAO.getUploadByRef(uuid)).thenReturn(upload);
 		file = new File(absolutePath + "/importData/invalidIMSI.xlsx");
 		assertInvalidRowMessage("Invalid IMSI");
 	}
 
 	@Test
 	void testInvalidHIER3_ID() {
+		when(uploadDAO.getUploadByRef(uuid)).thenReturn(upload);
 		file = new File(absolutePath + "/importData/invalidhier3Id.xlsx");
 		assertInvalidRowMessage("Invalid hier3Id");
 	}
 	
 	@Test
 	void testInvalidHIER32_ID() {
+		when(uploadDAO.getUploadByRef(uuid)).thenReturn(upload);
 		file = new File(absolutePath + "/importData/invalidhier32Id.xlsx");
 		assertInvalidRowMessage("Invalid hier32Id");
 	}
@@ -235,6 +258,7 @@ class ReadandPersisteEventsUTest {
 	@Test
 	void testInvalidHIER321_ID() {
 		file = new File(absolutePath + "/importData/invalidhier321Id.xlsx");
+		when(uploadDAO.getUploadByRef(uuid)).thenReturn(upload);
 		assertInvalidRowMessage("Invalid hier321Id");
 	}
 	
@@ -242,12 +266,14 @@ class ReadandPersisteEventsUTest {
 	@Test
 	void testInvalidEventCause() {
 		file = new File(absolutePath + "/importData/invalidEventCause.xlsx");
+		when(uploadDAO.getUploadByRef(uuid)).thenReturn(upload);
 		assertInvalidRowMessage("Invalid Event and Cause Code combination");
 	}
 	
 
 	@Test
 	void testInexistentEventCause() {
+		when(uploadDAO.getUploadByRef(uuid)).thenReturn(upload);
 		file = new File(absolutePath + "/importData/inexistentEventCause.xlsx");
 		assertInvalidRowMessage("Inexistent Event and Cause Code combination");
 	}
@@ -256,6 +282,7 @@ class ReadandPersisteEventsUTest {
 	@Test
 	void testInvalidFailureClass() {
 		when(eventCauseDAO.getEventCause(anyObject())).thenReturn(eventCause);
+		when(uploadDAO.getUploadByRef(uuid)).thenReturn(upload);
 		file = new File(absolutePath + "/importData/invalidFailureClass.xlsx");
 		assertInvalidRowMessage("Invalid Failure Class Id");
 	}
@@ -263,6 +290,7 @@ class ReadandPersisteEventsUTest {
 	@Test
 	void testInexistentFailureClass() {
 		when(eventCauseDAO.getEventCause(anyObject())).thenReturn(eventCause);
+		when(uploadDAO.getUploadByRef(uuid)).thenReturn(upload);
 		file = new File(absolutePath + "/importData/inexistentFailureClass.xlsx");
 		assertInvalidRowMessage("Inexistent Failure Class Id");
 	}
@@ -272,6 +300,7 @@ class ReadandPersisteEventsUTest {
 	void testInvalidUEType() {
 		when(eventCauseDAO.getEventCause(anyObject())).thenReturn(eventCause);
 		when(failureClassDAO.getFailureClass(anyInt())).thenReturn(failureClass);
+		when(uploadDAO.getUploadByRef(uuid)).thenReturn(upload);
 		file = new File(absolutePath + "/importData/invalidFailureClass.xlsx");
 		assertInvalidRowMessage("Invalid Failure Class Id");
 	}
@@ -280,6 +309,7 @@ class ReadandPersisteEventsUTest {
 	void testInexistentUEType() {
 		when(eventCauseDAO.getEventCause(anyObject())).thenReturn(eventCause);
 		when(failureClassDAO.getFailureClass(anyInt())).thenReturn(failureClass);
+		when(uploadDAO.getUploadByRef(uuid)).thenReturn(upload);
 		file = new File(absolutePath + "/importData/inexistentUEType.xlsx");
 		assertInvalidRowMessage("Inexistent UE type");
 	}
@@ -290,6 +320,7 @@ class ReadandPersisteEventsUTest {
 		when(eventCauseDAO.getEventCause(anyObject())).thenReturn(eventCause);
 		when(failureClassDAO.getFailureClass(anyInt())).thenReturn(failureClass);
 		when(userEquipmentDAO.getUserEquipment(21060800)).thenReturn(userEquipment);
+		when(uploadDAO.getUploadByRef(uuid)).thenReturn(upload);
 		file = new File(absolutePath + "/importData/invalidMarketOperator.xlsx");
 		assertInvalidRowMessage("Invalid  MCC and MNC combination");
 	}
@@ -300,12 +331,13 @@ class ReadandPersisteEventsUTest {
 		when(eventCauseDAO.getEventCause(anyObject())).thenReturn(eventCause);
 		when(failureClassDAO.getFailureClass(anyInt())).thenReturn(failureClass);
 		when(userEquipmentDAO.getUserEquipment(21060800)).thenReturn(userEquipment);
+		when(uploadDAO.getUploadByRef(uuid)).thenReturn(upload);
 		file = new File(absolutePath + "/importData/inexistentMarketOperator.xlsx");
 		assertInvalidRowMessage("Inexistent MCC and MNC combination");
 	}
 	
 	private void assertInvalidRowMessage(final String invalidRowMessage) {
-		final ParsingResponse<Events> parsingResults = eventService.read(file);
+		final ParsingResponse<Events> parsingResults = eventService.read(file, upload);
 		assertEquals(0, parsingResults.getValidObjects().size());
 		assertEquals(1, parsingResults.getInvalidRows().size());
 		final Iterator<InvalidRow> eventsIterator = parsingResults.getInvalidRows().iterator();
