@@ -18,5 +18,9 @@
 			<property name="javaVmArguments">-Xmx512m -Djava.util.logging.manager=org.jboss.logmanager.LogManager ${jacoco.agent}</property>
 		</configuration>
 	</container>
+	
+	<extension qualifier="jacoco">
+        <property name="includes">com.callfailures.*</property>
+    </extension> 
 
 </arquillian>
