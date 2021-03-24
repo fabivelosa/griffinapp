@@ -3,12 +3,8 @@ package com.callfailures.entity;
 import java.util.UUID;
 
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import org.hibernate.annotations.Type;
@@ -18,16 +14,16 @@ import org.hibernate.annotations.Type;
 @Table(name = "upload")
 public class Upload {
 	@Id
-	@Type(type="org.hibernate.type.UUIDCharType")
+	@Type(type = "org.hibernate.type.UUIDCharType")
 	private UUID uploadID;
 
 	private String uploadStatus;
-	
+
 	public UUID getUploadID() {
 		return uploadID;
 	}
 
-	public void setUploadID(UUID uploadID) {
+	public void setUploadID(final UUID uploadID) {
 		this.uploadID = uploadID;
 	}
 
@@ -35,11 +31,8 @@ public class Upload {
 		return uploadStatus;
 	}
 
-	public void setUploadStatus(String uploadStatus) {
+	public void setUploadStatus(final String uploadStatus) {
 		this.uploadStatus = uploadStatus;
 	}
 
-	public Upload() {
-	}
-
-	}
+}
