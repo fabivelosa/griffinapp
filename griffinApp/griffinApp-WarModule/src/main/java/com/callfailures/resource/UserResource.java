@@ -40,7 +40,6 @@ public class UserResource {
 	}
 
 	@PUT
-	@Path("/{id}")
 	@Consumes("application/json")
 	@Produces({ MediaType.APPLICATION_JSON })
 	public Response updateUser(final User user) {

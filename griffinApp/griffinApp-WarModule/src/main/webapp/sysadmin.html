@@ -235,28 +235,28 @@
                                 </div>
                                 <div class="card-body">
                                 	<div class="input-group mb-3">
-                                		<span class="input-group-text" id="basic-addon1">User ID</span>
-                                        <input type="text" class="form-control" placeholder="User ID" aria-label="User ID" aria-describedby="basic-addon1">                            
+                                		<span class="input-group-text" id="userId">User ID</span>
+                                        <input type="text" class="form-control" placeholder="User ID" aria-label="User ID" aria-describedby="basic-addon1" required>                            
                                 	</div>
 									<div class="input-group mb-3">
-                                		<span class="input-group-text" id="basic-addon1">User Name</span>
-                                        <input type="text" class="form-control" placeholder="User name" aria-label="User name" aria-describedby="basic-addon1">                            
+                                		<span class="input-group-text" id="userName">User Name</span>
+                                        <input type="text" class="form-control" placeholder="User name" aria-label="User name" aria-describedby="basic-addon1" required>                            
                                 	</div>
 									<div class="input-group mb-3">
-                                		<span class="input-group-text" id="basic-addon1">User Type</span>
-                                        <input type="text" class="form-control" placeholder="User type" aria-label="User type" aria-describedby="basic-addon1">                            
+                                		<span class="input-group-text" id="userType">User Type</span>
+                                        <input type="text" class="form-control" placeholder="User type" aria-label="User type" aria-describedby="basic-addon1" required>                            
                                 	</div>
                                     <div class="input-group mb-3">
-                                        <span class="input-group-text" id="basic-addon1">Password</span>
-                                        <input type="password" id="pass" class="form-control" placeholder="Password" aria-label="Password" aria-describedby="basic-addon1">
+                                        <span class="input-group-text" id="userPassword">Password</span>
+                                        <input type="password" id="pass" class="form-control" placeholder="Password" aria-label="Password" aria-describedby="basic-addon1" required>
                                       </div>
                                       <div class="input-group mb-3">
-                                        <span class="input-group-text" id="basic-addon1">Confirm Password</span>
-                                        <input type="password" id="passConfirm" class="form-control" placeholder="Password" aria-label="Password" aria-describedby="basic-addon1">
+                                        <span class="input-group-text" id="confirmPassword">Confirm Password</span>
+                                        <input type="password" id="passConfirm" class="form-control" placeholder="Password" aria-label="Password" aria-describedby="basic-addon1" required>
                                       </div>
                                   
                                       <div class="input-group">
-                                        <button type="button" class="btn btn-primary">Create User</button>
+                                        <button type="button" id="createUserButton" class="btn btn-primary">Create User</button>
                                       </div>
                                 </div>
                             </div>
@@ -348,6 +348,9 @@
     <!-- Page level custom scripts -->
     <script src="js/demo/chart-area-demo.js"></script>
     <script src="js/demo/chart-pie-demo.js"></script>
+    
+    <!-- JavaScript to Create User -->
+    <script src"js/createUser.js"></script>
 
 </body>
 
