@@ -1,4 +1,4 @@
-var rootURL = "http://localhost:8080/callfailures/api/";
+var rootURL = "http://localhost:8080/callfailures/";
 
 
 $(function() {
@@ -6,20 +6,26 @@ $(function() {
 });
 
 function initCreateUserForm() {
-	$('#createUserForm').submit(function(event) {
+	$('#createUserButton').submit(function(event) {
 		event.preventDefault();
-		createNewUser();
+		buildUser();
 	});
 }
 
-function createNewUser() {
-	console.log("Creating the user.");
-	var userID = $('#userId').val();
-	var userName = $('#userName').val();
-	var userType = $('#userType').val();
+function buildUser(){
+	console.log("Building the user")
+	var id = $('#userId').val();
+	var name = $('#userName').val();
+	var type = $('#userType').val();
 	var passwd = $('#userPassword').val();
 	var confirm = $('#confirmPassword').val();
+		
 	var formData = { userID: id, userName: name, userType: type, userPassword: passwd };
+	
+	
+
+	console.log("Creating the user.");
+	
 	$.ajax({
 		type: 'POST',
 		url: rootURL + "/create",
@@ -36,5 +42,5 @@ function createNewUser() {
 			$("#creation-failure").addClass('show');
 		}
 	});
-
+	
 }
