@@ -3,8 +3,10 @@ package com.callfailures.services.impl;
 import java.io.File;
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -156,7 +158,9 @@ public class EventServiceImpl implements EventService {
 	
 	@Override
 	public List<UniqueIMSI> findIMSIS() {
-		return eventDAO.findIMSIS();
+		return eventDAO.findIMSIS().stream()
+				.sorted(Comparator.comparing(UniqueIMSI::getImsi))
+				.collect(Collectors.toList());
 	}
 
 }
