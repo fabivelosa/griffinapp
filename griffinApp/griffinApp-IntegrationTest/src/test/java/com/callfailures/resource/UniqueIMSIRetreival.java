@@ -36,7 +36,7 @@ public class UniqueIMSIRetreival {
 	private final static String INVALID_TIME = "151600000";
 	private final static String UNIQUE_IMSIS_URL = "IMSIs/query?from=";
 	//IMSIs/query?from=1546300800000&to=1616065200000
-	
+	private final static String IMSIS_URL = "IMSIs/query/all";
 	
 	@ArquillianResource
 	private URL url; 
@@ -103,6 +103,21 @@ public class UniqueIMSIRetreival {
 		assertEquals(ErrorMessage.INVALID_DATE.getMessage(), uniqueImsis.get("errorMessage").getAsString());
 	}
 	
-	
+	@Test
+	@RunAsClient
+	public void testGetUniqueIMSIAll() {	
+		final String urlForIMSI = IMSIS_URL ;
+		final Response responseGet = resourceClient.resourcePath(urlForIMSI).get();
+		assertEquals(200, responseGet.getStatus());
+		
+		final JsonArray uniqueImsis = JsonReader.readAsJsonArray(responseGet.readEntity(String.class));	
+		assertEquals(2,uniqueImsis.size());
+		JsonObject uniqueIMSI = uniqueImsis.get(0).getAsJsonObject();
+		
+		
+		final String imsiOne = uniqueIMSI.get("imsi").getAsString();
+		final String imsiTwo = uniqueImsis.get(1).getAsJsonObject().get("imsi").getAsString();
+		assertFalse(imsiOne.equals(imsiTwo));
+	}
 	
 }
