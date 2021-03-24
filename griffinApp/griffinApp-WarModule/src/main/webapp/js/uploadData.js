@@ -48,7 +48,7 @@ var submitdata = function(){
 						});
 			});		
 			$('#errorBtn').data('errorLogs', errorLog );	
-			console.log($('errorBtn').data);
+			console.log($('#errorBtn').data('errorLogs'));
 		},
 		error: function(){
 			console.log('error occured, could not upload file');
