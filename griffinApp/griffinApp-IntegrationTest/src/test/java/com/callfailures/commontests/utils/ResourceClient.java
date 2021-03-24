@@ -37,6 +37,15 @@ public class ResourceClient {
 		System.out.println(content);
 		return buildClient().post(Entity.entity(content, MediaType.APPLICATION_JSON));
 	}
+	
+	public Response putWithFile(final String fileName) {
+		return putWithContent(getRequestFromFileOrEmptyIfNullFile(fileName));
+	}
+
+	public Response putWithContent(final String content) {
+		System.out.println(content);
+		return buildClient().put(Entity.entity(content, MediaType.APPLICATION_JSON));
+	}
 
 	public Response get() {
 		return buildClient().get();

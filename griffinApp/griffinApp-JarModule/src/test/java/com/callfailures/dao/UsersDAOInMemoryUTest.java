@@ -42,7 +42,11 @@ class UsersDAOInMemoryUTest {
 			usersDAO.addUser(user);
 			return null;
 		});
-
+		
+		final List<User> registeredUsers = usersDAO.getRegisteredUsers();
+		final User registeredUser = registeredUsers.iterator().next();
+		assertEquals(1, registeredUsers.size());
+		assertCorrectUser(registeredUser);
 	}
 
 	// two
@@ -55,9 +59,11 @@ class UsersDAOInMemoryUTest {
 			user.setUserPassword("password");
 			user.setUserType("network engineer");
 			usersDAO.addUser(user);
-			usersDAO.getUserByName("wilmir");
-			return user;
+			return null;
 		});
+		
+		final User registeredUser = usersDAO.getUserByName("wilmir");
+		assertCorrectUser(registeredUser);		
 	}
 
 	// three
@@ -70,10 +76,11 @@ class UsersDAOInMemoryUTest {
 			user.setUserPassword("password");
 			user.setUserType("network engineer");
 			usersDAO.addUser(user);
-			usersDAO.getUserByUserId("A100");
-
-			return user;
+			return null;
 		});
+		
+		final User registeredUser = usersDAO.getUserByUserId("A100");
+		assertCorrectUser(registeredUser);	
 	}
 
 	// four
@@ -94,15 +101,15 @@ class UsersDAOInMemoryUTest {
 			user2.setUserPassword("access");
 			user2.setUserType("cust. service");
 			usersDAO.addUser(user2);
-
-			final List<User> users = usersDAO.getRegisteredUsers();
-			return users;
+			return null;
 		});
+		
+		final List<User> users = usersDAO.getRegisteredUsers();
+		assertEquals(2, users.size());
 	}
 
 	@Test
 	void testUpdateUser() {
-
 		dBCommandTransactionalExecutor.executeCommand(() -> {
 
 			final User user = new User();
@@ -118,9 +125,15 @@ class UsersDAOInMemoryUTest {
 			assertEquals("password", user.getUserPassword());
 			assertEquals("network engineer", user.getUserType());
 			return user;
-			
 		});
 	}
 	
+	
+	private void assertCorrectUser(final User registeredUser) {
+		assertEquals("A100", registeredUser.getUserId());
+		assertEquals("wilmir", registeredUser.getUserName());
+		assertEquals("password", registeredUser.getUserPassword());
+		assertEquals("network engineer", registeredUser.getUserType());
+	}
 	
 }
