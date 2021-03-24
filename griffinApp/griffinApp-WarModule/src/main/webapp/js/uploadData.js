@@ -3,10 +3,10 @@ var submitdata = function(){
 	console.log('submit called"');
 	var formData = new FormData();
 	var formData = new FormData($('#fileUploadForm')[0]); 
-	var files = $('#formFile')[0].files;
+	var files = $('#uploadFile')[0].files;
 
 	if(files.length >0){
-		console.log('file found');
+		console.log('file found'+formData);
 	$.ajax({
 		type: 'POST',
 		url: 'http://localhost:8080/callfailures/api/file/upload',
@@ -20,7 +20,7 @@ var submitdata = function(){
 			$('#errorsList').empty();
 			
 			$.each(data,function(index,EventsUploadResponseDTO){
-			   console.log('func called 23');
+
 			    var validRowCount = EventsUploadResponseDTO.validRowCount;
 				var invalidRowCount = EventsUploadResponseDTO.erroneousData.length;
 
@@ -32,23 +32,23 @@ var submitdata = function(){
 					$('#successfulList').append('<li class = "ignoredRow"> Ignored ' + invalidRowCount + ' Row' + (invalidRowCount > 1?'s' : '') +' in the ' + EventsUploadResponseDTO.tabName + ' Table.</li>');
 				}
 			});
-			console.log('file found35');
+
 			var errorLog = '';
 			$.each(data,function(index,EventsUploadResponseDTO){
 				var invalidRowCount = EventsUploadResponseDTO.erroneousData.length;
 
 				if(invalidRowCount > 0){
-					$('#errorsList').append(`<li class = "tableWithError"> Table Name : ${EventsUploadResponseDTO.tabName} has ${invalidRowCount} Ignored Rows</li>`);
+					//$('#errorsList').append(`<li class = "tableWithError"> Table Name : ${EventsUploadResponseDTO.tabName} has ${invalidRowCount} Ignored Rows</li>`);
 					errorLog += '\nTable: ' + EventsUploadResponseDTO.tabName + ', has ' +EventsUploadResponseDTO.tabName + 'Ignored Rows,\n' ;
 				}
 				
 				$.each(EventsUploadResponseDTO.erroneousData,function(index,InvalidRow){
-						$('#errorsList')
-						.append('<li class = "rowWithError"> Error at Row'+InvalidRow.rowNumber + ', Cause of Error: '+ InvalidRow.errorMessage  +'</li>');
+						//$('#errorsList').append('<li class = "rowWithError"> Error at Row'+InvalidRow.rowNumber + ', Cause of Error: '+ InvalidRow.errorMessage  +'</li>');
 						errorLog += 'Row: ' + InvalidRow.rowNumber + ', Cause: ' +InvalidRow.errorMessage + ',\n';
 						});
 			});		
 			$('#errorBtn').data('errorLogs', errorLog );	
+			console.log($('errorBtn').data);
 		},
 		error: function(){
 			console.log('error occured, could not upload file');
@@ -84,7 +84,11 @@ $(document).ready(function(){
 // 	submitdata(); 
 //	});
 	
-	$('#uploadBtn').click(function(){submitdata();});
+	$('#fileUploadForm').submit(function(event){
+		event.preventDefault();
+		console.log('upload pressed');
+		submitdata();
+		});
 	
 	$('#errorBtn').click(function(){downloadErrorLog();});
 	

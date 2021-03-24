@@ -265,12 +265,13 @@
                             <div class="card shadow mb-4">
                                 <div class="card-body">
                                     <div class="mb-3">
-                                        <label for="formFile" class="form-label">Upload File</label>
-                                        <input class="form-control" type="file" id="formFile">
-                                    </div>
-                                    <br/>
-                                    <div class="input-group">
-                                        <button type="button" class="btn btn-primary" id="uploadBtn">Upload</button>  
+                                    <form id="fileUploadForm" name="uploadInfo">
+                                     	<label for="formFile" class="form-label">Upload File</label>
+                                        <input class="form-control" name="uploadedFile" type="file" id="uploadFile">
+                                        
+                                       <input type="submit" value="Upload It" id="uploadBtn"/>
+                                    </form>
+                                       
                                     </div>
                                     <br/>
                                     <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
