@@ -9,7 +9,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>System Admin</title>
+    <title>Dashboard</title>
 
     <!-- Custom fonts for this template-->
     <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -17,33 +17,17 @@
         href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
         rel="stylesheet">
 
+    <link href="https://cdn.datatables.net/1.10.22/css/dataTables.bootstrap4.min.css" rel="stylesheet" crossorigin="anonymous" />
+
     <!-- Custom styles for this template-->
     <link href="css/sb-admin-2.min.css" rel="stylesheet">
+    <link href="css/networkEngineer.css" rel="stylesheet">
+
 
 </head>
 
 <body id="page-top">
-<nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
-		<div class="container-fluid">
-			<a class="navbar-brand" href="#">Griffin</a>
-			<button class="navbar-toggler" type="button"
-				data-bs-toggle="collapse" data-bs-target="#navbarsExampleDefault"
-				aria-controls="navbarsExampleDefault" aria-expanded="false"
-				aria-label="Toggle navigation">
-				<span class="navbar-toggler-icon"></span>
-			</button>
 
-			<div class="collapse navbar-collapse" id="navbarsExampleDefault">
-				<ul class="navbar-nav me-auto mb-2 mb-md-0">
-					<li class="nav-item"><a class="nav-link" aria-current="page" href="index.jsp">Home</a></li>
-					<li class="nav-item"><a class="nav-link" aria-current="page" href="upload.html">Upload</a></li>
-					<li class="nav-item"><a class="nav-link active" href="createUser.html">Create User</a></li>
-					<li class="nav-item"><a class="nav-link" aria-current="page" href="login.html">Login</a>
-					</li>
-				</ul>
-			</div>
-		</div>
-	</nav>
     <!-- Page Wrapper -->
     <div id="wrapper">
 
@@ -78,14 +62,14 @@
             <li class="nav-item">
                 <a class="nav-link" href="#">
                     <i class="fas fa-fw fa-table"></i>
-                    <span>Create User</span></a>
+                    <span>Support Engineer</span></a>
             </li>
 
             <!-- Nav Item - Tables -->
             <li class="nav-item">
                 <a class="nav-link" href="#">
                     <i class="fas fa-fw fa-table"></i>
-                    <span>Upload file</span></a>
+                    <span>Network Engineer</span></a>
             </li>
 
             <!-- Divider -->
@@ -140,66 +124,13 @@
                             </div>
                         </li>
 
-                        <!-- Nav Item - Alerts -->
-                        <li class="nav-item dropdown no-arrow mx-1">
-                            <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button"
-                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <i class="fas fa-bell fa-fw"></i>
-                                <!-- Counter - Alerts -->
-                                <span class="badge badge-danger badge-counter">3+</span>
-                            </a>
-                            <!-- Dropdown - Alerts -->
-                            <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
-                                aria-labelledby="alertsDropdown">
-                                <h6 class="dropdown-header">
-                                    Alerts Center
-                                </h6>
-                                <a class="dropdown-item d-flex align-items-center" href="#">
-                                    <div class="mr-3">
-                                        <div class="icon-circle bg-primary">
-                                            <i class="fas fa-file-alt text-white"></i>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <div class="small text-gray-500">December 12, 2019</div>
-                                        <span class="font-weight-bold">A new monthly report is ready to download!</span>
-                                    </div>
-                                </a>
-                                <a class="dropdown-item d-flex align-items-center" href="#">
-                                    <div class="mr-3">
-                                        <div class="icon-circle bg-success">
-                                            <i class="fas fa-donate text-white"></i>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <div class="small text-gray-500">December 7, 2019</div>
-                                        $290.29 has been deposited into your account!
-                                    </div>
-                                </a>
-                                <a class="dropdown-item d-flex align-items-center" href="#">
-                                    <div class="mr-3">
-                                        <div class="icon-circle bg-warning">
-                                            <i class="fas fa-exclamation-triangle text-white"></i>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <div class="small text-gray-500">December 2, 2019</div>
-                                        Spending Alert: We've noticed unusually high spending for your account.
-                                    </div>
-                                </a>
-                                <a class="dropdown-item text-center small text-gray-500" href="#">Show All Alerts</a>
-                            </div>
-                        </li>
-
-                        
-
                         <div class="topbar-divider d-none d-sm-block"></div>
 
                         <!-- Nav Item - User Information -->
                         <li class="nav-item dropdown no-arrow">
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">System Administrator</span>
+                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">Customer Service  Rep</span>
                                 <img class="img-profile rounded-circle"
                                     src="img/undraw_profile.svg">
                             </a>
@@ -228,55 +159,93 @@
                     </div>
                     <!-- Content Row -->
                     <div class="row">
-                        <div class="col-lg-4 mb-4">
-                            <div class="card shadow mb-4">
-                                <div class="card-header py-3">
-                                    <h6 class="m-0 font-weight-bold text-primary">Create User</h6>
+                        <div class="col-lg-6 mb-4">
+                            <div class="card mt-4">
+                                <div class="card-header">
+                                  IMSI Diagnostics Summary
                                 </div>
-                                <div class="card-body">
-                                	<div class="input-group mb-3">
-                                		<span class="input-group-text">User ID</span>
-                                        <input type="text" class="form-control" id="userId" placeholder="User ID" aria-label="User ID" aria-describedby="basic-addon1" required>                            
-                                	</div>
-									<div class="input-group mb-3">
-                                		<span class="input-group-text">User Name</span>
-                                        <input type="text" class="form-control" id="userName" placeholder="User name" aria-label="User name" aria-describedby="basic-addon1" required>                            
-                                	</div>
-									<div class="input-group mb-3">
-                                		<span class="input-group-text">User Type</span>
-                                        <input type="text" class="form-control" id="userType" placeholder="User type" aria-label="User type" aria-describedby="basic-addon1" required>                            
-                                	</div>
-                                    <div class="input-group mb-3">
-                                        <span class="input-group-text">Password</span>
-                                        <input type="password" id="userPassword" class="form-control" placeholder="Password" aria-label="Password" aria-describedby="basic-addon1" required>
-                                      </div>
-                                      <div class="input-group mb-3">
-                                        <span class="input-group-text">Confirm Password</span>
-                                        <input type="password" id="confirmPassword" class="form-control" placeholder="Password" aria-label="Password" aria-describedby="basic-addon1" required>
-                                      </div>
-                                  
-                                      <div class="input-group">
-                                        <button type="button" id="createUserButton" class="btn btn-primary">Create User</button>
-                                      </div>
+                                <div class="card-body" id="imsiSummaryCard">
+                                    <div class = "row">
+                                        <form id = "imsiSummaryForm">
+                                            <div class = "row">
+                                                <div class = "col">
+                                                    <label for="imsiOnIMSISummaryForm" class="form-label fw-bold small">IMSI</label>
+                                                    <input required type="text" class="form-control" id="imsiOnIMSISummaryForm" placeholder="IMSI">
+                                                </div>
+                                                <div class = "col">
+                                                    <label for="startDateOnIMSISummaryForm" class="form-label fw-bold small">From</label>
+                                                    <input required type="datetime-local" class="form-control" id="startDateOnIMSISummaryForm" placeholder="name@example.com">
+                                                </div>
+                                                <div class = "col">
+                                                    <label for="endDateOnIMSISummaryForm" class="form-label fw-bold small">To</label>
+                                                    <input required type="datetime-local" class="form-control" id="endDateOnIMSISummaryForm" placeholder="name@example.com">
+                                                </div>
+                                                <div class = "col">
+                                                    <label for="exampleFormControlInput1" class="form-label fw-bold small">Query</label>
+                                                    <input required type="submit" class="form-control btn btn-primary" value="Submit"/>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                    <div class = "row mt-4 p-2" id = "imsiSummaryFormResult">
+                                        <table id="imsiSummaryTable" class="table table-hover table-bordered table-responsive">
+                                            <thead>
+                                                <tr>
+                                                  <th scope="col">IMSI</th>
+                                                  <th scope="col">From</th>
+                                                  <th scope="col">To</th>
+                                                  <th scope="col">Call Failures Count</th>
+                                                </tr>
+                                              </thead>
+                                              <tbody>
+                                                <tr>
+                                                  <th scope="row" id="imsiSummaryNumber">0</th>
+                                                  <td id="imsiSummaryFromDate">NaN</td>
+                                                  <td id="imsiSummaryToDate">NaN</td>
+                                                  <td id="imsiSummaryCallFailureCount">NaN</td>
+                                                </tr>
+                                              </tbody>
+                                        </table>
+                                        <div class="alert alert-danger col-lg-12" role="alert" id="errorAlertOnSummaryForm">
+                                            Error on Request
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                      <div class="col-lg-4 mb-4">
-                            <div class="card shadow mb-4">
-                                <div class="card-body">
-                                    <div class="mb-3">
-                                    <form id="fileUploadForm" name="uploadInfo">
-                                     	<label for="formFile" class="form-label">Upload File</label>
-                                        <input class="form-control" name="uploadedFile" type="file" id="uploadFile">
-                                        <br>
-                                       <input type="submit" class="btn btn-primary" value="Upload File" id="uploadBtn"/>
+                        <div class="col-lg-6 mb-4">
+                            <div class="card mt-4">
+                                <div class="card-header">
+                                    Call Failures
+                                </div>
+                                <div class="card-body" id="userEquipmentFailures">
+                                    <form id = "userEquipmentFailuresForm">
+                                        <div class = "row">
+                                            <div class = "col">
+                                                <label for="selectUserEquipmentDropdown" class="form-label fw-bold small">IMSI</label>
+                                                <select class="form-select" aria-label="Default select example" id="selectUserEquipmentDropdown">
+                                                </select>
+                                                </div>
+                                            <div class = "col">
+                                                <label for="exampleFormControlInput1" class="form-label fw-bold small">Query</label>
+                                                <input required type="submit" class="form-control btn btn-primary" value="Submit"/>
+                                            </div>
+                                        </div>
                                     </form>
-                                       
+                                    <div class = "row mt-4 p-4" id = "userEquipmentFailuresFormResult">
+                                        <table id="phoneFailuresTable" class="table table-hover table-bordered">
+                                            <thead>
+                                                <tr>
+                                                  <th>IMSI</th>
+                                                  <th>Event ID</th>
+                                                  <th>Cause Code</th>
+                                                  <th>Description</th>
+                                                </tr>
+                                              </thead>
+                                              <tbody>
+                                              </tbody>
+                                        </table>
                                     </div>
-                                    <br/>
-
-                                        <input type="button" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm" 
-                                        value="Download Error Logs" id ="errorBtn" />
                                 </div>
                             </div>
                         </div>
@@ -350,16 +319,13 @@
     <!-- Page level custom scripts -->
     <script src="js/demo/chart-area-demo.js"></script>
     <script src="js/demo/chart-pie-demo.js"></script>
-    
-    <!-- JavaScript to Create User -->
-<<<<<<< HEAD
-    <script src"js/createUser.js"></script>
-    <!-- JavaSccript for handling upload -->
-    <script src="js/uploadData.js"> </script>
-    <script src = "https://cdn.jsdelivr.net/npm/file-saver@2.0.2/dist/FileSaver.min.js"></script>
-=======
-    <script src="js/newUser.js"></script>
->>>>>>> refs/remotes/origin/newlogin
+
+    <!-- Data tables -->
+    <script src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.datatables.net/1.10.22/js/dataTables.bootstrap4.min.js" crossorigin="anonymous"></script>
+
+    <!-- Network Engineer Speciifc JS-->
+    <script src="js/customerSupport.js"></script>
 
 </body>
 

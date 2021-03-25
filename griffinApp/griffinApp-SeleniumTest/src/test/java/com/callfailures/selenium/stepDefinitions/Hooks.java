@@ -11,7 +11,8 @@ public class Hooks {
 	public static final String ROOT_DIRECTORY = System.getProperty("user.dir");
 	public static final String TEST_UPLOAD_PAGE = "http://localhost:8080/callfailures/upload.html";
 	public static final String NETWORK_ENGINEER_PAGE = "http://localhost:8080/callfailures/networkEngineer.html";
-
+	public static final String CUSTOMER_SUPPORT_REP_PAGE = "http://localhost:8080/callfailures/customerSupport.html";
+	public static final String SYSTEM_ADMIN_PAGE = "http://localhost:8080/callfailures/sysadmin.html";
 	
 	@Before
 	public void setup() {
@@ -28,12 +29,17 @@ public class Hooks {
 	
 	@Before("@SystemAdmin")
 	public void loginSetup() {
-		Hooks.driver.get(TEST_UPLOAD_PAGE);
+		Hooks.driver.get(SYSTEM_ADMIN_PAGE);
 	}
 	
 	@Before("@NetworkEngineer")
 	public void loginSetupForNetworkEngineer() {
 		Hooks.driver.get(NETWORK_ENGINEER_PAGE);
+	}
+	
+	@Before("@CustomerSupportRep")
+	public void loginSetupForCustomerSupportRep() {
+		Hooks.driver.get(CUSTOMER_SUPPORT_REP_PAGE);
 	}
 	
 	@After
