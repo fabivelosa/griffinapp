@@ -6,26 +6,26 @@ const setAuthHeader = function(xhr){
 }
 
 const displayPhoneEquipmentFailures = function(phoneFailures){
-    $("#phoneFailuresTable").show();
-    const table = $('#phoneFailuresTable').DataTable();
+    $("#imsiTable").show();
+    const table = $('#imsiTable').DataTable();
     table.clear();
     $(phoneFailures).each(function(index, phoneFailure){
         console.log(phoneFailure);
-        table.row.add([phoneFailure.userEquipment.model, 
-            phoneFailure.eventCause.eventCauseId.eventCauseId, 
-            phoneFailure.eventCause.eventCauseId.causeCode,
-            phoneFailure.eventCause.description,
-            phoneFailure.count
-        ]);
+//        table.row.add([phoneFailure.userEquipment.model, 
+//            phoneFailure.eventCause.eventCauseId.eventCauseId, 
+//            phoneFailure.eventCause.eventCauseId.causeCode,
+//            phoneFailure.eventCause.description,
+//            phoneFailure.count
+//        ]);
     });
     table.draw();
 }
 
-const queryPhoneEquipmentFailures = function(tac){
+const queryPhoneEquipmentFailures = function(from, to){
     $.ajax({
         type:'GET',
         dataType:'json',
-        url:`${rootURL}/userEquipment/query?tac=${tac}`,
+        url:`${rootURL}/IMSIs/query?from=${from}&to=${to}`,
         beforeSend: setAuthHeader,
         success: displayPhoneEquipmentFailures,
         error: function(jqXHR, textStatus, errorThrown){
@@ -34,36 +34,11 @@ const queryPhoneEquipmentFailures = function(tac){
     });
 }
 
-const addUserEquipmentOptions = function(userEquipments){
-    $("#selectUserEquipmentDropdown").empty();    
-    let options = "";
-    $(userEquipments).each(function(index, userEquipment){
-        options += `<option value=\"${userEquipment.tac}\">${userEquipment.model}</option>`
-    });
-    $("#selectUserEquipmentDropdown").append(options);
-}
-
-const setUserQuipmentDropdownOptions = function(){
-    $.ajax({
-        type:'GET',
-        dataType:'json',
-        url:`${rootURL}/userEquipment`,
-        beforeSend: setAuthHeader,
-        success: addUserEquipmentOptions,
-        error: function(){
-            alert("Failed to fetch user equipment options");
-        }
-    });
-}
-
 const displayIMSISummary = function(imsiSummary, textStatus, jqXHR){
     $("#errorAlertOnSummaryForm").hide();
-    $("#imsiSummaryTable").show();
-    $("#imsiSummaryNumber").text(imsiSummary.imsi);
-    $("#imsiSummaryFromDate").text($('#startDateOnIMSISummaryForm').val());
-    $("#imsiSummaryToDate").text($('#endDateOnIMSISummaryForm').val());
-    $("#imsiSummaryCallFailureCount").text(imsiSummary.callFailuresCount);
-    $("#imsiSummaryTotalDuration").text(imsiSummary.totalDurationMs/1000 + " s");
+    $("#imsiFailureTable").show();
+    $("#imsiNumber").text(imsiSummary.model);
+    $("#imsiCallFailureCount").text(imsiSummary.callFailuresCount);
 }
 
 const displayErrorOnIMSISummary = function(jqXHR, textStatus, errorThrown){
@@ -76,7 +51,7 @@ const queryIMSISUmmary = function(imsi, from, to){
     $.ajax({
         type: "GET",
         dataType: "json",
-        url: `${rootURL}/events/query?imsi=${imsi}&from=${from}&to=${to}&summary=true`,
+        url: `${rootURL}/events/query/ue?model=${imsi}&from=${from}&to=${to}`,
         beforeSend: setAuthHeader,
         success: displayIMSISummary,
         error: displayErrorOnIMSISummary
@@ -84,19 +59,18 @@ const queryIMSISUmmary = function(imsi, from, to){
 }
 
 $(document).ready(function(){		
-    setUserQuipmentDropdownOptions();
-
-    $('#imsiSummaryForm').submit(function(event){
+    $('#imsiCallFaluireForm').submit(function(event){
         event.preventDefault();
-        const imsi = $('#imsiOnIMSISummaryForm').val();
-        const from = new Date($('#startDateOnIMSISummaryForm').val()).valueOf();
-        const to = new Date($('#endDateOnIMSISummaryForm').val()).valueOf();
+        const imsi = $('#imsiOnCallFailureForm').val();
+        const from = new Date($('#startDateOnCallFailureForm').val()).valueOf();
+        const to = new Date($('#endDateOnCallFailureForm').val()).valueOf();
         queryIMSISUmmary(imsi, from, to);
     });
  
-    $("#userEquipmentFailuresForm").submit(function(event){
+    $("#imsiListForm").submit(function(event){
         event.preventDefault();
-        const tac = $("#selectUserEquipmentDropdown").val();
-        queryPhoneEquipmentFailures(tac);
+        const from = new Date($('#startDateOnListForm').val()).valueOf();
+        const to = new Date($('#endDateOnListForm').val()).valueOf();
+        queryPhoneEquipmentFailures(from, to);
     });
 });
