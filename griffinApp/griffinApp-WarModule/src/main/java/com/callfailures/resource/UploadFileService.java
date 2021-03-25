@@ -34,6 +34,7 @@ import com.callfailures.entity.FailureClass;
 import com.callfailures.entity.MarketOperator;
 import com.callfailures.entity.Upload;
 import com.callfailures.entity.UserEquipment;
+import com.callfailures.parsingutils.InvalidRow;
 import com.callfailures.parsingutils.ParsingResponse;
 import com.callfailures.services.EventCauseService;
 import com.callfailures.services.EventService;
@@ -64,6 +65,8 @@ public class UploadFileService {
 	private UploadDAO uploadDAO;
 
 	private final String UPLOADFILEPATH = System.getProperty("user.dir") + "/fileUploads/";
+
+	private static final String DOWNLOADFILEPATH = "/Users/fabi/wildfly-22.0.0.Final/welcome-content/fileDownloads/";
 
 	protected File sheet;
 
@@ -126,7 +129,7 @@ public class UploadFileService {
 				uploadDAO.update(currentUpload);
 
 				generateResponseEntity(uploadsOverallResult, eventCauses, failureClasses, userEquipment, marketOperator,
-						events);
+						events,currentUpload);
 
 				currentUpload.setUploadStatus(100);
 				uploadDAO.update(currentUpload);
@@ -135,13 +138,10 @@ public class UploadFileService {
 				final long duration = (endNano - startNano) / 1000000000;
 				System.out.println("It took " + duration + "seconds to validate and store the data");
 
-				// Response response =
-				// Response.status(200).entity(uploadsOverallResult).build();
-				// ((AsyncResponse) response).resume(response);
 			}
 		}.start();
 		return Response.status(200).entity(currentUpload).build();
-		//return Response.status(200).entity(uploadsOverallResult).build();
+
 	}
 
 	@GET
@@ -157,7 +157,8 @@ public class UploadFileService {
 	private void generateResponseEntity(final List<EventsUploadResponseDTO> uploadsOverallResult,
 			final ParsingResponse<EventCause> eventCauses, final ParsingResponse<FailureClass> failureClasses,
 			final ParsingResponse<UserEquipment> userEquipment, final ParsingResponse<MarketOperator> marketOperator,
-			final ParsingResponse<Events> events) {
+			final ParsingResponse<Events> events, final Upload reportFile) {
+
 		uploadsOverallResult.add(new EventsUploadResponseDTO("Event Cause", eventCauses.getValidObjects().size(),
 				eventCauses.getInvalidRows()));
 		uploadsOverallResult.add(new EventsUploadResponseDTO("Failure Class", failureClasses.getValidObjects().size(),
@@ -168,6 +169,31 @@ public class UploadFileService {
 				marketOperator.getInvalidRows()));
 		uploadsOverallResult.add(
 				new EventsUploadResponseDTO("Base Data", events.getValidObjects().size(), events.getInvalidRows()));
+		String table = "";
+		try {
+
+			final String filename = "Error" + System.currentTimeMillis() + ".txt";
+			final FileOutputStream file = new FileOutputStream(DOWNLOADFILEPATH + filename);
+			reportFile.setReportFile(filename);
+			for (final EventsUploadResponseDTO result : uploadsOverallResult) {
+
+				if (result.getTabName().equals(table.toString())) {
+					file.write(("Table: " + table + " , has Ignored Rows").getBytes());
+					table = result.getTabName();
+					file.write(System.getProperty("line.separator").getBytes());
+				}
+
+				for (final InvalidRow invalidItem : result.getErroneousData()) {
+					file.write(("Row :" + invalidItem.getRowNumber() + " , Caused :" + invalidItem.getErrorMessage())
+							.getBytes());
+					file.write(System.getProperty("line.separator").getBytes());
+				}
+			}
+			file.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
 	}
 
 	/**

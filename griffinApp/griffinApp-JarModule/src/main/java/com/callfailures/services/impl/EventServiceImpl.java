@@ -108,7 +108,7 @@ public class EventServiceImpl implements EventService {
 			Row row = rowIterator.next();
 			int rowNumber = 0;
 			int index = 0;
-			int batch_size = 2000;
+			int batch_size = 500;
 
 			if (batch_size > rowTotal) {
 				batch_size = rowTotal - 1;

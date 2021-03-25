@@ -1,4 +1,5 @@
 var i = 0;
+var reportfilename;
 
 //Add dataset
 var submitdata = function() {
@@ -25,7 +26,7 @@ var uuid = data.uploadID;
 	console.log('if novo"');
     width = 1;
     var elem = document.getElementById("myBar");
-    var id = setInterval(frame, 5000);
+    var id = setInterval(frame, 1000); 
     function frame() {
       if (width >= 100) {
         clearInterval(id);
@@ -47,10 +48,27 @@ var getStatus = function(id) {
 		async: false,
 		success: function(data) {
 			currentStatus = data.uploadStatus;
+			reportfilename = data.reportFile;
+			console.log("file" + reportfilename);
 			console.log("status" + currentStatus);
 		}
 	});
 	return currentStatus;
+}
+
+
+
+
+function downloadURI(uri, name) 
+{
+    var link = document.createElement("a");
+    // If you don't know the name or want to use
+    // the webserver default set name = ''
+    link.setAttribute('download', name);
+    link.href = uri;
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
 }
 
 $(document).ready(function() {
@@ -61,6 +79,28 @@ $(document).ready(function() {
 		console.log('Clicked upload');
 		submitdata();
 	});
+	
+	$('#downloadBtn').click(function(){
+		
+		
+		 downloadURI('http://localhost:8080/fileDownloads/', reportfilename);
+		
+	});
+	
+	$("#downloadBtn").click(function (e) {
+          e.preventDefault();
+          window.location.href = "http://localhost:8080/fileDownloads/"+reportfilename;
+      });
+
+
+ /* this one should download the file, but its getting Forbidden
+   $('#downloadBtn').click(function(){	
+		 downloadURI('http://localhost:8080/fileDownloads/', reportfilename);
+	});
+*/
 
 });
+
+
+
 
