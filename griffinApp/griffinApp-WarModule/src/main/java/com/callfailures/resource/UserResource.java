@@ -33,6 +33,7 @@ public class UserResource {
 	}
 
 	@POST
+	@Consumes("application/json")
 	@Produces({ MediaType.APPLICATION_JSON })
 	public Response addUser(final User user) {
 		userService.addUser(user);
@@ -40,7 +41,6 @@ public class UserResource {
 	}
 
 	@PUT
-	@Path("/{id}")
 	@Consumes("application/json")
 	@Produces({ MediaType.APPLICATION_JSON })
 	public Response updateUser(final User user) {

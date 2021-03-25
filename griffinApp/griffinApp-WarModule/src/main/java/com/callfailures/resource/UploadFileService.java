@@ -92,7 +92,8 @@ public class UploadFileService {
 				generateResponseEntity(uploadsOverallResult, eventCauses, failureClasses, userEquipment, marketOperator,
 						events);
 			} catch (IOException e) {
-				e.printStackTrace();
+				return Response.status(400).entity(e.getStackTrace()).build();
+				//e.printStackTrace();
 			}
 
 		}
