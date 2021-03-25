@@ -49,7 +49,7 @@ function authenticateUser() {
 			} else if (authInfo.userType == 'SUPPORTENG') {
 				renderSuppEngContent();
 			} else if (authInfo.userType == 'CUSTSERVREP') {
-				renderCustServReoContent();
+				renderCustServRepContent();
 			} else if (authInfo.userType == 'NETWORKMNG') {
 				renderNetwManagContent();
 			}
@@ -65,4 +65,19 @@ function authenticateUser() {
 function renderSysAdminContent() {
 	console.log('Display SysAdmin content');
 	  window.location.replace('sysadmin.html');
+}
+
+function renderNetwManagContent() {
+	console.log('Display Network Manager content');
+	  window.location.replace('networkEngineer.html');
+}
+
+function renderSuppEngContent() {
+	console.log('Display System Admin content');
+	  window.location.replace('networkEngineer.html');
+}
+
+function renderCustServRepContent() {
+	console.log('Display Customer Service Representative content');
+	  window.location.replace('customerSupport.html');
 }
