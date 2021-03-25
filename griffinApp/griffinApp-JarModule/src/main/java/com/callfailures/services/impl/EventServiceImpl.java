@@ -4,8 +4,10 @@ import java.io.File;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
@@ -26,6 +28,7 @@ import com.callfailures.entity.views.IMSIEvent;
 import com.callfailures.entity.views.IMSISummary;
 import com.callfailures.entity.views.PhoneFailures;
 import com.callfailures.entity.views.PhoneModelSummary;
+import com.callfailures.entity.views.UniqueIMSI;
 import com.callfailures.exception.FieldNotValidException;
 import com.callfailures.exception.InvalidDateException;
 import com.callfailures.exception.InvalidIMSIException;
@@ -50,7 +53,6 @@ public class EventServiceImpl implements EventService {
 
 	@Override
 	public List<IMSIEvent> findFailuresByImsi(final String imsi) {
-		// TODO Auto-generated method stub
 		if (!isValidIMSI(imsi)) {
 			return null;
 		}
@@ -192,9 +194,18 @@ public class EventServiceImpl implements EventService {
 	}
 
 	@Override
-	public List<String> findIMSISBetweenDates(final LocalDateTime startTime, final LocalDateTime endTime) {
-		// TODO Auto-generated method stub
-		return null;
+	public List<UniqueIMSI> findIMSISBetweenDates(final LocalDateTime startTime, final LocalDateTime endTime) {
+		if (startTime.isAfter(endTime)) {
+			throw new InvalidDateException();
+		}
+
+		return eventDAO.findIMSISBetweenDates(startTime, endTime);
+	}
+
+	@Override
+	public List<UniqueIMSI> findIMSIS() {
+		return eventDAO.findIMSIS().stream().sorted(Comparator.comparing(UniqueIMSI::getImsi))
+				.collect(Collectors.toList());
 	}
 
 }

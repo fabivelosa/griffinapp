@@ -63,7 +63,7 @@ public class UploadFileService {
 	@EJB
 	private UploadDAO uploadDAO;
 
-	private final String UPLOADED_FILE_PATH = System.getProperty("user.dir") + "/fileUploads/";
+	private final String UPLOADFILEPATH = System.getProperty("user.dir") + "/fileUploads/";
 
 	protected File sheet;
 
@@ -82,18 +82,17 @@ public class UploadFileService {
 		final Upload currentUpload = uploadDAO.getUploadByRef(uploadUUID);
 		final Map<String, List<InputPart>> uploadForm = input.getFormDataMap();
 		final List<InputPart> inputParts = uploadForm.get("uploadedFile");
-		System.out.println("tamanho: " + inputParts.size());
 		for (final InputPart inputPart : inputParts) {
 			final MultivaluedMap<String, String> header = inputPart.getHeaders();
 			String fileName = getFileName(header);
 			try (InputStream inputStream = inputPart.getBody(InputStream.class, null);) {
 				final byte[] bytes = IOUtils.toByteArray(inputStream);
 				// constructs upload file path
-				fileName = UPLOADED_FILE_PATH + fileName;
+				fileName = UPLOADFILEPATH + fileName;
 				System.out.println(fileName);
 				sheet = writeFile(bytes, fileName);
 			} catch (IOException e) {
-				e.printStackTrace();
+				return Response.status(400).entity(e.getStackTrace()).build();
 			}
 		}
 		// File sheet = null;
@@ -107,9 +106,6 @@ public class UploadFileService {
 			public void run() {
 				final List<EventsUploadResponseDTO> uploadsOverallResult = new ArrayList<>();
 				final long startNano = System.nanoTime();
-
-				System.out.println("Done upload");
-				System.out.println("name " + sheet.getName());
 
 				final ParsingResponse<EventCause> eventCauses = causeService.read(sheet);
 				currentUpload.setUploadStatus(5);
@@ -128,10 +124,10 @@ public class UploadFileService {
 				final ParsingResponse<Events> events = eventService.read(sheet, currentUpload);
 				currentUpload.setUploadStatus(95);
 				uploadDAO.update(currentUpload);
-				
+
 				generateResponseEntity(uploadsOverallResult, eventCauses, failureClasses, userEquipment, marketOperator,
 						events);
-				System.out.println("Done read");
+
 				currentUpload.setUploadStatus(100);
 				uploadDAO.update(currentUpload);
 
@@ -145,6 +141,7 @@ public class UploadFileService {
 			}
 		}.start();
 		return Response.status(200).entity(currentUpload).build();
+		//return Response.status(200).entity(uploadsOverallResult).build();
 	}
 
 	@GET
@@ -196,6 +193,7 @@ public class UploadFileService {
 
 	private File writeFile(final byte[] content, final String filename) {
 		final File file = new File(filename);
+
 		try (FileOutputStream fop = new FileOutputStream(file)) {
 			if (!file.exists()) {
 				if (!file.createNewFile()) {
@@ -207,7 +205,6 @@ public class UploadFileService {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-
 		return file;
 	}
 }
