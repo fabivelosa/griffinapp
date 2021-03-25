@@ -9,7 +9,8 @@ const displayIMSIByFailures = function(IMSIfailures){
         console.log(IMSIfailure);
         table.row.add([IMSIfailure.imsi, 
             IMSIfailure.eventCause.eventCauseId.eventCauseId, 
-            IMSIfailure.eventCause.eventCauseId.causeCode
+            IMSIfailure.eventCause.eventCauseId.causeCode,
+            IMSIfailure.eventCause.description
         ]);
     });
     table.draw();
