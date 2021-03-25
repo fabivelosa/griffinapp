@@ -22,7 +22,8 @@ import com.callfailures.entity.views.UniqueIMSI;
 public class EventDAO {
 	private static final String FIND_ALL_EVENTS = "SELECT e FROM event e",
 			FIND_ALL_IMSI="SELECT DISTINCT NEW com.callfailures.entity.views.UniqueIMSI(e.imsi) " 
-					+ "FROM event e ",
+					+ "FROM event e "
+					+"ORDER BY e.imsi",
 			FIND_IMSI_BY_DATE="SELECT DISTINCT NEW com.callfailures.entity.views.UniqueIMSI(e.imsi) " 
 					+ "FROM event e "
 					+ "WHERE (e.dateTime BETWEEN :startTime AND :endTime)",

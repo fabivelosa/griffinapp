@@ -27,7 +27,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
 @RunWith(Arquillian.class)
-public class EventsOfIMSITest {
+public class EventsOfIMSIIntTest {
 	
 	private final static String IMSI_VALID = "344930000000011";
 	private final static String IMSI_INVALID = "3449300000000119";
