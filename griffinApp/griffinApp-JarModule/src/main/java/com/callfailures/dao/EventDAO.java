@@ -51,8 +51,8 @@ public class EventDAO {
 	
 	@PersistenceContext
 	EntityManager entityManager;
-
-
+	
+	
 	/**
 	 * Stores the Events object to the database
 	 * @param event - the object to be persisted
@@ -60,6 +60,21 @@ public class EventDAO {
 	public void create(final Events event) {
 		entityManager.persist(event);
 	}
+	
+	/**
+	 * Stores the Events object to the database
+	 * @param event - the object to be persisted
+	 */
+	public void createBulk(final List<Events> events) {
+		
+		for(Events event : events ) {
+			entityManager.persist(event);			
+		}
+		
+		entityManager.flush();
+		entityManager.clear();
+	}
+	
 
 
 	/**
