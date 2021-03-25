@@ -33,10 +33,20 @@ public class ResourceClient {
 	public Response postWithFile(final String fileName) {
 		return postWithContent(getRequestFromFileOrEmptyIfNullFile(fileName));
 	}
+	
 
 	public Response postWithContent(final String content) {
 		System.out.println(content);
 		return buildClient().post(Entity.entity(content, MediaType.APPLICATION_JSON));
+	}
+	
+	public Response postWithFile(final String token, final String fileName) {
+		return postWithContent(token, getRequestFromFileOrEmptyIfNullFile(fileName));
+	}
+
+	public Response postWithContent(final String token, final String content) {
+		System.out.println(content);
+		return buildClient().header(HttpHeaders.AUTHORIZATION, "Bearer " + token).post(Entity.entity(content, MediaType.APPLICATION_JSON));
 	}
 	
 	public Response putWithFile(final String fileName) {
@@ -44,6 +54,15 @@ public class ResourceClient {
 	}
 
 	public Response putWithContent(final String content) {
+		System.out.println(content);
+		return buildClient().put(Entity.entity(content, MediaType.APPLICATION_JSON));
+	}
+	
+	public Response putWithFile(final String token,final String fileName) {
+		return putWithContent(getRequestFromFileOrEmptyIfNullFile(fileName));
+	}
+
+	public Response putWithContent(final String token, final String content) {
 		System.out.println(content);
 		return buildClient().put(Entity.entity(content, MediaType.APPLICATION_JSON));
 	}
