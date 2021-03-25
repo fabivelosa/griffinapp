@@ -13,6 +13,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import com.callfailures.entity.Secured;
 import com.callfailures.entity.User;
 import com.callfailures.services.UserService;
 
@@ -25,6 +26,7 @@ public class UserResource {
 	private UserService userService;
 
 	@GET
+	@Secured
 	@Produces({ MediaType.APPLICATION_JSON })
 	@Path("/{id}")
 	public Response findUserById(final @PathParam("id") String userId) {
@@ -33,6 +35,7 @@ public class UserResource {
 	}
 
 	@POST
+	@Secured
 	@Consumes("application/json")
 	@Produces({ MediaType.APPLICATION_JSON })
 	public Response addUser(final User user) {
@@ -41,6 +44,7 @@ public class UserResource {
 	}
 
 	@PUT
+	@Secured
 	@Consumes("application/json")
 	@Produces({ MediaType.APPLICATION_JSON })
 	public Response updateUser(final User user) {

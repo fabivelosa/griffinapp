@@ -11,6 +11,7 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import com.callfailures.entity.Secured;
 import com.callfailures.entity.UserEquipment;
 import com.callfailures.entity.views.PhoneFailures;
 import com.callfailures.services.EventService;
@@ -27,6 +28,7 @@ public class UserEquipmentResource {
 	private EventService eventService;
 	
 	@GET
+	@Secured
 	@Produces({MediaType.APPLICATION_JSON})
 	public Response findAll() {
 		final List<UserEquipment> allPhoneModels = userEquipmentService.findAll();
@@ -35,6 +37,7 @@ public class UserEquipmentResource {
 	
 	
 	@GET
+	@Secured
     @Path("/query")
 	@Produces({ MediaType.APPLICATION_JSON })
 	public Response findUniqueEventCauseCountByPhoneModel(
