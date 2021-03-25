@@ -18,6 +18,8 @@ import javax.validation.Validator;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.runner.RunWith;
+import org.mockito.runners.MockitoJUnitRunner;
 
 import com.callfailures.dao.EventCauseDao;
 import com.callfailures.dao.EventDAO;
@@ -33,6 +35,7 @@ import com.callfailures.entity.MarketOperatorPK;
 import com.callfailures.entity.UserEquipment;
 import com.callfailures.entity.views.IMSISummary;
 import com.callfailures.entity.views.PhoneModelSummary;
+import com.callfailures.entity.views.UniqueIMSI;
 import com.callfailures.entity.views.PhoneFailures;
 import com.callfailures.exception.InvalidDateException;
 import com.callfailures.exception.InvalidIMSIException;
@@ -44,8 +47,7 @@ import com.callfailures.entity.views.IMSIEvent;
 
 
 
-
-class ReadandPersisteEventsUTest {
+public class EventsServiceImplTest {
 	private static final LocalDateTime VALID_END_TIME = LocalDateTime.of(2021,3,18,12,1);
 	private static final LocalDateTime VALID_START_TIME = LocalDateTime.of(2021,3,18,12,0);
 	private static final String VALID_IMSI = "344930000000011", LONG_IMSI = "3449300000000111", INVALID_IMSI = "A44930000000011", VALID_PHONE_MODEL = "VEA3";
@@ -303,6 +305,7 @@ class ReadandPersisteEventsUTest {
 		file = new File(absolutePath + "/importData/inexistentMarketOperator.xlsx");
 		assertInvalidRowMessage("Inexistent MCC and MNC combination");
 	}
+
 	
 	private void assertInvalidRowMessage(final String invalidRowMessage) {
 		final ParsingResponse<Events> parsingResults = eventService.read(file);
@@ -310,5 +313,20 @@ class ReadandPersisteEventsUTest {
 		assertEquals(1, parsingResults.getInvalidRows().size());
 		final Iterator<InvalidRow> eventsIterator = parsingResults.getInvalidRows().iterator();
 		assertEquals(invalidRowMessage, eventsIterator.next().getErrorMessage());
+		
 	}
+	
+	
+	@Test
+	void testForFindIMSIs() {
+		UniqueIMSI imsi= new UniqueIMSI();
+		List<UniqueIMSI> imsisList=new ArrayList<>();
+		imsisList.add(imsi);
+		when(eventDAO.findIMSIS()).thenReturn(imsisList);
+		assertEquals(imsisList,eventService.findIMSIS()); 
+		verify(eventDAO,times(1)).findIMSIS();
+		
+	}
+	
+	
 }

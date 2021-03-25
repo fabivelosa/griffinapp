@@ -52,6 +52,24 @@ public class IMSIByDate {
 		}		
 	}
 	
+	
+	/**
+	 * Support Engineer: Retreive List of IMSIs with failures 
+	 * @return Returns List of IMSI names
+	 */
+	@GET
+    @Path("/query/all")
+	@Produces({ MediaType.APPLICATION_JSON })
+	public Response getIMSIs() {
+		try {
+			final List<UniqueIMSI> imsis = eventService.findIMSIS();
+			return Response.status(200).entity(imsis).build();
+		} catch (Exception exception) {
+			return Response.status(404).build();
+		}		
+	}
+	
+	
 	private LocalDateTime convertLongToLocalDateTime(final Long startEpoch) {
 		return LocalDateTime.ofInstant(Instant.ofEpochMilli(startEpoch), TimeZone.getDefault().toZoneId());
 }

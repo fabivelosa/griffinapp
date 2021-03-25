@@ -65,5 +65,7 @@ public interface EventService {
 	List<UniqueIMSI> findIMSISBetweenDates(final LocalDateTime startTime, final LocalDateTime endTime);
 
 	List<IMSIEvent> findFailuresByImsi(final String imsi);
+
+	List<UniqueIMSI> findIMSIS();
 	
 }
