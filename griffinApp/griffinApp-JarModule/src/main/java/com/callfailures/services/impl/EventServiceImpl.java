@@ -3,10 +3,15 @@ package com.callfailures.services.impl;
 import java.io.File;
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.ejb.Stateless;
+import javax.ejb.TransactionAttribute;
+import javax.ejb.TransactionAttributeType;
 import javax.inject.Inject;
 
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
@@ -16,7 +21,9 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import com.callfailures.dao.EventDAO;
+import com.callfailures.dao.UploadDAO;
 import com.callfailures.entity.Events;
+import com.callfailures.entity.Upload;
 import com.callfailures.entity.views.IMSIEvent;
 import com.callfailures.entity.views.IMSISummary;
 import com.callfailures.entity.views.PhoneFailures;
@@ -31,11 +38,15 @@ import com.callfailures.parsingutils.ParsingResponse;
 import com.callfailures.services.EventService;
 import com.callfailures.services.ValidationService;
 
+@TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
 @Stateless
 public class EventServiceImpl implements EventService {
 
 	@Inject
 	EventDAO eventDAO;
+
+	@Inject
+	UploadDAO uploadDAO;
 
 	@Inject
 	ValidationService validationService;
@@ -82,20 +93,49 @@ public class EventServiceImpl implements EventService {
 	}
 
 	@Override
-	public ParsingResponse<Events> read(final File workbookFile) {
+	public ParsingResponse<Events> read(final File workbookFile, final Upload currentUpload) {
+
+		List<Events> eventsToProcess = new ArrayList<Events>();
 		final ParsingResponse<Events> parsingResult = new ParsingResponse<>();
 		try (Workbook workbook = new XSSFWorkbook(workbookFile);) {
 			final Sheet sheet = workbook.getSheetAt(0);
+
+			int rowTotal = sheet.getLastRowNum();
+			if ((rowTotal > 0) || sheet.getPhysicalNumberOfRows() > 0) {
+				rowTotal++;
+			}
 			final Iterator<Row> rowIterator = sheet.rowIterator();
 			Row row = rowIterator.next();
 			int rowNumber = 0;
+			int index = 0;
+			int batch_size = 2000;
+
+			if (batch_size > rowTotal) {
+				batch_size = rowTotal - 1;
+			}
+
 			while (rowIterator.hasNext()) {
 				rowNumber++;
+				index++;
 				row = rowIterator.next();
+				if (rowNumber == rowTotal / 8) {
+					updateProgress(currentUpload, 45);
+				} else if (rowNumber == rowTotal / 4) {
+					updateProgress(currentUpload, 55);
+				} else if (rowNumber == rowTotal / 2) {
+					updateProgress(currentUpload, 75);
+				}
 				try {
 					final Events events = createEventObject(row);
-					eventDAO.create(events);
 					parsingResult.addValidObject(events);
+					eventsToProcess.add(events);
+
+					if (index >= batch_size) {
+						eventDAO.createBulk(eventsToProcess);
+						eventsToProcess = new ArrayList<Events>();
+						index = 0;
+					}
+
 				} catch (FieldNotValidException e) {
 					parsingResult.addInvalidRow(new InvalidRow(rowNumber, e.getMessage()));
 				}
@@ -104,6 +144,14 @@ public class EventServiceImpl implements EventService {
 			e.printStackTrace();
 		}
 		return parsingResult;
+	}
+
+	@TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
+	private void updateProgress(final Upload currentUpload, int percent) {
+		currentUpload.setUploadStatus(percent);
+		Upload newobject = uploadDAO.getUploadByRef(currentUpload.getUploadID());
+		newobject.setUploadStatus(percent);
+		uploadDAO.update(newobject);
 	}
 
 	private boolean isValidIMSI(final String imsi) {
@@ -152,6 +200,12 @@ public class EventServiceImpl implements EventService {
 		}
 
 		return eventDAO.findIMSISBetweenDates(startTime, endTime);
+	}
+
+	@Override
+	public List<UniqueIMSI> findIMSIS() {
+		return eventDAO.findIMSIS().stream().sorted(Comparator.comparing(UniqueIMSI::getImsi))
+				.collect(Collectors.toList());
 	}
 
 }

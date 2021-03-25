@@ -11,10 +11,10 @@ import cucumber.api.java.Before;
 public class Hooks {
 	public static WebDriver driver;
 	public static final String ROOT_DIRECTORY = System.getProperty("user.dir");
-	public static final String LOGIN_PAGE = "http://localhost:8080/callfailures/login.html";
-	public static final String NETWORK_ENGINEER_PAGE = "http://localhost:8080/callfailures/networkEngineer.html";
 	
-	@Before
+	public static final String LOGIN_PAGE = "http://localhost:8080/callfailures/login.html";
+	
+    @Before
 	public void setup() {
 		final String operatingSystem = System.getProperty("os.name");
 		
