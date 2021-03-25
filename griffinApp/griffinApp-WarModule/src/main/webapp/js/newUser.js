@@ -1,4 +1,4 @@
-var rootURL = "http://localhost:8080/callfailures/";
+var rootURL = 'http://localhost:8080/callfailures/api';
 
 var currentUser;
 
@@ -10,42 +10,52 @@ var newUser=function () {
 
 var addUser = function () {
 	console.log('addUser');
+	console.log(formToJSON());
 	$.ajax({
 		type: 'POST',
 		contentType: 'application/json',
-		url: rootURL,
-		dataType: "json",
+		url: rootURL + '/users',
+		dataType: 'json',
 		data: formToJSON(),
+		contentType: 'application/json',
 		success: function(data, textStatus, jqXHR){
 			alert('User created successfully');
 			
-		},
-		error: function(jqXHR, textStatus, errorThrown){
-			alert('addUser error: ' + textStatus);
+			$('#userId').val("");
+			$('#userName').val("");
+			$('#userType').val("");
+			$('#userPassword').val("");
+			$('#confirmPassword').val("");
+			
 		}
+	//	error: function(jqXHR, textStatus, errorThrown){
+	//		alert('addUser error: ' + textStatus);
+	//	} 
 	});
 };
 
-var renderDetails=function(user){
-	$('#userId').val(user.userId);
-	$('#userName').val(user.userName);
-	$('#userType').val(user.userType);
-	$('#userPassword').val(user.userPassword);
+var renderDetails=function(users){
+	$('#userId').val(users.userId);
+	$('#userName').val(users.userName);
+	$('#userType').val(users.userType);
+	$('#userPassword').val(users.userPassword);
+	
 }
 
 var formToJSON=function () {
 	
 	return JSON.stringify({
-		"id": $('#userId').val(),
-		"name": $('#userName').val(), 
-		"type": $('#userType').val(),
-		"password": $('#userPassword').val()
+		'userId': $('#userId').val(),
+		'userName': $('#userName').val(), 
+		'userType': $('#userType').val(),
+		'userPassword': $('#userPassword').val(),
+		'token': ''
 		});
 };
 
 $(document).ready(function(){
 
-	newUser();
+	
 	
 	$('#createUserButton').click(function() {
 		if ($('#userPassword').val() == $('#confirmPassword').val())
@@ -54,11 +64,5 @@ $(document).ready(function(){
 			alert('Error: Passwords must match');
 		return false;
 	});
-		
-	$('#userId').val("");
-	$('#userName').val("");
-	$('#userType').val("");
-	$('#userPassword').val("");
-	$('#confirmPassword').val("");
 	
 });
