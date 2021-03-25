@@ -11,7 +11,6 @@ import cucumber.api.java.Before;
 public class Hooks {
 	public static WebDriver driver;
 	public static final String ROOT_DIRECTORY = System.getProperty("user.dir");
-	
 	public static final String LOGIN_PAGE = "http://localhost:8080/callfailures/login.html";
 	
     @Before
