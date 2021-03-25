@@ -54,15 +54,13 @@ public class UploadFileService {
 	@EJB
 	private MarketOperatorService marketOperatorService;
 
-	private final String UPLOADED_FILE_PATH = System.getProperty("user.dir") + "/fileUploads/";
+	private final String UploadedFilePath = System.getProperty("user.dir") + "/fileUploads/";
 
 	@POST
 	@Path("/upload")
 	@Produces({ MediaType.APPLICATION_JSON })
 	@Consumes("multipart/form-data")
 	public Response uploadFile(final MultipartFormDataInput input) {
-
-		final long startNano = System.nanoTime();
 
 		String fileName = "";
 
@@ -73,23 +71,17 @@ public class UploadFileService {
 
 		for (final InputPart inputPart : inputParts) {
 
-			try {
-
-				final MultivaluedMap<String, String> header = inputPart.getHeaders();
-				fileName = getFileName(header);
-
-				// convert the uploaded file to inputstream
-				final InputStream inputStream = inputPart.getBody(InputStream.class, null);
-
+			final MultivaluedMap<String, String> header = inputPart.getHeaders();
+			fileName = getFileName(header);
+			
+			try(InputStream inputStream = inputPart.getBody(InputStream.class, null);){
+				
 				final byte[] bytes = IOUtils.toByteArray(inputStream);
 
 				// constructs upload file path
-				fileName = UPLOADED_FILE_PATH + fileName;
+				fileName = UploadedFilePath + fileName;
 				System.out.println(fileName);
 				sheet = writeFile(bytes, fileName);
-
-				System.out.println("Done upload");
-				System.out.println("name " + sheet.getName());
 
 				final ParsingResponse<EventCause> eventCauses = causeService.read(sheet);
 				final ParsingResponse<FailureClass> failureClasses = failClassService.read(sheet);
@@ -99,20 +91,12 @@ public class UploadFileService {
 
 				generateResponseEntity(uploadsOverallResult, eventCauses, failureClasses, userEquipment, marketOperator,
 						events);
-
-				System.out.println("Done read");
-
 			} catch (IOException e) {
-				e.printStackTrace();
+				return Response.status(400).entity(e.getStackTrace()).build();
+				//e.printStackTrace();
 			}
 
 		}
-
-		final long endNano = System.nanoTime();
-
-		final long duration = (endNano - startNano) / 1000000000;
-
-		System.out.println("It took " + duration + "seconds to validate and store the data");
 
 		return Response.status(200).entity(uploadsOverallResult).build();
 	}
@@ -154,19 +138,23 @@ public class UploadFileService {
 		return "unknown";
 	}
 
-	private File writeFile(final byte[] content, final String filename) throws IOException {
+	private File writeFile(final byte[] content, final String filename){
 
 		final File file = new File(filename);
 
-		if (!file.exists()) {
-			file.createNewFile();
+		try(FileOutputStream fop = new FileOutputStream(file)){
+			
+			if (!file.exists()) {
+				if(!file.createNewFile()) {
+					throw new IOException("File is not created");
+				};
+			}
+			
+			fop.write(content);
+			fop.flush();
+		}catch(Exception e) {
+			e.printStackTrace();
 		}
-
-		final FileOutputStream fop = new FileOutputStream(file);
-
-		fop.write(content);
-		fop.flush();
-		fop.close();
 
 		return file;
 

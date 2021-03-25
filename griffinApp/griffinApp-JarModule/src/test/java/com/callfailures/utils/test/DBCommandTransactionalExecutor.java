@@ -6,10 +6,10 @@ import org.junit.Ignore;
 
 @Ignore
 public class DBCommandTransactionalExecutor {
-	private EntityManager entityManager;
+	private final EntityManager entityManager;
 
-	public DBCommandTransactionalExecutor(final EntityManager em) {
-		this.entityManager = em;
+	public DBCommandTransactionalExecutor(final EntityManager entitymanager) {
+		this.entityManager = entitymanager;
 	}
 
 	public <T> T executeCommand(final DBCommand<T> dbCommand) {
