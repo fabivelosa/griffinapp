@@ -13,6 +13,8 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+
+import com.callfailures.entity.Secured;
 import com.callfailures.entity.views.UniqueIMSI;
 import com.callfailures.errors.ErrorMessage;
 import com.callfailures.errors.ErrorMessages;
@@ -35,6 +37,7 @@ public class IMSIByDate {
 	 * @return Returns List of IMSI names
 	 */
 	@GET
+	@Secured
     @Path("/query")
 	@Produces({ MediaType.APPLICATION_JSON })
 	public Response getIMSIsByDate(
@@ -57,6 +60,7 @@ public class IMSIByDate {
 	 * @return Returns List of IMSI names
 	 */
 	@GET
+	@Secured
     @Path("/query/all")
 	@Produces({ MediaType.APPLICATION_JSON })
 	public Response getIMSIs() {

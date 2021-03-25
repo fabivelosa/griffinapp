@@ -1,5 +1,6 @@
 package com.callfailures.resource;
 
+import static com.callfailures.commontests.utils.FileTestNameUtils.getPathFileRequest;
 import static org.junit.Assert.*;
 
 import java.io.File;
@@ -19,6 +20,8 @@ import org.json.JSONObject;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.junit.Ignore;
+
 
 import com.callfailures.commontests.utils.JsonReader;
 import com.callfailures.commontests.utils.ResourceClient;
@@ -39,7 +42,8 @@ public class UserEquipmentResourceIntTest {
 	private final static int tac = 21060800;
 	private final static String ALL_USER_EQUIPMENT = "userEquipment/";
 	private final static String PHONE_FAILURES = "userEquipment/query?tac=" + tac;
-
+	private final static String LOGIN = "login/auth";
+	private String token;
 
 	
 	@ArquillianResource
@@ -68,12 +72,18 @@ public class UserEquipmentResourceIntTest {
 	@Before
 	public void initTestCase() {
 		this.resourceClient = new ResourceClient(url);
+		final Response loginRequest = resourceClient.resourcePath(LOGIN)
+				.postWithFile(getPathFileRequest(LOGIN, "networkEngineer.json"));
+		
+		token = JsonReader.readAsJsonObject(loginRequest.readEntity(String.class))
+				.get("token")
+				.getAsString();
 	}
 
 	@Test
 	@RunAsClient
 	public void testFindAll() {	
-		final Response responseGet = resourceClient.resourcePath(ALL_USER_EQUIPMENT).get();
+		final Response responseGet = resourceClient.resourcePath(ALL_USER_EQUIPMENT).get(token);
 		assertEquals(200, responseGet.getStatus());
 
 		final JsonArray result = JsonReader.readAsJsonArray(responseGet.readEntity(String.class));
@@ -86,7 +96,7 @@ public class UserEquipmentResourceIntTest {
 	@Test
 	@RunAsClient
 	public void testfindUniqueEventCauseCountByPhoneModel() {
-		final Response responseGet = resourceClient.resourcePath(PHONE_FAILURES).get();
+		final Response responseGet = resourceClient.resourcePath(PHONE_FAILURES).get(token);
 		assertEquals(200, responseGet.getStatus());
 		
 		final JsonArray result = JsonReader.readAsJsonArray(responseGet.readEntity(String.class));

@@ -1,5 +1,6 @@
 package com.callfailures.resource;
 
+import static com.callfailures.commontests.utils.FileTestNameUtils.getPathFileRequest;
 import static org.junit.Assert.*;
 
 import java.io.File;
@@ -17,6 +18,7 @@ import org.jboss.shrinkwrap.api.spec.WebArchive;
 import org.jboss.shrinkwrap.resolver.api.maven.Maven;
 import org.json.JSONArray;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -26,6 +28,7 @@ import com.callfailures.errors.ErrorMessage;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
+
 @RunWith(Arquillian.class)
 public class EventsOfIMSIIntTest {
 	
@@ -33,6 +36,8 @@ public class EventsOfIMSIIntTest {
 	private final static String IMSI_INVALID = "3449300000000119";
 	private final static String IMSI_INEXISTENT= "244930000000011";
 	private final static String IMSI_FAILURE_DATA = "failures/";
+	private final static String LOGIN = "login/auth";
+	private String token;
 	
 	@ArquillianResource
 	private URL url;
@@ -59,13 +64,20 @@ public class EventsOfIMSIIntTest {
 	@Before
 	public void initTestCase() {
 		this.resourceClient = new ResourceClient(url);
+		
+		final Response loginRequest = resourceClient.resourcePath(LOGIN)
+				.postWithFile(getPathFileRequest(LOGIN, "customerSupport.json"));
+		
+		token = JsonReader.readAsJsonObject(loginRequest.readEntity(String.class))
+				.get("token")
+				.getAsString();
 	}
 	
 	@Test
 	@RunAsClient
 	public void testGetIMSIfailuresForValidIMSI() {
 		final String validImsiURI = IMSI_FAILURE_DATA+IMSI_VALID;
-		final Response responseGet = resourceClient.resourcePath(validImsiURI).get();
+		final Response responseGet = resourceClient.resourcePath(validImsiURI).get(token);
 		assertEquals(200, responseGet.getStatus());
 
 		final JsonArray imisiEvents = JsonReader.readAsJsonArray(responseGet.readEntity(String.class));	
@@ -84,7 +96,7 @@ public class EventsOfIMSIIntTest {
 	@RunAsClient
 	public void testGetIMSIfailuresForInvalidIMSI() {
 		final String validImsiURI = IMSI_FAILURE_DATA+IMSI_INVALID;
-		final Response responseGet = resourceClient.resourcePath(validImsiURI).get();
+		final Response responseGet = resourceClient.resourcePath(validImsiURI).get(token);
 		assertEquals(404, responseGet.getStatus());
 
 		final JsonObject imsievent = JsonReader.readAsJsonObject(responseGet.readEntity(String.class));
