@@ -2,6 +2,7 @@ package com.callfailures.resource;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.TimeZone;
 
 import javax.ejb.EJB;
@@ -13,8 +14,10 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import com.callfailures.entity.Secured;
 import com.callfailures.entity.views.IMSISummary;
 import com.callfailures.entity.views.PhoneModelSummary;
+import com.callfailures.entity.views.UniqueIMSI;
 import com.callfailures.errors.ErrorMessage;
 import com.callfailures.errors.ErrorMessages;
 import com.callfailures.exception.InvalidDateException;
@@ -28,10 +31,6 @@ public class EventsResource {
 
 	@EJB
 	private EventService eventService;
-	
-	
-	
-	
 	
 	
 	/**
@@ -107,7 +106,6 @@ public class EventsResource {
 			return Response.status(404).build();
 		}
 	}
-	
 	
 	private LocalDateTime convertLongToLocalDateTime(final Long startEpoch) {
 			return LocalDateTime.ofInstant(Instant.ofEpochMilli(startEpoch), TimeZone.getDefault().toZoneId());
