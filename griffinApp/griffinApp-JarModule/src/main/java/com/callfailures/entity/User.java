@@ -1,9 +1,13 @@
 package com.callfailures.entity;
 
 import javax.persistence.Entity;
+
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
+
+import com.callfailures.services.impl.UserServiceImpl;
+
 
 @Entity(name = "users")
 @XmlRootElement
@@ -17,6 +21,8 @@ public class User {
 	private String userType;
 	private String userPassword;
 	private String token;
+	
+	private UserServiceImpl userServiceImpl = new UserServiceImpl();
 
 	public String getUserName() {
 		return userName;
@@ -41,9 +47,17 @@ public class User {
 	public void setUserType(final String userType) {
 		this.userType = userType;
 	}
-
+	
 	public String getUserPassword() {
 		return userPassword;
+	}
+
+	public String getUserPasswordDecrypted() throws Exception {
+		return userServiceImpl.passDecrypt();
+	}
+	
+	public void encryptUserPassword(final String userPassword) throws Exception{
+		this.userPassword = userServiceImpl.passEncrypt(userPassword);
 	}
 
 	public void setUserPassword(final String userPassword) {

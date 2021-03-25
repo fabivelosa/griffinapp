@@ -4,7 +4,7 @@ import com.callfailures.entity.User;
 
 public class UserGenerator {
 
-	public User generateUserInstance(final String userId, final String userName, final String userType, final String userPassword) {
+	public User generateUserInstance(final String userId, final String userName, final String userType, final String userPassword) throws Exception {
 
 		User user = new User();
 		user.setUserId(userId);

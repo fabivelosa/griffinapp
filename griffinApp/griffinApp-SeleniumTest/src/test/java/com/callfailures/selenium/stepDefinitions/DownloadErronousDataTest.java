@@ -27,7 +27,7 @@ public class DownloadErronousDataTest {
 	private static final String DOWNLOAD_NAME  ="Error Logs.txt";
 
 	//Will need to be changed per device running test
-	private static String fileDownloadpath = "C:\\Users\\Peter\\Downloads";
+	private static String fileDownloadpath = "C:\\Users\\Dan\\Downloads";
 	
 	@Given("^The Administrator is on the upload page$")
 	public void the_Administrator_is_on_the_upload_page() throws Throwable {

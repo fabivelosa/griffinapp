@@ -1,4 +1,5 @@
 var rootURL = 'http://localhost:8080/callfailures/api';
+var authToken = 'Bearer '+sessionStorage.getItem("auth-token");
 
 var currentUser;
 
@@ -18,6 +19,9 @@ var addUser = function () {
 		dataType: 'json',
 		data: formToJSON(),
 		contentType: 'application/json',
+		beforeSend: function(xhr){
+		xhr.setRequestHeader('Authorization', authToken);
+		},
 		success: function(data, textStatus, jqXHR){
 			alert('User created successfully');
 			
