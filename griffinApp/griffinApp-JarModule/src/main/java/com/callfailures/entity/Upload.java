@@ -2,6 +2,7 @@ package com.callfailures.entity;
 
 import java.util.UUID;
 
+import javax.persistence.Cacheable;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
@@ -12,6 +13,7 @@ import org.hibernate.annotations.Type;
 @Entity(name = "upload")
 @XmlRootElement
 @Table(name = "upload")
+@Cacheable
 public class Upload {
 	@Id
 	@Type(type = "org.hibernate.type.UUIDCharType")
