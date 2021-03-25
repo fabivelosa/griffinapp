@@ -1,6 +1,5 @@
 package com.callfailures.entity;
 
-import javax.persistence.Cacheable;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
@@ -11,7 +10,6 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Entity(name = "failureClass")
 @XmlRootElement
 @Table(name = "failureClass")
-@Cacheable
 public class FailureClass {
 	@Id
 	@Min(0)

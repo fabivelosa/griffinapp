@@ -7,17 +7,13 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
-import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
@@ -26,13 +22,11 @@ import org.apache.commons.io.IOUtils;
 import org.jboss.resteasy.plugins.providers.multipart.InputPart;
 import org.jboss.resteasy.plugins.providers.multipart.MultipartFormDataInput;
 
-import com.callfailures.dao.UploadDAO;
 import com.callfailures.dto.EventsUploadResponseDTO;
 import com.callfailures.entity.EventCause;
 import com.callfailures.entity.Events;
 import com.callfailures.entity.FailureClass;
 import com.callfailures.entity.MarketOperator;
-import com.callfailures.entity.Upload;
 import com.callfailures.entity.UserEquipment;
 import com.callfailures.parsingutils.ParsingResponse;
 import com.callfailures.services.EventCauseService;
@@ -60,98 +54,51 @@ public class UploadFileService {
 	@EJB
 	private MarketOperatorService marketOperatorService;
 
-	@EJB
-	private UploadDAO uploadDAO;
-
-	private final String UPLOADFILEPATH = System.getProperty("user.dir") + "/fileUploads/";
-
-	protected File sheet;
+	private final String UploadedFilePath = System.getProperty("user.dir") + "/fileUploads/";
 
 	@POST
 	@Path("/upload")
 	@Produces({ MediaType.APPLICATION_JSON })
 	@Consumes("multipart/form-data")
-	@Context
 	public Response uploadFile(final MultipartFormDataInput input) {
 
-		final UUID uploadUUID = UUID.randomUUID();
-		final Upload upload = new Upload();
-		upload.setUploadID(uploadUUID);
-		upload.setUploadStatus(0);
-		uploadDAO.create(upload);
-		final Upload currentUpload = uploadDAO.getUploadByRef(uploadUUID);
+		String fileName = "";
+
 		final Map<String, List<InputPart>> uploadForm = input.getFormDataMap();
 		final List<InputPart> inputParts = uploadForm.get("uploadedFile");
+		final List<EventsUploadResponseDTO> uploadsOverallResult = new ArrayList<>();
+		File sheet = null;
+
 		for (final InputPart inputPart : inputParts) {
+
 			final MultivaluedMap<String, String> header = inputPart.getHeaders();
-			String fileName = getFileName(header);
-			try (InputStream inputStream = inputPart.getBody(InputStream.class, null);) {
+			fileName = getFileName(header);
+			
+			try(InputStream inputStream = inputPart.getBody(InputStream.class, null);){
+				
 				final byte[] bytes = IOUtils.toByteArray(inputStream);
+
 				// constructs upload file path
-				fileName = UPLOADFILEPATH + fileName;
+				fileName = UploadedFilePath + fileName;
 				System.out.println(fileName);
 				sheet = writeFile(bytes, fileName);
-			} catch (IOException e) {
-				return Response.status(400).entity(e.getStackTrace()).build();
-			}
-		}
-		// File sheet = null;
-		try {
-			Thread.sleep(3 * 1000);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		new Thread() {
-			public void run() {
-				final List<EventsUploadResponseDTO> uploadsOverallResult = new ArrayList<>();
-				final long startNano = System.nanoTime();
 
 				final ParsingResponse<EventCause> eventCauses = causeService.read(sheet);
-				currentUpload.setUploadStatus(5);
-				uploadDAO.update(currentUpload);
-				currentUpload.setUploadStatus(10);
-				uploadDAO.update(currentUpload);
 				final ParsingResponse<FailureClass> failureClasses = failClassService.read(sheet);
-				currentUpload.setUploadStatus(15);
-				uploadDAO.update(currentUpload);
 				final ParsingResponse<UserEquipment> userEquipment = userEquipmentService.read(sheet);
-				currentUpload.setUploadStatus(20);
-				uploadDAO.update(currentUpload);
 				final ParsingResponse<MarketOperator> marketOperator = marketOperatorService.read(sheet);
-				currentUpload.setUploadStatus(25);
-				uploadDAO.update(currentUpload);
-				final ParsingResponse<Events> events = eventService.read(sheet, currentUpload);
-				currentUpload.setUploadStatus(95);
-				uploadDAO.update(currentUpload);
+				final ParsingResponse<Events> events = eventService.read(sheet);
 
 				generateResponseEntity(uploadsOverallResult, eventCauses, failureClasses, userEquipment, marketOperator,
 						events);
-
-				currentUpload.setUploadStatus(100);
-				uploadDAO.update(currentUpload);
-
-				final long endNano = System.nanoTime();
-				final long duration = (endNano - startNano) / 1000000000;
-				System.out.println("It took " + duration + "seconds to validate and store the data");
-
-				// Response response =
-				// Response.status(200).entity(uploadsOverallResult).build();
-				// ((AsyncResponse) response).resume(response);
+			} catch (IOException e) {
+				return Response.status(400).entity(e.getStackTrace()).build();
+				//e.printStackTrace();
 			}
-		}.start();
-		return Response.status(200).entity(currentUpload).build();
-		//return Response.status(200).entity(uploadsOverallResult).build();
-	}
 
-	@GET
-	@Produces({ MediaType.APPLICATION_JSON })
-	@Path("upload/{id}")
-	public Response findUploadById(@PathParam("id") final String uuid) {
-		final UUID uploadRef = UUID.fromString(uuid);
-		final Upload requestedUpload = uploadDAO.getUploadByRef(uploadRef);
-		return Response.status(200).entity(requestedUpload).build();
+		}
 
+		return Response.status(200).entity(uploadsOverallResult).build();
 	}
 
 	private void generateResponseEntity(final List<EventsUploadResponseDTO> uploadsOverallResult,
@@ -191,20 +138,25 @@ public class UploadFileService {
 		return "unknown";
 	}
 
-	private File writeFile(final byte[] content, final String filename) {
+	private File writeFile(final byte[] content, final String filename){
+
 		final File file = new File(filename);
 
-		try (FileOutputStream fop = new FileOutputStream(file)) {
+		try(FileOutputStream fop = new FileOutputStream(file)){
+			
 			if (!file.exists()) {
-				if (!file.createNewFile()) {
-					throw new Exception("File is not created");
-				}
+				if(!file.createNewFile()) {
+					throw new IOException("File is not created");
+				};
 			}
+			
 			fop.write(content);
 			fop.flush();
-		} catch (Exception e) {
+		}catch(Exception e) {
 			e.printStackTrace();
 		}
+
 		return file;
+
 	}
 }

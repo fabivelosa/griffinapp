@@ -12,7 +12,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import com.callfailures.entity.TokenUtil;
+import com.callfailures.entity.Token;
 import com.callfailures.entity.User;
 import com.callfailures.services.UserService;
 
@@ -31,7 +31,7 @@ public class LoginResource {
 	public Response auth(final User user) {
 		final User authUser = userService.getUserByName(user.getUserName());
 		if (authUser != null && authUser.getUserPassword().equals(user.getUserPassword())) {
-			TokenUtil.issueNewToken(authUser);
+			Token.issueNewToken(authUser);
 			return Response.status(200).entity(authUser).build();
 		}
 		return Response.status(401).build();
@@ -42,7 +42,7 @@ public class LoginResource {
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	public Response logout(@PathParam("token") final String token) {
-		TokenUtil.revokeToken(token);
+		Token.revokeToken(token);
 		return Response.ok().build();
 	}
 

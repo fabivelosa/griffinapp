@@ -9,7 +9,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.Provider;
 
 import com.callfailures.entity.Secured;
-import com.callfailures.entity.TokenUtil;
+import com.callfailures.entity.Token;
 
 @Secured
 @Provider
@@ -17,10 +17,10 @@ import com.callfailures.entity.TokenUtil;
 public class AuthenticationFilter implements ContainerRequestFilter {
 
 	@Override
-	public void filter(final ContainerRequestContext requestContext) {
-		final String authenticationToken = requestContext.getHeaderString(HttpHeaders.AUTHORIZATION);
+	public void filter(ContainerRequestContext requestContext) {
+		String authenticationToken = requestContext.getHeaderString(HttpHeaders.AUTHORIZATION);
 
-		if (authenticationToken == null || !TokenUtil.validateToken(authenticationToken)) {
+		if (authenticationToken == null || !Token.validateToken(authenticationToken)) {
 			requestContext.abortWith(Response.status(Response.Status.UNAUTHORIZED).build());
 		}
 	}

@@ -18,6 +18,7 @@ import com.callfailures.errors.ErrorMessage;
 import com.callfailures.errors.ErrorMessages;
 import com.callfailures.exception.InvalidDateException;
 import com.callfailures.services.EventService;
+import com.callfailures.services.impl.EventServiceImpl;
 
 @Path("/IMSIs")
 @Stateless
@@ -50,24 +51,6 @@ public class IMSIByDate {
 			return Response.status(404).entity(new ErrorMessages(ErrorMessage.INVALID_DATE.getMessage())).build();
 		}		
 	}
-	
-	
-	/**
-	 * Support Engineer: Retreive List of IMSIs with failures 
-	 * @return Returns List of IMSI names
-	 */
-	@GET
-    @Path("/query/all")
-	@Produces({ MediaType.APPLICATION_JSON })
-	public Response getIMSIs() {
-		try {
-			final List<UniqueIMSI> imsis = eventService.findIMSIS();
-			return Response.status(200).entity(imsis).build();
-		} catch (Exception exception) {
-			return Response.status(404).build();
-		}		
-	}
-	
 	
 	private LocalDateTime convertLongToLocalDateTime(final Long startEpoch) {
 		return LocalDateTime.ofInstant(Instant.ofEpochMilli(startEpoch), TimeZone.getDefault().toZoneId());

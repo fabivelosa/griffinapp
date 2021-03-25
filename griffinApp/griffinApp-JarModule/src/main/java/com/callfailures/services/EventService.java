@@ -7,7 +7,6 @@ import java.util.List;
 import javax.ejb.Local;
 
 import com.callfailures.entity.Events;
-import com.callfailures.entity.Upload;
 import com.callfailures.entity.views.IMSIEvent;
 import com.callfailures.entity.views.IMSISummary;
 import com.callfailures.entity.views.PhoneModelSummary;
@@ -55,7 +54,8 @@ public interface EventService {
 	 * @param workbookFile
 	 * @return and returns the validation result, ParsingResponse,  for the Base Data tab
 	 */
-	ParsingResponse<Events> read(File workbookFile, Upload currentUpload);
+	ParsingResponse<Events> read(File workbookFile);
+
 	/**
 	 * Query Database for all IMSI with failures between Start and End time submitted
 	 * @param startTime (inclusive) - the start of the period
@@ -65,7 +65,5 @@ public interface EventService {
 	List<UniqueIMSI> findIMSISBetweenDates(final LocalDateTime startTime, final LocalDateTime endTime);
 
 	List<IMSIEvent> findFailuresByImsi(final String imsi);
-
-	List<UniqueIMSI> findIMSIS();
 	
 }

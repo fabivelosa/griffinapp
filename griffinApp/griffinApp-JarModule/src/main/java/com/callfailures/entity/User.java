@@ -5,7 +5,6 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 
-
 @Entity(name = "users")
 @XmlRootElement
 @Table(name = "users")
@@ -55,7 +54,7 @@ public class User {
 		return token;
 	}
 
-	public void setToken(final String token) {
+	public void setToken(String token) {
 		this.token = token;
 	}
 }

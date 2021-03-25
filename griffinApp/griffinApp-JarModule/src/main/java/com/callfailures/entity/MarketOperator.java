@@ -1,6 +1,5 @@
 package com.callfailures.entity;
 
-import javax.persistence.Cacheable;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.Table;
@@ -11,7 +10,6 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Entity(name = "mccmnc")
 @XmlRootElement
 @Table(name = "mccmnc")
-@Cacheable
 public class MarketOperator {
 
 	@EmbeddedId

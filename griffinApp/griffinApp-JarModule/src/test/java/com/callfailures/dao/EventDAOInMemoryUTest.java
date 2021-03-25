@@ -192,7 +192,7 @@ class EventDAOInMemoryUTest {
 	}
 	
 	@Test
-	void testFindUniqueIMSIByDates() throws InterruptedException {
+	void testFundUniqueIMSIByDates() throws InterruptedException {
 	
 		List<Events> events = eventDAO.findAllEvents();
 		assertEquals(1,events.size());
@@ -203,21 +203,6 @@ class EventDAOInMemoryUTest {
 		assertNotNull(uniqueIMSI.getImsi());
 		assertEquals(IMSI,uniqueIMSI.getImsi());
 	}
-	
-	@Test
-	void testFindIMSIs() throws InterruptedException {
-	
-		List<UniqueIMSI> events = eventDAO.findIMSIS();
-		assertEquals(1,events.size());
-		
-		List<UniqueIMSI> imsis = eventDAO.findIMSIS();
-		assertEquals(1,imsis.size());
-		UniqueIMSI uniqueIMSI = imsis.get(0);
-		assertNotNull(uniqueIMSI.getImsi());
-		assertEquals(IMSI,uniqueIMSI.getImsi());
-	}
-	
-	
 }
 
 

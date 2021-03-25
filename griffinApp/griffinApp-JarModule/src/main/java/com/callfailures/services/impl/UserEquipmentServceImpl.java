@@ -2,10 +2,8 @@ package com.callfailures.services.impl;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -44,9 +42,7 @@ public class UserEquipmentServceImpl implements UserEquipmentService {
 	}
 
 	public List<UserEquipment> findAll(){
-		return userEquipmentDAO.findAll().stream()
-				.sorted(Comparator.comparing(UserEquipment::getModel))
-				.collect(Collectors.toList());
+		return userEquipmentDAO.findAll();
 	}
 	
 	@Override
