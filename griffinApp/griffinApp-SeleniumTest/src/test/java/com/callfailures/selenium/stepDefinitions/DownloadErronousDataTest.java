@@ -23,7 +23,7 @@ import cucumber.api.java.en.When;
 
 public class DownloadErronousDataTest {
 	
-	private static final String PAGE_TITLE = "Upload";
+	private static final String PAGE_TITLE = "System Admin";
 	private static final String DOWNLOAD_NAME  ="Error Logs.txt";
 
 	//Will need to be changed per device running test
@@ -56,7 +56,7 @@ public class DownloadErronousDataTest {
 	public void the_Admin_clicks_download_report() throws Throwable {
 	    // Write code here that turns the phrase above into concrete actions
 		Thread.sleep(10000);
-		WebElement errorDownloadBtn =  Hooks.driver.findElement(By.xpath("/html/body/main/div[2]/input"));
+		WebElement errorDownloadBtn =  Hooks.driver.findElement(By.id("errorBtn"));
 		Thread.sleep(500);
 		errorDownloadBtn.click();
 		Thread.sleep(5000);
