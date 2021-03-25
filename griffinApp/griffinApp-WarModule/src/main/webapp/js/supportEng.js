@@ -5,37 +5,30 @@ const setAuthHeader = function(xhr){
     xhr.setRequestHeader('Authorization', authToken);
 }
 
-const displayPhoneEquipmentFailures = function(phoneFailures){
-    $("#imsiTable").show();
-    const table = $('#imsiTable').DataTable();
+const displayCallFailures = function(callFailures){
+    $("#imsiListTable").show();
+    const table = $('#imsiListTable').DataTable();
     table.clear();
-    $(phoneFailures).each(function(index, phoneFailure){
-        console.log(phoneFailure);
-//        table.row.add([phoneFailure.userEquipment.model, 
-//            phoneFailure.eventCause.eventCauseId.eventCauseId, 
-//            phoneFailure.eventCause.eventCauseId.causeCode,
-//            phoneFailure.eventCause.description,
-//            phoneFailure.count
-//        ]);
+    $(callFailures).each(function(index, callFailure){
+        console.log(callFailure);
+        table.row.add([callFailure.imsi]);
     });
     table.draw();
 }
 
-const queryPhoneEquipmentFailures = function(from, to){
+const queryCallFailures = function(from, to){
     $.ajax({
         type:'GET',
         dataType:'json',
         url:`${rootURL}/IMSIs/query?from=${from}&to=${to}`,
         beforeSend: setAuthHeader,
-        success: displayPhoneEquipmentFailures,
-        error: function(jqXHR, textStatus, errorThrown){
-            console.log(jqXHR);
-        }
+        success: displayCallFailures,
+        error: displayErrorOnIMSIList
     });
 }
 
-const displayIMSISummary = function(imsiSummary, textStatus, jqXHR){
-    $("#errorAlertOnSummaryForm").hide();
+const displayCallFailureCount = function(imsiSummary, textStatus, jqXHR){
+    $("#errorAlertOnCallFailureForm").hide();
     $("#imsiFailureTable").show();
     $("#imsiNumber").text(imsiSummary.model);
     $("#imsiCallFailureCount").text(imsiSummary.callFailuresCount);
@@ -43,17 +36,23 @@ const displayIMSISummary = function(imsiSummary, textStatus, jqXHR){
 
 const displayErrorOnIMSISummary = function(jqXHR, textStatus, errorThrown){
     $("#imsiSummaryTable").hide();
-    $("#errorAlertOnSummaryForm").show();
-    $("#errorAlertOnSummaryForm").text(jqXHR.responseJSON.errorMessage);
+    $("#errorAlertOnCallFailureForm").show();
+    $("#errorAlertOnCallFailureForm").text(jqXHR.responseJSON.errorMessage);
 }
 
-const queryIMSISUmmary = function(imsi, from, to){
+const displayErrorOnIMSIList = function(jqXHR, textStatus, errorThrown){
+    $("#imsiListTable").hide();
+    $("#errorAlertOnListForm").show();
+    $("#errorAlertOnListForm").text(jqXHR.responseJSON.errorMessage);
+}
+
+const queryCallFailureCount = function(imsi, from, to){
     $.ajax({
         type: "GET",
         dataType: "json",
         url: `${rootURL}/events/query/ue?model=${imsi}&from=${from}&to=${to}`,
         beforeSend: setAuthHeader,
-        success: displayIMSISummary,
+        success: displayCallFailureCount,
         error: displayErrorOnIMSISummary
     })
 }
@@ -64,13 +63,13 @@ $(document).ready(function(){
         const imsi = $('#imsiOnCallFailureForm').val();
         const from = new Date($('#startDateOnCallFailureForm').val()).valueOf();
         const to = new Date($('#endDateOnCallFailureForm').val()).valueOf();
-        queryIMSISUmmary(imsi, from, to);
+        queryCallFailureCount(imsi, from, to);
     });
  
     $("#imsiListForm").submit(function(event){
         event.preventDefault();
         const from = new Date($('#startDateOnListForm').val()).valueOf();
         const to = new Date($('#endDateOnListForm').val()).valueOf();
-        queryPhoneEquipmentFailures(from, to);
+        queryCallFailures(from, to);
     });
 });

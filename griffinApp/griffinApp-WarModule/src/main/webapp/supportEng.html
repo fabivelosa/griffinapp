@@ -24,8 +24,8 @@
 	rel="stylesheet" crossorigin="anonymous" />
 
 <!-- Custom styles for this template-->
+<link href="css/supportEng.css" rel="stylesheet">
 <link href="css/sb-admin-2.min.css" rel="stylesheet">
-
 
 
 </head>
@@ -132,8 +132,7 @@
 							class="nav-link dropdown-toggle" href="#" id="userDropdown"
 							role="button" data-toggle="dropdown" aria-haspopup="true"
 							aria-expanded="false"> <span
-								class="mr-2 d-none d-lg-inline text-gray-600 small">Support
-									Engineer</span> <img class="img-profile rounded-circle"
+								class="mr-2 d-none d-lg-inline text-gray-600 small">Network Manager</span> <img class="img-profile rounded-circle"
 								src="img/undraw_profile.svg">
 						</a> <!-- Dropdown - User Information -->
 							<div
@@ -164,7 +163,7 @@
 					<div class="row">
 						<div class="col-lg-6 mb-4">
 							<div class="card mt-4">
-								<div class="card-header">IMSI Diagnostics Summary</div>
+								<div class="card-header">Call Count Failure Summary</div>
 								<div class="card-body" id="imsiSummaryCard">
 									<div class="row">
 										<form id="imsiCallFaluireForm">
@@ -173,7 +172,7 @@
 													<label for="imsiOnCallFailureForm"
 														class="form-label fw-bold small">Model</label> <input
 														required type="text" class="form-control"
-														id="imsiOnCallFailureForm" placeholder="IMSI">
+														id="imsiOnCallFailureForm" placeholder="Model">
 												</div>
 												<div class="col">
 													<label for="startDateOnCallFailureForm"
@@ -215,14 +214,14 @@
 											</tbody>
 										</table>
 										<div class="alert alert-danger col-lg-12" role="alert"
-											id="errorAlertOnSummaryForm">Error on Request</div>
+											id="errorAlertOnCallFailureForm">Error on Request</div>
 									</div>
 								</div>
 							</div>
 						</div>
 						<div class="col-lg-6 mb-4">
 							<div class="card mt-4">
-								<div class="card-header">List of Call Failures</div>
+								<div class="card-header">List of Unique Call Failures</div>
 
 								<div class="card-body" id="callFailures">
 									<div class="row">
@@ -250,29 +249,18 @@
 										</form>
 									</div>
 									<div class="row mt-4 p-2" id="imsiList">
-										<table id="imsiTable"
+										<table id="imsiListTable"
 											class="table table-hover table-bordered table-responsive">
 											<thead>
 												<tr>
 													<th scope="col">IMSI</th>
-													<th scope="col">From</th>
-													<th scope="col">To</th>
-													<th scope="col">Call Failures Count</th>
-													<th scope="col">Duration</th>
 												</tr>
 											</thead>
 											<tbody id="tableBody">
-												<tr>
-													<td scope="row" id="imsiListNumber">0</td>
-													<td id="imsiFromDate">NaN</td>
-													<td id="imsiToDate">NaN</td>
-													<td id="imsiSummaryCallFailureCount">NaN</td>
-													<td id="imsiSummaryTotalDuration">NaN</td>
-												</tr>
 											</tbody>
 										</table>
 										<div class="alert alert-danger col-lg-12" role="alert"
-											id="errorAlertOnSummaryForm">Error on Request</div>
+											id="errorAlertOnListForm">Error on Request</div>
 									</div>
 								</div>
 							</div>
