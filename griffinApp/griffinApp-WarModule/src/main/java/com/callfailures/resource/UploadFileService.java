@@ -128,18 +128,15 @@ public class UploadFileService {
 				final ParsingResponse<Events> events = eventService.read(sheet, currentUpload);
 				currentUpload.setUploadStatus(95);
 				uploadDAO.update(currentUpload);
-
+				
 				generateResponseEntity(uploadsOverallResult, eventCauses, failureClasses, userEquipment, marketOperator,
 						events);
-
 				System.out.println("Done read");
 				currentUpload.setUploadStatus(100);
 				uploadDAO.update(currentUpload);
 
 				final long endNano = System.nanoTime();
-
 				final long duration = (endNano - startNano) / 1000000000;
-
 				System.out.println("It took " + duration + "seconds to validate and store the data");
 
 				// Response response =
@@ -198,18 +195,13 @@ public class UploadFileService {
 	}
 
 	private File writeFile(final byte[] content, final String filename) {
-
 		final File file = new File(filename);
-
 		try (FileOutputStream fop = new FileOutputStream(file)) {
-
 			if (!file.exists()) {
 				if (!file.createNewFile()) {
 					throw new Exception("File is not created");
 				}
-				;
 			}
-
 			fop.write(content);
 			fop.flush();
 		} catch (Exception e) {
@@ -217,6 +209,5 @@ public class UploadFileService {
 		}
 
 		return file;
-
 	}
 }

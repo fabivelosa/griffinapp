@@ -3,6 +3,7 @@ package com.callfailures.services.impl;
 import java.io.File;
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
@@ -92,21 +93,28 @@ public class EventServiceImpl implements EventService {
 	@Override
 	public ParsingResponse<Events> read(final File workbookFile, final Upload currentUpload) {
 
+		List<Events> eventsToProcess = new ArrayList<Events>();
 		final ParsingResponse<Events> parsingResult = new ParsingResponse<>();
 		try (Workbook workbook = new XSSFWorkbook(workbookFile);) {
 			final Sheet sheet = workbook.getSheetAt(0);
 
 			int rowTotal = sheet.getLastRowNum();
-
 			if ((rowTotal > 0) || sheet.getPhysicalNumberOfRows() > 0) {
 				rowTotal++;
 			}
-
 			final Iterator<Row> rowIterator = sheet.rowIterator();
 			Row row = rowIterator.next();
 			int rowNumber = 0;
+			int index = 0;
+			int batch_size = 2000;
+
+			if (batch_size > rowTotal) {
+				batch_size = rowTotal - 1;
+			}
+
 			while (rowIterator.hasNext()) {
 				rowNumber++;
+				index++;
 				row = rowIterator.next();
 				if (rowNumber == rowTotal / 8) {
 					updateProgress(currentUpload, 45);
@@ -117,8 +125,15 @@ public class EventServiceImpl implements EventService {
 				}
 				try {
 					final Events events = createEventObject(row);
-					eventDAO.create(events);
 					parsingResult.addValidObject(events);
+					eventsToProcess.add(events);
+
+					if (index >= batch_size) {
+						eventDAO.createBulk(eventsToProcess);
+						eventsToProcess = new ArrayList<Events>();
+						index = 0;
+					}
+
 				} catch (FieldNotValidException e) {
 					parsingResult.addInvalidRow(new InvalidRow(rowNumber, e.getMessage()));
 				}
