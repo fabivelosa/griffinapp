@@ -23,19 +23,38 @@ import cucumber.api.java.en.When;
 
 public class DownloadErronousDataTest {
 	
-	private static final String PAGE_TITLE = "System Admin";
+	private static final String LOGIN_PAGE_TITLE = "Welcome Back - Login";
+	private static final String ADMIN_PAGE_TITLE = "System Admin";
 	private static final String DOWNLOAD_NAME  ="Error Logs.txt";
+	private static final String USER_NAME  ="alex";
+	private static final String PASSWORD  ="1234";
 
 	//Will need to be changed per device running test
 	private static String fileDownloadpath = "C:\\Users\\Peter\\Downloads";
 	
-	@Given("^The Administrator is on the upload page$")
-	public void the_Administrator_is_on_the_upload_page() throws Throwable {
-		assertEquals(PAGE_TITLE, Hooks.driver.getTitle());
+	@Given("^The Administrator is on the login page$")
+	public void the_Administrator_is_on_the_login_page() throws Throwable {
+	    
+		assertEquals(LOGIN_PAGE_TITLE, Hooks.driver.getTitle());
 	}
 
-	@Given("^Admin has uploads \"([^\"]*)\"$")
-	public void admin_has_uploads(final String filePath) throws Throwable {
+	@Given("^Admin enters \"([^\"]*)\" in usernameInput$")
+	public void admin_enters_in_usernameInput(String userName) throws Throwable {
+	    // Write code here that turns the phrase above into concrete actions
+		Hooks.driver.findElement(By.id("InputUsername")).sendKeys(userName);
+	}
+
+	@Given("^Admin enters \"([^\"]*)\" in passwordInput$")
+	public void admin_enters_in_passwordInput(String password) throws Throwable {
+	    // Write code here that turns the phrase above into concrete actions
+		Hooks.driver.findElement(By.id("InputPassword")).sendKeys(password);
+		Hooks.driver.findElement(By.id("loginBtn")).click();
+	}
+
+	@When("^The Admins uploads \"([^\"]*)\"$")
+	public void the_Admins_uploads(String filePath) throws Throwable {
+	    // Write code here that turns the phrase above into concrete actions
+		Thread.sleep(1000);
 		assertNotNull(Hooks.driver.findElement(By.id("uploadFile")));
 		final String fileLocation = Hooks.ROOT_DIRECTORY + filePath;
 		
@@ -45,16 +64,9 @@ public class DownloadErronousDataTest {
 		Hooks.driver.findElement(By.id("uploadBtn")).click();	
 	}
 
-	@When("^The Upload is complete$")
-	public void the_Upload_is_complete() throws Throwable {
-		final List<WebElement> errors = Hooks.driver.findElements(By.xpath("/html/body/main/div[2]/ul[1]"));
-	    
-		assertNotNull(Hooks.driver.findElement(By.id("errorBtn")));
-	}
-
 	@When("^The Admin clicks download report$")
 	public void the_Admin_clicks_download_report() throws Throwable {
-	    // Write code here that turns the phrase above into concrete actions
+		assertNotNull(Hooks.driver.findElement(By.id("errorBtn")));
 		Thread.sleep(10000);
 		WebElement errorDownloadBtn =  Hooks.driver.findElement(By.id("errorBtn"));
 		Thread.sleep(500);

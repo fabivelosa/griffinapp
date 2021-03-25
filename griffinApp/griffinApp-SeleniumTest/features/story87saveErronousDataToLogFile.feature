@@ -7,14 +7,15 @@ Feature: As an administrator
 
   
   Scenario Outline: Download of Errornous Log Data
-    Given The Administrator is on the upload page
-    And Admin has uploads "<fileName>"
-    When The Upload is complete
+    Given The Administrator is on the login page
+    And Admin enters "<username>" in usernameInput
+    And Admin enters "<password>" in passwordInput
+    When The Admins uploads "<fileName>"
     And The Admin clicks download report
     Then The error log file is downloaded
 
     Examples: 
-      | fileName             																	 |
-      | /resources/testdatasets/full_dataset.xlsx 						 |
-			| /resources/testdatasets/mini_dataset.xlsx 						 |	
+      | fileName             											| username | password|
+      | /resources/testdatasets/full_dataset.xlsx | lisa	 | 1234  |
+			| /resources/testdatasets/mini_dataset.xlsx |	lisa	 | 1234  |
       

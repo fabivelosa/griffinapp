@@ -13,6 +13,7 @@ public class Hooks {
 	public static final String NETWORK_ENGINEER_PAGE = "http://localhost:8080/callfailures/networkEngineer.html";
 	public static final String CUSTOMER_SUPPORT_REP_PAGE = "http://localhost:8080/callfailures/customerSupport.html";
 	public static final String SYSTEM_ADMIN_PAGE = "http://localhost:8080/callfailures/sysadmin.html";
+	public static final String LOGIN_PAGE = "http://localhost:8080/callfailures/login.html";
 	
 	@Before
 	public void setup() {
@@ -29,7 +30,7 @@ public class Hooks {
 	
 	@Before("@SystemAdmin")
 	public void loginSetup() {
-		Hooks.driver.get(SYSTEM_ADMIN_PAGE);
+		Hooks.driver.get(LOGIN_PAGE);
 	}
 	
 	@Before("@NetworkEngineer")
