@@ -197,7 +197,7 @@ public class UploadFileService {
 		try (FileOutputStream fop = new FileOutputStream(file)) {
 			if (!file.exists()) {
 				if (!file.createNewFile()) {
-					throw new Exception("File is not created");
+					throw new IOException("File is not created");
 				}
 			}
 			fop.write(content);

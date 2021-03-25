@@ -20,6 +20,7 @@ import org.jboss.shrinkwrap.resolver.api.maven.Maven;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.junit.Ignore;
 
 import com.callfailures.commontests.utils.ResourceClient;
 

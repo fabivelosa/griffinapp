@@ -9,6 +9,7 @@ import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.Invocation.Builder;
+import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
@@ -47,8 +48,10 @@ public class ResourceClient {
 		return buildClient().put(Entity.entity(content, MediaType.APPLICATION_JSON));
 	}
 
-	public Response get() {
-		return buildClient().get();
+	public Response get(final String token) {
+		return buildClient()
+				.header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
+				.get();
 	}
 
 	private Builder buildClient() {
