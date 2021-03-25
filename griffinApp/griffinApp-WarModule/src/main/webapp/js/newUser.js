@@ -58,7 +58,11 @@ $(document).ready(function(){
 	
 	
 	$('#createUserButton').click(function() {
-		if ($('#userPassword').val() == $('#confirmPassword').val())
+		if (($('#userId').val() == "")||($('#userName').val() == "")||($('#userType').val() == "")||($('#userPassword').val() == "")){
+			alert('Required field left empty');
+			}
+			
+		else if ($('#userPassword').val() == $('#confirmPassword').val())
 			addUser();
 		else
 			alert('Error: Passwords must match');
