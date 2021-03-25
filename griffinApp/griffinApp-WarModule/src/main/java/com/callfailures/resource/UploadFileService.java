@@ -54,7 +54,7 @@ public class UploadFileService {
 	@EJB
 	private MarketOperatorService marketOperatorService;
 
-	private final String UploadedFilePath = System.getProperty("user.dir") + "/fileUploads/";
+	private final String UPLOADFILEPATH = System.getProperty("user.dir") + "/fileUploads/";
 
 	@POST
 	@Path("/upload")
@@ -79,7 +79,7 @@ public class UploadFileService {
 				final byte[] bytes = IOUtils.toByteArray(inputStream);
 
 				// constructs upload file path
-				fileName = UploadedFilePath + fileName;
+				fileName = UPLOADFILEPATH + fileName;
 				System.out.println(fileName);
 				sheet = writeFile(bytes, fileName);
 

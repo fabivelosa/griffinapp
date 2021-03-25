@@ -18,7 +18,6 @@ import com.callfailures.errors.ErrorMessage;
 import com.callfailures.errors.ErrorMessages;
 import com.callfailures.exception.InvalidDateException;
 import com.callfailures.services.EventService;
-import com.callfailures.services.impl.EventServiceImpl;
 
 @Path("/IMSIs")
 @Stateless
