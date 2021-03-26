@@ -13,6 +13,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import com.callfailures.entity.Secured;
 import com.callfailures.entity.User;
 import com.callfailures.services.UserService;
 
@@ -27,6 +28,7 @@ public class UserResource {
 	@GET
 	@Produces({ MediaType.APPLICATION_JSON })
 	@Path("/{id}")
+	@Secured
 	public Response findUserById(final @PathParam("id") String userId) {
 		final User user = userService.getUserById(userId);
 		return Response.status(200).entity(user).build();

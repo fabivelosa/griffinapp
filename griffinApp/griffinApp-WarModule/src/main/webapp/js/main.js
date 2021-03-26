@@ -76,7 +76,7 @@ function renderNetwManagContent() {
 
 function renderSuppEngContent() {
 	console.log('Display System Admin content');
-	  window.location.replace('networkEngineer.html');
+	  window.location.replace('supportEng.html');
 }
 
 function renderCustServRepContent() {

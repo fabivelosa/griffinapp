@@ -76,7 +76,6 @@ public class UploadFileService {
 	@Produces({ MediaType.APPLICATION_JSON })
 	@Consumes("multipart/form-data")
 	@Context
-	@Secured
 	public Response uploadFile(final MultipartFormDataInput input) {
 
 		final UUID uploadUUID = UUID.randomUUID();
@@ -149,7 +148,6 @@ public class UploadFileService {
 	@GET
 	@Produces({ MediaType.APPLICATION_JSON })
 	@Path("upload/{id}")
-	@Secured
 	public Response findUploadById(@PathParam("id") final String uuid) {
 		final UUID uploadRef = UUID.fromString(uuid);
 		final Upload requestedUpload = uploadDAO.getUploadByRef(uploadRef);
