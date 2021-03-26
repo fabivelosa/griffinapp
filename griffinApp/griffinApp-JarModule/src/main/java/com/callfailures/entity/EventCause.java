@@ -1,5 +1,6 @@
 package com.callfailures.entity;
 
+import javax.persistence.Cacheable;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.Table;
@@ -9,6 +10,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Entity(name = "eventCause")
 @XmlRootElement
 @Table(name = "eventCause")
+@Cacheable
 public class EventCause {
 	
 	@EmbeddedId

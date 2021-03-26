@@ -20,13 +20,17 @@ import org.jboss.shrinkwrap.resolver.api.maven.Maven;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.junit.Ignore;
 
+import com.callfailures.commontests.utils.JsonReader;
 import com.callfailures.commontests.utils.ResourceClient;
 
 
 @RunWith(Arquillian.class)
 public class UserResourceIntTest {
 	private final static String RESOURCE_PATH = "users";
+	private final static String LOGIN = "login/auth";
+	private String token;
 
 	@ArquillianResource
 	private URL url; 
@@ -54,13 +58,19 @@ public class UserResourceIntTest {
 	@Before
 	public void initTestCase() {
 		this.resourceClient = new ResourceClient(url);
+		final Response loginRequest = resourceClient.resourcePath(LOGIN)
+				.postWithFile(getPathFileRequest(LOGIN, "systemAdmin.json"));
+		
+		token = JsonReader.readAsJsonObject(loginRequest.readEntity(String.class))
+				.get("token")
+				.getAsString();
 	}
 
 	@Test
 	@RunAsClient
 	public void testAddUser() {	
 		final Response responsePost = resourceClient.resourcePath(RESOURCE_PATH)
-				.postWithFile(getPathFileRequest(RESOURCE_PATH, "newUser.json"));
+				.postWithFile(token, getPathFileRequest(RESOURCE_PATH, "newUser.json"));
 		assertEquals(200, responsePost.getStatus());
 		assertJsonResponseWithFile(responsePost, "newUser.json");
 	}

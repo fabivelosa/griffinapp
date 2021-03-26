@@ -2,6 +2,7 @@ package com.callfailures.resource;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.TimeZone;
 
 import javax.ejb.EJB;
@@ -16,6 +17,7 @@ import javax.ws.rs.core.Response;
 import com.callfailures.entity.Secured;
 import com.callfailures.entity.views.IMSISummary;
 import com.callfailures.entity.views.PhoneModelSummary;
+import com.callfailures.entity.views.UniqueIMSI;
 import com.callfailures.errors.ErrorMessage;
 import com.callfailures.errors.ErrorMessages;
 import com.callfailures.exception.InvalidDateException;
@@ -43,8 +45,8 @@ public class EventsResource {
 	 * @param summary - boolean parameter which checks if summary is required or not
 	 * @return Returns IMSISummary entity which contains the (1) total failure count and (2) total duration of failues 
 	 */
-	@Secured
 	@GET
+	@Secured
     @Path("/query")
 	@Produces({ MediaType.APPLICATION_JSON })
 	public Response getIMSICallFailureSummary(
@@ -77,8 +79,8 @@ public class EventsResource {
 	 * @param toEpoch - the starting Date parameter converted to long or UNIX timestamp
 	 * @return Returns PhoneModelSummary entity which contains the (1) total failure count and (2) phone model
 	 */
-	@Secured
 	@GET
+	@Secured
     @Path("/query/ue")
 	@Produces({ MediaType.APPLICATION_JSON })
 	public Response getPhoneModelCallFailureSummary(
@@ -106,7 +108,6 @@ public class EventsResource {
 			return Response.status(404).build();
 		}
 	}
-	
 	
 	private LocalDateTime convertLongToLocalDateTime(final Long startEpoch) {
 			return LocalDateTime.ofInstant(Instant.ofEpochMilli(startEpoch), TimeZone.getDefault().toZoneId());

@@ -9,6 +9,8 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+
+import com.callfailures.entity.Secured;
 import com.callfailures.entity.views.IMSIEvent;
 import com.callfailures.errors.ErrorMessage;
 import com.callfailures.errors.ErrorMessages;
@@ -29,6 +31,7 @@ public class QueryIMSI {
 	 * @return Returns IMSIEvents entity which contains the Cause Code and Event ID
 	 */
 	@GET @Path("{imsi}")
+	@Secured
 	@Produces({MediaType.APPLICATION_JSON})
 
 	public Response findEventsByIMISI(@PathParam("imsi") final String imsi) {

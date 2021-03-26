@@ -1,5 +1,7 @@
 package com.callfailures.resource;
 
+import static com.callfailures.commontests.utils.FileTestNameUtils.*;
+import static com.callfailures.commontests.utils.JsonTestUtils.*;
 import static org.junit.Assert.*;
 
 import java.io.File;
@@ -40,6 +42,9 @@ public class EventsResourceIntTest {
 	private final static String nonExistentModel = "ABCDEF";
 	private final static String IMSI_SUMMARY_BY_DATE = "events/query?imsi=" + imsi + "&from=" + fromTime + "&to=" + toTime + "&summary=" + summary;
 	private final static String EVENTS_SUMMARY_BY_PHONE_MODEL = "events/query/ue?model=" + model + "&from=" + fromTime + "&to=" + toTime;
+	private final static String LOGIN = "login/auth";
+	private String token;
+
 	
 	@ArquillianResource
 	private URL url; 
@@ -67,12 +72,20 @@ public class EventsResourceIntTest {
 	@Before
 	public void initTestCase() {
 		this.resourceClient = new ResourceClient(url);
+		
+		final Response loginRequest = resourceClient.resourcePath(LOGIN)
+				.postWithFile(getPathFileRequest(LOGIN, "networkEngineer.json"));
+		
+		token = JsonReader.readAsJsonObject(loginRequest.readEntity(String.class))
+				.get("token")
+				.getAsString();
 	}
 
+	
 	@Test
 	@RunAsClient
 	public void testGetIMSISummaryByDate() {	
-		final Response responseGet = resourceClient.resourcePath(IMSI_SUMMARY_BY_DATE).get();
+		final Response responseGet = resourceClient.resourcePath(IMSI_SUMMARY_BY_DATE).get(token);
 		assertEquals(200, responseGet.getStatus());
 
 		final JsonObject imsiSummaryJSON = JsonReader.readAsJsonObject(responseGet.readEntity(String.class));
@@ -86,7 +99,7 @@ public class EventsResourceIntTest {
 	public void testGetIMSISummaryByDateInvalidIMSI() {	
 		final String IMSI_SUMMARY_BY_DATE = "events/query?imsi=" + invalid_imsi + "&from=" + fromTime + "&to=" + toTime + "&summary=" + summary;
 
-		final Response responseGet = resourceClient.resourcePath(IMSI_SUMMARY_BY_DATE).get();
+		final Response responseGet = resourceClient.resourcePath(IMSI_SUMMARY_BY_DATE).get(token);
 		assertEquals(404, responseGet.getStatus());
 
 		final JsonObject imsiSummaryJSON = JsonReader.readAsJsonObject(responseGet.readEntity(String.class));
@@ -98,7 +111,7 @@ public class EventsResourceIntTest {
 	public void testGetIMSISummaryByDateInvalidDate() {	
 		final String IMSI_SUMMARY_BY_DATE = "events/query?imsi=" + imsi + "&from=" + toTime + "&to=" + fromTime + "&summary=" + summary;
 
-		final Response responseGet = resourceClient.resourcePath(IMSI_SUMMARY_BY_DATE).get();
+		final Response responseGet = resourceClient.resourcePath(IMSI_SUMMARY_BY_DATE).get(token);
 		assertEquals(404, responseGet.getStatus());
 
 		final JsonObject imsiSummaryJSON = JsonReader.readAsJsonObject(responseGet.readEntity(String.class));
@@ -110,7 +123,7 @@ public class EventsResourceIntTest {
 	public void testGetIMSISummaryByDateZeroResult() {	
 		final String IMSI_SUMMARY_BY_DATE = "events/query?imsi=" + inexistent_imsi + "&from=" + fromTime + "&to=" + toTime + "&summary=" + summary;
 		
-		final Response responseGet = resourceClient.resourcePath(IMSI_SUMMARY_BY_DATE).get();
+		final Response responseGet = resourceClient.resourcePath(IMSI_SUMMARY_BY_DATE).get(token);
 		assertEquals(200, responseGet.getStatus());
 
 		final JsonObject imsiSummaryJSON = JsonReader.readAsJsonObject(responseGet.readEntity(String.class));
@@ -124,7 +137,7 @@ public class EventsResourceIntTest {
 	@Test
 	@RunAsClient
 	public void testGetPhoneModelEventsSummary() {	
-		final Response responseGet = resourceClient.resourcePath(EVENTS_SUMMARY_BY_PHONE_MODEL).get();
+		final Response responseGet = resourceClient.resourcePath(EVENTS_SUMMARY_BY_PHONE_MODEL).get(token);
 		assertEquals(200, responseGet.getStatus());
 
 		final JsonObject phoneModelSummaryJSON = JsonReader.readAsJsonObject(responseGet.readEntity(String.class));
@@ -137,7 +150,7 @@ public class EventsResourceIntTest {
 	public void testGetPhoneModelEventSummaryByInvalidModel() {	
 		final String INVALID_PHONE_MODEL_SUMMARY = "events/query/ue?model=" + invalidModel + "&from=" + fromTime + "&to=" + toTime;
 
-		final Response responseGet = resourceClient.resourcePath(INVALID_PHONE_MODEL_SUMMARY).get();
+		final Response responseGet = resourceClient.resourcePath(INVALID_PHONE_MODEL_SUMMARY).get(token);
 		assertEquals(404, responseGet.getStatus());
 
 		final JsonObject phoneModelSummaryJSON = JsonReader.readAsJsonObject(responseGet.readEntity(String.class));
@@ -149,7 +162,7 @@ public class EventsResourceIntTest {
 	public void testGetPhoneModelEventSummaryByDateInvalidDate() {	
 		final String INVALID_DATE_PHONE_MODEL = "events/query/ue?model=" + model + "&from=" + toTime + "&to=" + fromTime;
 
-		final Response responseGet = resourceClient.resourcePath(INVALID_DATE_PHONE_MODEL).get();
+		final Response responseGet = resourceClient.resourcePath(INVALID_DATE_PHONE_MODEL).get(token);
 		assertEquals(404, responseGet.getStatus());
 
 		final JsonObject phoneModelSummaryJSON = JsonReader.readAsJsonObject(responseGet.readEntity(String.class));
@@ -161,7 +174,7 @@ public class EventsResourceIntTest {
 	public void testGetPhoneModelEventSummaryByDateZeroResult() {	
 		final String IMSI_SUMMARY_BY_DATE = "events/query/ue?model=" + nonExistentModel + "&from=" + fromTime + "&to=" + toTime;
 		
-		final Response responseGet = resourceClient.resourcePath(IMSI_SUMMARY_BY_DATE).get();
+		final Response responseGet = resourceClient.resourcePath(IMSI_SUMMARY_BY_DATE).get(token);
 		assertEquals(200, responseGet.getStatus());
 
 		final JsonObject phoneModelSummaryJSON = JsonReader.readAsJsonObject(responseGet.readEntity(String.class));
