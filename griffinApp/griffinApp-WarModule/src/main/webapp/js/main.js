@@ -57,6 +57,7 @@ function authenticateUser() {
 		},
 		error: function() {
 			console.log("Unsuccessful user authentication.");
+			alert('Error: Invalid Credentials!');
 			$("#invalid-login").addClass('show');
 		}
 	});
