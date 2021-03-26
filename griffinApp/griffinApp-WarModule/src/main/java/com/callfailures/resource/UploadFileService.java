@@ -32,6 +32,7 @@ import com.callfailures.entity.EventCause;
 import com.callfailures.entity.Events;
 import com.callfailures.entity.FailureClass;
 import com.callfailures.entity.MarketOperator;
+import com.callfailures.entity.Secured;
 import com.callfailures.entity.Upload;
 import com.callfailures.entity.UserEquipment;
 import com.callfailures.parsingutils.InvalidRow;
@@ -66,7 +67,7 @@ public class UploadFileService {
 
 	private final String UPLOADFILEPATH = System.getProperty("user.dir") + "/fileUploads/";
 
-	private static final String DOWNLOADFILEPATH = "/Users/fabi/wildfly-22.0.0.Final/welcome-content/fileDownloads/";
+	private static final String DOWNLOADFILEPATH = System.getProperty("jboss.home.dir") + "/welcome-content/fileDownloads/";
 
 	protected File sheet;
 
@@ -75,6 +76,7 @@ public class UploadFileService {
 	@Produces({ MediaType.APPLICATION_JSON })
 	@Consumes("multipart/form-data")
 	@Context
+	@Secured
 	public Response uploadFile(final MultipartFormDataInput input) {
 
 		final UUID uploadUUID = UUID.randomUUID();
@@ -147,6 +149,7 @@ public class UploadFileService {
 	@GET
 	@Produces({ MediaType.APPLICATION_JSON })
 	@Path("upload/{id}")
+	@Secured
 	public Response findUploadById(@PathParam("id") final String uuid) {
 		final UUID uploadRef = UUID.fromString(uuid);
 		final Upload requestedUpload = uploadDAO.getUploadByRef(uploadRef);
