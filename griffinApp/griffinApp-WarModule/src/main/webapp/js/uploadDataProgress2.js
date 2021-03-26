@@ -1,3 +1,9 @@
+const authToken = 'Bearer ' + sessionStorage.getItem("auth-token");
+
+const setAuthHeader = function(xhr){
+    xhr.setRequestHeader('Authorization', authToken);
+}
+
 var i = 0;
 var reportfilename;
 
@@ -11,6 +17,7 @@ var submitdata = function() {
 	$.ajax({
 		type: 'POST',
 		url: 'http://localhost:8080/callfailures/api/file/upload',
+		beforeSend: setAuthHeader,
 		dataType: "json",
 		data: formData,
 		contentType: false,
@@ -44,6 +51,7 @@ var getStatus = function(id) {
 	$.ajax({
 		type: 'GET',
 		url: 'http://localhost:8080/callfailures/api/file/upload/' + id,
+		beforeSend: setAuthHeader,
 		dataType: "json",
 		async: false,
 		success: function(data) {
