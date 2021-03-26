@@ -1,4 +1,9 @@
 const rootURL = "http://localhost:8080/callfailures/api";
+const authToken = 'Bearer ' + sessionStorage.getItem("auth-token");
+
+const setAuthHeader = function(xhr){
+    xhr.setRequestHeader('Authorization', authToken);
+}
 
 
 const displayIMSIByFailures = function(IMSIfailures){
@@ -22,6 +27,7 @@ const queryFailuresByIMSI = function(imsi){
         type:'GET',
         dataType:'json',
         url:`${rootURL}/failures/${imsi}`,
+        beforeSend: setAuthHeader,
         success: displayIMSIByFailures,
         error: function(jqXHR, textStatus, errorThrown){
             console.log(jqXHR);
@@ -72,6 +78,7 @@ const queryIMSISUmmary = function(imsi, from, to){
         type: "GET",
         dataType: "json",
         url: `${rootURL}/events/query?imsi=${imsi}&from=${from}&to=${to}&summary=true`,
+        beforeSend: setAuthHeader,
         success: displayIMSISummary,
         error: displayErrorOnIMSISummary
     })

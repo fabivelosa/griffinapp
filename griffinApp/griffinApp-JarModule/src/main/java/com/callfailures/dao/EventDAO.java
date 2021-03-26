@@ -67,7 +67,7 @@ public class EventDAO {
 	 */
 	public void createBulk(final List<Events> events) {
 		
-		for(Events event : events ) {
+		for(final Events event : events ) {
 			entityManager.persist(event);			
 		}
 		
