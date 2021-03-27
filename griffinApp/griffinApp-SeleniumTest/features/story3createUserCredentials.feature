@@ -13,7 +13,7 @@ Feature: As the System Administrator,
 
 	Examples:
 			|userId		|userName  		|userType				|userPassword		|confirmPassword |
-			|userA1		|named user		|System Admin		|verify					|verify          |
+			|userA1		|named user		|System Admin		|verify					|verify 				 |
 
     
        

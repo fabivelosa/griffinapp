@@ -46,6 +46,7 @@ public class EventsResource {
 	 * @return Returns IMSISummary entity which contains the (1) total failure count and (2) total duration of failues 
 	 */
 	@GET
+	@Secured
     @Path("/query")
 	@Produces({ MediaType.APPLICATION_JSON })
 	public Response getIMSICallFailureSummary(
@@ -79,6 +80,7 @@ public class EventsResource {
 	 * @return Returns PhoneModelSummary entity which contains the (1) total failure count and (2) phone model
 	 */
 	@GET
+	@Secured
     @Path("/query/ue")
 	@Produces({ MediaType.APPLICATION_JSON })
 	public Response getPhoneModelCallFailureSummary(

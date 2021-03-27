@@ -11,7 +11,10 @@ import cucumber.api.java.Before;
 public class Hooks {
 	public static WebDriver driver;
 	public static final String ROOT_DIRECTORY = System.getProperty("user.dir");
-	public static final String LOGIN_PAGE = "http://localhost:8080/callfailures/login.html";
+	public static final String TEST_UPLOAD_PAGE = "http://localhost:8080/callfailures/upload.html";
+	public static final String NETWORK_ENGINEER_PAGE = "http://localhost:8080/callfailures/networkEngineer.html";
+	public static final String CUSTOMER_SUPPORT_REP_PAGE = "http://localhost:8080/callfailures/customerSupport.html";
+	public static final String SYSTEM_ADMIN_PAGE = "http://localhost:8080/callfailures/sysadmin.html";
 	
     @Before
 	public void setup() {
@@ -27,11 +30,8 @@ public class Hooks {
 	}
 
 	@Before("@SystemAdmin")
-	public void sysAdminSetup() {
-		Hooks.driver.get(LOGIN_PAGE);
-		Hooks.driver.findElement(By.id("InputUsername")).sendKeys("lisa");
-		Hooks.driver.findElement(By.id("InputPassword")).sendKeys("1234");
-		Hooks.driver.findElement(By.id("loginBtn")).click();
+	public void loginSetup() {
+		Hooks.driver.get(SYSTEM_ADMIN_PAGE);
 	}
 	
 	@Before("@NetworkEngineer")

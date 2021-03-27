@@ -1,5 +1,6 @@
 package com.callfailures.resource;
 
+import static com.callfailures.commontests.utils.FileTestNameUtils.getPathFileRequest;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 
@@ -19,12 +20,15 @@ import org.jboss.shrinkwrap.resolver.api.maven.Maven;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.junit.Ignore;
+
 
 import com.callfailures.commontests.utils.JsonReader;
 import com.callfailures.commontests.utils.ResourceClient;
 import com.callfailures.errors.ErrorMessage;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+
 
 @RunWith(Arquillian.class)
 public class UniqueIMSIRetreivalIntTest {
@@ -37,6 +41,8 @@ public class UniqueIMSIRetreivalIntTest {
 	private final static String UNIQUE_IMSIS_URL = "IMSIs/query?from=";
 	//IMSIs/query?from=1546300800000&to=1616065200000
 	private final static String IMSIS_URL = "IMSIs/query/all";
+	private final static String LOGIN = "login/auth";
+	private String token;
 	
 	@ArquillianResource
 	private URL url; 
@@ -63,13 +69,19 @@ public class UniqueIMSIRetreivalIntTest {
 	@Before
 	public void initTestCase() {
 		this.resourceClient = new ResourceClient(url);
+		final Response loginRequest = resourceClient.resourcePath(LOGIN)
+				.postWithFile(getPathFileRequest(LOGIN, "supportEngineer.json"));
+		
+		token = JsonReader.readAsJsonObject(loginRequest.readEntity(String.class))
+				.get("token")
+				.getAsString();
 	}
 	
 	@Test
 	@RunAsClient
 	public void testGetUniqueIMSIByDate() {	
 		final String urlForIMSI = UNIQUE_IMSIS_URL + FROM_TIME + "&to=" + TO_TIME;
-		final Response responseGet = resourceClient.resourcePath(urlForIMSI).get();
+		final Response responseGet = resourceClient.resourcePath(urlForIMSI).get(token);
 		assertEquals(200, responseGet.getStatus());
 		
 		final JsonArray uniqueImsis = JsonReader.readAsJsonArray(responseGet.readEntity(String.class));	
@@ -86,7 +98,7 @@ public class UniqueIMSIRetreivalIntTest {
 	@RunAsClient
 	public void testGetUniqueIMSI_No_Unique() {	
 		final String urlForIMSI = UNIQUE_IMSIS_URL + FROM_TIME_INVALID + "&to=" + TO_TIME_INVALID;
-		final Response responseGet = resourceClient.resourcePath(urlForIMSI).get();
+		final Response responseGet = resourceClient.resourcePath(urlForIMSI).get(token);
 		assertEquals(200, responseGet.getStatus());
 		final JsonArray uniqueImsis = JsonReader.readAsJsonArray(responseGet.readEntity(String.class));	
 		assertEquals(0,uniqueImsis.size());
@@ -96,7 +108,7 @@ public class UniqueIMSIRetreivalIntTest {
 	@RunAsClient
 	public void testGetUniqueIMSI_Invalid_Date() {	
 		final String urlForIMSI = UNIQUE_IMSIS_URL + FROM_TIME_INVALID + "&to=" + INVALID_TIME;
-		final Response responseGet = resourceClient.resourcePath(urlForIMSI).get();
+		final Response responseGet = resourceClient.resourcePath(urlForIMSI).get(token);
 		assertEquals(404, responseGet.getStatus());
 		
 		final JsonObject uniqueImsis = JsonReader.readAsJsonObject(responseGet.readEntity(String.class));
@@ -107,7 +119,7 @@ public class UniqueIMSIRetreivalIntTest {
 	@RunAsClient
 	public void testGetUniqueIMSIAll() {	
 		final String urlForIMSI = IMSIS_URL ;
-		final Response responseGet = resourceClient.resourcePath(urlForIMSI).get();
+		final Response responseGet = resourceClient.resourcePath(urlForIMSI).get(token);
 		assertEquals(200, responseGet.getStatus());
 		
 		final JsonArray uniqueImsis = JsonReader.readAsJsonArray(responseGet.readEntity(String.class));	
