@@ -32,8 +32,10 @@ import com.callfailures.entity.EventCause;
 import com.callfailures.entity.Events;
 import com.callfailures.entity.FailureClass;
 import com.callfailures.entity.MarketOperator;
+import com.callfailures.entity.Secured;
 import com.callfailures.entity.Upload;
 import com.callfailures.entity.UserEquipment;
+import com.callfailures.parsingutils.InvalidRow;
 import com.callfailures.parsingutils.ParsingResponse;
 import com.callfailures.services.EventCauseService;
 import com.callfailures.services.EventService;
@@ -43,6 +45,7 @@ import com.callfailures.services.UserEquipmentService;
 
 @Path("/file")
 @Stateless
+@Secured
 public class UploadFileService {
 
 	@EJB
@@ -65,6 +68,9 @@ public class UploadFileService {
 
 	private final String UPLOADFILEPATH = System.getProperty("user.dir") + "/fileUploads/";
 
+	private static final String DOWNLOADFILEPATH = System.getProperty("jboss.home.dir")
+			+ "/welcome-content/fileDownloads/";
+
 	protected File sheet;
 
 	@POST
@@ -72,6 +78,7 @@ public class UploadFileService {
 	@Produces({ MediaType.APPLICATION_JSON })
 	@Consumes("multipart/form-data")
 	@Context
+	@Secured
 	public Response uploadFile(final MultipartFormDataInput input) {
 
 		final UUID uploadUUID = UUID.randomUUID();
@@ -95,11 +102,10 @@ public class UploadFileService {
 				return Response.status(400).entity(e.getStackTrace()).build();
 			}
 		}
-		// File sheet = null;
+
 		try {
 			Thread.sleep(3 * 1000);
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		new Thread() {
@@ -125,8 +131,8 @@ public class UploadFileService {
 				currentUpload.setUploadStatus(95);
 				uploadDAO.update(currentUpload);
 
-				generateResponseEntity(uploadsOverallResult, eventCauses, failureClasses, userEquipment, marketOperator,
-						events);
+				generateReportFile(uploadsOverallResult, eventCauses, failureClasses, userEquipment, marketOperator,
+						events, currentUpload);
 
 				currentUpload.setUploadStatus(100);
 				uploadDAO.update(currentUpload);
@@ -135,13 +141,10 @@ public class UploadFileService {
 				final long duration = (endNano - startNano) / 1000000000;
 				System.out.println("It took " + duration + "seconds to validate and store the data");
 
-				// Response response =
-				// Response.status(200).entity(uploadsOverallResult).build();
-				// ((AsyncResponse) response).resume(response);
 			}
 		}.start();
 		return Response.status(200).entity(currentUpload).build();
-		//return Response.status(200).entity(uploadsOverallResult).build();
+
 	}
 
 	@GET
@@ -154,10 +157,11 @@ public class UploadFileService {
 
 	}
 
-	private void generateResponseEntity(final List<EventsUploadResponseDTO> uploadsOverallResult,
+	private void generateReportFile(final List<EventsUploadResponseDTO> uploadsOverallResult,
 			final ParsingResponse<EventCause> eventCauses, final ParsingResponse<FailureClass> failureClasses,
 			final ParsingResponse<UserEquipment> userEquipment, final ParsingResponse<MarketOperator> marketOperator,
-			final ParsingResponse<Events> events) {
+			final ParsingResponse<Events> events, final Upload reportFile) {
+
 		uploadsOverallResult.add(new EventsUploadResponseDTO("Event Cause", eventCauses.getValidObjects().size(),
 				eventCauses.getInvalidRows()));
 		uploadsOverallResult.add(new EventsUploadResponseDTO("Failure Class", failureClasses.getValidObjects().size(),
@@ -168,6 +172,43 @@ public class UploadFileService {
 				marketOperator.getInvalidRows()));
 		uploadsOverallResult.add(
 				new EventsUploadResponseDTO("Base Data", events.getValidObjects().size(), events.getInvalidRows()));
+
+		String table = "";
+		final String filename = "Error" + System.currentTimeMillis() + ".txt";
+		FileOutputStream file = null;
+
+		try {
+
+			file = new FileOutputStream(DOWNLOADFILEPATH + filename);
+			reportFile.setReportFile(filename);
+			for (final EventsUploadResponseDTO result : uploadsOverallResult) {
+
+				if (result.getTabName().equals(table.toString())) {
+					file.write(("Table: " + table + " , has Ignored Rows").getBytes());
+					table = result.getTabName();
+					file.write(System.getProperty("line.separator").getBytes());
+				}
+
+				for (final InvalidRow invalidItem : result.getErroneousData()) {
+					file.write(("Row :" + invalidItem.getRowNumber() + " , Caused :" + invalidItem.getErrorMessage())
+							.getBytes());
+					file.write(System.getProperty("line.separator").getBytes());
+				}
+			}
+			file.flush();
+			file.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			// releases all system resources from the streams
+			if (file != null)
+				try {
+					file.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+		}
+
 	}
 
 	/**
@@ -202,9 +243,11 @@ public class UploadFileService {
 			}
 			fop.write(content);
 			fop.flush();
-		} catch (Exception e) {
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
+
 		return file;
+
 	}
 }
