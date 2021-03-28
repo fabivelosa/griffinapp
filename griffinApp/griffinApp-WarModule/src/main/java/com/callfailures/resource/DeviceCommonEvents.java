@@ -35,7 +35,7 @@ public class DeviceCommonEvents {
 	
 	
 	@GET
-	@Secured
+	//@Secured commented for testing
     @Path("/query")
 	@Produces({ MediaType.APPLICATION_JSON })
 	public Response getTop10Combinations(@QueryParam("from") final Long fromEpoch,
@@ -48,6 +48,7 @@ public class DeviceCommonEvents {
 			final List<DeviceCombination> topTen = eventService.findTopTenEvents(startTime, endTime);
 			return Response.status(200).entity(topTen).build();
 		} catch (Exception e) {
+			e.printStackTrace();
 			return Response.status(404).entity(e.getMessage()).build();
 		}
 	}
