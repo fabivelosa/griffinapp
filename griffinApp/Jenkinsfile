@@ -14,7 +14,7 @@ pipeline {
         }
         stage('Integration Test') { 
             steps {
-	     //sh  "mvn test -Pintegration-tests -Djboss.home=/opt/wildfly-8.2.1.Final -f griffinApp"
+	      sh  "mvn test -ParquillianTest -f griffinApp"
 	      echo 'This is integration test'
             }
         }
@@ -53,5 +53,6 @@ pipeline {
     
 	 }  
 
-     }      
+     }
+     
 }

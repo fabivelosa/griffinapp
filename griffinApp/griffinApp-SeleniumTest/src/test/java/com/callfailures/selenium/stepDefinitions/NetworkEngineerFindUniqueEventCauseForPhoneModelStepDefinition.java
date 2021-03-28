@@ -7,7 +7,7 @@ import org.openqa.selenium.support.ui.Select;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 
-public class NetworkEngineerFindUniqueEventCauseForPhomeModelStepDefinition {
+public class NetworkEngineerFindUniqueEventCauseForPhoneModelStepDefinition {
 	@When("^The network engineer selected the Phone Model \"([^\"]*)\" from the dropdown$")
 	public void the_network_engineer_selected_the_Phone_Model_from_the_dropdown(String phoneModel) throws Throwable {
 		(new Select(Hooks.driver.findElement(By.id("selectUserEquipmentDropdown")))).selectByVisibleText(phoneModel);
