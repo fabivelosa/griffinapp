@@ -1,35 +1,40 @@
-#sampleData{
-	visibility:hidden;
-	text-align:left;
+#sampleData {
+	visibility: hidden;
+	text-align: left;
 }
-#successfulList, #errorsList{
-	list-style-type:none;
+
+#successfulList, #errorsList {
+	list-style-type: none;
 }
 
 #myProgress {
   width: 100%;
-  background-color: grey;
+  height: 30px;
+  background-color: rgb(222, 222, 222);
 }
 
 #myBar {
   width: 1%;
   height: 30px;
-  background-color: green;
-}
-
-.storedRow{
-	color:#5cb85c;
-}
-
-.ignoredRow{
-	color:#f0ad4e;
-}
-
-.tableWithError{
-	 font-weight: bold;
+  background-color: #1550f3;
 }
 
 
+.ui-dialog-titlebar-close {
+	display: none;
+}
+
+.storedRow {
+	color: #5cb85c;
+}
+
+.ignoredRow {
+	color: #f0ad4e;
+}
+
+.tableWithError {
+	font-weight: bold;
+}
 
 /* #displayCount{
 	visibility:hidden;

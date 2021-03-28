@@ -20,6 +20,17 @@ public class Upload {
 	private UUID uploadID;
 
 	private int uploadStatus;
+	
+	private String reportFile;
+	
+
+	public String getReportFile() {
+		return reportFile;
+	}
+
+	public void setReportFile(final String reportFile) {
+		this.reportFile = reportFile;
+	}
 
 	public UUID getUploadID() {
 		return uploadID;

@@ -1,4 +1,5 @@
 var rootURL = 'http://localhost:8080/callfailures/api';
+var authToken = 'Bearer '+sessionStorage.getItem("auth-token");
 
 var currentUser;
 
@@ -18,6 +19,9 @@ var addUser = function () {
 		dataType: 'json',
 		data: formToJSON(),
 		contentType: 'application/json',
+		beforeSend: function(xhr){
+		xhr.setRequestHeader('Authorization', authToken);
+		},
 		success: function(data, textStatus, jqXHR){
 			alert('User created successfully');
 			
@@ -54,11 +58,12 @@ var formToJSON=function () {
 };
 
 $(document).ready(function(){
-
-	
-	
 	$('#createUserButton').click(function() {
-		if ($('#userPassword').val() == $('#confirmPassword').val())
+		if (($('#userId').val() == "")||($('#userName').val() == "")||($('#userType').val() == "")||($('#userPassword').val() == "")){
+			alert('Required field left empty');
+			}
+			
+		else if ($('#userPassword').val() == $('#confirmPassword').val())
 			addUser();
 		else
 			alert('Error: Passwords must match');
