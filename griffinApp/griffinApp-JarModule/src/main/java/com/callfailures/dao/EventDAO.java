@@ -46,11 +46,12 @@ public class EventDAO {
 					+ "FROM event e "
 					+ "WHERE e.ueType.tac = :tac "
 					+ "GROUP BY e.ueType, e.eventCause",
-			Find_TOP_COMBOS="SELECT NEW com.callfailures.entity.views.DeviceCombination(e.eventCause,e.marketOperator,e.cellId) "
+			Find_TOP_COMBOS="SELECT DISTINCT NEW com.callfailures.entity.views.DeviceCombination(e.eventCause,e.marketOperator,e.cellId) "
 					+"FROM event e "
 					+"WHERE (e.dateTime BETWEEN :startTime AND :endTime) "
-					+"ORDER BY COUNT(e.eventCause) DESC"
-					+"GROUP BY e.cellId";
+					+"ORDER BY COUNT(e.eventCause) DESC "
+					+"GROUP BY e.cellId "
+					+"LIMIT 10";
 	
 
 
