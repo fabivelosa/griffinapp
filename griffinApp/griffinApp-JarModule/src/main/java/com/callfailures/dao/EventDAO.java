@@ -11,6 +11,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
 import com.callfailures.entity.Events;
+import com.callfailures.entity.views.DeviceCombination;
 import com.callfailures.entity.views.IMSIEvent;
 import com.callfailures.entity.views.IMSISummary;
 import com.callfailures.entity.views.PhoneModelSummary;
@@ -36,7 +37,7 @@ public class EventDAO {
 					+ "WHERE (e.dateTime BETWEEN :startTime AND :endTime) "
 					+ "AND e.imsi = :imsi "
 					+ "GROUP BY e.imsi",
-		        FIND_CALL_FAILURES_BY_PHONEMODEL_AND_DATE = "SELECT NEW com.callfailures.entity.views.PhoneModelSummary(e.ueType.model, COUNT(e)) "
+		    FIND_CALL_FAILURES_BY_PHONEMODEL_AND_DATE = "SELECT NEW com.callfailures.entity.views.PhoneModelSummary(e.ueType.model, COUNT(e)) "
 							+ "FROM event e "
 							+ "WHERE (e.dateTime BETWEEN :startTime AND :endTime) "
 							+ "AND e.ueType.model = :model "
@@ -44,7 +45,12 @@ public class EventDAO {
 			FIND_UNIQUE_EVENT_ID_AND_CAUSE_CODE_COUNT = "SELECT NEW com.callfailures.entity.views.PhoneFailures(e.ueType, e.eventCause, COUNT(e)) "
 					+ "FROM event e "
 					+ "WHERE e.ueType.tac = :tac "
-					+ "GROUP BY e.ueType, e.eventCause";
+					+ "GROUP BY e.ueType, e.eventCause",
+			Find_TOP_COMBOS="SELECT NEW com.callfailures.entity.views.DeviceCombination(e.eventCause,e.marketOperator,e.cellId) "
+					+"FROM event e "
+					+"WHERE (e.dateTime BETWEEN :startTime AND :endTime) "
+					+"ORDER BY COUNT(e.eventCause) DESC"
+					+"GROUP BY e.cellId";
 	
 
 
@@ -187,5 +193,24 @@ public class EventDAO {
 		}
 		
 	}
-
+	
+	
+	/**
+	 * Query Database for top ten combination of Market, Operator, Cell ID
+	 * @return list of Device Combination for given time period
+	 */
+	@SuppressWarnings("unchecked")
+	public List<DeviceCombination> findTopTenCombinations(final LocalDateTime startTime, final LocalDateTime endTime){
+		final Query query = entityManager.createQuery(Find_TOP_COMBOS,Events.class);
+		query.setParameter("startTime", startTime);
+		query.setParameter("endTime", endTime);
+		try {
+			return query.getResultList();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	
 }
