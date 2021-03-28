@@ -12,6 +12,7 @@ import javax.persistence.Query;
 
 import com.callfailures.entity.Events;
 import com.callfailures.entity.views.DeviceCombination;
+import com.callfailures.entity.views.IMSICount;
 import com.callfailures.entity.views.IMSIEvent;
 import com.callfailures.entity.views.IMSISummary;
 import com.callfailures.entity.views.PhoneModelSummary;
@@ -25,6 +26,11 @@ public class EventDAO {
 			FIND_ALL_IMSI="SELECT DISTINCT NEW com.callfailures.entity.views.UniqueIMSI(e.imsi) " 
 					+ "FROM event e "
 					+"ORDER BY e.imsi",
+			FIND_IMSI_COUNT_FOR_TIMEPERIOD = "SELECT DISTINCT NEW com.callfailures.entity.views.IMSICount(e.imsi, COUNT(e)) "
+					+ "FROM event e "
+					+ "WHERE (e.dateTime BETWEEN :startTime AND :endTime) "
+					+ "GROUP BY e.imsi "
+					+ "ORDER BY COUNT(e) DESC",
 			FIND_IMSI_BY_DATE="SELECT DISTINCT NEW com.callfailures.entity.views.UniqueIMSI(e.imsi) " 
 					+ "FROM event e "
 					+ "WHERE (e.dateTime BETWEEN :startTime AND :endTime)",
@@ -214,4 +220,22 @@ public class EventDAO {
 	}
 	
 	
+	/**
+	 * Query Database for top 'N' IMSI with failures
+	 * @return list of IMSI for given time period
+	 */
+	@SuppressWarnings("unchecked")
+	public List<IMSICount> findIMSIS(final int number, final LocalDateTime startTime, final LocalDateTime endTime){
+		final Query query = entityManager.createQuery(FIND_IMSI_COUNT_FOR_TIMEPERIOD, IMSICount.class);
+		try {
+			query.setParameter("startTime", startTime);
+			query.setParameter("endTime", endTime);
+			query.setMaxResults(number);
+			return query.getResultList();
+		} catch (NoResultException e) {
+			return null;
+		}
+		
+	}
+
 }

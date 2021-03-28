@@ -25,6 +25,7 @@ import com.callfailures.dao.UploadDAO;
 import com.callfailures.entity.Events;
 import com.callfailures.entity.Upload;
 import com.callfailures.entity.views.DeviceCombination;
+import com.callfailures.entity.views.IMSICount;
 import com.callfailures.entity.views.IMSIEvent;
 import com.callfailures.entity.views.IMSISummary;
 import com.callfailures.entity.views.PhoneFailures;
@@ -218,7 +219,11 @@ public class EventServiceImpl implements EventService {
 	@Override
 	public List<DeviceCombination> findTopTenEvents(final LocalDateTime startTime, final LocalDateTime endTime){
 		return eventDAO.findTopTenCombinations(startTime, endTime);
+	}
 		
+	@Override
+	public List<IMSICount> findIMSIS(final int number, final LocalDateTime startTime, final LocalDateTime endTime) {
+		return eventDAO.findIMSIS(number, startTime, endTime);
 	}
 
 }
