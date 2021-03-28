@@ -105,9 +105,9 @@ public class EventServiceImpl implements EventService {
 			if ((rowTotal > 0) || sheet.getPhysicalNumberOfRows() > 0) {
 				rowTotal++;
 			}
-			
+
 			readRows(currentUpload, eventsToProcess, parsingResult, sheet, rowTotal);
-			
+
 		} catch (IOException | InvalidFormatException e) {
 			e.printStackTrace();
 		}
@@ -115,12 +115,12 @@ public class EventServiceImpl implements EventService {
 	}
 
 	private void readRows(final Upload currentUpload, List<Events> eventsToProcess,
-			final ParsingResponse<Events> parsingResult, final Sheet sheet, int rowTotal) {
+			final ParsingResponse<Events> parsingResult, final Sheet sheet, final int rowTotal) {
 		final Iterator<Row> rowIterator = sheet.rowIterator();
 		Row row = rowIterator.next();
 		int rowNumber = 0;
 		int index = 0;
-		int batch_size = 2000;
+		int batch_size = 500;
 
 		if (batch_size > rowTotal) {
 			batch_size = rowTotal - 1;
