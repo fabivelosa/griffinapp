@@ -46,12 +46,11 @@ public class EventDAO {
 					+ "FROM event e "
 					+ "WHERE e.ueType.tac = :tac "
 					+ "GROUP BY e.ueType, e.eventCause",
-			Find_TOP_COMBOS="SELECT DISTINCT NEW com.callfailures.entity.views.DeviceCombination(e.eventCause,e.cellId, e.marketOperator, COUNT(eventCause)) "
+			Find_TOP_COMBOS="SELECT DISTINCT NEW com.callfailures.entity.views.DeviceCombination(e.eventCause,e.cellId, e.marketOperator, COUNT(e.eventCause)) "
 					+"FROM event e "
 					+"WHERE (e.dateTime BETWEEN :startTime AND :endTime) "
 					+"GROUP BY e.eventCause,e.cellId, e.marketOperator "
-					+"ORDER BY COUNT(e.eventCause) DESC "
-					+"LIMIT 10";
+					+"ORDER BY COUNT(e.eventCause) DESC";
 	
 
 
@@ -205,6 +204,7 @@ public class EventDAO {
 		final Query query = entityManager.createQuery(Find_TOP_COMBOS,DeviceCombination.class);
 		query.setParameter("startTime", startTime);
 		query.setParameter("endTime", endTime);
+		query.setMaxResults(10);
 		try {
 			return query.getResultList();
 		} catch (Exception e) {
