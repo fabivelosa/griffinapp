@@ -19,6 +19,7 @@
 
     <!-- Custom styles for this template-->
     <link href="css/sb-admin-2.min.css" rel="stylesheet">
+    <link href="css/sysadmin.css" rel="stylesheet">
 
 </head>
 
@@ -228,7 +229,7 @@
                     </div>
                     <!-- Content Row -->
                     <div class="row">
-                        <div class="col-lg-4 mb-4">
+                        <div class="col-lg-7 mb-6">
                             <div class="card shadow mb-4">
                                 <div class="card-header py-3">
                                     <h6 class="m-0 font-weight-bold text-primary">Create User</h6>
@@ -244,24 +245,43 @@
                                 	</div>
 									<div class="input-group mb-3">
                                 		<span class="input-group-text">User Type</span>
-                                        <input type="text" class="form-control" id="userType" placeholder="User type" aria-label="User type" aria-describedby="basic-addon1" required>                            
+										<div id="dropdown">
+											<select class="form-control" id="userType" name="types">
+												<option value="Customer Service Rep">Customer Service Rep.</option>
+												<option value="Support Engineer">Support Engineer</option>
+												<option value="Network Management Engineer">Network Management Engineer</option>
+											</select>
+										</div>
                                 	</div>
                                     <div class="input-group mb-3">
                                         <span class="input-group-text">Password</span>
-                                        <input type="password" id="userPassword" class="form-control" placeholder="Password" aria-label="Password" aria-describedby="basic-addon1" required>
+                                       <!--  <input type="password" id="userPassword" class="form-control" placeholder="Password" aria-label="Password" aria-describedby="basic-addon1" required>-->
+                                       <input type="password" id="userPassword" class="form-control" placeholder="Password" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"  required>
                                       </div>
+                                      
                                       <div class="input-group mb-3">
                                         <span class="input-group-text">Confirm Password</span>
-                                        <input type="password" id="confirmPassword" class="form-control" placeholder="Password" aria-label="Password" aria-describedby="basic-addon1" required>
+                                        <input type="password" id="confirmPassword" class="form-control" placeholder="Confirm Password" aria-label="Password" aria-describedby="basic-addon1" required>
                                       </div>
                                   
                                       <div class="input-group">
                                         <button type="button" id="createUserButton" class="btn btn-primary">Create User</button>
                                       </div>
                                 </div>
+                                <div id="message">
+										  <h3>Password must contain the following:</h3>
+										  <p id="letter" class="invalid">A <b>lowercase</b> letter</p>
+										  <p id="capital" class="invalid">A <b>capital (uppercase)</b> letter</p>
+										  <p id="number" class="invalid">A <b>number</b></p>
+										  <p id="length" class="invalid">Minimum <b>8 characters</b></p>
+								</div>
+			<!--  					<div id="success">
+										  <h3>User saved to Database</h3>
+								</div> -->
+								
                             </div>
                         </div>
-                      <div class="col-lg-4 mb-4">
+ <!--                     <div class="col-lg-4 mb-4">
                             <div class="card shadow mb-4">
                                 <div class="card-body">
                                     <div class="mb-3">
@@ -281,6 +301,7 @@
                             </div>
                         </div>
                     </div>
+                     --> 
 
                     <!-- Content Row -->
                     <div class="row">
