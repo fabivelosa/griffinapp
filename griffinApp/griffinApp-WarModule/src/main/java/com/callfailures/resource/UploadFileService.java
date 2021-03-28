@@ -45,6 +45,7 @@ import com.callfailures.services.UserEquipmentService;
 
 @Path("/file")
 @Stateless
+@Secured
 public class UploadFileService {
 
 	@EJB
@@ -67,7 +68,8 @@ public class UploadFileService {
 
 	private final String UPLOADFILEPATH = System.getProperty("user.dir") + "/fileUploads/";
 
-	private static final String DOWNLOADFILEPATH = System.getProperty("jboss.home.dir") + "/welcome-content/fileDownloads/";
+	private static final String DOWNLOADFILEPATH = System.getProperty("jboss.home.dir")
+			+ "/welcome-content/fileDownloads/";
 
 	protected File sheet;
 
@@ -76,6 +78,7 @@ public class UploadFileService {
 	@Produces({ MediaType.APPLICATION_JSON })
 	@Consumes("multipart/form-data")
 	@Context
+	@Secured
 	public Response uploadFile(final MultipartFormDataInput input) {
 
 		final UUID uploadUUID = UUID.randomUUID();
@@ -99,11 +102,10 @@ public class UploadFileService {
 				return Response.status(400).entity(e.getStackTrace()).build();
 			}
 		}
-		// File sheet = null;
+
 		try {
 			Thread.sleep(3 * 1000);
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		new Thread() {
@@ -129,8 +131,8 @@ public class UploadFileService {
 				currentUpload.setUploadStatus(95);
 				uploadDAO.update(currentUpload);
 
-				generateResponseEntity(uploadsOverallResult, eventCauses, failureClasses, userEquipment, marketOperator,
-						events,currentUpload);
+				generateReportFile(uploadsOverallResult, eventCauses, failureClasses, userEquipment, marketOperator,
+						events, currentUpload);
 
 				currentUpload.setUploadStatus(100);
 				uploadDAO.update(currentUpload);
@@ -155,7 +157,7 @@ public class UploadFileService {
 
 	}
 
-	private void generateResponseEntity(final List<EventsUploadResponseDTO> uploadsOverallResult,
+	private void generateReportFile(final List<EventsUploadResponseDTO> uploadsOverallResult,
 			final ParsingResponse<EventCause> eventCauses, final ParsingResponse<FailureClass> failureClasses,
 			final ParsingResponse<UserEquipment> userEquipment, final ParsingResponse<MarketOperator> marketOperator,
 			final ParsingResponse<Events> events, final Upload reportFile) {
@@ -170,11 +172,14 @@ public class UploadFileService {
 				marketOperator.getInvalidRows()));
 		uploadsOverallResult.add(
 				new EventsUploadResponseDTO("Base Data", events.getValidObjects().size(), events.getInvalidRows()));
+
 		String table = "";
+		final String filename = "Error" + System.currentTimeMillis() + ".txt";
+		FileOutputStream file = null;
+
 		try {
 
-			final String filename = "Error" + System.currentTimeMillis() + ".txt";
-			final FileOutputStream file = new FileOutputStream(DOWNLOADFILEPATH + filename);
+			file = new FileOutputStream(DOWNLOADFILEPATH + filename);
 			reportFile.setReportFile(filename);
 			for (final EventsUploadResponseDTO result : uploadsOverallResult) {
 
@@ -190,9 +195,18 @@ public class UploadFileService {
 					file.write(System.getProperty("line.separator").getBytes());
 				}
 			}
+			file.flush();
 			file.close();
 		} catch (IOException e) {
 			e.printStackTrace();
+		} finally {
+			// releases all system resources from the streams
+			if (file != null)
+				try {
+					file.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
 		}
 
 	}
@@ -224,14 +238,16 @@ public class UploadFileService {
 		try (FileOutputStream fop = new FileOutputStream(file)) {
 			if (!file.exists()) {
 				if (!file.createNewFile()) {
-					throw new Exception("File is not created");
+					throw new IOException("File is not created");
 				}
 			}
 			fop.write(content);
 			fop.flush();
-		} catch (Exception e) {
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
+
 		return file;
+
 	}
 }
