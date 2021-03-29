@@ -8,6 +8,8 @@ import javax.ejb.Local;
 
 import com.callfailures.entity.Events;
 import com.callfailures.entity.Upload;
+import com.callfailures.entity.views.DeviceCombination;
+import com.callfailures.entity.views.IMSICount;
 import com.callfailures.entity.views.IMSIEvent;
 import com.callfailures.entity.views.IMSISummary;
 import com.callfailures.entity.views.PhoneModelSummary;
@@ -78,5 +80,9 @@ public interface EventService {
 	List<IMSIEvent> findFailuresByImsi(final String imsi);
 
 	List<UniqueIMSI> findIMSIS();
+
+	List<DeviceCombination> findTopTenEvents(final LocalDateTime startTime, final LocalDateTime endTime);
+
+	List<IMSICount> findIMSIS(int number, LocalDateTime startTime, LocalDateTime endTime);
 	
 }
