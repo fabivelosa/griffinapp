@@ -11,6 +11,8 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
 import com.callfailures.entity.Events;
+import com.callfailures.entity.views.DeviceCombination;
+import com.callfailures.entity.views.IMSICount;
 import com.callfailures.entity.views.IMSIEvent;
 import com.callfailures.entity.views.IMSISummary;
 import com.callfailures.entity.views.PhoneModelSummary;
@@ -24,6 +26,11 @@ public class EventDAO {
 			FIND_ALL_IMSI="SELECT DISTINCT NEW com.callfailures.entity.views.UniqueIMSI(e.imsi) " 
 					+ "FROM event e "
 					+"ORDER BY e.imsi",
+			FIND_IMSI_COUNT_FOR_TIMEPERIOD = "SELECT DISTINCT NEW com.callfailures.entity.views.IMSICount(e.imsi, COUNT(e)) "
+					+ "FROM event e "
+					+ "WHERE (e.dateTime BETWEEN :startTime AND :endTime) "
+					+ "GROUP BY e.imsi "
+					+ "ORDER BY COUNT(e) DESC",
 			FIND_IMSI_BY_DATE="SELECT DISTINCT NEW com.callfailures.entity.views.UniqueIMSI(e.imsi) " 
 					+ "FROM event e "
 					+ "WHERE (e.dateTime BETWEEN :startTime AND :endTime)",
@@ -36,7 +43,7 @@ public class EventDAO {
 					+ "WHERE (e.dateTime BETWEEN :startTime AND :endTime) "
 					+ "AND e.imsi = :imsi "
 					+ "GROUP BY e.imsi",
-		        FIND_CALL_FAILURES_BY_PHONEMODEL_AND_DATE = "SELECT NEW com.callfailures.entity.views.PhoneModelSummary(e.ueType.model, COUNT(e)) "
+		    FIND_CALL_FAILURES_BY_PHONEMODEL_AND_DATE = "SELECT NEW com.callfailures.entity.views.PhoneModelSummary(e.ueType.model, COUNT(e)) "
 							+ "FROM event e "
 							+ "WHERE (e.dateTime BETWEEN :startTime AND :endTime) "
 							+ "AND e.ueType.model = :model "
@@ -44,7 +51,12 @@ public class EventDAO {
 			FIND_UNIQUE_EVENT_ID_AND_CAUSE_CODE_COUNT = "SELECT NEW com.callfailures.entity.views.PhoneFailures(e.ueType, e.eventCause, COUNT(e)) "
 					+ "FROM event e "
 					+ "WHERE e.ueType.tac = :tac "
-					+ "GROUP BY e.ueType, e.eventCause";
+					+ "GROUP BY e.ueType, e.eventCause",
+			Find_TOP_COMBOS="SELECT DISTINCT NEW com.callfailures.entity.views.DeviceCombination(e.cellId, e.marketOperator, COUNT(e)) "
+					+"FROM event e "
+					+"WHERE (e.dateTime BETWEEN :startTime AND :endTime) "
+					+"GROUP BY e.cellId, e.marketOperator "
+					+"ORDER BY COUNT(e) DESC";
 	
 
 
@@ -181,6 +193,43 @@ public class EventDAO {
 	public List<UniqueIMSI> findIMSIS(){
 		final Query query = entityManager.createQuery(FIND_ALL_IMSI,UniqueIMSI.class);
 		try {
+			return query.getResultList();
+		} catch (NoResultException e) {
+			return null;
+		}
+		
+	}
+	
+	
+	/**
+	 * Query Database for top ten combination of Market, Operator, Cell ID
+	 * @return list of Device Combination for given time period
+	 */
+	@SuppressWarnings("unchecked")
+	public List<DeviceCombination> findTopTenCombinations(final LocalDateTime startTime, final LocalDateTime endTime){
+		final Query query = entityManager.createQuery(Find_TOP_COMBOS,DeviceCombination.class);
+		query.setParameter("startTime", startTime);
+		query.setParameter("endTime", endTime);
+		query.setMaxResults(10);
+		try {
+			return query.getResultList();
+		} catch (NoResultException e) {
+			return null;
+		}
+	}
+	
+	
+	/**
+	 * Query Database for top 'N' IMSI with failures
+	 * @return list of IMSI for given time period
+	 */
+	@SuppressWarnings("unchecked")
+	public List<IMSICount> findIMSIS(final int number, final LocalDateTime startTime, final LocalDateTime endTime){
+		final Query query = entityManager.createQuery(FIND_IMSI_COUNT_FOR_TIMEPERIOD, IMSICount.class);
+		try {
+			query.setParameter("startTime", startTime);
+			query.setParameter("endTime", endTime);
+			query.setMaxResults(number);
 			return query.getResultList();
 		} catch (NoResultException e) {
 			return null;
