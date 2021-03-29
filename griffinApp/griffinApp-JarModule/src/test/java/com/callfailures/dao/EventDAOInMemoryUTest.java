@@ -221,13 +221,13 @@ class EventDAOInMemoryUTest {
 	
 	@Test
 	void testFind_TOP_COMBOS() {
-		List<DeviceCombination> deviceCombos = eventDAO.findTopTenCombinations(startTime, endTime);
+		final List<DeviceCombination> deviceCombos = eventDAO.findTopTenCombinations(startTime, endTime);
 		assertEquals(1, deviceCombos.size());
 	}
 	
 	@Test
 	void testFind_TOP_IMISs() {
-		List<IMSICount> topIMISs = eventDAO.findIMSIS(10, startTime, endTime);
+		final List<IMSICount> topIMISs = eventDAO.findIMSIS(10, startTime, endTime);
 		assertEquals(1, topIMISs.size());
 	}
 }

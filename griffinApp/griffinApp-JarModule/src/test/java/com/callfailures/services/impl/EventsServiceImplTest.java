@@ -73,7 +73,7 @@ public class EventsServiceImplTest {
 			"AT&T Wireless-Antigua AG");
 	private Validator validator;
 	private ValidationService validationService;
-	private List<IMSIEvent> imsiEvents = new ArrayList<>();
+	private final List<IMSIEvent> imsiEvents = new ArrayList<>();
 	private EventService eventService;
 	private File file;
 	private final UUID uuid = UUID.fromString("427e8708-8cdb-11eb-8dcd-0242ac130003");
@@ -99,14 +99,14 @@ public class EventsServiceImplTest {
 
 	@Test
 	public void findUniqueEventCauseCountByPhoneModel() {
-		PhoneFailures phoneFailures = new PhoneFailures(userEquipment, eventCause, 10);
-		List<PhoneFailures> testList = new ArrayList<>();
+		final PhoneFailures phoneFailures = new PhoneFailures(userEquipment, eventCause, 10);
+	    final List<PhoneFailures> testList = new ArrayList<>();
 		testList.add(phoneFailures);
 
 		when(eventDAO.findUniqueEventCauseCountByPhoneModel(1)).thenReturn(testList);
 
-		List<PhoneFailures> retrievedPhoneFailures = eventService.findUniqueEventCauseCountByPhoneModel(1);
-		PhoneFailures retrievedPhoneFailues = retrievedPhoneFailures.get(0);
+		final List<PhoneFailures> retrievedPhoneFailures = eventService.findUniqueEventCauseCountByPhoneModel(1);
+		final PhoneFailures retrievedPhoneFailues = retrievedPhoneFailures.get(0);
 
 		assertEquals(phoneFailures, retrievedPhoneFailues);
 		assertEquals(userEquipment, retrievedPhoneFailues.getUserEquipment());
@@ -198,7 +198,7 @@ public class EventsServiceImplTest {
 
 	@Test
 	void testSucessfindFailuresByIMSI() {
-		IMSIEvent imsiEvent = new IMSIEvent(VALID_IMSI, eventCause);
+		final IMSIEvent imsiEvent = new IMSIEvent(VALID_IMSI, eventCause);
 		imsiEvents.add(imsiEvent);
 		when(eventDAO.findEventsByIMSI(VALID_IMSI)).thenReturn(imsiEvents);
 		assertEquals(1, eventService.findFailuresByImsi(VALID_IMSI).size());
@@ -347,8 +347,8 @@ public class EventsServiceImplTest {
 
 	@Test
 	void testForFindIMSIs() {
-		UniqueIMSI imsi = new UniqueIMSI();
-		List<UniqueIMSI> imsisList = new ArrayList<>();
+		final UniqueIMSI imsi = new UniqueIMSI();
+		final List<UniqueIMSI> imsisList = new ArrayList<>();
 		imsisList.add(imsi);
 		when(eventDAO.findIMSIS()).thenReturn(imsisList);
 		assertEquals(imsisList, eventService.findIMSIS());
@@ -358,8 +358,8 @@ public class EventsServiceImplTest {
 	
 	@Test
 	void testForTopIMSIs() {
-		IMSICount imsiCount = new IMSICount();
-		List<IMSICount> imsiCounts = new ArrayList<>();
+		final IMSICount imsiCount = new IMSICount();
+		final List<IMSICount> imsiCounts = new ArrayList<>();
 		imsiCounts.add(imsiCount);
 		when(eventDAO.findIMSIS(10, VALID_START_TIME, VALID_END_TIME)).thenReturn(imsiCounts);
 		assertEquals(imsiCounts, eventService.findIMSIS(10, VALID_START_TIME, VALID_END_TIME));
