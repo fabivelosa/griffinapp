@@ -111,9 +111,6 @@ var formToJSON=function () {
 };
 
 $(document).ready(function(){
-
-	
-	
 	$('#createUserButton').click(function() {
 		if (($('#userId').val() == "")||($('#userName').val() == "")||($('#userType').val() == "")||($('#userPassword').val() == "")){
 			alert('Required field left empty');
