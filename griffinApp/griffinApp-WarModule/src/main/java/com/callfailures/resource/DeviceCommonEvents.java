@@ -19,6 +19,7 @@ import com.callfailures.entity.views.DeviceCombination;
 import com.callfailures.entity.views.UniqueIMSI;
 import com.callfailures.errors.ErrorMessage;
 import com.callfailures.errors.ErrorMessages;
+import com.callfailures.exception.InvalidDateException;
 import com.callfailures.services.EventService;
 import com.callfailures.utils.DateConverter;
 
@@ -47,9 +48,8 @@ public class DeviceCommonEvents {
 		try {
 			final List<DeviceCombination> topTen = eventService.findTopTenEvents(startTime, endTime);
 			return Response.status(200).entity(topTen).build();
-		} catch (Exception e) {
-			e.printStackTrace();
-			return Response.status(404).entity(e.getMessage()).build();
+		} catch (InvalidDateException e) {
+			return Response.status(404).entity(new ErrorMessages(ErrorMessage.INVALID_DATE.getMessage())).build();
 		}
 	}
 	

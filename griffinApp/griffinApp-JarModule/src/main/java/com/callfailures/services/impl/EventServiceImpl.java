@@ -217,6 +217,9 @@ public class EventServiceImpl implements EventService {
 	
 	@Override
 	public List<DeviceCombination> findTopTenEvents(final LocalDateTime startTime, final LocalDateTime endTime){
+		if (startTime.isAfter(endTime)) {
+			throw new InvalidDateException();
+		}
 		return eventDAO.findTopTenCombinations(startTime, endTime);
 		
 	}

@@ -22,6 +22,7 @@ import org.junit.runner.RunWith;
 
 import com.callfailures.commontests.utils.JsonReader;
 import com.callfailures.commontests.utils.ResourceClient;
+import com.callfailures.errors.ErrorMessage;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
@@ -34,7 +35,9 @@ public class DeviceCombinationIntTest {
 	private final static int VALID_MARKET= 344;
 	private final static String fromTime = "1616061600000"; // March 18, 2021 10:00AM
 	private final static String toTime = "1616065200000"; // March 18, 2021 11:00AM
-	private final static String COMBINATION_PATH = "Combinations/query?from="+fromTime+"&to="+toTime;
+	private final static String COMBINATION_PATH = "Combinations/query?from=";
+	private final static String VALID_DATE = fromTime+"&to="+toTime;
+	private final static String INVALID_DATE = toTime+"&to="+fromTime;
 	private final static String LOGIN = "login/auth";
 	private String token;
 	//http://localhost:8080/callfailures/api/Combinations/query?from=1546300800000&to=1616065200000
@@ -76,7 +79,8 @@ public class DeviceCombinationIntTest {
 	@Test
 	@RunAsClient
 	public void testGetComboByValidDate() {
-		final Response responseGet = resourceClient.resourcePath(COMBINATION_PATH).get(token);
+		final String VALID_REQUEST = COMBINATION_PATH+VALID_DATE;
+		final Response responseGet = resourceClient.resourcePath(VALID_REQUEST).get(token);
 		assertEquals(200, responseGet.getStatus());
 
 		final JsonArray combinations = JsonReader.readAsJsonArray(responseGet.readEntity(String.class));	
@@ -85,16 +89,23 @@ public class DeviceCombinationIntTest {
 		JsonObject combination = combinations.get(0).getAsJsonObject();
 		assertEquals(VALID_CELL, combination.get("cellId").getAsInt());
 		JsonObject marketOperator = combination.get("marketOperator").getAsJsonObject();
-		assertEquals(VALID_OPERATOR, marketOperator.get("operatorCode").getAsInt());
-		assertEquals(VALID_MARKET, combination.get("countryCode").getAsInt());
+		assertEquals(VALID_OPERATOR, marketOperator.get("marketOperatorId").getAsJsonObject().get("operatorCode").getAsInt());
+		assertEquals(VALID_MARKET, marketOperator.get("marketOperatorId").getAsJsonObject().get("countryCode").getAsInt());
 	
-		/*
-		JsonObject eventCause = imsiEvent.get("eventCause").getAsJsonObject();
-		assertEquals(4098, eventCause.get("eventCauseId").getAsJsonObject().get("eventCauseId").getAsInt());
-		assertEquals(1, eventCause.get("eventCauseId").getAsJsonObject().get("causeCode").getAsInt());
-		*/
 	}
 	
+	@Test
+	@RunAsClient
+	public void testGetComboByInvalidDate() {
+		final String INVALID_REQUEST = COMBINATION_PATH+INVALID_DATE;
+		
+		final Response responseGet = resourceClient.resourcePath(INVALID_REQUEST).get(token);
+		assertEquals(404, responseGet.getStatus());
+
+		final JsonObject combinationJson = JsonReader.readAsJsonObject(responseGet.readEntity(String.class));
+		assertEquals(ErrorMessage.INVALID_DATE.getMessage(), combinationJson.get("errorMessage").getAsString());
+	
+	}
 	
 	
 }
