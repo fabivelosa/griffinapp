@@ -223,6 +223,9 @@ public class EventServiceImpl implements EventService {
 		
 	@Override
 	public List<IMSICount> findIMSIS(final int number, final LocalDateTime startTime, final LocalDateTime endTime) {
+		if (startTime.isAfter(endTime)) {
+			throw new InvalidDateException();
+		}
 		return eventDAO.findIMSIS(number, startTime, endTime);
 	}
 

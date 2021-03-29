@@ -40,6 +40,7 @@ import com.callfailures.entity.MarketOperatorPK;
 import com.callfailures.entity.Upload;
 import com.callfailures.entity.UserEquipment;
 import com.callfailures.entity.views.IMSIEvent;
+import com.callfailures.entity.views.IMSICount;
 import com.callfailures.entity.views.IMSISummary;
 import com.callfailures.entity.views.PhoneFailures;
 import com.callfailures.entity.views.PhoneModelSummary;
@@ -353,6 +354,22 @@ public class EventsServiceImplTest {
 		assertEquals(imsisList, eventService.findIMSIS());
 		verify(eventDAO, times(1)).findIMSIS();
 
+	}
+	
+	@Test
+	void testForTopIMSIs() {
+		IMSICount imsiCount = new IMSICount();
+		List<IMSICount> imsiCounts = new ArrayList<>();
+		imsiCounts.add(imsiCount);
+		when(eventDAO.findIMSIS(10, VALID_START_TIME, VALID_END_TIME)).thenReturn(imsiCounts);
+		assertEquals(imsiCounts, eventService.findIMSIS(10, VALID_START_TIME, VALID_END_TIME));
+		verify(eventDAO, times(1)).findIMSIS(10, VALID_START_TIME, VALID_END_TIME);
+	}
+	
+	@Test
+	public void testInvalidTimeForTopIMSIs() {
+		assertThrows(InvalidDateException.class,
+				() -> eventService.findIMSIS(10, VALID_END_TIME, VALID_START_TIME));
 	}
 
 }
