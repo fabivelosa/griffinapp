@@ -11,7 +11,6 @@ const displayIMSIByFailures = function(IMSIfailures){
     const table = $('#phoneFailuresTable').DataTable();
     table.clear();
     $(IMSIfailures).each(function(index, IMSIfailure){
-        console.log(IMSIfailure);
         table.row.add([IMSIfailure.imsi, 
             IMSIfailure.eventCause.eventCauseId.eventCauseId, 
             IMSIfailure.eventCause.eventCauseId.causeCode,
@@ -26,18 +25,17 @@ const displayIMSICauseCodes = function(causeCodes){
     const table = $('#causeCodesTable').DataTable();
     table.clear();
     $(causeCodes).each(function(index, causeCode){
-        console.log(causeCode);
         table.row.add([causeCode]);
     });
     table.draw();
 }
 
 
-const queryFailuresByIMSI = function(imsi){
+const queryFailuresByUserEquipment = function(userEquipment){
     $.ajax({
         type:'GET',
         dataType:'json',
-        url:`${rootURL}/failures/${imsi}`,
+        url:`${rootURL}/failures/${userEquipment}`,
         beforeSend: setAuthHeader,
         success: displayIMSIByFailures,
         error: function(jqXHR, textStatus, errorThrown){
@@ -118,7 +116,6 @@ const setIMSIFieldAutoComplete = function(){
         success: function(data){
             let imsis = [];
             data.forEach(item => imsis.push(item.imsi));    
-            console.log(imsis);        
             $("#imsiOnImsiCauseCodesForm").autocomplete({source:imsis});
             $("#imsiOnIMSISummaryForm").autocomplete({source:imsis});
         }
@@ -138,8 +135,8 @@ $(document).ready(function(){
  
     $("#userEquipmentFailuresForm").submit(function(event){
         event.preventDefault();
-        const imsi = $("#imsiOnuserEquipmentFailuresForm").val();
-        queryFailuresByIMSI(imsi);
+        const userEquipment = $("#selectUserEquipmentDropdown").val();
+        queryFailuresByUserEquipment(userEquipment);
     });
 
     $("#imsiCauseCodesForm").submit(function(event){
