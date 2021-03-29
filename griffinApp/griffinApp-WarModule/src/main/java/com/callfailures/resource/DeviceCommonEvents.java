@@ -16,7 +16,6 @@ import javax.ws.rs.core.Response;
 
 import com.callfailures.entity.Secured;
 import com.callfailures.entity.views.DeviceCombination;
-import com.callfailures.entity.views.UniqueIMSI;
 import com.callfailures.errors.ErrorMessage;
 import com.callfailures.errors.ErrorMessages;
 import com.callfailures.exception.InvalidDateException;
@@ -36,7 +35,7 @@ public class DeviceCommonEvents {
 	
 	
 	@GET
-	//@Secured commented for testing
+	@Secured
     @Path("/query")
 	@Produces({ MediaType.APPLICATION_JSON })
 	public Response getTop10Combinations(@QueryParam("from") final Long fromEpoch,
