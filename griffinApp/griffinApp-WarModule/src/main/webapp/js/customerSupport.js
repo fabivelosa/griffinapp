@@ -21,6 +21,17 @@ const displayIMSIByFailures = function(IMSIfailures){
     table.draw();
 }
 
+const displayIMSICauseCodes = function(causeCodes){
+    $("#causeCodesTable").show();
+    const table = $('#causeCodesTable').DataTable();
+    table.clear();
+    $(causeCodes).each(function(index, causeCode){
+        console.log(causeCode);
+        table.row.add([causeCode]);
+    });
+    table.draw();
+}
+
 
 const queryFailuresByIMSI = function(imsi){
     $.ajax({
@@ -29,6 +40,19 @@ const queryFailuresByIMSI = function(imsi){
         url:`${rootURL}/failures/${imsi}`,
         beforeSend: setAuthHeader,
         success: displayIMSIByFailures,
+        error: function(jqXHR, textStatus, errorThrown){
+            console.log(jqXHR);
+        }
+    });
+}
+
+const queryCauseCodesByIMSI = function(imsi){
+    $.ajax({
+        type:'GET',
+        dataType:'json',
+        url:`${rootURL}/causecodes/${imsi}`,
+        beforeSend: setAuthHeader,
+        success: displayIMSICauseCodes,
         error: function(jqXHR, textStatus, errorThrown){
             console.log(jqXHR);
         }
@@ -50,6 +74,7 @@ const setUserQuipmentDropdownOptions = function(){
         type:'GET',
         dataType:'json',
         url:`${rootURL}/IMSIs/query/all`,
+        beforeSend: setAuthHeader,
         success: addUserEquipmentOptions,
         error: function(){
             alert("Failed to fetch user equipment options");
@@ -84,10 +109,25 @@ const queryIMSISUmmary = function(imsi, from, to){
     })
 }
 
-$(document).ready(function(){		
-    
-    setUserQuipmentDropdownOptions();
+const setIMSIFieldAutoComplete = function(){
+    $.ajax({
+        type: "GET",
+        dataType: "json",
+        url: `${rootURL}/IMSIs/query/all`,
+        beforeSend: setAuthHeader,
+        success: function(data){
+            let imsis = [];
+            data.forEach(item => imsis.push(item.imsi));    
+            console.log(imsis);        
+            $("#imsiOnImsiCauseCodesForm").autocomplete({source:imsis});
+            $("#imsiOnIMSISummaryForm").autocomplete({source:imsis});
+        }
+    })
+}
 
+$(document).ready(function(){		
+    setUserQuipmentDropdownOptions();
+    setIMSIFieldAutoComplete();
     $('#imsiSummaryForm').submit(function(event){
         event.preventDefault();
         const imsi = $('#imsiOnIMSISummaryForm').val();
@@ -98,9 +138,23 @@ $(document).ready(function(){
  
     $("#userEquipmentFailuresForm").submit(function(event){
         event.preventDefault();
-        const imsi = $("#selectUserEquipmentDropdown").val();
+        const imsi = $("#imsiOnuserEquipmentFailuresForm").val();
         queryFailuresByIMSI(imsi);
     });
 
+    $("#imsiCauseCodesForm").submit(function(event){
+        event.preventDefault();
+        const imsi = $("#imsiOnImsiCauseCodesForm").val();
+        queryCauseCodesByIMSI(imsi);
+    });
 
+    $("#querySelectors").on("click", "a", function(event){
+        $.each($("#querySelectors").children(), function(index, selector) {
+            if(event.target == selector){
+                $(`#${$(selector).data("section")}`).show();
+            }else{
+                $(`#${$(selector).data("section")}`).hide();
+            }
+        });
+    });
 });
