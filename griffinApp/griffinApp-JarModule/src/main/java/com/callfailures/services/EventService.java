@@ -9,6 +9,7 @@ import javax.ejb.Local;
 import com.callfailures.entity.Events;
 import com.callfailures.entity.Upload;
 import com.callfailures.entity.views.DeviceCombination;
+import com.callfailures.entity.views.IMSICount;
 import com.callfailures.entity.views.IMSIEvent;
 import com.callfailures.entity.views.IMSISummary;
 import com.callfailures.entity.views.PhoneModelSummary;
@@ -21,6 +22,7 @@ import com.callfailures.parsingutils.ParsingResponse;
 @Local
 public interface EventService {
 
+	
 	
 	/**
 	 * Validates the IMSISUmmary request parameters and retrieves IMSISUmmary object from DAO layer
@@ -57,6 +59,7 @@ public interface EventService {
 	 * @return and returns the validation result, ParsingResponse,  for the Base Data tab
 	 */
 	ParsingResponse<Events> read(File workbookFile, Upload currentUpload);
+	
 	/**
 	 * Query Database for all IMSI with failures between Start and End time submitted
 	 * @param startTime (inclusive) - the start of the period
@@ -65,10 +68,21 @@ public interface EventService {
 	 */
 	List<UniqueIMSI> findIMSISBetweenDates(final LocalDateTime startTime, final LocalDateTime endTime);
 
+	
+	/**
+	 * Query unique Cause Code per imsi
+	 * @param imsi
+	 * @return the unique event cause per IMSI
+	 */
+	List<Integer> findUniqueCauseCode(final String imsi);
+
+	
 	List<IMSIEvent> findFailuresByImsi(final String imsi);
 
 	List<UniqueIMSI> findIMSIS();
-	
+
 	List<DeviceCombination> findTopTenEvents(final LocalDateTime startTime, final LocalDateTime endTime);
+
+	List<IMSICount> findIMSIS(int number, LocalDateTime startTime, LocalDateTime endTime);
 	
 }
