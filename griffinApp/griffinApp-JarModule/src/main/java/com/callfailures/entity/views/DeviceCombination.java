@@ -1,12 +1,11 @@
 package com.callfailures.entity.views;
 
-import com.callfailures.entity.EventCause;
+
 import com.callfailures.entity.MarketOperator;
 
 public class DeviceCombination {
 
 	
-	private EventCause eventCause;
 	
 	private int cellId;
 	
@@ -19,8 +18,8 @@ public class DeviceCombination {
 		
 	}
 	
-	public DeviceCombination(EventCause eventCause, int cellId, MarketOperator marketOperator, final long count) {
-		this.eventCause = eventCause;
+	public DeviceCombination(final int cellId,final MarketOperator marketOperator, final long count) {
+	
 		this.cellId =cellId;
 		this.marketOperator = marketOperator;
 		this.count = count;
@@ -30,23 +29,15 @@ public class DeviceCombination {
 		return count;
 	}
 
-	public void setCount(long count) {
+	public void setCount(final long count) {
 		this.count = count;
-	}
-
-	public EventCause getEventCause() {
-		return eventCause;
-	}
-
-	public void setEventCause(EventCause eventCause) {
-		this.eventCause = eventCause;
 	}
 
 	public int getCellId() {
 		return cellId;
 	}
 
-	public void setCellId(int cellId) {
+	public void setCellId(final int cellId) {
 		this.cellId = cellId;
 	}
 
@@ -54,7 +45,7 @@ public class DeviceCombination {
 		return marketOperator;
 	}
 
-	public void setMarketOperator(MarketOperator marketOperator) {
+	public void setMarketOperator(final MarketOperator marketOperator) {
 		this.marketOperator = marketOperator;
 	}
 	

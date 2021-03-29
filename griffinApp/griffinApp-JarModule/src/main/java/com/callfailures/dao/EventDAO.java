@@ -52,10 +52,10 @@ public class EventDAO {
 					+ "FROM event e "
 					+ "WHERE e.ueType.tac = :tac "
 					+ "GROUP BY e.ueType, e.eventCause",
-			Find_TOP_COMBOS="SELECT DISTINCT NEW com.callfailures.entity.views.DeviceCombination(e.eventCause,e.cellId, e.marketOperator, COUNT(e)) "
+			Find_TOP_COMBOS="SELECT DISTINCT NEW com.callfailures.entity.views.DeviceCombination(e.cellId, e.marketOperator, COUNT(e)) "
 					+"FROM event e "
 					+"WHERE (e.dateTime BETWEEN :startTime AND :endTime) "
-					+"GROUP BY e.eventCause,e.cellId, e.marketOperator "
+					+"GROUP BY e.cellId, e.marketOperator "
 					+"ORDER BY COUNT(e) DESC";
 	
 
@@ -213,8 +213,7 @@ public class EventDAO {
 		query.setMaxResults(10);
 		try {
 			return query.getResultList();
-		} catch (Exception e) {
-			e.printStackTrace();
+		} catch (NoResultException e) {
 			return null;
 		}
 	}

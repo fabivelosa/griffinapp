@@ -1,9 +1,9 @@
 package com.callfailures.resource;
 
-import java.time.Instant;
+
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.TimeZone;
+
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -16,9 +16,9 @@ import javax.ws.rs.core.Response;
 
 import com.callfailures.entity.Secured;
 import com.callfailures.entity.views.DeviceCombination;
-import com.callfailures.entity.views.UniqueIMSI;
 import com.callfailures.errors.ErrorMessage;
 import com.callfailures.errors.ErrorMessages;
+import com.callfailures.exception.InvalidDateException;
 import com.callfailures.services.EventService;
 import com.callfailures.utils.DateConverter;
 
@@ -35,7 +35,7 @@ public class DeviceCommonEvents {
 	
 	
 	@GET
-	//@Secured commented for testing
+	@Secured
     @Path("/query")
 	@Produces({ MediaType.APPLICATION_JSON })
 	public Response getTop10Combinations(@QueryParam("from") final Long fromEpoch,
@@ -47,9 +47,8 @@ public class DeviceCommonEvents {
 		try {
 			final List<DeviceCombination> topTen = eventService.findTopTenEvents(startTime, endTime);
 			return Response.status(200).entity(topTen).build();
-		} catch (Exception e) {
-			e.printStackTrace();
-			return Response.status(404).entity(e.getMessage()).build();
+		} catch (InvalidDateException e) {
+			return Response.status(404).entity(new ErrorMessages(ErrorMessage.INVALID_DATE.getMessage())).build();
 		}
 	}
 	

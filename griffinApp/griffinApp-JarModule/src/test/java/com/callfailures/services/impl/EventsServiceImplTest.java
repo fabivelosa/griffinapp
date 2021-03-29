@@ -39,6 +39,7 @@ import com.callfailures.entity.MarketOperator;
 import com.callfailures.entity.MarketOperatorPK;
 import com.callfailures.entity.Upload;
 import com.callfailures.entity.UserEquipment;
+import com.callfailures.entity.views.DeviceCombination;
 import com.callfailures.entity.views.IMSIEvent;
 import com.callfailures.entity.views.IMSICount;
 import com.callfailures.entity.views.IMSISummary;
@@ -371,5 +372,16 @@ public class EventsServiceImplTest {
 		assertThrows(InvalidDateException.class,
 				() -> eventService.findIMSIS(10, VALID_END_TIME, VALID_START_TIME));
 	}
+
+	@Test
+	void testFindTopCombinations() {
+		DeviceCombination combination = new DeviceCombination();
+		List<DeviceCombination> combinations = new ArrayList<>();
+		combinations.add(combination);
+		when(eventDAO.findTopTenCombinations(VALID_START_TIME, VALID_END_TIME)).thenReturn(combinations);
+		assertEquals(1, eventService.findTopTenEvents(VALID_START_TIME, VALID_END_TIME).size());
+		verify(eventDAO,times(1)).findTopTenCombinations(VALID_START_TIME, VALID_END_TIME);
+	}
+	
 
 }

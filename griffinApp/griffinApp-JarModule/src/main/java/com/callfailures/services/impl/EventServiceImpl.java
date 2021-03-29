@@ -61,6 +61,20 @@ public class EventServiceImpl implements EventService {
 		return eventDAO.findEventsByIMSI(imsi);
 	}
 
+	
+	@Override
+	public List<Integer> findUniqueCauseCode(final String imsi) {
+		if (!isValidIMSI(imsi)) {
+			throw new InvalidIMSIException();
+		}
+		
+		return eventDAO.findEventsByIMSI(imsi).stream()
+				.map(imsiEvent -> imsiEvent.getEventCause().getEventCauseId().getCauseCode())
+				.distinct()
+				.collect(Collectors.toList());
+	}
+	
+	
 	@Override
 	public IMSISummary findCallFailuresCountByIMSIAndDate(final String imsi, final LocalDateTime startTime,
 			final LocalDateTime endTime) {
@@ -218,6 +232,9 @@ public class EventServiceImpl implements EventService {
 	
 	@Override
 	public List<DeviceCombination> findTopTenEvents(final LocalDateTime startTime, final LocalDateTime endTime){
+		if (startTime.isAfter(endTime)) {
+			throw new InvalidDateException();
+		}
 		return eventDAO.findTopTenCombinations(startTime, endTime);
 	}
 		
