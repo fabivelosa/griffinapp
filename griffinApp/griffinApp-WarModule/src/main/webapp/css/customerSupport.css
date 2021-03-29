@@ -1,3 +1,9 @@
-#equipmentFailuresQuery, #imsiCauseCodesQuery, #causeCodesTable{
+#equipmentFailuresQuery, 
+#imsiCauseCodesQuery, 
+#causeCodesTable, 
+#errorAlertOnCauseCodesQuery,
+#errorAlertOnEquipmentFailuresQuery,
+#errorAlertOnSummaryForm
+{
     display:none;
 }
