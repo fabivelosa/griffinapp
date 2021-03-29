@@ -4,6 +4,8 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
+import java.util.Base64;
+
 
 
 @Entity(name = "users")
@@ -42,13 +44,26 @@ public class User {
 	public void setUserType(final String userType) {
 		this.userType = userType;
 	}
+	
+	public String passDecrypt(String extract) {
+		byte[] sDecode = Base64.getDecoder().decode(extract);
+		String result = new String(sDecode);
+		return result;
+	}
 
 	public String getUserPassword() {
-		return userPassword;
+		String demystify = passDecrypt(userPassword);
+		return demystify;
+	}
+	
+	public String passEncrypt(final String entry) {
+		byte[] sBytes = entry.getBytes();
+		String encoded = Base64.getEncoder().encodeToString(sBytes);
+		return encoded;
 	}
 
 	public void setUserPassword(final String userPassword) {
-		this.userPassword = userPassword;
+		this.userPassword = passEncrypt(userPassword);
 	}
 
 	public String getToken() {
