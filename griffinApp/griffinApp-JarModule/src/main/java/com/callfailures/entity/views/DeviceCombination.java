@@ -1,6 +1,6 @@
 package com.callfailures.entity.views;
 
-import com.callfailures.entity.EventCause;
+
 import com.callfailures.entity.MarketOperator;
 
 public class DeviceCombination {
@@ -18,7 +18,7 @@ public class DeviceCombination {
 		
 	}
 	
-	public DeviceCombination( int cellId, MarketOperator marketOperator, final long count) {
+	public DeviceCombination(final int cellId,final MarketOperator marketOperator, final long count) {
 	
 		this.cellId =cellId;
 		this.marketOperator = marketOperator;
@@ -29,7 +29,7 @@ public class DeviceCombination {
 		return count;
 	}
 
-	public void setCount(long count) {
+	public void setCount(final long count) {
 		this.count = count;
 	}
 
@@ -37,7 +37,7 @@ public class DeviceCombination {
 		return cellId;
 	}
 
-	public void setCellId(int cellId) {
+	public void setCellId(final int cellId) {
 		this.cellId = cellId;
 	}
 
@@ -45,7 +45,7 @@ public class DeviceCombination {
 		return marketOperator;
 	}
 
-	public void setMarketOperator(MarketOperator marketOperator) {
+	public void setMarketOperator(final MarketOperator marketOperator) {
 		this.marketOperator = marketOperator;
 	}
 	
