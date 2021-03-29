@@ -83,9 +83,26 @@ const queryIMSISUmmary = function(imsi, from, to){
     })
 }
 
+const autoCompleteIMSI = function(){
+    $.ajax({
+        type: "GET",
+        dataType: "json",
+        url: `${rootURL}/IMSIs/query/all`,
+        beforeSend: setAuthHeader,
+        success: function(data){
+            var list = [];
+            for(var i=0; i<data.length; i++){
+                list.push(data[i].imsi)
+            }
+            $("#imsiOnIMSISummaryForm").autocomplete({source:list});
+        }
+    })
+}
+
+
 $(document).ready(function(){		
     setUserQuipmentDropdownOptions();
-
+    autoCompleteIMSI();
     $('#imsiSummaryForm').submit(function(event){
         event.preventDefault();
         const imsi = $('#imsiOnIMSISummaryForm').val();
