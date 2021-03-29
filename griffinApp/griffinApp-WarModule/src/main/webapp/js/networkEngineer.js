@@ -99,4 +99,13 @@ $(document).ready(function(){
         const tac = $("#selectUserEquipmentDropdown").val();
         queryPhoneEquipmentFailures(tac);
     });
+
+    $("#netFirstQuery").click(function(){
+        $("#networkEngQueryOne").show();
+        $("#networkEngQueryTwo").hide();
+    });
+    $("#netSecondQuery").click(function(){
+        $("#networkEngQueryOne").hide();
+        $("#networkEngQueryTwo").show();
+    });
 });
