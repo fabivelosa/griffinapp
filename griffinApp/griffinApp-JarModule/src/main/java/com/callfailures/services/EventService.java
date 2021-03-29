@@ -21,6 +21,7 @@ import com.callfailures.parsingutils.ParsingResponse;
 public interface EventService {
 
 	
+	
 	/**
 	 * Validates the IMSISUmmary request parameters and retrieves IMSISUmmary object from DAO layer
 	 * @param imsi
@@ -56,6 +57,7 @@ public interface EventService {
 	 * @return and returns the validation result, ParsingResponse,  for the Base Data tab
 	 */
 	ParsingResponse<Events> read(File workbookFile, Upload currentUpload);
+	
 	/**
 	 * Query Database for all IMSI with failures between Start and End time submitted
 	 * @param startTime (inclusive) - the start of the period
@@ -64,6 +66,15 @@ public interface EventService {
 	 */
 	List<UniqueIMSI> findIMSISBetweenDates(final LocalDateTime startTime, final LocalDateTime endTime);
 
+	
+	/**
+	 * Query unique Cause Code per imsi
+	 * @param imsi
+	 * @return the unique event cause per IMSI
+	 */
+	List<Integer> findUniqueCauseCode(final String imsi);
+
+	
 	List<IMSIEvent> findFailuresByImsi(final String imsi);
 
 	List<UniqueIMSI> findIMSIS();
