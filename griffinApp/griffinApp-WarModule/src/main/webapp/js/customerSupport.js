@@ -6,7 +6,20 @@ const setAuthHeader = function(xhr){
 }
 
 
-const displayIMSIByFailures = function(IMSIfailures){
+const displayIMSICauseCodes = function(causeCodes){
+    $("#errorAlertOnCauseCodesQuery").hide();
+    $("#causeCodesTable_wrapper").show();
+    $("#causeCodesTable").show();
+    const table = $('#causeCodesTable').DataTable();
+    table.clear();
+    $(causeCodes).each(function(index, causeCode){
+        table.row.add([causeCode]);
+    });
+    table.draw();
+}
+
+const displayEquipmentFailures = function(IMSIfailures){
+    $("#errorAlertOnEquipmentFailuresQuery").hide();
     $("#phoneFailuresTable").show();
     const table = $('#phoneFailuresTable').DataTable();
     table.clear();
@@ -20,16 +33,11 @@ const displayIMSIByFailures = function(IMSIfailures){
     table.draw();
 }
 
-const displayIMSICauseCodes = function(causeCodes){
-    $("#causeCodesTable").show();
-    const table = $('#causeCodesTable').DataTable();
-    table.clear();
-    $(causeCodes).each(function(index, causeCode){
-        table.row.add([causeCode]);
-    });
-    table.draw();
+const displayErrorOnEquipmentFailures = function(jqXHR, textStatus, errorThrown){
+    $("#phoneFailuresTable").hide();
+    $("#errorAlertOnEquipmentFailuresQuery").show();
+    $("#errorAlertOnEquipmentFailuresQuery").text(jqXHR.responseJSON.errorMessage);
 }
-
 
 const queryFailuresByUserEquipment = function(userEquipment){
     $.ajax({
@@ -37,11 +45,15 @@ const queryFailuresByUserEquipment = function(userEquipment){
         dataType:'json',
         url:`${rootURL}/failures/${userEquipment}`,
         beforeSend: setAuthHeader,
-        success: displayIMSIByFailures,
-        error: function(jqXHR, textStatus, errorThrown){
-            console.log(jqXHR);
-        }
+        success: displayEquipmentFailures,
+        error: displayErrorOnEquipmentFailures
     });
+}
+
+const displayErrorOnQueryCauseCodesByIMSI = function(jqXHR, textStatus, errorThrown){
+    $("#causeCodesTable_wrapper").hide();
+    $("#errorAlertOnCauseCodesQuery").show();
+    $("#errorAlertOnCauseCodesQuery").text(jqXHR.responseJSON.errorMessage);
 }
 
 const queryCauseCodesByIMSI = function(imsi){
@@ -51,12 +63,9 @@ const queryCauseCodesByIMSI = function(imsi){
         url:`${rootURL}/causecodes/${imsi}`,
         beforeSend: setAuthHeader,
         success: displayIMSICauseCodes,
-        error: function(jqXHR, textStatus, errorThrown){
-            console.log(jqXHR);
-        }
+        error: displayErrorOnQueryCauseCodesByIMSI
     });
 }
-
 
 const addUserEquipmentOptions = function(IMSIs){
     $("#selectUserEquipmentDropdown").empty();    
