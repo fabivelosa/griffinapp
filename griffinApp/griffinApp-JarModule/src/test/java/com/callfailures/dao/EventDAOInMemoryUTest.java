@@ -16,6 +16,7 @@ import org.junit.jupiter.api.Test;
 
 import com.callfailures.entity.Events;
 import com.callfailures.entity.views.DeviceCombination;
+import com.callfailures.entity.views.IMSICount;
 import com.callfailures.entity.views.IMSIEvent;
 import com.callfailures.entity.views.IMSISummary;
 import com.callfailures.entity.views.PhoneModelSummary;
@@ -220,9 +221,15 @@ class EventDAOInMemoryUTest {
 	
 	@Test
 	void testFind_TOP_COMBOS() {
-		List<DeviceCombination> deviceCombos = eventDAO.findTopTenCombinations(startTime, endTime);
+		final List<DeviceCombination> deviceCombos = eventDAO.findTopTenCombinations(startTime, endTime);
 		assertEquals(1, deviceCombos.size());
-	}	
+	}
+	
+	@Test
+	void testFind_TOP_IMISs() {
+		final List<IMSICount> topIMISs = eventDAO.findIMSIS(10, startTime, endTime);
+		assertEquals(1, topIMISs.size());
+	}
 }
 
 
