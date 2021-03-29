@@ -12,15 +12,26 @@ public class DeviceCombination {
 	
 	private MarketOperator marketOperator;
 
+	private long count;
+	
 	
 	public DeviceCombination() {
 		
 	}
 	
-	public DeviceCombination(EventCause eventCause, int cellId, MarketOperator marketOperator ) {
+	public DeviceCombination(EventCause eventCause, int cellId, MarketOperator marketOperator, final long count) {
 		this.eventCause = eventCause;
 		this.cellId =cellId;
 		this.marketOperator = marketOperator;
+		this.count = count;
+	}
+
+	public long getCount() {
+		return count;
+	}
+
+	public void setCount(long count) {
+		this.count = count;
 	}
 
 	public EventCause getEventCause() {
