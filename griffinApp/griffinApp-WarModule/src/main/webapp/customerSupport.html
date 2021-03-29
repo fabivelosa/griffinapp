@@ -67,8 +67,8 @@
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Customer Rep Queries:</h6>
                         <div id="querySelectors">
-                            <a class="collapse-item" href="#" id="imsiFailuresCountQuerySelector" data-section="imsiFailuresCountQuery">IMSI Summary</a>
-                            <a class="collapse-item" href="#" id="equipmentFailuresQuerySelector" data-section="equipmentFailuresQuery">Phone Model Failures</a>
+                            <a class="collapse-item" href="#" id="imsiFailuresCountQuerySelector" data-section="imsiFailuresCountQuery">IMSI Failure Summary</a>
+                            <a class="collapse-item" href="#" id="equipmentFailuresQuerySelector" data-section="equipmentFailuresQuery">IMSI Failure Details</a>
                             <a class="collapse-item" href="#" id="imsiCauseCodesQuerySelector" data-section="imsiCauseCodesQuery">IMSI Cause Codes</a>
                         </div>
                     </div>
@@ -222,13 +222,13 @@
                             <div class="col mb-4">
                                 <div class="card mt-4">
                                     <div class="card-header">
-                                        Find the Event ID and Cause Code Associated with A Given Phone Model
+                                        Find the Event ID and Cause Code Associated with A Given IMSI
                                     </div>
                                     <div class="card-body" id="userEquipmentFailures">
                                         <form id = "userEquipmentFailuresForm">
                                             <div class = "row">
                                                 <div class = "col">
-                                                    <label for="selectUserEquipmentDropdown" class="form-label fw-bold small">Phone Model</label>
+                                                    <label for="selectUserEquipmentDropdown" class="form-label fw-bold small">IMSI</label>
                                                     <select class="form-control" aria-label="Default select example" id="selectUserEquipmentDropdown">
                                                     </select>
                                                 </div>
@@ -263,7 +263,7 @@
                             <div class="col mb-4">
                                 <div class="card mt-4">
                                     <div class="card-header">
-                                        Unique Cause Codes Associated With A Given IMSI
+                                        Find Unique Cause Codes Associated With A Given IMSI
                                     </div>
                                     <div class="card-body" id="imsiCauseCodes">
                                         <form id = "imsiCauseCodesForm">
