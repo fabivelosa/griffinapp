@@ -6,7 +6,6 @@ import com.callfailures.entity.MarketOperator;
 public class DeviceCombination {
 
 	
-	private EventCause eventCause;
 	
 	private int cellId;
 	
@@ -19,8 +18,8 @@ public class DeviceCombination {
 		
 	}
 	
-	public DeviceCombination(EventCause eventCause, int cellId, MarketOperator marketOperator, final long count) {
-		this.eventCause = eventCause;
+	public DeviceCombination( int cellId, MarketOperator marketOperator, final long count) {
+	
 		this.cellId =cellId;
 		this.marketOperator = marketOperator;
 		this.count = count;
@@ -32,14 +31,6 @@ public class DeviceCombination {
 
 	public void setCount(long count) {
 		this.count = count;
-	}
-
-	public EventCause getEventCause() {
-		return eventCause;
-	}
-
-	public void setEventCause(EventCause eventCause) {
-		this.eventCause = eventCause;
 	}
 
 	public int getCellId() {
