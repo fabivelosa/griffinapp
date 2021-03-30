@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -66,7 +67,7 @@ public class UploadFileService {
 	@EJB
 	private UploadDAO uploadDAO;
 
-	private final String UPLOADFILEPATH = System.getProperty("user.dir") + "/fileUploads/";
+	private final String uploadFilePath = System.getProperty("user.dir") + "/fileUploads/";
 
 	private static final String DOWNLOADFILEPATH = System.getProperty("jboss.home.dir")
 			+ "/welcome-content/fileDownloads/";
@@ -95,7 +96,7 @@ public class UploadFileService {
 			try (InputStream inputStream = inputPart.getBody(InputStream.class, null);) {
 				final byte[] bytes = IOUtils.toByteArray(inputStream);
 				// constructs upload file path
-				fileName = UPLOADFILEPATH + fileName;
+				fileName = uploadFilePath + fileName;
 				System.out.println(fileName);
 				sheet = writeFile(bytes, fileName);
 			} catch (IOException e) {
@@ -108,6 +109,12 @@ public class UploadFileService {
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
+		createUploadThread(currentUpload);
+		return Response.status(200).entity(currentUpload).build();
+
+	}
+
+	private void createUploadThread(final Upload currentUpload) {
 		new Thread() {
 			public void run() {
 				final List<EventsUploadResponseDTO> uploadsOverallResult = new ArrayList<>();
@@ -143,8 +150,6 @@ public class UploadFileService {
 
 			}
 		}.start();
-		return Response.status(200).entity(currentUpload).build();
-
 	}
 
 	@GET
@@ -173,10 +178,15 @@ public class UploadFileService {
 		uploadsOverallResult.add(
 				new EventsUploadResponseDTO("Base Data", events.getValidObjects().size(), events.getInvalidRows()));
 
+		writeFileToServer(uploadsOverallResult, reportFile);
+
+	}
+
+	private void writeFileToServer(final List<EventsUploadResponseDTO> uploadsOverallResult, final Upload reportFile) {
 		String table = "";
 		final String filename = "Error" + System.currentTimeMillis() + ".txt";
 		FileOutputStream file = null;
-
+		
 		try {
 
 			file = new FileOutputStream(DOWNLOADFILEPATH + filename);
@@ -184,15 +194,15 @@ public class UploadFileService {
 			for (final EventsUploadResponseDTO result : uploadsOverallResult) {
 
 				if (result.getTabName().equals(table.toString())) {
-					file.write(("Table: " + table + " , has Ignored Rows").getBytes());
+					file.write(("Table: " + table + " , has Ignored Rows").getBytes(Charset.forName("UTF-8")));
 					table = result.getTabName();
-					file.write(System.getProperty("line.separator").getBytes());
+					file.write(System.getProperty("line.separator").getBytes(Charset.forName("UTF-8")));
 				}
 
 				for (final InvalidRow invalidItem : result.getErroneousData()) {
 					file.write(("Row :" + invalidItem.getRowNumber() + " , Caused :" + invalidItem.getErrorMessage())
 							.getBytes());
-					file.write(System.getProperty("line.separator").getBytes());
+					file.write(System.getProperty("line.separator").getBytes(Charset.forName("UTF-8")));
 				}
 			}
 			file.flush();
@@ -201,14 +211,14 @@ public class UploadFileService {
 			e.printStackTrace();
 		} finally {
 			// releases all system resources from the streams
-			if (file != null)
+			if (file != null) {
 				try {
 					file.close();
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
+			}
 		}
-
 	}
 
 	/**
