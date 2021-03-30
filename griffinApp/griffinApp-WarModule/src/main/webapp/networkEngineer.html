@@ -61,6 +61,7 @@
                         <h6 class="collapse-header">Network Engineer Queries:</h6>
                         <a class="collapse-item" href="#" id="netFirstQuery">IMSI Diagnostics Summary</a>
                         <a class="collapse-item" href="#" id="netSecondQuery">User Equipment Failures</a>
+                        <a class="collapse-item" href="#" id="netThirdQuery">Device Combinations</a>
                     </div>
                 </div>
             </li>
@@ -261,6 +262,51 @@
                             </div>
                         </div>
                     </div>
+					<div class="row" id="networkEngQueryThree">
+                        <div class="col">
+                            <div class="card mt-4">
+                                <div class="card-header">
+                                    Show Top 10  Market/Operator/Cell ID combinations Between Given times
+                                </div>
+                                <div class="card-body" id="userTopTenCombinations">
+                                    <form id = "userTop10CombinationsForm">
+                                        <div class = "row">                                                                                
+                                                <div class = "col">
+                                                    <label for="startDateOnIMSISummaryForm" class="form-label fw-bold small">From</label>
+                                                    <input required type="datetime-local" class="form-control" id="startDateOnTop10CombinationsForm" placeholder="name@example.com">
+                                                </div>
+                                                <div class = "col">
+                                                    <label for="endDateOnIMSISummaryForm" class="form-label fw-bold small">To</label>
+                                                    <input required type="datetime-local" class="form-control" id="endDateOnTop10CombinationsForm" placeholder="name@example.com">
+                                                </div>
+                                           		 <div class = "col">
+                                                	<label for="exampleFormControlInput1" class="form-label fw-bold small">Query</label>
+                                                	<input required type="submit" class="form-control btn btn-primary" value="Submit"/>
+                                            	</div>
+                                        </div>
+                                    </form>
+                                    <div class = "row mt-4 p-4" id = "usertop10CombinaitonsFormResult">
+                                        <table id="combinationsTable" class="table table-hover table-bordered">
+                                            <thead>
+                                                <tr>
+                                                  <th>Cell ID</th>
+                                                  <th>Market</th>
+                                                  <th>Operator</th>
+                                                  <th>Count</th>
+                                                </tr>
+                                              </thead>
+                                              <tbody>                                                                                           
+                                              </tbody>
+                                        </table>
+                                        <div class="alert alert-danger col-lg-12" role="alert" id="errorAlertOnTopCombinationsForm">
+                                            Error on Request
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
 
                     <!-- Content Row -->
                     <div class="row">
