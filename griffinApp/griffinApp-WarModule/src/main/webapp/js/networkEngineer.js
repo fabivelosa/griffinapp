@@ -189,6 +189,7 @@ const displayTopTenCombinationsChart = function(combinations){
 
 const displayTopCombinationsError = function(jqXHR, textStatus, errorThrown){
     $("#combinationsTable").hide();
+    $("#combinationsTable_wrapper").hide();
     $("#top10ComboChartCard").hide();
     $("#errorAlertOnTopCombinationsForm").show();
     $("#errorAlertOnSummaryForm").text(jqXHR.responseJSON.errorMessage);
