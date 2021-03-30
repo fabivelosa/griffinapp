@@ -67,6 +67,7 @@ public class MarketOperatorServiceImpl implements MarketOperatorService {
 
 				operator.setMarketOperatorId(operatorPK);
 				operator.setCountryDesc(cell.getStringCellValue());
+				cell = cellIterator.next();
 				operator.setOperatorDesc(cell.getStringCellValue());
 
 				try {
