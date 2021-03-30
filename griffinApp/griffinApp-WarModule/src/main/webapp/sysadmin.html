@@ -32,99 +32,102 @@
 
 <body id="page-top">
 
-	<!-- Page Wrapper -->
-	<div id="wrapper">
+    <!-- Page Wrapper -->
+    <div id="wrapper">
 
-		<!-- Sidebar -->
-		<ul
-			class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion"
-			id="accordionSidebar">
+        <!-- Sidebar -->
+        <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
-			<!-- Sidebar - Brand -->
-			<a
-				class="sidebar-brand d-flex align-items-center justify-content-center"
-				href="#">
-				<div class="sidebar-brand-text mx-3">Griffin</div>
-			</a>
+            <!-- Sidebar - Brand -->
+            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="#">
+                <div class="sidebar-brand-text mx-3">Griffin</div>
+            </a>
 
-			<!-- Divider -->
-			<hr class="sidebar-divider my-0">
+            <!-- Divider -->
+            <hr class="sidebar-divider my-0">
 
-			<!-- Nav Item - Dashboard -->
-			<li class="nav-item active"><a class="nav-link"
-				href="index.html"> <i class="fas fa-fw fa-tachometer-alt"></i> <span>Dashboard</span></a>
-			</li>
+            <!-- Divider -->
+            <hr class="sidebar-divider">
 
-			<!-- Divider -->
-			<hr class="sidebar-divider">
+            <!-- Heading -->
+            <div class="sidebar-heading">
+                Interface
+            </div>
 
-			<!-- Heading -->
-			<div class="sidebar-heading">Interface</div>
+            <!-- Nav Item - Pages Collapse Menu -->
+            <li class="nav-item">
+                <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                    </div>
+                </div>
+            </li>
+            
+            <!-- Nav Item - Tables -->
+            <li class="nav-item">
+                <a class="nav-link" href="supportEng.html">
+                    <i class="fas fa-fw fa-table"></i>
+                    <span>Create User</span></a>
+            </li>
 
+            <!-- Nav Item - Tables -->
+            <li class="nav-item">
+                <a class="nav-link" href="customerSupport.html">
+                    <i class="fas fa-fw fa-table"></i>
+                    <span>Upload File</span></a>
+            </li>
 
-			<!-- Nav Item - Tables -->
-			<li class="nav-item"><a class="nav-link" href="#"> <i
-					class="fas fa-fw fa-table"></i> <span>Support Engineer</span></a></li>
+            <!-- Divider -->
+            <hr class="sidebar-divider d-none d-md-block">
 
-			<!-- Nav Item - Tables -->
-			<li class="nav-item"><a class="nav-link" href="#"> <i
-					class="fas fa-fw fa-table"></i> <span>Customer
-						Representative</span></a></li>
+            <!-- Sidebar Toggler (Sidebar) -->
+            <div class="text-center d-none d-md-inline">
+                <button class="rounded-circle border-0" id="sidebarToggle"></button>
+            </div>
 
-			<!-- Divider -->
-			<hr class="sidebar-divider d-none d-md-block">
+        </ul>
+        <!-- End of Sidebar -->
 
-			<!-- Sidebar Toggler (Sidebar) -->
-			<div class="text-center d-none d-md-inline">
-				<button class="rounded-circle border-0" id="sidebarToggle"></button>
-			</div>
+        <!-- Content Wrapper -->
+        <div id="content-wrapper" class="d-flex flex-column">
 
-		</ul>
-		<!-- End of Sidebar -->
+            <!-- Main Content -->
+            <div id="content">
 
-		<!-- Content Wrapper -->
-		<div id="content-wrapper" class="d-flex flex-column">
+                <!-- Topbar -->
+                <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
 
-			<!-- Main Content -->
-			<div id="content">
+                    <!-- Sidebar Toggle (Topbar) -->
+                    <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
+                        <i class="fa fa-bars"></i>
+                    </button>
 
-				<!-- Topbar -->
-				<nav
-					class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+                    <!-- Topbar Navbar -->
+                    <ul class="navbar-nav ml-auto">
 
-					<!-- Sidebar Toggle (Topbar) -->
-					<button id="sidebarToggleTop"
-						class="btn btn-link d-md-none rounded-circle mr-3">
-						<i class="fa fa-bars"></i>
-					</button>
-
-					<!-- Topbar Navbar -->
-					<ul class="navbar-nav ml-auto">
-
-						<!-- Nav Item - Search Dropdown (Visible Only XS) -->
-						<li class="nav-item dropdown no-arrow d-sm-none"><a
-							class="nav-link dropdown-toggle" href="#" id="searchDropdown"
-							role="button" data-toggle="dropdown" aria-haspopup="true"
-							aria-expanded="false"> <i class="fas fa-search fa-fw"></i>
-						</a> <!-- Dropdown - Messages -->
-							<div
-								class="dropdown-menu dropdown-menu-right p-3 shadow animated--grow-in"
-								aria-labelledby="searchDropdown">
-								<form class="form-inline mr-auto w-100 navbar-search">
-									<div class="input-group">
-										<input type="text"
-											class="form-control bg-light border-0 small"
-											placeholder="Search for..." aria-label="Search"
-											aria-describedby="basic-addon2">
-										<div class="input-group-append">
-											<button class="btn btn-primary" type="button">
-												<i class="fas fa-search fa-sm"></i>
-											</button>
-										</div>
-									</div>
-								</form>
-							</div></li>
-
+                        <!-- Nav Item - Search Dropdown (Visible Only XS) -->
+                        <li class="nav-item dropdown no-arrow d-sm-none">
+                            <a class="nav-link dropdown-toggle" href="#" id="searchDropdown" role="button"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="fas fa-search fa-fw"></i>
+                            </a>
+                            <!-- Dropdown - Messages -->
+                            <div class="dropdown-menu dropdown-menu-right p-3 shadow animated--grow-in"
+                                aria-labelledby="searchDropdown">
+                                <form class="form-inline mr-auto w-100 navbar-search">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control bg-light border-0 small"
+                                            placeholder="Search for..." aria-label="Search"
+                                            aria-describedby="basic-addon2">
+                                        <div class="input-group-append">
+                                            <button class="btn btn-primary" type="button">
+                                                <i class="fas fa-search fa-sm"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </li>
+                        
 						<div class="topbar-divider d-none d-sm-block"></div>
 
 						<!-- Nav Item - User Information -->
@@ -133,9 +136,8 @@
 							role="button" data-toggle="dropdown" aria-haspopup="true"
 							aria-expanded="false"> <span
 								class="mr-2 d-none d-lg-inline text-gray-600 small">System
-									Administrator</span> <img class="img-profile rounded-circle"
-								src="img/undraw_profile.svg">
-						</a> <!-- Dropdown - User Information -->
+									Administrator</span> 					
+									</a> <!-- Dropdown - User Information -->
 							<div
 								class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
 								aria-labelledby="userDropdown">
@@ -215,31 +217,38 @@
 			<!--  					<div id="success">
 										  <h3>User saved to Database</h3>
 								</div> -->
-								
+								</div>
                             </div>
                         </div>
- <!--                     <div class="col-lg-4 mb-4">
-                            <div class="card shadow mb-4">
-                                <div class="card-body">
-                                    <div class="mb-3">
-                                    <form id="fileUploadForm" name="uploadInfo">
-                                     	<label for="formFile" class="form-label">Upload File</label>
-                                        <input class="form-control" name="uploadedFile" type="file" id="uploadFile">
-                                        <br>
-                                       <input type="submit" class="btn btn-primary" value="Upload File" id="uploadBtn"/>
-                                    </form>
-                                       
-                                    </div>
-                                    <br/>
-
-                                        <input type="button" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm" 
-                                        value="Download Error Logs" id ="errorBtn" />
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                     --> 
-
+                    <!-- Content Row -->
+						<div class="row">
+						<div class="col-lg-7 mb-3">
+							<div class="card shadow mb-4">
+								<div class="card-header py-3">
+									<h6 class="m-0 font-weight-bold text-primary">Upload File</h6>
+								</div>
+								<div class="card-body">
+									<form id="fileUploadForm" name="uploadInfo">
+										<input class="form-control" name="uploadedFile" type="file"
+											id="uploadFile"> <br>
+										<div id="myProgress">
+											<div id="myBar"></div>
+										</div>
+										<br>
+										<div class="input-group">
+										<button
+											class="d-sm-inline-block btn btn-sm btn-primary shadow-sm"
+											type="submit" id="uploadBtn">Upload File</button>
+											<button
+												class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"
+												id="downloadBtn"><i
+												class="fas fa-download fa-sm text-white-50"></i> View Report</button>
+												</div>	
+											</form>
+											</div>
+										</div>
+									</div>
+								</div>
                     <!-- Content Row -->
                     <div class="row">
 
