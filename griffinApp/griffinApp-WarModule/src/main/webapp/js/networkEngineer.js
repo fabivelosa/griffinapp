@@ -105,7 +105,7 @@ const displayTopTenCombinationsChart = function(combinations){
       type: 'horizontalBar',
       data: {
         labels: combinations.map(combination => {
-          return combination.marketOperator.countryDesc + " | " + combination.marketOperator.operatorDesc + " | " + combination.cellId}
+          return combination.marketOperator.countryDesc + " , " + combination.marketOperator.operatorDesc + " , Cell " + combination.cellId}
           ),
         datasets: [{
           label: "Call Failures",
@@ -158,8 +158,7 @@ const displayTopTenCombinationsChart = function(combinations){
           }],
         },
         legend: {
-          display: true,
-          position: 'bottom'
+          display: false
         },
         tooltips: {
           titleMarginBottom: 10,
