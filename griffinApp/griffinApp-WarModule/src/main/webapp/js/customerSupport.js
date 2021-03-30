@@ -6,12 +6,24 @@ const setAuthHeader = function(xhr){
 }
 
 
-const displayIMSIByFailures = function(IMSIfailures){
+const displayIMSICauseCodes = function(causeCodes){
+    $("#errorAlertOnCauseCodesQuery").hide();
+    $("#causeCodesTable_wrapper").show();
+    $("#causeCodesTable").show();
+    const table = $('#causeCodesTable').DataTable();
+    table.clear();
+    $(causeCodes).each(function(index, causeCode){
+        table.row.add([causeCode]);
+    });
+    table.draw();
+}
+
+const displayEquipmentFailures = function(IMSIfailures){
+    $("#errorAlertOnEquipmentFailuresQuery").hide();
     $("#phoneFailuresTable").show();
     const table = $('#phoneFailuresTable').DataTable();
     table.clear();
     $(IMSIfailures).each(function(index, IMSIfailure){
-        console.log(IMSIfailure);
         table.row.add([IMSIfailure.imsi, 
             IMSIfailure.eventCause.eventCauseId.eventCauseId, 
             IMSIfailure.eventCause.eventCauseId.causeCode,
@@ -21,20 +33,39 @@ const displayIMSIByFailures = function(IMSIfailures){
     table.draw();
 }
 
+const displayErrorOnEquipmentFailures = function(jqXHR, textStatus, errorThrown){
+    $("#phoneFailuresTable").hide();
+    $("#errorAlertOnEquipmentFailuresQuery").show();
+    $("#errorAlertOnEquipmentFailuresQuery").text(jqXHR.responseJSON.errorMessage);
+}
 
-const queryFailuresByIMSI = function(imsi){
+const queryFailuresByUserEquipment = function(userEquipment){
     $.ajax({
         type:'GET',
         dataType:'json',
-        url:`${rootURL}/failures/${imsi}`,
+        url:`${rootURL}/failures/${userEquipment}`,
         beforeSend: setAuthHeader,
-        success: displayIMSIByFailures,
-        error: function(jqXHR, textStatus, errorThrown){
-            console.log(jqXHR);
-        }
+        success: displayEquipmentFailures,
+        error: displayErrorOnEquipmentFailures
     });
 }
 
+const displayErrorOnQueryCauseCodesByIMSI = function(jqXHR, textStatus, errorThrown){
+    $("#causeCodesTable_wrapper").hide();
+    $("#errorAlertOnCauseCodesQuery").show();
+    $("#errorAlertOnCauseCodesQuery").text(jqXHR.responseJSON.errorMessage);
+}
+
+const queryCauseCodesByIMSI = function(imsi){
+    $.ajax({
+        type:'GET',
+        dataType:'json',
+        url:`${rootURL}/causecodes/${imsi}`,
+        beforeSend: setAuthHeader,
+        success: displayIMSICauseCodes,
+        error: displayErrorOnQueryCauseCodesByIMSI
+    });
+}
 
 const addUserEquipmentOptions = function(IMSIs){
     $("#selectUserEquipmentDropdown").empty();    
@@ -50,6 +81,7 @@ const setUserQuipmentDropdownOptions = function(){
         type:'GET',
         dataType:'json',
         url:`${rootURL}/IMSIs/query/all`,
+        beforeSend: setAuthHeader,
         success: addUserEquipmentOptions,
         error: function(){
             alert("Failed to fetch user equipment options");
@@ -84,10 +116,24 @@ const queryIMSISUmmary = function(imsi, from, to){
     })
 }
 
-$(document).ready(function(){		
-    
-    setUserQuipmentDropdownOptions();
+const setIMSIFieldAutoComplete = function(){
+    $.ajax({
+        type: "GET",
+        dataType: "json",
+        url: `${rootURL}/IMSIs/query/all`,
+        beforeSend: setAuthHeader,
+        success: function(data){
+            let imsis = [];
+            data.forEach(item => imsis.push(item.imsi));    
+            $("#imsiOnImsiCauseCodesForm").autocomplete({source:imsis});
+            $("#imsiOnIMSISummaryForm").autocomplete({source:imsis});
+        }
+    })
+}
 
+$(document).ready(function(){		
+    setUserQuipmentDropdownOptions();
+    setIMSIFieldAutoComplete();
     $('#imsiSummaryForm').submit(function(event){
         event.preventDefault();
         const imsi = $('#imsiOnIMSISummaryForm').val();
@@ -98,9 +144,23 @@ $(document).ready(function(){
  
     $("#userEquipmentFailuresForm").submit(function(event){
         event.preventDefault();
-        const imsi = $("#selectUserEquipmentDropdown").val();
-        queryFailuresByIMSI(imsi);
+        const userEquipment = $("#selectUserEquipmentDropdown").val();
+        queryFailuresByUserEquipment(userEquipment);
     });
 
+    $("#imsiCauseCodesForm").submit(function(event){
+        event.preventDefault();
+        const imsi = $("#imsiOnImsiCauseCodesForm").val();
+        queryCauseCodesByIMSI(imsi);
+    });
 
+    $("#querySelectors").on("click", "a", function(event){
+        $.each($("#querySelectors").children(), function(index, selector) {
+            if(event.target == selector){
+                $(`#${$(selector).data("section")}`).show();
+            }else{
+                $(`#${$(selector).data("section")}`).hide();
+            }
+        });
+    });
 });
