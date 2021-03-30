@@ -201,7 +201,7 @@ public class UploadFileService {
 
 				for (final InvalidRow invalidItem : result.getErroneousData()) {
 					file.write(("Row :" + invalidItem.getRowNumber() + " , Caused :" + invalidItem.getErrorMessage())
-							.getBytes());
+							.getBytes(Charset.forName("UTF-8")));
 					file.write(System.getProperty("line.separator").getBytes(Charset.forName("UTF-8")));
 				}
 			}
