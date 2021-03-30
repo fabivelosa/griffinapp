@@ -83,6 +83,43 @@ const queryIMSISUmmary = function(imsi, from, to){
     })
 }
 
+//Combinations Handlers
+const displayTopTenCombinations = function(combinations){
+    $("#combinationsTable").show();
+    const table = $('#combinationsTable').DataTable();
+    table.clear();
+    $(combinations).each(function(index, combination){
+        console.log(combination);
+        table.row.add([combination.cellId,
+			combination.marketOperator.countryDesc, 
+            combination.marketOperator.marketOperatorId.countryCode, 
+			combination.marketOperator.operatorDesc, 
+            combination.marketOperator.marketOperatorId.operatorCode,
+            combination.count
+        ]);
+    });
+    table.draw();
+}
+
+const displayTopCombinationsError = function(jqXHR, textStatus, errorThrown){
+    $("#combinationsTable").hide();
+    $("#errorAlertOnTopCombinationsForm").show();
+    $("#errorAlertOnSummaryForm").text(jqXHR.responseJSON.errorMessage);
+}
+
+
+const queryTopCombinations = function(from, to){	
+	$.ajax({
+        type: "GET",
+        dataType: "json",
+        url: `${rootURL}/Combinations/query?from=${from}&to=${to}`,
+        beforeSend: setAuthHeader,
+        success: displayTopTenCombinations,
+        error: displayTopCombinationsError
+    })
+	
+}
+
 const autoCompleteIMSI = function(){
     $.ajax({
         type: "GET",
@@ -98,6 +135,31 @@ const autoCompleteIMSI = function(){
         }
     })
 }
+
+const displayTop10IMSISummary = function(topTenIMSIFailures){
+	$("#imsiTopSummaryTable").show();
+	const table = $('#imsiTopSummaryTable').DataTable();
+    table.clear();
+    $(topTenIMSIFailures).each(function(index, topTenIMSIFailure){
+        console.log(topTenIMSIFailure);
+        table.row.add([topTenIMSIFailure.imsi, 
+            topTenIMSIFailure.callFailuresCount
+        ]);
+    });
+    table.draw();
+}
+
+
+const queryTop10IMSISummary = function(from, to){
+    $.ajax({
+        type: "GET",
+        dataType: "json",
+        url: `${rootURL}/IMSIs/query/limit?from=${from}&to=${to}`,
+        beforeSend: setAuthHeader,
+        success: displayTop10IMSISummary
+    })
+}
+
 
 
 $(document).ready(function(){		
@@ -117,12 +179,49 @@ $(document).ready(function(){
         queryPhoneEquipmentFailures(tac);
     });
 
+    $("#userTop10CombinationsForm").submit(function(event){
+        event.preventDefault();
+  		$("#errorAlertOnTopCombinationsForm").hide();
+        const from = new Date($('#startDateOnTop10CombinationsForm').val()).valueOf();
+        const to = new Date($('#endDateOnTop10CombinationsForm').val()).valueOf();
+        queryTopCombinations(from,to);
+    });
+
+
+    $('#imsiTopSummaryForm').submit(function(event){
+        event.preventDefault();
+        const from = new Date($('#startDateOnIMSITopSummaryForm').val()).valueOf();
+        const to = new Date($('#endDateOnIMSITopSummaryForm').val()).valueOf();
+        queryTop10IMSISummary(from, to);
+    });
+
     $("#netFirstQuery").click(function(){
         $("#networkEngQueryOne").show();
         $("#networkEngQueryTwo").hide();
+	$("#networkEngQueryThree").hide();
+        $("#networkEngQueryFour").hide();
     });
     $("#netSecondQuery").click(function(){
         $("#networkEngQueryOne").hide();
         $("#networkEngQueryTwo").show();
+	$("#networkEngQueryThree").hide();
+        $("#networkEngQueryFour").hide();
+
     });
+    $("#netThirdQuery").click(function(){
+        $("#networkEngQueryOne").hide();
+        $("#networkEngQueryTwo").hide();
+	$("#networkEngQueryThree").show();
+        $("#networkEngQueryFour").hide();
+    });
+
+     $("#netFourthQuery").click(function(){
+        $("#networkEngQueryOne").hide();
+        $("#networkEngQueryTwo").hide();
+        $("#networkEngQueryFour").show();
+        $("#imsiTopSummaryTable").hide(); 
+    });
+    $("#errorAlertOnTopCombinationsForm").hide();
+    $("#networkEngQueryThree").hide();
+    $("#networkEngQueryFour").hide();
 });
