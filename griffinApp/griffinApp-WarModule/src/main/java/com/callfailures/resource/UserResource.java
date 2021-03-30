@@ -43,13 +43,4 @@ public class UserResource {
 		return Response.status(200).entity(user).build();
 	}
 
-	@PUT
-	@Consumes("application/json")
-	@Produces({ MediaType.APPLICATION_JSON })
-	public Response updateUser(final User user) {
-		userService.updateUser(user);
-		return Response.status(200).entity(user).build();
-
-	}
-
 }
