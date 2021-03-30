@@ -83,9 +83,64 @@ const queryIMSISUmmary = function(imsi, from, to){
     })
 }
 
+//Combinations Handlers
+const displayTopTenCombinations = function(combinations){
+    $("#combinationsTable").show();
+    const table = $('#combinationsTable').DataTable();
+    table.clear();
+    $(combinations).each(function(index, combination){
+        console.log(combination);
+        table.row.add([combination.cellId,
+			combination.marketOperator.countryDesc, 
+            combination.marketOperator.marketOperatorId.countryCode, 
+			combination.marketOperator.operatorDesc, 
+            combination.marketOperator.marketOperatorId.operatorCode,
+            combination.count
+        ]);
+    });
+    table.draw();
+}
+
+const displayTopCombinationsError = function(jqXHR, textStatus, errorThrown){
+    $("#combinationsTable").hide();
+    $("#errorAlertOnTopCombinationsForm").show();
+    $("#errorAlertOnSummaryForm").text(jqXHR.responseJSON.errorMessage);
+}
+
+
+const queryTopCombinations = function(from, to){	
+	$.ajax({
+        type: "GET",
+        dataType: "json",
+        url: `${rootURL}/Combinations/query?from=${from}&to=${to}`,
+        beforeSend: setAuthHeader,
+        success: displayTopTenCombinations,
+        error: displayTopCombinationsError
+    })
+	
+}
+
+const autoCompleteIMSI = function(){
+    $.ajax({
+        type: "GET",
+        dataType: "json",
+        url: `${rootURL}/IMSIs/query/all`,
+        beforeSend: setAuthHeader,
+        success: function(data){
+            var list = [];
+            for(var i=0; i<data.length; i++){
+                list.push(data[i].imsi)
+            }
+            $("#imsiOnIMSISummaryForm").autocomplete({source:list});
+        }
+    })
+}
+
+
+
 $(document).ready(function(){		
     setUserQuipmentDropdownOptions();
-
+    autoCompleteIMSI();
     $('#imsiSummaryForm').submit(function(event){
         event.preventDefault();
         const imsi = $('#imsiOnIMSISummaryForm').val();
@@ -99,4 +154,32 @@ $(document).ready(function(){
         const tac = $("#selectUserEquipmentDropdown").val();
         queryPhoneEquipmentFailures(tac);
     });
+
+	$("#userTop10CombinationsForm").submit(function(event){
+        event.preventDefault();
+  		$("#errorAlertOnTopCombinationsForm").hide();
+        const from = new Date($('#startDateOnTop10CombinationsForm').val()).valueOf();
+        const to = new Date($('#endDateOnTop10CombinationsForm').val()).valueOf();
+        queryTopCombinations(from,to);
+    });
+
+
+    $("#netFirstQuery").click(function(){
+        $("#networkEngQueryOne").show();
+        $("#networkEngQueryTwo").hide();
+		$("#networkEngQueryThree").hide();
+    });
+    $("#netSecondQuery").click(function(){
+        $("#networkEngQueryOne").hide();
+        $("#networkEngQueryTwo").show();
+		$("#networkEngQueryThree").hide();
+    });
+ 	$("#netThirdQuery").click(function(){
+        $("#networkEngQueryOne").hide();
+        $("#networkEngQueryTwo").hide();
+		$("#networkEngQueryThree").show();
+    });
+
+ 	 $("#errorAlertOnTopCombinationsForm").hide();
+	$("#networkEngQueryThree").hide();
 });
