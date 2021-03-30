@@ -100,6 +100,7 @@ const displayTopTenCombinations = function(combinations){
 }
 
 const displayTopTenCombinationsChart = function(combinations){
+    $("#top10ComboChartCard").show();
     var ctx = $("#top10ComboChart")[0];
     const top10Chart = new Chart(ctx, {
       type: 'horizontalBar',
@@ -188,6 +189,7 @@ const displayTopTenCombinationsChart = function(combinations){
 
 const displayTopCombinationsError = function(jqXHR, textStatus, errorThrown){
     $("#combinationsTable").hide();
+    $("#top10ComboChartCard").hide();
     $("#errorAlertOnTopCombinationsForm").show();
     $("#errorAlertOnSummaryForm").text(jqXHR.responseJSON.errorMessage);
 }
@@ -201,7 +203,11 @@ const queryTopCombinations = function(from, to){
         beforeSend: setAuthHeader,
         success: function(combinations){
             displayTopTenCombinations(combinations);
-            displayTopTenCombinationsChart(combinations);
+            if(combinations.length > 0){
+              displayTopTenCombinationsChart(combinations);
+            }else{
+              $("#top10ComboChartCard").hide();
+            }
         },
         error: displayTopCombinationsError
     })
