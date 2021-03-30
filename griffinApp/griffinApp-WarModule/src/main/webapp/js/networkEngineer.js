@@ -107,6 +107,12 @@ const displayTopCombinationsError = function(jqXHR, textStatus, errorThrown){
     $("#errorAlertOnSummaryForm").text(jqXHR.responseJSON.errorMessage);
 }
 
+const displayTop10IMSIsError = function(jqXHR, textStatus, errorThrown){
+    $("#imsiTopSummaryTable").hide();
+    $("#errorAlertOnTopCombinationsForm").show();
+    $("#errorAlertOnSummaryForm").text(jqXHR.responseJSON.errorMessage);
+}
+
 
 const queryTopCombinations = function(from, to){	
 	$.ajax({
@@ -156,7 +162,8 @@ const queryTop10IMSISummary = function(from, to){
         dataType: "json",
         url: `${rootURL}/IMSIs/query/limit?from=${from}&to=${to}`,
         beforeSend: setAuthHeader,
-        success: displayTop10IMSISummary
+        success: displayTop10IMSISummary,
+        error: displayTop10IMSIsError
     })
 }
 
@@ -198,30 +205,28 @@ $(document).ready(function(){
     $("#netFirstQuery").click(function(){
         $("#networkEngQueryOne").show();
         $("#networkEngQueryTwo").hide();
-	$("#networkEngQueryThree").hide();
+	    $("#networkEngQueryThree").hide();
         $("#networkEngQueryFour").hide();
     });
     $("#netSecondQuery").click(function(){
         $("#networkEngQueryOne").hide();
         $("#networkEngQueryTwo").show();
-	$("#networkEngQueryThree").hide();
+	    $("#networkEngQueryThree").hide();
         $("#networkEngQueryFour").hide();
 
     });
     $("#netThirdQuery").click(function(){
         $("#networkEngQueryOne").hide();
         $("#networkEngQueryTwo").hide();
-	$("#networkEngQueryThree").show();
+	    $("#networkEngQueryThree").show();
         $("#networkEngQueryFour").hide();
     });
 
      $("#netFourthQuery").click(function(){
         $("#networkEngQueryOne").hide();
         $("#networkEngQueryTwo").hide();
+		$("#networkEngQueryThree").hide();
         $("#networkEngQueryFour").show();
-        $("#imsiTopSummaryTable").hide(); 
     });
-    $("#errorAlertOnTopCombinationsForm").hide();
-    $("#networkEngQueryThree").hide();
-    $("#networkEngQueryFour").hide();
+
 });
