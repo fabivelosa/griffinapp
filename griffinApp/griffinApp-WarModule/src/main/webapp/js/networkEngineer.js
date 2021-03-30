@@ -90,8 +90,10 @@ const displayTopTenCombinations = function(combinations){
     table.clear();
     $(combinations).each(function(index, combination){
         console.log(combination);
-        table.row.add([combination.cellId, 
+        table.row.add([combination.cellId,
+			combination.marketOperator.countryDesc, 
             combination.marketOperator.marketOperatorId.countryCode, 
+			combination.marketOperator.operatorDesc, 
             combination.marketOperator.marketOperatorId.operatorCode,
             combination.count
         ]);
