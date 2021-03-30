@@ -2,6 +2,7 @@ package com.callfailures.services.impl;
 
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -75,7 +76,13 @@ public class MarketOperatorServiceImplTest {
 		when(validationService.checkExistingMarketOperator(any(MarketOperator.class))).thenReturn(null);
 		final ParsingResponse<MarketOperator> parseResult = marketOperatorServiceImpl.read(workbookFile);
 		final Collection<MarketOperator> validObjects = parseResult.getValidObjects();
-		assertEquals(false, validObjects.isEmpty());
+		assertFalse(validObjects.isEmpty());
+		final MarketOperator marketOperator = validObjects.iterator().next();
+		assertEquals("Denmark", marketOperator.getCountryDesc());
+		assertEquals("TDC-DK", marketOperator.getOperatorDesc());
+		assertEquals(238, marketOperator.getMarketOperatorId().getCountryCode());
+		assertEquals(1, marketOperator.getMarketOperatorId().getOperatorCode());
+
 	}
 
 	@Test
