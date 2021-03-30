@@ -20,7 +20,7 @@ import com.callfailures.errors.ErrorMessage;
 import com.callfailures.errors.ErrorMessages;
 import com.callfailures.exception.InvalidDateException;
 import com.callfailures.services.EventService;
-import com.callfailures.utils.DateConverter;
+import com.callfailures.utils.DateConverterUtil;
 
 @Path("/Combinations")
 @Stateless
@@ -41,8 +41,8 @@ public class DeviceCommonEvents {
 	public Response getTop10Combinations(@QueryParam("from") final Long fromEpoch,
 			@QueryParam("to") final Long toEpoch) {
 		
-		final LocalDateTime startTime = DateConverter.convertLongToLocalDateTime(fromEpoch); 
-		final LocalDateTime endTime = DateConverter.convertLongToLocalDateTime(toEpoch); 
+		final LocalDateTime startTime = DateConverterUtil.convertLongToLocalDateTime(fromEpoch); 
+		final LocalDateTime endTime = DateConverterUtil.convertLongToLocalDateTime(toEpoch); 
 		
 		try {
 			final List<DeviceCombination> topTen = eventService.findTopTenEvents(startTime, endTime);
