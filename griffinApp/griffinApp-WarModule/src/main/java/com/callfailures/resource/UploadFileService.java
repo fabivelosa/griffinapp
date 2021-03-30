@@ -178,16 +178,15 @@ public class UploadFileService {
 		uploadsOverallResult.add(
 				new EventsUploadResponseDTO("Base Data", events.getValidObjects().size(), events.getInvalidRows()));
 
-		String table = "";
-		final String filename = "Error" + System.currentTimeMillis() + ".txt";
-		FileOutputStream file = null;
-
-		writeFileToServer(uploadsOverallResult, reportFile, table, filename, file);
+		writeFileToServer(uploadsOverallResult, reportFile);
 
 	}
 
-	private void writeFileToServer(final List<EventsUploadResponseDTO> uploadsOverallResult, final Upload reportFile,
-			String table, final String filename, FileOutputStream file) {
+	private void writeFileToServer(final List<EventsUploadResponseDTO> uploadsOverallResult, final Upload reportFile) {
+		String table = "";
+		final String filename = "Error" + System.currentTimeMillis() + ".txt";
+		FileOutputStream file = null;
+		
 		try {
 
 			file = new FileOutputStream(DOWNLOADFILEPATH + filename);
@@ -202,8 +201,8 @@ public class UploadFileService {
 
 				for (final InvalidRow invalidItem : result.getErroneousData()) {
 					file.write(("Row :" + invalidItem.getRowNumber() + " , Caused :" + invalidItem.getErrorMessage())
-							.getBytes());
-					file.write(System.getProperty("line.separator").getBytes());
+							.getBytes(Charset.forName("UTF-8")));
+					file.write(System.getProperty("line.separator").getBytes(Charset.forName("UTF-8")));
 				}
 			}
 			file.flush();
