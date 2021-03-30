@@ -194,6 +194,12 @@ const displayTopCombinationsError = function(jqXHR, textStatus, errorThrown){
     $("#errorAlertOnSummaryForm").text(jqXHR.responseJSON.errorMessage);
 }
 
+const displayTop10IMSIsError = function(jqXHR, textStatus, errorThrown){
+    $("#imsiTopSummaryTable").hide();
+    $("#errorAlertOnTopCombinationsForm").show();
+    $("#errorAlertOnSummaryForm").text(jqXHR.responseJSON.errorMessage);
+}
+
 
 const queryTopCombinations = function(from, to){	
 	$.ajax({
@@ -230,6 +236,31 @@ const autoCompleteIMSI = function(){
     })
 }
 
+const displayTop10IMSISummary = function(topTenIMSIFailures){
+	$("#imsiTopSummaryTable").show();
+	const table = $('#imsiTopSummaryTable').DataTable();
+    table.clear();
+    $(topTenIMSIFailures).each(function(index, topTenIMSIFailure){
+        console.log(topTenIMSIFailure);
+        table.row.add([topTenIMSIFailure.imsi, 
+            topTenIMSIFailure.callFailuresCount
+        ]);
+    });
+    table.draw();
+}
+
+
+const queryTop10IMSISummary = function(from, to){
+    $.ajax({
+        type: "GET",
+        dataType: "json",
+        url: `${rootURL}/IMSIs/query/limit?from=${from}&to=${to}`,
+        beforeSend: setAuthHeader,
+        success: displayTop10IMSISummary,
+        error: displayTop10IMSIsError
+    })
+}
+
 
 
 
@@ -251,7 +282,7 @@ $(document).ready(function(){
         queryPhoneEquipmentFailures(tac);
     });
 
-	$("#userTop10CombinationsForm").submit(function(event){
+    $("#userTop10CombinationsForm").submit(function(event){
         event.preventDefault();
   		$("#errorAlertOnTopCombinationsForm").hide();
         const from = new Date($('#startDateOnTop10CombinationsForm').val()).valueOf();
@@ -260,22 +291,38 @@ $(document).ready(function(){
     });
 
 
+    $('#imsiTopSummaryForm').submit(function(event){
+        event.preventDefault();
+        const from = new Date($('#startDateOnIMSITopSummaryForm').val()).valueOf();
+        const to = new Date($('#endDateOnIMSITopSummaryForm').val()).valueOf();
+        queryTop10IMSISummary(from, to);
+    });
+
     $("#netFirstQuery").click(function(){
         $("#networkEngQueryOne").show();
         $("#networkEngQueryTwo").hide();
-		$("#networkEngQueryThree").hide();
+	    $("#networkEngQueryThree").hide();
+        $("#networkEngQueryFour").hide();
     });
     $("#netSecondQuery").click(function(){
         $("#networkEngQueryOne").hide();
         $("#networkEngQueryTwo").show();
-		$("#networkEngQueryThree").hide();
+	    $("#networkEngQueryThree").hide();
+        $("#networkEngQueryFour").hide();
+
     });
- 	$("#netThirdQuery").click(function(){
+    $("#netThirdQuery").click(function(){
         $("#networkEngQueryOne").hide();
         $("#networkEngQueryTwo").hide();
-		$("#networkEngQueryThree").show();
+	    $("#networkEngQueryThree").show();
+        $("#networkEngQueryFour").hide();
     });
 
- 	 $("#errorAlertOnTopCombinationsForm").hide();
-	$("#networkEngQueryThree").hide();
+     $("#netFourthQuery").click(function(){
+        $("#networkEngQueryOne").hide();
+        $("#networkEngQueryTwo").hide();
+		$("#networkEngQueryThree").hide();
+        $("#networkEngQueryFour").show();
+    });
+
 });
