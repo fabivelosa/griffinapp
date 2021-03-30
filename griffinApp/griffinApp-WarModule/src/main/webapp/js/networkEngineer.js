@@ -142,7 +142,7 @@ const displayTopTenCombinationsChart = function(combinations){
             ticks: {
               min: 0,
               max: Math.max(...combinations.map(combination => combination.count)),
-              maxTicksLimit: 5,
+              maxTicksLimit: 10,
               padding: 10
             },
             scaleLabel: {
