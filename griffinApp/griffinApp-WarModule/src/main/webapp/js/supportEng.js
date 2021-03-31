@@ -57,7 +57,24 @@ const queryCallFailureCount = function(imsi, from, to){
     })
 }
 
-$(document).ready(function(){		
+const autoCompleteIMSI = function(){
+    $.ajax({
+        type: "GET",
+        dataType: "json",
+        url:`${rootURL}/userEquipment`,
+        beforeSend: setAuthHeader,
+        success: function(data){
+            var list = [];
+            for(var i=0; i<data.length; i++){
+                list.push(data[i].model)
+            }
+            $("#imsiOnCallFailureForm").autocomplete({source:list});
+        }
+    })
+}
+
+$(document).ready(function(){	
+    autoCompleteIMSI();	
     $('#imsiCallFaluireForm').submit(function(event){
         event.preventDefault();
         const imsi = $('#imsiOnCallFailureForm').val();
@@ -71,5 +88,14 @@ $(document).ready(function(){
         const from = new Date($('#startDateOnListForm').val()).valueOf();
         const to = new Date($('#endDateOnListForm').val()).valueOf();
         queryCallFailures(from, to);
+    });
+
+    $("#supFirstQuery").click(function(){
+        $("#supportEngQueryOne").show();
+        $("#supportEngQueryTwo").hide();
+    });
+    $("#supSecondQuery").click(function(){
+        $("#supportEngQueryOne").hide();
+        $("#supportEngQueryTwo").show();
     });
 });
