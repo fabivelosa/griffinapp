@@ -38,7 +38,6 @@ public class UserResource {
 	@Consumes("application/json")
 	@Produces({ MediaType.APPLICATION_JSON })
 	public Response addUser(final User user) {
-		user.setUserPassword(User.passEncrypt(user.getUserPassword()));
 		userService.addUser(user);
 		return Response.status(200).entity(user).build();
 	}
