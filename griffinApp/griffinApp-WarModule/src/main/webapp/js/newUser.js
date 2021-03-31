@@ -34,7 +34,7 @@ var addUser = function () {
 		xhr.setRequestHeader('Authorization', authToken);
 		},
 		success: function(data, textStatus, jqXHR){
-			alert('User created successfully');
+			document.getElementById("successMessage").style.display = "block";
 			
 			$('#userId').val("");
 			$('#userName').val("");
@@ -110,18 +110,29 @@ var formToJSON=function () {
 		});
 };
 
+document.getElementById("successMessage").style.display= "none";
+document.getElementById("alertMissingField").style.display= "none";
+document.getElementById("alertPasswordMatch").style.display= "none";
+
+var clear = document.getElementById("createUserButton");
+
+clear.onblur=function(){
+	document.getElementById("successMessage").style.display= "none";
+	document.getElementById("alertMissingField").style.display= "none";
+	document.getElementById("alertPasswordMatch").style.display= "none";	
+}
+
 $(document).ready(function(){
 	$('#createUserButton').click(function() {
 		if (($('#userId').val() == "")||($('#userName').val() == "")||($('#userType').val() == "")||($('#userPassword').val() == "")){
-			alert('Required field left empty');
-			}
+		document.getElementById("alertMissingField").style.display= "block";
+		}
+		else if($('#userPassword').val() != $('#confirmPassword').val())
+					document.getElementById("alertPasswordMatch").style.display= "block";			
 			
-		else if ($('#userPassword').val() == $('#confirmPassword').val())
-			addUser();
-			
-		else
-			alert('Error: Passwords must match');
-			
+		else{
+			document.getElementById("successMessage").style.display= "block";	
+			addUser();}
 		return false;
 	});
 	
