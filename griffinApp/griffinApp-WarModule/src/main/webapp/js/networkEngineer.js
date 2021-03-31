@@ -113,8 +113,7 @@ const displayTopTenCombinationsChart = function(combinations){
           backgroundColor: "#4e73df",
           hoverBackgroundColor: "#2e59d9",
           borderColor: "#4e73df",
-          barPercentage:0.8,
-          categoryPercentahe:1.0,
+          barThickness:'flex',
           data: combinations.map(combination => combination.count),
         }],
       },
@@ -342,7 +341,7 @@ const queryTop10IMSISummary = function(from, to){
     $.ajax({
         type: "GET",
         dataType: "json",
-        url: `${rootURL}/IMSIs/query/limit?from=${from}&to=${to}`,
+        url: `${rootURL}/IMSIs/query/limit?from=${from}&to=${to}&number=10`,
         beforeSend: setAuthHeader,
         success: function(imsis){
           displayTop10IMSISummary(imsis);
