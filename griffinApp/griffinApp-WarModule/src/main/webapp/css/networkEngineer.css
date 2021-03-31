@@ -6,7 +6,7 @@
 #phoneFailuresTable,
 #networkEngQueryTwo, 
 #networkEngQueryThree, 
-#networkEngQueryFour
-{
+#networkEngQueryFour,
+#top10ComboChartCard{
     display:none;
 }

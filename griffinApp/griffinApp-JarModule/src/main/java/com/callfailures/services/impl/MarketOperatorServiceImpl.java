@@ -58,18 +58,17 @@ public class MarketOperatorServiceImpl implements MarketOperatorService {
 				final Iterator<Cell> cellIterator = row.cellIterator();
 
 				Cell cell = cellIterator.next();
-				operator = new MarketOperator();
-				operatorPK = new MarketOperatorPK();
-				operatorPK.setCountryCode((int) cell.getNumericCellValue());
-				cell = cellIterator.next();
-				operatorPK.setOperatorCode((int) cell.getNumericCellValue());
-				cell = cellIterator.next();
-
-				operator.setMarketOperatorId(operatorPK);
-				operator.setCountryDesc(cell.getStringCellValue());
-				operator.setOperatorDesc(cell.getStringCellValue());
-
 				try {
+					operator = new MarketOperator();
+					operatorPK = new MarketOperatorPK();
+					operatorPK.setCountryCode((int) cell.getNumericCellValue());
+					cell = cellIterator.next();
+					operatorPK.setOperatorCode((int) cell.getNumericCellValue());
+					operator.setMarketOperatorId(operatorPK);
+					cell = cellIterator.next();
+					operator.setCountryDesc(cell.getStringCellValue());
+					cell = cellIterator.next();
+					operator.setOperatorDesc(cell.getStringCellValue());
 					if (validationService.checkExistingMarketOperator(operator) == null) {
 						marketOperatorDAO.create(operator);
 						result.addValidObject(operator);
