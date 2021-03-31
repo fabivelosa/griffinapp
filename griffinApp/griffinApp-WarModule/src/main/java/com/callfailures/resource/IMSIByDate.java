@@ -100,6 +100,21 @@ public class IMSIByDate {
 		}		
 	}
 	
+	@GET
+	@Secured
+	@Path("/query/failureClass")
+	@Produces({ MediaType.APPLICATION_JSON })
+	public Response getIMSIsByFailure(@QueryParam("failureClass")final int failureClass) {
+		
+		try {
+			final List<UniqueIMSI> imsis = eventService.findIMSISByFailure(failureClass);
+			return Response.status(200).entity(imsis).build();
+		} catch (Exception e) {
+			return Response.status(404).entity(new ErrorMessages(ErrorMessage.INVALID_FAILURECLASS.getMessage())).build();
+		}
+		
+	}
+	
 	
 	private LocalDateTime convertLongToLocalDateTime(final Long startEpoch) {
 		return LocalDateTime.ofInstant(Instant.ofEpochMilli(startEpoch), TimeZone.getDefault().toZoneId());

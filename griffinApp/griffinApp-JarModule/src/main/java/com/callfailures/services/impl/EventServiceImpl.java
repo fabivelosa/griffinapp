@@ -245,5 +245,10 @@ public class EventServiceImpl implements EventService {
 		}
 		return eventDAO.findIMSIS(number, startTime, endTime);
 	}
+	@Override
+	public List<UniqueIMSI> findIMSISByFailure(final int failureClass){
+		return eventDAO.findIMSISByFailureClass(failureClass);
+	}
+	
 
 }
