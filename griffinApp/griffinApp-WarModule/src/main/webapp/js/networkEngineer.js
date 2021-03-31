@@ -10,7 +10,6 @@ const displayPhoneEquipmentFailures = function(phoneFailures){
     const table = $('#phoneFailuresTable').DataTable();
     table.clear();
     $(phoneFailures).each(function(index, phoneFailure){
-        console.log(phoneFailure);
         table.row.add([phoneFailure.userEquipment.model, 
             phoneFailure.eventCause.eventCauseId.eventCauseId, 
             phoneFailure.eventCause.eventCauseId.causeCode,
@@ -89,8 +88,7 @@ const displayTopTenCombinations = function(combinations){
     const table = $('#combinationsTable').DataTable();
     table.clear();
     $(combinations).each(function(index, combination){
-        console.log(combination);
-        table.row.add([combination.cellId,
+      table.row.add([combination.cellId,
 			combination.marketOperator.countryDesc, 
             combination.marketOperator.marketOperatorId.countryCode, 
 			combination.marketOperator.operatorDesc, 
@@ -101,8 +99,99 @@ const displayTopTenCombinations = function(combinations){
     table.draw();
 }
 
+const displayTopTenCombinationsChart = function(combinations){
+    $("#top10ComboChartCard").show();
+    var ctx = $("#top10ComboChart")[0];
+    const top10Chart = new Chart(ctx, {
+      type: 'horizontalBar',
+      data: {
+        labels: combinations.map(combination => {
+          return combination.marketOperator.countryDesc + " , " + combination.marketOperator.operatorDesc + " , Cell " + combination.cellId}
+          ),
+        datasets: [{
+          label: "Call Failures",
+          backgroundColor: "#4e73df",
+          hoverBackgroundColor: "#2e59d9",
+          borderColor: "#4e73df",
+          barPercentage:0.8,
+          categoryPercentahe:1.0,
+          data: combinations.map(combination => combination.count),
+        }],
+      },
+      options: {
+        maintainAspectRatio: false,
+        layout: {
+          padding: {
+            left: 10,
+            right: 25,
+            top: 25,
+            bottom: 0
+          }
+        },
+        scales: {
+          yAxes: [{
+            type:"category",
+            gridLines: {
+              display: false,
+              drawBorder: false
+            },
+            ticks: {
+              maxTicksLimit: 10
+            }
+          }],
+          xAxes: [{
+            ticks: {
+              min: 0,
+              max: Math.max(...combinations.map(combination => combination.count)),
+              maxTicksLimit: 10,
+              padding: 10
+            },
+            scaleLabel: {
+              display: true,
+              labelString: 'Call Failures Count'
+            },
+            gridLines: {
+              color: "rgb(234, 236, 244)",
+              zeroLineColor: "rgb(234, 236, 244)",
+              drawBorder: false,
+              borderDash: [2],
+              zeroLineBorderDash: [2]
+            }
+          }],
+        },
+        legend: {
+          display: false
+        },
+        tooltips: {
+          titleMarginBottom: 10,
+          titleFontColor: '#6e707e',
+          titleFontSize: 14,
+          backgroundColor: "rgb(255,255,255)",
+          bodyFontColor: "#858796",
+          borderColor: '#dddfeb',
+          borderWidth: 1,
+          xPadding: 15,
+          yPadding: 15,
+          displayColors: false, 
+          caretPadding: 10,
+          callbacks: {
+            label: function(tooltipItem, chart) {
+              var datasetLabel = chart.datasets[tooltipItem.datasetIndex].label || '';
+              return datasetLabel + ': ' + tooltipItem.xLabel;
+            }
+          }
+        },
+      }
+    });
+
+    $("#top10ComboChartDate").text(`Data as of ${new Date()}`);
+}
+
+
 const displayTopCombinationsError = function(jqXHR, textStatus, errorThrown){
     $("#combinationsTable").hide();
+    $("#combinationsTable_wrapper").hide();
+    $("#top10ComboChartCard").hide();
     $("#errorAlertOnTopCombinationsForm").show();
     $("#errorAlertOnSummaryForm").text(jqXHR.responseJSON.errorMessage);
 }
@@ -120,7 +209,14 @@ const queryTopCombinations = function(from, to){
         dataType: "json",
         url: `${rootURL}/Combinations/query?from=${from}&to=${to}`,
         beforeSend: setAuthHeader,
-        success: displayTopTenCombinations,
+        success: function(combinations){
+            displayTopTenCombinations(combinations);
+            if(combinations.length > 0){
+              displayTopTenCombinationsChart(combinations);
+            }else{
+              $("#top10ComboChartCard").hide();
+            }
+        },
         error: displayTopCombinationsError
     })
 	
@@ -166,6 +262,8 @@ const queryTop10IMSISummary = function(from, to){
         error: displayTop10IMSIsError
     })
 }
+
+
 
 
 
