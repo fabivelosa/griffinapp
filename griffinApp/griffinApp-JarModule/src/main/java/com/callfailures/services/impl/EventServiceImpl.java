@@ -1,7 +1,5 @@
 package com.callfailures.services.impl;
 
-import java.io.File;
-import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -14,11 +12,8 @@ import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.inject.Inject;
 
-import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import com.callfailures.dao.EventDAO;
 import com.callfailures.dao.UploadDAO;
@@ -61,20 +56,17 @@ public class EventServiceImpl implements EventService {
 		return eventDAO.findEventsByIMSI(imsi);
 	}
 
-	
 	@Override
 	public List<Integer> findUniqueCauseCode(final String imsi) {
 		if (!isValidIMSI(imsi)) {
 			throw new InvalidIMSIException();
 		}
-		
+
 		return eventDAO.findEventsByIMSI(imsi).stream()
-				.map(imsiEvent -> imsiEvent.getEventCause().getEventCauseId().getCauseCode())
-				.distinct()
+				.map(imsiEvent -> imsiEvent.getEventCause().getEventCauseId().getCauseCode()).distinct()
 				.collect(Collectors.toList());
 	}
-	
-	
+
 	@Override
 	public IMSISummary findCallFailuresCountByIMSIAndDate(final String imsi, final LocalDateTime startTime,
 			final LocalDateTime endTime) {
@@ -109,46 +101,43 @@ public class EventServiceImpl implements EventService {
 	}
 
 	@Override
-	public ParsingResponse<Events> read(final File workbookFile, final Upload currentUpload) {
+	public ParsingResponse<Events> read(final Sheet sheet, final int ini, final int end, final Upload currentUpload) {
 
 		final List<Events> eventsToProcess = new ArrayList<Events>();
 		final ParsingResponse<Events> parsingResult = new ParsingResponse<>();
-		try (Workbook workbook = new XSSFWorkbook(workbookFile);) {
-			final Sheet sheet = workbook.getSheetAt(0);
-
-			int rowTotal = sheet.getLastRowNum();
-			if ((rowTotal > 0) || sheet.getPhysicalNumberOfRows() > 0) {
-				rowTotal++;
-			}
-
-			readRows(currentUpload, eventsToProcess, parsingResult, sheet, rowTotal);
-
-		} catch (IOException | InvalidFormatException e) {
-			e.printStackTrace();
+		int rowTotal = sheet.getLastRowNum();
+		if ((rowTotal > 0) || sheet.getPhysicalNumberOfRows() > 0) {
+			rowTotal++;
 		}
+
+		readRows(currentUpload, eventsToProcess, parsingResult, sheet, ini, end, rowTotal);
+
 		return parsingResult;
 	}
 
 	private void readRows(final Upload currentUpload, List<Events> eventsToProcess,
-			final ParsingResponse<Events> parsingResult, final Sheet sheet, final int rowTotal) {
+			final ParsingResponse<Events> parsingResult, final Sheet sheet, final int ini, final int end,
+			final int rowTotal) {
 		final Iterator<Row> rowIterator = sheet.rowIterator();
 		Row row = rowIterator.next();
 		int rowNumber = 0;
 		int index = 0;
-		int batch_size = 500;
+		int batch_size = (end - ini) / 3;
 
 		if (batch_size > rowTotal) {
 			batch_size = rowTotal - 1;
 		}
-		while (rowIterator.hasNext()) {
+
+		for (int i = ini; i < end; i++) {
 			rowNumber++;
 			index++;
-			row = rowIterator.next();
-			if (rowNumber == rowTotal / 8) {
+			row = sheet.getRow(i);
+
+			if (i == rowTotal / 8) {
 				updateProgress(currentUpload, 45);
-			} else if (rowNumber == rowTotal / 4) {
+			} else if (i == rowTotal / 4) {
 				updateProgress(currentUpload, 55);
-			} else if (rowNumber == rowTotal / 2) {
+			} else if (i == rowTotal / 2) {
 				updateProgress(currentUpload, 75);
 			}
 			try {
@@ -172,8 +161,10 @@ public class EventServiceImpl implements EventService {
 	private void updateProgress(final Upload currentUpload, final int percent) {
 		currentUpload.setUploadStatus(percent);
 		final Upload newobject = uploadDAO.getUploadByRef(currentUpload.getUploadID());
-		newobject.setUploadStatus(percent);
-		uploadDAO.update(newobject);
+		if (newobject.getUploadStatus() < percent) {
+			newobject.setUploadStatus(percent);
+			uploadDAO.update(newobject);
+		}
 	}
 
 	private boolean isValidIMSI(final String imsi) {
@@ -229,15 +220,15 @@ public class EventServiceImpl implements EventService {
 		return eventDAO.findIMSIS().stream().sorted(Comparator.comparing(UniqueIMSI::getImsi))
 				.collect(Collectors.toList());
 	}
-	
+
 	@Override
-	public List<DeviceCombination> findTopTenEvents(final LocalDateTime startTime, final LocalDateTime endTime){
+	public List<DeviceCombination> findTopTenEvents(final LocalDateTime startTime, final LocalDateTime endTime) {
 		if (startTime.isAfter(endTime)) {
 			throw new InvalidDateException();
 		}
 		return eventDAO.findTopTenCombinations(startTime, endTime);
 	}
-		
+
 	@Override
 	public List<IMSICount> findIMSIS(final int number, final LocalDateTime startTime, final LocalDateTime endTime) {
 		if (startTime.isAfter(endTime)) {

@@ -6,6 +6,8 @@ import java.util.List;
 
 import javax.ejb.Local;
 
+import org.apache.poi.ss.usermodel.Sheet;
+
 import com.callfailures.entity.Events;
 import com.callfailures.entity.Upload;
 import com.callfailures.entity.views.DeviceCombination;
@@ -58,7 +60,7 @@ public interface EventService {
 	 * @param workbookFile
 	 * @return and returns the validation result, ParsingResponse,  for the Base Data tab
 	 */
-	ParsingResponse<Events> read(File workbookFile, Upload currentUpload);
+	public ParsingResponse<Events> read(final Sheet sheet, int ini, int end, final Upload currentUpload);
 	
 	/**
 	 * Query Database for all IMSI with failures between Start and End time submitted

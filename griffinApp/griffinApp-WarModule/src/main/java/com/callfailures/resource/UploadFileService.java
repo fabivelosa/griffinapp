@@ -24,6 +24,9 @@ import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.jboss.resteasy.plugins.providers.multipart.InputPart;
 import org.jboss.resteasy.plugins.providers.multipart.MultipartFormDataInput;
 
@@ -73,6 +76,8 @@ public class UploadFileService {
 			+ "/welcome-content/fileDownloads/";
 
 	protected File sheet;
+
+	protected ParsingResponse<Events> eventsList = new ParsingResponse<Events>();
 
 	@POST
 	@Path("/upload")
@@ -134,9 +139,8 @@ public class UploadFileService {
 				final ParsingResponse<MarketOperator> marketOperator = marketOperatorService.read(sheet);
 				currentUpload.setUploadStatus(25);
 				uploadDAO.update(currentUpload);
-				final ParsingResponse<Events> events = eventService.read(sheet, currentUpload);
-				currentUpload.setUploadStatus(95);
-				uploadDAO.update(currentUpload);
+				final long starEvents = System.nanoTime();
+				final ParsingResponse<Events> events = processEvents(currentUpload);
 
 				generateReportFile(uploadsOverallResult, eventCauses, failureClasses, userEquipment, marketOperator,
 						events, currentUpload);
@@ -146,10 +150,98 @@ public class UploadFileService {
 
 				final long endNano = System.nanoTime();
 				final long duration = (endNano - startNano) / 1000000000;
+				final long durationOthers = (starEvents - startNano) / 1000000000;
+				final long durationEvents = (endNano - starEvents) / 1000000000;
 				System.out.println("It took " + duration + "seconds to validate and store the data");
+				System.out.println("It took " + durationOthers + "seconds to validate and store the others data");
+				System.out.println("It took " + durationEvents + "seconds to validate and store the events data");
 
 			}
 		}.start();
+	}
+
+	private ParsingResponse<Events> processEvents(final Upload currentUpload) {
+
+		 Workbook workbook = null;
+
+		try {
+			workbook = new XSSFWorkbook(sheet);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		final Sheet eventSheet = workbook.getSheetAt(0);
+
+		int rowTotal = eventSheet.getLastRowNum();
+		if ((rowTotal > 0) || eventSheet.getPhysicalNumberOfRows() > 0) {
+			rowTotal++;
+		}
+		final int num_threads = 4;
+		final int slice = rowTotal / num_threads;
+
+		final Thread t1 = new Thread() {
+			public void run() {
+				System.out.println("Init :" + Thread.currentThread().getName() + " from id: " + 1 + " to: "
+						+ (slice - 1) + " at " + System.currentTimeMillis());
+				eventsList = eventService.read(eventSheet, 1, slice - 1, currentUpload);
+				System.out.println("End :" + Thread.currentThread().getName() + " at " + System.currentTimeMillis());
+
+			}
+		};
+
+		int slice2 = (slice * 2) - 1;
+
+		final Thread t2 = new Thread() {
+			public void run() {
+				System.out.println("Init :" + Thread.currentThread().getName() + " from id: " + slice + " to: " + slice2
+						+ " at " + System.currentTimeMillis());
+				eventsList = eventService.read(eventSheet, slice, slice2, currentUpload);
+				System.out.println("End :" + Thread.currentThread().getName() + " at " + System.currentTimeMillis());
+
+			}
+		};
+
+		final int slice3 = (slice * 3) - 1;
+
+		final Thread t3 = new Thread() {
+			public void run() {
+				System.out.println("Init :" + Thread.currentThread().getName() + " from id: " + slice * 2 + " to: "
+						+ slice3 + " at " + System.currentTimeMillis());
+				ParsingResponse<Events> events = eventService.read(eventSheet, slice * 2, slice3, currentUpload);
+				System.out.println("End :" + Thread.currentThread().getName() + " at " + System.currentTimeMillis());
+
+			}
+		};
+
+		final Thread t4 = new Thread() {
+			public void run() {
+				System.out.println("Init :" + Thread.currentThread().getName() + " from id: " + (slice * 3) + " to: "
+						+ eventSheet.getLastRowNum() + " at " + System.currentTimeMillis());
+				ParsingResponse<Events> events = eventService.read(eventSheet, slice * 3, eventSheet.getLastRowNum(),
+						currentUpload);
+				System.out.println("End :" + Thread.currentThread().getName() + " at " + System.currentTimeMillis());
+
+			}
+		};
+
+		t1.start();
+		t2.start();
+		t3.start();
+		t4.start();
+
+		try {
+			t1.join();
+			t2.join();
+			t3.join();
+			t4.join();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		currentUpload.setUploadStatus(95);
+		uploadDAO.update(currentUpload);
+		return eventsList;
+
 	}
 
 	@GET
@@ -186,7 +278,7 @@ public class UploadFileService {
 		String table = "";
 		final String filename = "Error" + System.currentTimeMillis() + ".txt";
 		FileOutputStream file = null;
-		
+
 		try {
 
 			file = new FileOutputStream(DOWNLOADFILEPATH + filename);
