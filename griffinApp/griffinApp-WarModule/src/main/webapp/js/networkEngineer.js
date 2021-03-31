@@ -188,6 +188,92 @@ const displayTopTenCombinationsChart = function(combinations){
 }
 
 
+const displayTopTenIMSIsChart = function(imsis){
+  $("#top10IMSIChartCard").show();
+  var ctx = $("#top10IMSIChart")[0];
+  const top10Chart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: imsis.map(imsiData => imsiData.imsi),
+      datasets: [{
+        label: "Call Failures",
+        backgroundColor: "#4e73df",
+        hoverBackgroundColor: "#2e59d9",
+        borderColor: "#4e73df",
+        barPercentage:0.5,
+        categoryPercentahe:1.0,
+        data: imsis.map(imsiData => imsiData.callFailuresCount),
+      }],
+    },
+    options: {
+      maintainAspectRatio: false,
+      layout: {
+        padding: {
+          left: 10,
+          right: 25,
+          top: 25,
+          bottom: 0
+        }
+      },
+      scales: {
+        xAxes: [{
+          type:"category",
+          gridLines: {
+            display: false,
+            drawBorder: false
+          },
+          ticks: {
+            maxTicksLimit: 10
+          }
+        }],
+        yAxes: [{
+          ticks: {
+            min: 0,
+            max: Math.max(...imsis.map(imsiData => imsiData.callFailuresCount)),
+            padding: 10
+          },
+          scaleLabel: {
+            display: true,
+            labelString: 'Call Failures Count'
+          },
+          gridLines: {
+            color: "rgb(234, 236, 244)",
+            zeroLineColor: "rgb(234, 236, 244)",
+            drawBorder: false,
+            borderDash: [2],
+            zeroLineBorderDash: [2]
+          }
+        }],
+      },
+      legend: {
+        display: false
+      },
+      tooltips: {
+        titleMarginBottom: 10,
+        titleFontColor: '#6e707e',
+        titleFontSize: 14,
+        backgroundColor: "rgb(255,255,255)",
+        bodyFontColor: "#858796",
+        borderColor: '#dddfeb',
+        borderWidth: 1,
+        xPadding: 15,
+        yPadding: 15,
+        displayColors: false, 
+        caretPadding: 10,
+        callbacks: {
+          label: function(tooltipItem, chart) {
+            var datasetLabel = chart.datasets[tooltipItem.datasetIndex].label || '';
+            return datasetLabel + ': ' + tooltipItem.yLabel;
+          }
+        }
+      },
+    }
+  });
+
+  $("#top10IMSIDate").text(`Data as of ${new Date()}`);
+}
+
+
 const displayTopCombinationsError = function(jqXHR, textStatus, errorThrown){
     $("#combinationsTable").hide();
     $("#combinationsTable_wrapper").hide();
@@ -198,10 +284,10 @@ const displayTopCombinationsError = function(jqXHR, textStatus, errorThrown){
 
 const displayTop10IMSIsError = function(jqXHR, textStatus, errorThrown){
     $("#imsiTopSummaryTable").hide();
+    $("#top10IMSIChartCard").hide();
     $("#errorAlertOnTopCombinationsForm").show();
     $("#errorAlertOnSummaryForm").text(jqXHR.responseJSON.errorMessage);
 }
-
 
 const queryTopCombinations = function(from, to){	
 	$.ajax({
@@ -258,13 +344,17 @@ const queryTop10IMSISummary = function(from, to){
         dataType: "json",
         url: `${rootURL}/IMSIs/query/limit?from=${from}&to=${to}`,
         beforeSend: setAuthHeader,
-        success: displayTop10IMSISummary,
+        success: function(imsis){
+          displayTop10IMSISummary(imsis);
+          if(imsis.length > 0){
+            displayTopTenIMSIsChart(imsis);
+          }else{
+            $("#top10IMSIChartCard").hide();
+          }
+        },
         error: displayTop10IMSIsError
     })
 }
-
-
-
 
 
 $(document).ready(function(){		

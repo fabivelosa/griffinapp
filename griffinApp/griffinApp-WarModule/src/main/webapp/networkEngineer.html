@@ -263,47 +263,6 @@
                             </div>
                         </div>
                     </div>                    
-                    <div class="row" id="networkEngQueryFour">
-                        <div class="col mb-4">
-                            <div class="card mt-4">
-                                <div class="card-header">
-                                  Top 10 IMSIs with Call Failures
-                                </div>
-                                <div class="card-body" id="imsiTopSummaryCard">
-                                    <form id = "imsiTopSummaryForm">
-                                          <div class = "row">
-                                          	<div class = "col">
-                                                  <label for="startDateOnIMSITopSummaryForm" class="form-label fw-bold small">From</label>
-                                                  <input required type="datetime-local" class="form-control" id="startDateOnIMSITopSummaryForm" placeholder="name@example.com">
-                                              </div>		
-                                              <div class = "col">
-                                                  <label for="endDateOnIMSITopSummaryForm" class="form-label fw-bold small">To</label>
-                                                  <input required type="datetime-local" class="form-control" id="endDateOnIMSITopSummaryForm" placeholder="name@example.com">
-                                              </div>
-                                              <div class = "col">
-                                                  <label for="exampleFormControlInput1" class="form-label fw-bold small">Query</label>
-                                                  <input required type="submit" class="form-control btn btn-primary" value="Submit"/>
-                                              </div>
-                                          </div>
-                                      </form>
-                                    <div class = "row mt-4 p-4" id = "imsiSummaryFormResult">
-                                    	<div class = "col">
-	                                        <table id="imsiTopSummaryTable" class="table table-hover table-bordered table-responsive">
-	                                            <thead>
-	                                                <tr>
-	                                                  <th>IMSI</th>
-	                                                  <th>Call Failures Count</th>
-	                                                </tr>
-	                                              </thead>
-	                                              <tbody>
-	                                              </tbody>
-	                                        </table>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
 					<div class="row" id="networkEngQueryThree">
                         <div class="col">
                             <div class="card mt-4">
@@ -353,6 +312,54 @@
                                             <div class="alert alert-danger col-lg-12" role="alert" id="errorAlertOnTopCombinationsForm">
                                                 Error on Request
                                             </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" id="networkEngQueryFour">
+                        <div class="col mb-4">
+                            <div class="card mt-4">
+                                <div class="card-header">
+                                  Top 10 IMSIs with Call Failures
+                                </div>
+                                <div class="card-body" id="imsiTopSummaryCard">
+                                    <form id = "imsiTopSummaryForm">
+                                          <div class = "row">
+                                          	<div class = "col">
+                                                  <label for="startDateOnIMSITopSummaryForm" class="form-label fw-bold small">From</label>
+                                                  <input required type="datetime-local" class="form-control" id="startDateOnIMSITopSummaryForm" placeholder="name@example.com">
+                                              </div>		
+                                              <div class = "col">
+                                                  <label for="endDateOnIMSITopSummaryForm" class="form-label fw-bold small">To</label>
+                                                  <input required type="datetime-local" class="form-control" id="endDateOnIMSITopSummaryForm" placeholder="name@example.com">
+                                              </div>
+                                              <div class = "col">
+                                                  <label for="exampleFormControlInput1" class="form-label fw-bold small">Query</label>
+                                                  <input required type="submit" class="form-control btn btn-primary" value="Submit"/>
+                                              </div>
+                                          </div>
+                                      </form>
+                                    <div class = "row mt-4 p-4" id = "imsiSummaryFormResult">
+                                    	<div class = "col">
+                                            <div class="card mb-4" id="top10IMSIChartCard">
+                                                <div class="card-header">Top 10 IMSIS with Call Failures</div>
+                                                <div class="card-body">
+                                                    <div class="chart-bar"><canvas id="top10IMSIChart" width="100%" height="100"></canvas></div>
+                                                </div>
+                                                <div class="card-footer small text-muted" id="top10IMSIDate">NaN</div>
+                                            </div>
+	                                        <table id="imsiTopSummaryTable" class="table table-hover table-bordered table-responsive">
+	                                            <thead>
+	                                                <tr>
+	                                                  <th>IMSI</th>
+	                                                  <th>Call Failures Count</th>
+	                                                </tr>
+	                                              </thead>
+	                                              <tbody>
+	                                              </tbody>
+	                                        </table>
                                         </div>
                                     </div>
                                 </div>
