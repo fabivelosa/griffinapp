@@ -26,7 +26,7 @@
 <!-- Custom styles for this template-->
 <link href="css/supportEng.css" rel="stylesheet">
 <link href="css/sb-admin-2.min.css" rel="stylesheet">
-
+<link href="js/jquery-ui-1.12.1/jquery-ui.css" rel="stylesheet">
 
 </head>
 
@@ -51,9 +51,9 @@
 			<hr class="sidebar-divider my-0">
 
 			<!-- Nav Item - Dashboard -->
-			<li class="nav-item active"><a class="nav-link"
+			<!-- <li class="nav-item active"><a class="nav-link"
 				href="index.html"> <i class="fas fa-fw fa-tachometer-alt"></i> <span>Dashboard</span></a>
-			</li>
+			</li> -->
 
 			<!-- Divider -->
 			<hr class="sidebar-divider">
@@ -63,14 +63,28 @@
 
 
 			<!-- Nav Item - Tables -->
-			<li class="nav-item"><a class="nav-link" href="#"> <i
-					class="fas fa-fw fa-table"></i> <span>Support Engineer</span></a></li>
+			<!-- <li class="nav-item"><a class="nav-link" href="#"> <i
+					class="fas fa-fw fa-table"></i> <span>Support Engineer</span></a></li> -->
 
 			<!-- Nav Item - Tables -->
-			<li class="nav-item"><a class="nav-link" href="#"> <i
+			<li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
+                    aria-expanded="true" aria-controls="collapseTwo">
+                    <i class="fas fa-fw fa-cog"></i>
+                    <span>Queries</span>
+                </a>
+                <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <h6 class="collapse-header">Network Engineer Queries:</h6>
+                        <a class="collapse-item" href="#" id="supFirstQuery">Count Call Failures</a>
+                        <a class="collapse-item" href="#" id="supSecondQuery">Unique Call Failures</a>
+                    </div>
+                </div>
+            </li>
+			<li class="nav-item"><a class="nav-link" href="customerSupport.html"> <i
 					class="fas fa-fw fa-table"></i> <span>Customer
 						Representative</span></a></li>
-
+			
 			<!-- Divider -->
 			<hr class="sidebar-divider d-none d-md-block">
 
@@ -132,8 +146,7 @@
 							class="nav-link dropdown-toggle" href="#" id="userDropdown"
 							role="button" data-toggle="dropdown" aria-haspopup="true"
 							aria-expanded="false"> <span
-								class="mr-2 d-none d-lg-inline text-gray-600 small">Support Engineer</span> <img class="img-profile rounded-circle"
-								src="img/undraw_profile.svg">
+								class="mr-2 d-none d-lg-inline text-gray-600 small">Support Engineer</span> 
 						</a> <!-- Dropdown - User Information -->
 							<div
 								class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
@@ -157,13 +170,13 @@
 					<!-- Page Heading -->
 					<div
 						class="d-sm-flex align-items-center justify-content-between mb-4">
-						<h1 class="h3 mb-0 text-gray-800">Dashboard</h1>
+						<h1 class="h3 mb-0 text-gray-800">Support Engineer Dashboard</h1>
 					</div>
 					<!-- Content Row -->
-					<div class="row">
-						<div class="col-lg-6 mb-4">
+					<div class="row" id="supportEngQueryOne">
+						<div class="col">
 							<div class="card mt-4">
-								<div class="card-header">Call Count Failure Summary</div>
+								<div class="card-header">Count Call Failures for given Phone Model within time period</div>
 								<div class="card-body" id="imsiSummaryCard">
 									<div class="row">
 										<form id="imsiCallFaluireForm">
@@ -219,9 +232,14 @@
 								</div>
 							</div>
 						</div>
-						<div class="col-lg-6 mb-4">
+						
+					</div>
+
+					<!-- Content Row -->
+					<div class="row" id="supportEngQueryTwo">
+						<div class="col">
 							<div class="card mt-4">
-								<div class="card-header">List of Unique Call Failures</div>
+								<div class="card-header">List of Unique Call Failures within time period</div>
 
 								<div class="card-body" id="callFailures">
 									<div class="row">
@@ -266,9 +284,6 @@
 							</div>
 						</div>
 					</div>
-
-					<!-- Content Row -->
-					<div class="row"></div>
 
 				</div>
 				<!-- /.container-fluid -->
@@ -347,7 +362,7 @@
 
 	<!-- Network Engineer Speciifc JS-->
 	<script src="js/supportEng.js"></script>
-
+	<script src="js/jquery-ui-1.12.1/jquery-ui.js"></script>
 </body>
 
 </html>
