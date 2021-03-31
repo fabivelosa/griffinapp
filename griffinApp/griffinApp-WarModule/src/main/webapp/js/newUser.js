@@ -10,6 +10,10 @@ var newUser=function () {
 };
 
 var pass = document.getElementById('userPassword');
+var letter = document.getElementById("letter");
+var capital = document.getElementById("capital");
+var number = document.getElementById("number");
+var length = document.getElementById("length");
 
 pass.onfocus = function() {
   	document.getElementById("message").style.display = "block";
