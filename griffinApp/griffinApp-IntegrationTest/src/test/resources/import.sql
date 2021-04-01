@@ -5,7 +5,7 @@ INSERT INTO ue (tac, model, vendorName, accessCapability, ueType, deviceOS, inpu
 INSERT INTO event (cellId,dateTime,duration,hier321Id,hier32Id,hier3Id,imsi,neVersion,causeCode,eventCauseId,failureClass,countryCode,operatorCode,tac) VALUES(4,'2021-03-18 10:00:00',1000,'4809532081614990000','8226896360947470000','1150444940909480000','344930000000011','11B',1,4098,1,344,930,21060800);
 INSERT INTO event (cellId,dateTime,duration,hier321Id,hier32Id,hier3Id,imsi,neVersion,causeCode,eventCauseId,failureClass,countryCode,operatorCode,tac) VALUES(4,'2021-03-18 10:30:00',1000,'4809532081614990000','8226896360947470000','1150444940909480000','344930000000011','11B',1,4098,1,344,930,21060800);
 INSERT INTO event (cellId,dateTime,duration,hier321Id,hier32Id,hier3Id,imsi,neVersion,causeCode,eventCauseId,failureClass,countryCode,operatorCode,tac) VALUES(4,'2021-03-18 11:00:00',1000,'4809532081614990000','8226896360947470000','1150444940909480000','344930006766767','11B',1,4098,1,344,930,21060800);
-INSERT INTO users (userId, userName, userPassword, userType) VALUES('ne8','alex','1234', 'NETWORKMNG');
-INSERT INTO users (userId, userName, userPassword, userType) VALUES('sa9','lisa','1234', 'SYSADMIN');
-INSERT INTO users (userId, userName, userPassword, userType) VALUES('se10','bonnie','1234', 'SUPPORTENG');
-INSERT INTO users (userId, userName, userPassword, userType) VALUES('cs11','joe','1234', 'CUSTSERVREP');
+INSERT INTO users (userId, userName, userPassword, userType) VALUES('ne8','alex','MTIzNA==', 'NETWORKMNG');
+INSERT INTO users (userId, userName, userPassword, userType) VALUES('sa9','lisa','MTIzNA==', 'SYSADMIN');
+INSERT INTO users (userId, userName, userPassword, userType) VALUES('se10','bonnie','MTIzNA==', 'SUPPORTENG');
+INSERT INTO users (userId, userName, userPassword, userType) VALUES('cs11','joe','MTIzNA==', 'CUSTSERVREP');
