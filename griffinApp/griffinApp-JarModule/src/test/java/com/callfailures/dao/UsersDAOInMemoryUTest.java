@@ -40,7 +40,7 @@ class UsersDAOInMemoryUTest {
 			usersDAO.addUser(user);
 			return null;
 		});
-		
+
 		final List<User> registeredUsers = usersDAO.getRegisteredUsers();
 		final User registeredUser = registeredUsers.iterator().next();
 		assertEquals(1, registeredUsers.size());
@@ -58,9 +58,9 @@ class UsersDAOInMemoryUTest {
 			usersDAO.addUser(user);
 			return null;
 		});
-		
+
 		final User registeredUser = usersDAO.getUserByName("wilmir");
-		assertCorrectUser(registeredUser);		
+		assertCorrectUser(registeredUser);
 	}
 
 	@Test
@@ -74,9 +74,9 @@ class UsersDAOInMemoryUTest {
 			usersDAO.addUser(user);
 			return null;
 		});
-		
+
 		final User registeredUser = usersDAO.getUserByUserId("A100");
-		assertCorrectUser(registeredUser);	
+		assertCorrectUser(registeredUser);
 	}
 
 	@Test
@@ -98,16 +98,16 @@ class UsersDAOInMemoryUTest {
 			usersDAO.addUser(user2);
 			return null;
 		});
-		
+
 		final List<User> users = usersDAO.getRegisteredUsers();
 		assertEquals(2, users.size());
 	}
-	
+
 	private void assertCorrectUser(final User registeredUser) {
 		assertEquals("A100", registeredUser.getUserId());
 		assertEquals("wilmir", registeredUser.getUserName());
 		assertEquals("password", registeredUser.getUserPassword());
 		assertEquals("network engineer", registeredUser.getUserType());
 	}
-	
+
 }

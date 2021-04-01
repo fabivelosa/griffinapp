@@ -1,10 +1,11 @@
 package com.callfailures.entity;
 
+import java.util.Base64;
+
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
-
 
 @Entity(name = "users")
 @XmlRootElement
@@ -42,6 +43,19 @@ public class User {
 	public void setUserType(final String userType) {
 		this.userType = userType;
 	}
+
+	public static String passDecrypt(final String extract) {
+		final byte[] sDecode = Base64.getDecoder().decode(extract);
+		final String result = new String(sDecode);
+		return result;
+	}
+
+	public static String passEncrypt(final String entry) {
+		final byte[] sBytes = entry.getBytes();
+		final String encoded = Base64.getEncoder().encodeToString(sBytes);
+		return encoded;
+	}
+
 
 	public String getUserPassword() {
 		return userPassword;
