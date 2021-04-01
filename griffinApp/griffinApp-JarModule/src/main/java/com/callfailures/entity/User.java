@@ -1,5 +1,6 @@
 package com.callfailures.entity;
 
+import java.io.UnsupportedEncodingException;
 import java.util.Base64;
 
 import javax.persistence.Entity;
@@ -44,14 +45,29 @@ public class User {
 	}
 
 	public static String passDecrypt(final String extract) {
-		final byte[] sDecode = Base64.getDecoder().decode(extract);
-		final String result = new String(sDecode);
+		byte[] sDecode = null;
+		String result = null;
+
+		try {
+			sDecode = Base64.getDecoder().decode(extract.getBytes("UTF-8"));
+			result = new String(sDecode, "UTF-8");
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
+	
 		return result;
 	}
 
 	public static String passEncrypt(final String entry) {
-		final byte[] sBytes = entry.getBytes();
-		final String encoded = Base64.getEncoder().encodeToString(sBytes);
+		byte[] sBytes;
+		String encoded = null;
+		try {
+			sBytes = entry.getBytes("UTF-8");
+			encoded = Base64.getEncoder().encodeToString(sBytes);
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
+
 		return encoded;
 	}
 
