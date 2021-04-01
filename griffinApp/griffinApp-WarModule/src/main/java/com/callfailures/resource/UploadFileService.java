@@ -162,7 +162,7 @@ public class UploadFileService {
 
 	private ParsingResponse<Events> processEvents(final Upload currentUpload) {
 
-		 Workbook workbook = null;
+		Workbook workbook = null;
 
 		try {
 			workbook = new XSSFWorkbook(sheet);
@@ -194,8 +194,8 @@ public class UploadFileService {
 
 		final Thread t2 = new Thread() {
 			public void run() {
-				System.out.println("Init :" + Thread.currentThread().getName() + " from id: " + slice + " to: " + slice2
-						+ " at " + System.currentTimeMillis());
+				System.out.println("Init :" + Thread.currentThread().getName() + " from id: " + slice + " to: "
+						+ slice2 + " at " + System.currentTimeMillis());
 				eventsList = eventService.read(eventSheet, slice, slice2, currentUpload);
 				System.out.println("End :" + Thread.currentThread().getName() + " at " + System.currentTimeMillis());
 
@@ -233,8 +233,8 @@ public class UploadFileService {
 		try {
 			t1.join();
 			t2.join();
-			t3.join();
-			t4.join();
+			 t3.join();
+			 t4.join();
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}

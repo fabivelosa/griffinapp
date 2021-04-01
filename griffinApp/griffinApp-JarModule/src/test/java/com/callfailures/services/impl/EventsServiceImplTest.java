@@ -22,6 +22,9 @@ import java.util.UUID;
 import javax.validation.Validation;
 import javax.validation.Validator;
 
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -101,7 +104,7 @@ public class EventsServiceImplTest {
 	@Test
 	public void findUniqueEventCauseCountByPhoneModel() {
 		final PhoneFailures phoneFailures = new PhoneFailures(userEquipment, eventCause, 10);
-	    final List<PhoneFailures> testList = new ArrayList<>();
+		final List<PhoneFailures> testList = new ArrayList<>();
 		testList.add(phoneFailures);
 
 		when(eventDAO.findUniqueEventCauseCountByPhoneModel(1)).thenReturn(testList);
@@ -191,8 +194,23 @@ public class EventsServiceImplTest {
 		when(uploadDAO.getUploadByRef(uuid)).thenReturn(upload);
 		file = new File(absolutePath + "/importData/validData.xlsx");
 		upload.setUploadStatus(10);
+		Workbook workbook = null;
 
-		final ParsingResponse<Events> parsingResults = eventService.read(file, upload);
+		try {
+			workbook = new XSSFWorkbook(file);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		final Sheet eventSheet = workbook.getSheetAt(0);
+
+		int rowTotal = eventSheet.getLastRowNum();
+		if ((rowTotal > 0) || eventSheet.getPhysicalNumberOfRows() > 0) {
+			rowTotal++;
+		}
+
+		final ParsingResponse<Events> parsingResults = eventService.read(eventSheet, 1, rowTotal, upload);
 		assertEquals(4, parsingResults.getValidObjects().size());
 		assertEquals(0, parsingResults.getInvalidRows().size());
 	}
@@ -338,7 +356,23 @@ public class EventsServiceImplTest {
 	}
 
 	private void assertInvalidRowMessage(final String invalidRowMessage) {
-		final ParsingResponse<Events> parsingResults = eventService.read(file, upload);
+
+		Workbook workbook = null;
+
+		try {
+			workbook = new XSSFWorkbook(file);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		final Sheet eventSheet = workbook.getSheetAt(0);
+
+		int rowTotal = eventSheet.getLastRowNum();
+		if ((rowTotal > 0) || eventSheet.getPhysicalNumberOfRows() > 0) {
+			rowTotal++;
+		}
+		final ParsingResponse<Events> parsingResults = eventService.read(eventSheet, 1, rowTotal, upload);		
 		assertEquals(0, parsingResults.getValidObjects().size());
 		assertEquals(1, parsingResults.getInvalidRows().size());
 		final Iterator<InvalidRow> eventsIterator = parsingResults.getInvalidRows().iterator();
@@ -356,7 +390,7 @@ public class EventsServiceImplTest {
 		verify(eventDAO, times(1)).findIMSIS();
 
 	}
-	
+
 	@Test
 	void testForTopIMSIs() {
 		final IMSICount imsiCount = new IMSICount();
@@ -366,11 +400,10 @@ public class EventsServiceImplTest {
 		assertEquals(imsiCounts, eventService.findIMSIS(10, VALID_START_TIME, VALID_END_TIME));
 		verify(eventDAO, times(1)).findIMSIS(10, VALID_START_TIME, VALID_END_TIME);
 	}
-	
+
 	@Test
 	public void testInvalidTimeForTopIMSIs() {
-		assertThrows(InvalidDateException.class,
-				() -> eventService.findIMSIS(10, VALID_END_TIME, VALID_START_TIME));
+		assertThrows(InvalidDateException.class, () -> eventService.findIMSIS(10, VALID_END_TIME, VALID_START_TIME));
 	}
 
 	@Test
@@ -380,8 +413,7 @@ public class EventsServiceImplTest {
 		combinations.add(combination);
 		when(eventDAO.findTopTenCombinations(VALID_START_TIME, VALID_END_TIME)).thenReturn(combinations);
 		assertEquals(1, eventService.findTopTenEvents(VALID_START_TIME, VALID_END_TIME).size());
-		verify(eventDAO,times(1)).findTopTenCombinations(VALID_START_TIME, VALID_END_TIME);
+		verify(eventDAO, times(1)).findTopTenCombinations(VALID_START_TIME, VALID_END_TIME);
 	}
-	
 
 }

@@ -155,6 +155,8 @@ public class EventServiceImpl implements EventService {
 				parsingResult.addInvalidRow(new InvalidRow(rowNumber, e.getMessage()));
 			}
 		}
+		//eventDAO.createBulk(eventsToProcess);
+		
 	}
 
 	@TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
