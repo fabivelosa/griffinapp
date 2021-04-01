@@ -65,8 +65,105 @@ const displayIMSISummary = function(imsiSummary, textStatus, jqXHR){
     $("#imsiSummaryTotalDuration").text(imsiSummary.totalDurationMs/1000 + " s");
 }
 
+const displayIMSISummaryChart = function(imsiSummary){
+  $("#imsiSummaryFormResultChartCard").show();
+  var ctx = $("#imsiSummaryFormResultChart")[0];
+  const imsiSummaryChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: [imsiSummary.imsi],
+      datasets: [{
+        label: "Total Count",
+        backgroundColor: "#4e73df",
+        hoverBackgroundColor: "#2e59d9",
+        borderColor: "#4e73df",
+        barPercentage:0.5,
+        categoryPercentage:1.0,
+        data: [imsiSummary.callFailuresCount],
+      },
+      {
+        label: "Total Duration",
+        backgroundColor: "#4e73df",
+        hoverBackgroundColor: "#2e59d9",
+        borderColor: "#4e73df",
+        barPercentage:0.5,
+        categoryPercentage:1.0,
+        data: [imsiSummary.totalDurationMs/1000],
+        type:"line"
+      }
+      ],
+    },
+    options: {
+      maintainAspectRatio: false,
+      layout: {
+        padding: {
+          left: 10,
+          right: 25,
+          top: 25,
+          bottom: 0
+        }
+      },
+      scales: {
+        xAxes: [{
+          type:"category",
+          gridLines: {
+            display: false,
+            drawBorder: false
+          },
+          ticks: {
+            maxTicksLimit: 1
+          }
+        }],
+        yAxes: [{
+          ticks: {
+            min: 0,
+            max: imsiSummary.callFailuresCount,
+            stepSize:1,
+            padding: 10
+          },
+          scaleLabel: {
+            display: true,
+            labelString: 'Call Failures Count'
+          },
+          gridLines: {
+            color: "rgb(234, 236, 244)",
+            zeroLineColor: "rgb(234, 236, 244)",
+            drawBorder: false,
+            borderDash: [2],
+            zeroLineBorderDash: [2]
+          }
+        }],
+      },
+      legend: {
+        display: false
+      },
+      tooltips: {
+        titleMarginBottom: 10,
+        titleFontColor: '#6e707e',
+        titleFontSize: 14,
+        backgroundColor: "rgb(255,255,255)",
+        bodyFontColor: "#858796",
+        borderColor: '#dddfeb',
+        borderWidth: 1,
+        xPadding: 15,
+        yPadding: 15,
+        displayColors: false, 
+        caretPadding: 10,
+        callbacks: {
+          label: function(tooltipItem, chart) {
+            var datasetLabel = chart.datasets[tooltipItem.datasetIndex].label || '';
+            return datasetLabel + ': ' + tooltipItem.yLabel;
+          }
+        }
+      },
+    }
+  });
+  $("#imsiSummaryFormResultDate").text(`Data from ${$('#startDateOnIMSISummaryForm').val()} to ${$('#endDateOnIMSISummaryForm').val()}`);
+}
+
 const displayErrorOnIMSISummary = function(jqXHR, textStatus, errorThrown){
     $("#imsiSummaryTable").hide();
+    $("#imsiSummaryFormResultChartCard").hide();
     $("#errorAlertOnSummaryForm").show();
     $("#errorAlertOnSummaryForm").text(jqXHR.responseJSON.errorMessage);
 }
@@ -77,7 +174,14 @@ const queryIMSISUmmary = function(imsi, from, to){
         dataType: "json",
         url: `${rootURL}/events/query?imsi=${imsi}&from=${from}&to=${to}&summary=true`,
         beforeSend: setAuthHeader,
-        success: displayIMSISummary,
+        success: function(imsiSummary){
+          displayIMSISummary(imsiSummary);
+          if(imsiSummary.callFailuresCount > 0){
+            displayIMSISummaryChart(imsiSummary);
+          }else{
+            $("#imsiSummaryFormResultChartCard").hide();
+          }
+        },
         error: displayErrorOnIMSISummary
     })
 }
@@ -186,6 +290,52 @@ const displayTopTenCombinationsChart = function(combinations){
     $("#top10ComboChartDate").text(`Data as of ${new Date()}`);
 }
 
+const displayTopCombinationsError = function(jqXHR, textStatus, errorThrown){
+    $("#combinationsTable").hide();
+    $("#combinationsTable_wrapper").hide();
+    $("#top10ComboChartCard").hide();
+    $("#errorAlertOnTopCombinationsForm").show();
+    $("#errorAlertOnSummaryForm").text(jqXHR.responseJSON.errorMessage);
+}
+
+const queryTopCombinations = function(from, to){	
+	$.ajax({
+        type: "GET",
+        dataType: "json",
+        url: `${rootURL}/Combinations/query?from=${from}&to=${to}`,
+        beforeSend: setAuthHeader,
+        success: function(combinations){
+            displayTopTenCombinations(combinations);
+            if(combinations.length > 0){
+              displayTopTenCombinationsChart(combinations);
+            }else{
+              $("#top10ComboChartCard").hide();
+            }
+        },
+        error: displayTopCombinationsError
+    })
+	
+}
+
+const displayTop10IMSISummary = function(topTenIMSIFailures){
+	$("#imsiTopSummaryTable").show();
+	const table = $('#imsiTopSummaryTable').DataTable();
+    table.clear();
+    $(topTenIMSIFailures).each(function(index, topTenIMSIFailure){
+        console.log(topTenIMSIFailure);
+        table.row.add([topTenIMSIFailure.imsi, 
+            topTenIMSIFailure.callFailuresCount
+        ]);
+    });
+    table.draw();
+}
+
+const displayTop10IMSIsError = function(jqXHR, textStatus, errorThrown){
+  $("#imsiTopSummaryTable").hide();
+  $("#top10IMSIChartCard").hide();
+  $("#errorAlertOnTopCombinationsForm").show();
+  $("#errorAlertOnSummaryForm").text(jqXHR.responseJSON.errorMessage);
+}
 
 const displayTopTenIMSIsChart = function(imsis){
   $("#top10IMSIChartCard").show();
@@ -200,7 +350,7 @@ const displayTopTenIMSIsChart = function(imsis){
         hoverBackgroundColor: "#2e59d9",
         borderColor: "#4e73df",
         barPercentage:0.5,
-        categoryPercentahe:1.0,
+        categoryPercentage:1.0,
         data: imsis.map(imsiData => imsiData.callFailuresCount),
       }],
     },
@@ -272,71 +422,6 @@ const displayTopTenIMSIsChart = function(imsis){
   $("#top10IMSIDate").text(`Data as of ${new Date()}`);
 }
 
-
-const displayTopCombinationsError = function(jqXHR, textStatus, errorThrown){
-    $("#combinationsTable").hide();
-    $("#combinationsTable_wrapper").hide();
-    $("#top10ComboChartCard").hide();
-    $("#errorAlertOnTopCombinationsForm").show();
-    $("#errorAlertOnSummaryForm").text(jqXHR.responseJSON.errorMessage);
-}
-
-const displayTop10IMSIsError = function(jqXHR, textStatus, errorThrown){
-    $("#imsiTopSummaryTable").hide();
-    $("#top10IMSIChartCard").hide();
-    $("#errorAlertOnTopCombinationsForm").show();
-    $("#errorAlertOnSummaryForm").text(jqXHR.responseJSON.errorMessage);
-}
-
-const queryTopCombinations = function(from, to){	
-	$.ajax({
-        type: "GET",
-        dataType: "json",
-        url: `${rootURL}/Combinations/query?from=${from}&to=${to}`,
-        beforeSend: setAuthHeader,
-        success: function(combinations){
-            displayTopTenCombinations(combinations);
-            if(combinations.length > 0){
-              displayTopTenCombinationsChart(combinations);
-            }else{
-              $("#top10ComboChartCard").hide();
-            }
-        },
-        error: displayTopCombinationsError
-    })
-	
-}
-
-const autoCompleteIMSI = function(){
-    $.ajax({
-        type: "GET",
-        dataType: "json",
-        url: `${rootURL}/IMSIs/query/all`,
-        beforeSend: setAuthHeader,
-        success: function(data){
-            var list = [];
-            for(var i=0; i<data.length; i++){
-                list.push(data[i].imsi)
-            }
-            $("#imsiOnIMSISummaryForm").autocomplete({source:list});
-        }
-    })
-}
-
-const displayTop10IMSISummary = function(topTenIMSIFailures){
-	$("#imsiTopSummaryTable").show();
-	const table = $('#imsiTopSummaryTable').DataTable();
-    table.clear();
-    $(topTenIMSIFailures).each(function(index, topTenIMSIFailure){
-        console.log(topTenIMSIFailure);
-        table.row.add([topTenIMSIFailure.imsi, 
-            topTenIMSIFailure.callFailuresCount
-        ]);
-    });
-    table.draw();
-}
-
-
 const queryTop10IMSISummary = function(from, to){
     $.ajax({
         type: "GET",
@@ -355,6 +440,21 @@ const queryTop10IMSISummary = function(from, to){
     })
 }
 
+const autoCompleteIMSI = function(){
+  $.ajax({
+      type: "GET",
+      dataType: "json",
+      url: `${rootURL}/IMSIs/query/all`,
+      beforeSend: setAuthHeader,
+      success: function(data){
+          var list = [];
+          for(var i=0; i<data.length; i++){
+              list.push(data[i].imsi)
+          }
+          $("#imsiOnIMSISummaryForm").autocomplete({source:list});
+      }
+  })
+}
 
 $(document).ready(function(){		
     setUserQuipmentDropdownOptions();
@@ -392,20 +492,21 @@ $(document).ready(function(){
     $("#netFirstQuery").click(function(){
         $("#networkEngQueryOne").show();
         $("#networkEngQueryTwo").hide();
-	    $("#networkEngQueryThree").hide();
+	      $("#networkEngQueryThree").hide();
         $("#networkEngQueryFour").hide();
     });
+
     $("#netSecondQuery").click(function(){
         $("#networkEngQueryOne").hide();
         $("#networkEngQueryTwo").show();
-	    $("#networkEngQueryThree").hide();
+	      $("#networkEngQueryThree").hide();
         $("#networkEngQueryFour").hide();
 
     });
     $("#netThirdQuery").click(function(){
         $("#networkEngQueryOne").hide();
         $("#networkEngQueryTwo").hide();
-	    $("#networkEngQueryThree").show();
+	      $("#networkEngQueryThree").show();
         $("#networkEngQueryFour").hide();
     });
 
