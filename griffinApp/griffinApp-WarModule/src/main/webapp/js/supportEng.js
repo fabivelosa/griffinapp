@@ -142,5 +142,10 @@ $(document).ready(function(){
         $("#supportEngQueryOne").hide();
         $("#supportEngQueryTwo").hide();
 		$("#supportEngQueryThree").show();
+		$("#imsiFailuresTable").hide();
+		$("#errorAlertOnFailuresListForm").hide();
     });
+
+	$("#supportEngQueryThree").hide();
+	
 });
