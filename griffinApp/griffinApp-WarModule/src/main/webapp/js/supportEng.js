@@ -73,6 +73,38 @@ const autoCompleteIMSI = function(){
     })
 }
 
+//Display
+const displayIMSIAffectedByFailureClass = function(IMSIs){
+    $("#imsiFailuresTable").show();
+	$("#errorAlertOnFailuresListForm").hide();
+	const table = $('#imsiFailuresTable').DataTable();
+    table.clear();
+    $(IMSIs).each(function(index, imsi){
+      table.row.add([imsi.imsi
+        ]);
+    });
+    table.draw();
+    
+}
+
+const displayErrorOnIFailuresList = function(jqXHR, textStatus, errorThrown){
+    $("#imsiFailuresTable").hide();
+    $("#errorAlertOnFailuresListForm").show();
+    $("#errorAlertOnFailuresListForm").text(jqXHR.responseJSON.errorMessage);
+}
+
+//Query
+const queryCallIMSIsWithFailure = function(failureClass){
+    $.ajax({
+        type: "GET",
+        dataType: "json",
+        url: `${rootURL}/IMSIs/query/failureClass?=${failureClass}`,
+        beforeSend: setAuthHeader,
+        success: displayIMSIAffectedByFailureClass,
+        error: displayErrorOnIFailuresList
+    })
+}
+
 $(document).ready(function(){	
     autoCompleteIMSI();	
     $('#imsiCallFaluireForm').submit(function(event){
@@ -90,12 +122,25 @@ $(document).ready(function(){
         queryCallFailures(from, to);
     });
 
+  $("#imsiFailuresForm").submit(function(event){
+        event.preventDefault();
+        const failureClass = $('#failureClassValue').val();
+        queryCallIMSIsWithFailure(failureClass);
+    });
+
     $("#supFirstQuery").click(function(){
         $("#supportEngQueryOne").show();
         $("#supportEngQueryTwo").hide();
+		$("#supportEngQueryThree").hide();
     });
     $("#supSecondQuery").click(function(){
         $("#supportEngQueryOne").hide();
         $("#supportEngQueryTwo").show();
+		$("#supportEngQueryThree").hide();
+    });
+	 $("#supThirdQuery").click(function(){
+        $("#supportEngQueryOne").hide();
+        $("#supportEngQueryTwo").hide();
+		$("#supportEngQueryThree").show();
     });
 });

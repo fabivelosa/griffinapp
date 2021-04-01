@@ -100,8 +100,9 @@ public class IMSIByDate {
 		}		
 	}
 	
+	//http://localhost:8080/callfailures/api//IMSIs/query/failureClass?=0
 	@GET
-	@Secured
+	//@Secured
 	@Path("/query/failureClass")
 	@Produces({ MediaType.APPLICATION_JSON })
 	public Response getIMSIsByFailure(@QueryParam("failureClass")final int failureClass) {
