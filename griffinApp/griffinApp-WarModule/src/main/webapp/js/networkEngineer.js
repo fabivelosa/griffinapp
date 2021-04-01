@@ -75,7 +75,7 @@ const displayIMSISummaryChart = function(imsiSummary){
       datasets: [{
         label: "Total Count",
         backgroundColor: "#4e73df",
-        hoverBackgroundColor: "#2e59d9",
+        hoverBackgroundColor: "#4e73df",
         borderColor: "#4e73df",
         barPercentage:0.5,
         categoryPercentage:1.0,
@@ -84,9 +84,9 @@ const displayIMSISummaryChart = function(imsiSummary){
       },
       {
         label: "Total Duration (seconds) ",
-        backgroundColor: "#4e73df",
+        backgroundColor: "#FFA500",
         hoverBackgroundColor: "#2e59d9",
-        borderColor: "#4e73df",
+        borderColor: "#FFA500",
         data: [imsiSummary.totalDurationMs/1000],
         type:"line"
       }
@@ -133,7 +133,8 @@ const displayIMSISummaryChart = function(imsiSummary){
         }],
       },
       legend: {
-        display: false
+        display: true,
+        position:'bottom'
       },
       tooltips: {
         titleMarginBottom: 10,
