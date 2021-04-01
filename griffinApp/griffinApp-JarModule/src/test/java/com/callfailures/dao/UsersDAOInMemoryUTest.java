@@ -12,7 +12,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import com.callfailures.entity.User;
-import com.callfailures.entity.UserEquipment;
 import com.callfailures.utils.test.DBCommandTransactionalExecutor;
 
 class UsersDAOInMemoryUTest {
@@ -30,7 +29,6 @@ class UsersDAOInMemoryUTest {
 
 	}
 
-	// one
 	@Test
 	void testAddUser() {
 		dBCommandTransactionalExecutor.executeCommand(() -> {
@@ -42,14 +40,13 @@ class UsersDAOInMemoryUTest {
 			usersDAO.addUser(user);
 			return null;
 		});
-		
+
 		final List<User> registeredUsers = usersDAO.getRegisteredUsers();
 		final User registeredUser = registeredUsers.iterator().next();
 		assertEquals(1, registeredUsers.size());
 		assertCorrectUser(registeredUser);
 	}
 
-	// two
 	@Test
 	void testGetUserByName() {
 		dBCommandTransactionalExecutor.executeCommand(() -> {
@@ -61,12 +58,11 @@ class UsersDAOInMemoryUTest {
 			usersDAO.addUser(user);
 			return null;
 		});
-		
+
 		final User registeredUser = usersDAO.getUserByName("wilmir");
-		assertCorrectUser(registeredUser);		
+		assertCorrectUser(registeredUser);
 	}
 
-	// three
 	@Test
 	void testGetUserByUserId() {
 		dBCommandTransactionalExecutor.executeCommand(() -> {
@@ -78,12 +74,11 @@ class UsersDAOInMemoryUTest {
 			usersDAO.addUser(user);
 			return null;
 		});
-		
+
 		final User registeredUser = usersDAO.getUserByUserId("A100");
-		assertCorrectUser(registeredUser);	
+		assertCorrectUser(registeredUser);
 	}
 
-	// four
 	@Test
 	void testGetRegisteredUsers() {
 		dBCommandTransactionalExecutor.executeCommand(() -> {
@@ -103,37 +98,16 @@ class UsersDAOInMemoryUTest {
 			usersDAO.addUser(user2);
 			return null;
 		});
-		
+
 		final List<User> users = usersDAO.getRegisteredUsers();
 		assertEquals(2, users.size());
 	}
 
-	@Test
-	void testUpdateUser() {
-		dBCommandTransactionalExecutor.executeCommand(() -> {
-
-			final User user = new User();
-			user.setUserId("A100");
-			user.setUserName("wilmir");
-			user.setUserPassword("password");
-			user.setUserType("network engineer");
-			usersDAO.addUser(user);
-			user.setUserName("My Boo");
-			usersDAO.updateUser(user);
-			assertEquals("A100", user.getUserId());
-			assertEquals("My Boo", user.getUserName());
-			assertEquals("password", user.getUserPassword());
-			assertEquals("network engineer", user.getUserType());
-			return user;
-		});
-	}
-	
-	
 	private void assertCorrectUser(final User registeredUser) {
 		assertEquals("A100", registeredUser.getUserId());
 		assertEquals("wilmir", registeredUser.getUserName());
 		assertEquals("password", registeredUser.getUserPassword());
 		assertEquals("network engineer", registeredUser.getUserType());
 	}
-	
+
 }
