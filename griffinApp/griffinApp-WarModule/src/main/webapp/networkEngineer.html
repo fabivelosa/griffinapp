@@ -196,6 +196,13 @@
                                         </form>
                                     </div>
                                     <div class = "row mt-4 p-2" id = "imsiSummaryFormResult">
+                                        <div class="card mb-4" id="imsiSummaryFormResultChartCard">
+                                            <div class="card-header">Top 10 IMSIS with Call Failures</div>
+                                            <div class="card-body">
+                                                <div class="chart-bar"><canvas id="imsiSummaryFormResultChart" width="100%" height="100"></canvas></div>
+                                            </div>
+                                            <div class="card-footer small text-muted" id="imsiSummaryFormResultDate">NaN</div>
+                                        </div>
                                         <table id="imsiSummaryTable" class="table table-hover table-bordered table-responsive">
                                             <thead>
                                                 <tr>
@@ -432,10 +439,6 @@
 
     <!-- Page level plugins -->
     <script src="vendor/chart.js/Chart.min.js"></script>
-
-    <!-- Page level custom scripts -->
-    <script src="js/demo/chart-area-demo.js"></script>
-    <script src="js/demo/chart-pie-demo.js"></script>
 
     <!-- Data tables -->
     <script src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js" crossorigin="anonymous"></script>
