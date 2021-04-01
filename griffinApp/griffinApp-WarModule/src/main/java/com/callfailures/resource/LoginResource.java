@@ -30,7 +30,6 @@ public class LoginResource {
 	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	public Response auth(final User user) {
 		final User authUser = userService.getUserByName(user.getUserName());
-
 		if (authUser != null && User.passDecrypt(authUser.getUserPassword()).equals(user.getUserPassword())) {
 			TokenUtil.issueNewToken(authUser);
 			return Response.status(200).entity(authUser).build();

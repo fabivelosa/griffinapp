@@ -21,10 +21,11 @@ pass.onfocus = function() {
 
 // When the user clicks outside of the password field, hide the message box
 pass.onblur = function() {
-	document.getElementById("message").style.display = "none";
+ 	document.getElementById("message").style.display = "none";
 }
 
-var addUser = function() {
+var addUser = function () {
+	document.getElementById("message").style.display = "none";
 	console.log('addUser');
 	console.log(formToJSON());
 	$.ajax({
@@ -60,8 +61,6 @@ var renderDetails = function(users) {
 	$('#userPassword').val(users.userPassword);
 
 }
-
-
 
 
 pass.onkeyup = function() {
