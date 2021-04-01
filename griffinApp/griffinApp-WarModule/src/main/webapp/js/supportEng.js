@@ -98,7 +98,7 @@ const queryCallIMSIsWithFailure = function(failureClass){
     $.ajax({
         type: "GET",
         dataType: "json",
-        url: `${rootURL}/IMSIs/query/failureClass?=${failureClass}`,
+        url: `${rootURL}/IMSIs/query/failureClass?failureClass=${failureClass}`,
         beforeSend: setAuthHeader,
         success: displayIMSIAffectedByFailureClass,
         error: displayErrorOnIFailuresList
