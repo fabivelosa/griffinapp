@@ -79,10 +79,11 @@ const displayIMSISummaryChart = function(imsiSummary){
         borderColor: "#4e73df",
         barPercentage:0.5,
         categoryPercentage:1.0,
+        maxBarThickness:200,
         data: [imsiSummary.callFailuresCount],
       },
       {
-        label: "Total Duration",
+        label: "Total Duration (seconds) ",
         backgroundColor: "#4e73df",
         hoverBackgroundColor: "#2e59d9",
         borderColor: "#4e73df",
@@ -117,9 +118,8 @@ const displayIMSISummaryChart = function(imsiSummary){
         yAxes: [{
           ticks: {
             min: 0,
-            max: imsiSummary.callFailuresCount,
-            stepSize:1,
-            padding: 10
+            max: Math.ceil((imsiSummary.totalDurationMs/1000)),       
+            padding: 10,
           },
           scaleLabel: {
             display: true,
