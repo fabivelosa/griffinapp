@@ -75,15 +75,6 @@ public class UserResourceIntTest {
 		assertJsonResponseWithFile(responsePost, "newUser.json");
 	}
 	
-	@Test
-	@RunAsClient
-	public void testUpdateUser() {	
-		final Response responsePut = resourceClient.resourcePath(RESOURCE_PATH)
-				.putWithFile(getPathFileRequest(RESOURCE_PATH, "updatedUser.json"));
-		assertEquals(200, responsePut.getStatus());
-		assertJsonResponseWithFile(responsePut, "updatedUser.json");
-	}
-	
 	
 	private void assertJsonResponseWithFile(final Response response, final String fileName) {
 		assertJsonMatchesFileContent(response.readEntity(String.class), getPathFileResponse(RESOURCE_PATH, fileName));
