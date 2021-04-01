@@ -20,7 +20,7 @@
     <link href="https://cdn.datatables.net/1.10.22/css/dataTables.bootstrap4.min.css" rel="stylesheet" crossorigin="anonymous" />
 
     <!-- Custom styles for this template-->
-    <link href="css/sb-admin-2.min.css" rel="stylesheet">
+    <link href="css/sb-admin-2.css" rel="stylesheet">
     <link href="css/networkEngineer.css" rel="stylesheet">
     <link href="js/jquery-ui-1.12.1/jquery-ui.css" rel="stylesheet">
 </head>
@@ -61,7 +61,7 @@
                         <h6 class="collapse-header">Network Engineer Queries:</h6>
                         <a class="collapse-item" href="#" id="netFirstQuery">IMSI Diagnostics Summary</a>
                         <a class="collapse-item" href="#" id="netSecondQuery">User Equipment Failures</a>
-                        <a class="collapse-item" href="#" id="netThirdQuery">Device Combinations</a>
+                        <a class="collapse-item" href="#" id="netThirdQuery">Top 10 Device Combinations</a>
                         <a class="collapse-item" href="#" id="netFourthQuery">Top 10 IMSIs Failures</a>
                     </div>
                 </div>
@@ -195,28 +195,37 @@
                                             </div>
                                         </form>
                                     </div>
-                                    <div class = "row mt-4 p-2" id = "imsiSummaryFormResult">
-                                        <table id="imsiSummaryTable" class="table table-hover table-bordered table-responsive">
-                                            <thead>
-                                                <tr>
-                                                  <th scope="col">IMSI</th>
-                                                  <th scope="col">From</th>
-                                                  <th scope="col">To</th>
-                                                  <th scope="col">Call Failures Count</th>
-                                                  <th scope="col">Duration</th>
-                                                </tr>
-                                              </thead>
-                                              <tbody>
-                                                <tr>
-                                                  <th scope="row" id="imsiSummaryNumber">0</th>
-                                                  <td id="imsiSummaryFromDate">NaN</td>
-                                                  <td id="imsiSummaryToDate">NaN</td>
-                                                  <td id="imsiSummaryCallFailureCount">NaN</td>
-                                                  <td id="imsiSummaryTotalDuration">NaN</td>
-                                                </tr>
-                                              </tbody>
-                                        </table>
-                                        <div class="alert alert-danger col-lg-12" role="alert" id="errorAlertOnSummaryForm">
+                                    <div class = "col mt-4 p-2" id = "imsiSummaryFormResult">
+                                        <div class="row card mb-4" id="imsiSummaryFormResultChartCard">
+                                            <div class="card-header">IMSI Call Failure Count and Duration</div>
+                                            <div class="card-body">
+                                                <div class="chart-bar"><canvas id="imsiSummaryFormResultChart" width="100%" height="100"></canvas></div>
+                                            </div>
+                                            <div class="card-footer small text-muted" id="imsiSummaryFormResultDate">NaN</div>
+                                        </div>
+                                        <div class ="row">
+                                            <table id="imsiSummaryTable" class="table table-hover table-bordered table-responsive">
+                                                <thead>
+                                                    <tr>
+                                                    <th scope="col">IMSI</th>
+                                                    <th scope="col">From</th>
+                                                    <th scope="col">To</th>
+                                                    <th scope="col">Call Failures Count</th>
+                                                    <th scope="col">Duration</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                    <th scope="row" id="imsiSummaryNumber">0</th>
+                                                    <td id="imsiSummaryFromDate">NaN</td>
+                                                    <td id="imsiSummaryToDate">NaN</td>
+                                                    <td id="imsiSummaryCallFailureCount">NaN</td>
+                                                    <td id="imsiSummaryTotalDuration">NaN</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        <div class="row alert alert-danger col-lg-12" role="alert" id="errorAlertOnSummaryForm">
                                             Error on Request
                                         </div>
                                     </div>

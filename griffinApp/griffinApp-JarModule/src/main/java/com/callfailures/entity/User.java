@@ -46,17 +46,15 @@ public class User {
 
 	public static String passDecrypt(final String extract) {
 		byte[] sDecode = null;
+		String result = null;
+
 		try {
 			sDecode = Base64.getDecoder().decode(extract.getBytes("UTF-8"));
-		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
-		}
-		String result = null;
-		try {
 			result = new String(sDecode, "UTF-8");
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 		}
+	
 		return result;
 	}
 

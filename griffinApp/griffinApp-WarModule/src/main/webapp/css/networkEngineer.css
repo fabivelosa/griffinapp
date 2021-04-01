@@ -8,6 +8,7 @@
 #networkEngQueryThree, 
 #networkEngQueryFour,
 #top10ComboChartCard,
-#top10IMSIChartCard{
+#top10IMSIChartCard,
+#imsiSummaryFormResultChartCard{
     display:none;
 }
