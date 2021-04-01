@@ -109,7 +109,7 @@ var formToJSON=function () {
 		'token': ''
 		});
 };
-
+ 
 document.getElementById("successMessage").style.display= "none";
 document.getElementById("alertMissingField").style.display= "none";
 document.getElementById("alertPasswordMatch").style.display= "none";
