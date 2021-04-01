@@ -22,6 +22,8 @@
     <!-- Custom styles for this template-->
     <link href="css/sb-admin-2.css" rel="stylesheet">
     <link href="css/networkEngineer.css" rel="stylesheet">
+    <link href="css/customerSupport.css" rel="stylesheet">
+    <link href="css/supportEng.css" rel="stylesheet">
     <link href="js/jquery-ui-1.12.1/jquery-ui.css" rel="stylesheet">
 </head>
 
@@ -54,7 +56,7 @@
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
                     aria-expanded="true" aria-controls="collapseTwo">
                     <i class="fas fa-fw fa-cog"></i>
-                    <span>Queries</span>
+                    <span>Network Queries</span>
                 </a>
                 <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
@@ -67,20 +69,27 @@
                 </div>
             </li>
             
-            <!-- Nav Item - Tables -->
             <li class="nav-item">
-                <a class="nav-link" href="supportEng.html">
-                    <i class="fas fa-fw fa-table"></i>
-                    <span>Support Engineer</span></a>
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseThree"
+                    aria-expanded="true" aria-controls="collapseTwo">
+                    <i class="fas fa-fw fa-cog"></i>
+                    <span>Support Queries</span>
+                </a>
+                <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <h6 class="collapse-header">Other Support Queries:</h6>
+                        <div id="querySelectors">
+                            <a class="collapse-item" href="#" id="imsiFailuresCountQuerySelector" data-section="imsiFailuresCountQuery">IMSI Failure Summary</a>
+                            <a class="collapse-item" href="#" id="equipmentFailuresQuerySelector" data-section="equipmentFailuresQuery">IMSI Failure Details</a>
+                            <a class="collapse-item" href="#" id="imsiCauseCodesQuerySelector" data-section="imsiCauseCodesQuery">IMSI Cause Codes</a>
+                            <a class="collapse-item" href="#" id="supFirstQuery" data-section="supportEngQueryOne">Count Call Failures</a>
+                            <a class="collapse-item" href="#" id="supSecondQuery" data-section="supportEngQueryTwo">Unique Call Failures</a>                        
+                        </div>
+                    </div>
+                </div>
             </li>
-
-            <!-- Nav Item - Tables -->
-            <li class="nav-item">
-                <a class="nav-link" href="customerSupport.html">
-                    <i class="fas fa-fw fa-table"></i>
-                    <span>Customer Representative</span></a>
-            </li>
-
+            
+        
             <!-- Divider -->
             <hr class="sidebar-divider d-none d-md-block">
 
@@ -174,19 +183,19 @@
                                 </div>
                                 <div class="card-body" id="imsiSummaryCard">
                                     <div class = "col">
-                                        <form id = "imsiSummaryForm" autocomplete="off">
+                                        <form id = "imsiSummaryFormNE" autocomplete="off">
                                             <div class = "row">
                                                 <div class = "col">
-                                                    <label for="imsiOnIMSISummaryForm" class="form-label fw-bold small">IMSI</label>
-                                                    <input required type="text" class="form-control" id="imsiOnIMSISummaryForm" placeholder="IMSI">
+                                                    <label for="imsiOnIMSISummaryFormNE" class="form-label fw-bold small">IMSI</label>
+                                                    <input required type="text" class="form-control" id="imsiOnIMSISummaryFormNE" placeholder="IMSI">
                                                 </div>
                                                 <div class = "col">
-                                                    <label for="startDateOnIMSISummaryForm" class="form-label fw-bold small">From</label>
-                                                    <input required type="datetime-local" class="form-control" id="startDateOnIMSISummaryForm" placeholder="name@example.com">
+                                                    <label for="startDateOnIMSISummaryFormNE" class="form-label fw-bold small">From</label>
+                                                    <input required type="datetime-local" class="form-control" id="startDateOnIMSISummaryFormNE" placeholder="name@example.com">
                                                 </div>
                                                 <div class = "col">
-                                                    <label for="endDateOnIMSISummaryForm" class="form-label fw-bold small">To</label>
-                                                    <input required type="datetime-local" class="form-control" id="endDateOnIMSISummaryForm" placeholder="name@example.com">
+                                                    <label for="endDateOnIMSISummaryFormNE" class="form-label fw-bold small">To</label>
+                                                    <input required type="datetime-local" class="form-control" id="endDateOnIMSISummaryFormNE" placeholder="name@example.com">
                                                 </div>
                                                 <div class = "col">
                                                     <label for="exampleFormControlInput1" class="form-label fw-bold small">Query</label>
@@ -195,8 +204,9 @@
                                             </div>
                                         </form>
                                     </div>
-                                    <div class = "col mt-4 p-2" id = "imsiSummaryFormResult">
-                                        <div class="row card mb-4" id="imsiSummaryFormResultChartCard">
+
+                                    <div class = "row mt-4 p-2" id = "imsiSummaryFormResult">
+                                    	<div class="row card mb-4" id="imsiSummaryFormResultChartCard">
                                             <div class="card-header">IMSI Call Failure Count and Duration</div>
                                             <div class="card-body">
                                                 <div class="chart-bar"><canvas id="imsiSummaryFormResultChart" width="100%" height="100"></canvas></div>
@@ -204,28 +214,28 @@
                                             <div class="card-footer small text-muted" id="imsiSummaryFormResultDate">NaN</div>
                                         </div>
                                         <div class ="row">
-                                            <table id="imsiSummaryTable" class="table table-hover table-bordered table-responsive">
-                                                <thead>
-                                                    <tr>
-                                                    <th scope="col">IMSI</th>
-                                                    <th scope="col">From</th>
-                                                    <th scope="col">To</th>
-                                                    <th scope="col">Call Failures Count</th>
-                                                    <th scope="col">Duration</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    <tr>
-                                                    <th scope="row" id="imsiSummaryNumber">0</th>
-                                                    <td id="imsiSummaryFromDate">NaN</td>
-                                                    <td id="imsiSummaryToDate">NaN</td>
-                                                    <td id="imsiSummaryCallFailureCount">NaN</td>
-                                                    <td id="imsiSummaryTotalDuration">NaN</td>
-                                                    </tr>
-                                                </tbody>
-                                            </table>
+                                        <table id="imsiSummaryTableOne" class="table table-hover table-bordered table-responsive">
+                                            <thead>
+                                                <tr>
+                                                  <th scope="col">IMSI</th>
+                                                  <th scope="col">From</th>
+                                                  <th scope="col">To</th>
+                                                  <th scope="col">Call Failures Count</th>
+                                                  <th scope="col">Duration</th>
+                                                </tr>
+                                              </thead>
+                                              <tbody>
+                                                <tr>
+                                                  <th scope="row" id="imsiSummaryNENumber">0</th>
+                                                  <td id="imsiSummaryNEFromDate">NaN</td>
+                                                  <td id="imsiSummaryNEToDate">NaN</td>
+                                                  <td id="imsiSummaryNECallFailureCount">NaN</td>
+                                                  <td id="imsiSummaryNETotalDuration">NaN</td>
+                                                </tr>
+                                              </tbody>
+                                        </table>
                                         </div>
-                                        <div class="row alert alert-danger col-lg-12" role="alert" id="errorAlertOnSummaryForm">
+                                        <div class="alert alert-danger col-lg-12" role="alert" id="errorAlertOnSummaryFormNE">
                                             Error on Request
                                         </div>
                                     </div>
@@ -240,11 +250,11 @@
                                     Show all unique failure Event Id & Cause Code combinations with given Phone Model (IMSI)
                                 </div>
                                 <div class="card-body" id="userEquipmentFailures">
-                                    <form id = "userEquipmentFailuresForm">
+                                    <form id = "userEquipmentFailuresFormNE">
                                         <div class = "row">
                                             <div class = "col">
-                                                <label for="selectUserEquipmentDropdown" class="form-label fw-bold small">Phone Model</label>
-                                                <select class="form-control" aria-label="Default select example" id="selectUserEquipmentDropdown">
+                                                <label for="selectUserEquipmentDropdownNE" class="form-label fw-bold small">Phone Model</label>
+                                                <select class="form-control" aria-label="Default select example" id="selectUserEquipmentDropdownNE">
                                                 </select>
                                                 </div>
                                             <div class = "col">
@@ -254,7 +264,7 @@
                                         </div>
                                     </form>
                                     <div class = "row mt-4 p-4" id = "userEquipmentFailuresFormResult">
-                                        <table id="phoneFailuresTable" class="table table-hover table-bordered">
+                                        <table id="phoneFailuresTableNE" class="table table-hover table-bordered">
                                             <thead>
                                                 <tr>
                                                   <th>User Equipment</th>
@@ -369,13 +379,263 @@
 	                                              <tbody>
 	                                              </tbody>
 	                                        </table>
+	                      					</div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
+             
+                 <!--  Support Queries -->
+                    <div class="row" id="imsiFailuresCountQuery">
+                            <div class="col mb-4">
+                                <div class="card mt-4">
+                                    <div class="card-header">
+                                    Count call failures of an IMSI for during a time period
+                                    </div>
+                                    <div class="card-body" id="imsiSummaryCard">
+                                        <div class = "col">
+                                            <form id = "imsiSummaryForm">
+                                                <div class = "row">
+                                                    <div class = "col-3">
+                                                        <label for="imsiOnIMSISummaryForm" class="form-label fw-bold small">IMSI</label>
+                                                        <input required type="text" class="form-control" id="imsiOnIMSISummaryForm" placeholder="IMSI">
+                                                    </div>
+                                                    <div class = "col-3">
+                                                        <label for="startDateOnIMSISummaryForm" class="form-label fw-bold small">From</label>
+                                                        <input required type="datetime-local" class="form-control" id="startDateOnIMSISummaryForm" placeholder="name@example.com">
+                                                    </div>
+                                                    <div class = "col-3">
+                                                        <label for="endDateOnIMSISummaryForm" class="form-label fw-bold small">To</label>
+                                                        <input required type="datetime-local" class="form-control" id="endDateOnIMSISummaryForm" placeholder="name@example.com">
+                                                    </div>
+                                                    <div class = "col-3">
+                                                        <label for="exampleFormControlInput1" class="form-label fw-bold small">Query</label>
+                                                        <input required type="submit" class="form-control btn btn-primary" value="Submit"/>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                        <div class = "row mt-4 p-2" id = "imsiSummaryFormResult">
+                                            <table id="imsiSummaryTable" class="table table-hover table-bordered table-responsive">
+                                                <thead>
+                                                    <tr>
+                                                    <th scope="col">IMSI</th>
+                                                    <th scope="col">From</th>
+                                                    <th scope="col">To</th>
+                                                    <th scope="col">Call Failures Count</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                    <th scope="row" id="imsiSummaryNumber">0</th>
+                                                    <td id="imsiSummaryFromDate">NaN</td>
+                                                    <td id="imsiSummaryToDate">NaN</td>
+                                                    <td id="imsiSummaryCallFailureCount">NaN</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                            <div class="alert alert-danger col-lg-12" role="alert" id="errorAlertOnSummaryForm">
+                                                Error on Request
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    <div class="row" id="equipmentFailuresQuery">
+                            <div class="col mb-4">
+                                <div class="card mt-4">
+                                    <div class="card-header">
+                                        Find the Event ID and Cause Code Associated with A Given IMSI
+                                    </div>
+                                    <div class="card-body" id="userEquipmentFailures">
+                                        <form id = "userEquipmentFailuresForm">
+                                            <div class = "row">
+                                                <div class = "col">
+                                                    <label for="selectUserEquipmentDropdown" class="form-label fw-bold small">IMSI</label>
+                                                    <select class="form-control" aria-label="Default select example" id="selectUserEquipmentDropdown">
+                                                    </select>
+                                                </div>
+                                                <div class = "col">
+                                                    <label for="exampleFormControlInput1" class="form-label fw-bold small">Query</label>
+                                                    <input required type="submit" class="form-control btn btn-primary" value="Submit"/>
+                                                </div>
+                                            </div>
+                                        </form>
+                                        <div class = "row mt-4 p-4" id = "userEquipmentFailuresFormResult">
+                                            <table id="phoneFailuresTable" class="table table-hover table-bordered">
+                                                <thead>
+                                                    <tr>
+                                                    <th>IMSI</th>
+                                                    <th>Event ID</th>
+                                                    <th>Cause Code</th>
+                                                    <th>Description</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                </tbody>
+                                            </table>
+                                            <div class="alert alert-danger col-lg-12" role="alert" id="errorAlertOnEquipmentFailuresQuery">
+                                                Error on Request
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    <div class="row" id="imsiCauseCodesQuery">
+                            <div class="col mb-4">
+                                <div class="card mt-4">
+                                    <div class="card-header">
+                                        Find Unique Cause Codes Associated With A Given IMSI
+                                    </div>
+                                    <div class="card-body" id="imsiCauseCodes">
+                                        <form id = "imsiCauseCodesForm">
+                                            <div class = "row">
+                                                <div class = "col">
+                                                    <label for="imsiOnImsiCauseCodesForm" class="form-label fw-bold small">IMSI</label>
+                                                    <input required type="text" class="form-control" id="imsiOnImsiCauseCodesForm" placeholder="IMSI">
+                                                </div>
+                                                <div class = "col">
+                                                    <label for="exampleFormControlInput1" class="form-label fw-bold small">Query</label>
+                                                    <input required type="submit" class="form-control btn btn-primary" value="Submit"/>
+                                                </div>
+                                            </div>
+                                        </form>
+                                        <div class = "row mt-4 p-4" id = "userEquipmentFailuresFormResult">
+                                            <div class = "col">
+                                                <table id="causeCodesTable" class="table table-hover table-bordered table-responsive">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Cause Code</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    </tbody>
+                                                </table>
+                                                <div class="alert alert-danger col-lg-12" role="alert" id="errorAlertOnCauseCodesQuery">
+                                                    Error on Request
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+               <!--  </div> -->
+               
+               <div class="row" id="supportEngQueryOne">
+						<div class="col">
+							<div class="card mt-4">
+								<div class="card-header">Count Call Failures for given Phone Model within time period</div>
+								<div class="card-body" id="imsiSummaryCard">
+									<div class="row">
+										<form id="imsiCallFaluireForm">
+											<div class="row">
+												<div class="col">
+													<label for="imsiOnCallFailureForm"
+														class="form-label fw-bold small">Model</label> <input
+														required type="text" class="form-control"
+														id="imsiOnCallFailureForm" placeholder="Model">
+												</div>
+												<div class="col">
+													<label for="startDateOnCallFailureForm"
+														class="form-label fw-bold small">From</label> <input
+														required type="datetime-local" class="form-control"
+														id="startDateOnCallFailureForm"
+														placeholder="name@example.com">
+												</div>
+												<div class="col">
+													<label for="endDateOnCallFailureForm"
+														class="form-label fw-bold small">To</label> <input
+														required type="datetime-local" class="form-control"
+														id="endDateOnCallFailureForm"
+														placeholder="name@example.com">
+												</div>
+												<div class="col">
+													<label for="exampleFormControlInput1"
+														class="form-label fw-bold small">Query</label> <input
+														required type="submit"
+														class="form-control btn btn-primary" value="Submit" />
+												</div>
+											</div>
+										</form>
+									</div>
+									<div class="row mt-4 p-2" id="countCallFailureResult">
+										<table id="imsiFailureTable"
+											class="table table-hover table-bordered table-responsive">
+											<thead>
+												<tr>
+													<th scope="col">IMSI</th>
+													<th scope="col">Count</th>
+												</tr>
+											</thead>
+											<tbody>
+												<tr>
+													<td id="imsiNumber">0</td>
+													<td id="imsiCallFailureCount">0</td>
+												</tr>
+											</tbody>
+										</table>
+										<div class="alert alert-danger col-lg-12" role="alert"
+											id="errorAlertOnCallFailureForm">Error on Request</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						
+					</div>
 
+					<!-- Content Row -->
+					<div class="row" id="supportEngQueryTwo">
+						<div class="col">
+							<div class="card mt-4">
+								<div class="card-header">List of Unique Call Failures within time period</div>
+
+								<div class="card-body" id="callFailures">
+									<div class="row">
+										<form id="imsiListForm">
+											<div class="row">
+												<div class="col">
+													<label for="startDateOnListForm"
+														class="form-label fw-bold small">From</label> <input
+														required type="datetime-local" class="form-control"
+														id="startDateOnListForm" placeholder="name@example.com">
+												</div>
+												<div class="col">
+													<label for="endDateOnListForm"
+														class="form-label fw-bold small">To</label> <input
+														required type="datetime-local" class="form-control"
+														id="endDateOnListForm" placeholder="name@example.com">
+												</div>
+												<div class="col">
+													<label for="exampleFormControlInput1"
+														class="form-label fw-bold small">Query</label> <input
+														required type="submit"
+														class="form-control btn btn-primary" value="Submit" />
+												</div>
+											</div>
+										</form>
+									</div>
+									<div class="row mt-4 p-2" id="imsiList">
+										<table id="imsiListTable"
+											class="table table-hover table-bordered table-responsive">
+											<thead>
+												<tr>
+													<th scope="col">IMSI</th>
+												</tr>
+											</thead>
+											<tbody id="tableBody">
+											</tbody>
+										</table>
+										<div class="alert alert-danger col-lg-12" role="alert"
+											id="errorAlertOnListForm">Error on Request</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
 
                     <!-- Content Row -->
                     <div class="row">
@@ -448,6 +708,8 @@
     <script src="https://cdn.datatables.net/1.10.22/js/dataTables.bootstrap4.min.js" crossorigin="anonymous"></script>
 
     <!-- Network Engineer Speciifc JS-->
+    <script src="js/customerSupport.js"></script>
+    <script src="js/supportEng.js"></script>
     <script src="js/networkEngineer.js"></script>
     <script src="js/jquery-ui-1.12.1/jquery-ui.js"></script>
 </body>
