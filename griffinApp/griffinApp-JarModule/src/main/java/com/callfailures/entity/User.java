@@ -1,10 +1,11 @@
 package com.callfailures.entity;
 
+import java.util.Base64;
+
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
-import java.util.Base64;
 
 @Entity(name = "users")
 @XmlRootElement

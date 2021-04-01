@@ -15,6 +15,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import com.callfailures.entity.Secured;
+import com.callfailures.entity.views.IMSICount;
 import com.callfailures.entity.views.UniqueIMSI;
 import com.callfailures.errors.ErrorMessage;
 import com.callfailures.errors.ErrorMessages;
@@ -68,6 +69,33 @@ public class IMSIByDate {
 			final List<UniqueIMSI> imsis = eventService.findIMSIS();
 			return Response.status(200).entity(imsis).build();
 		} catch (Exception exception) {
+			return Response.status(404).build();
+		}		
+	}
+	
+	/**
+	 * Support Engineer: Retrieve top N IMSIs with failures 
+	 * @return Returns List of IMSI names
+	 */
+	@GET
+	@Secured
+    @Path("/query/limit")
+	@Produces({ MediaType.APPLICATION_JSON })
+	public Response getTopIMSIs(@QueryParam("number") final int number,
+			@QueryParam("from") final Long fromEpoch,
+			@QueryParam("to") final Long toEpoch) {
+		
+		final LocalDateTime startTime = convertLongToLocalDateTime(fromEpoch); 
+		final LocalDateTime endTime = convertLongToLocalDateTime(toEpoch); 
+		
+		try {
+			final List<IMSICount> imsis = eventService.findIMSIS(number, startTime, endTime);
+			return Response.status(200).entity(imsis).build();
+		} 
+		catch (InvalidDateException exception) {
+			return Response.status(404).entity(new ErrorMessages(ErrorMessage.INVALID_DATE.getMessage())).build();
+		}
+		catch (Exception exception) {
 			return Response.status(404).build();
 		}		
 	}

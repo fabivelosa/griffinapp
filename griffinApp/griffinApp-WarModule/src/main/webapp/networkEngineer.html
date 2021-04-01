@@ -22,8 +22,7 @@
     <!-- Custom styles for this template-->
     <link href="css/sb-admin-2.min.css" rel="stylesheet">
     <link href="css/networkEngineer.css" rel="stylesheet">
-
-
+    <link href="js/jquery-ui-1.12.1/jquery-ui.css" rel="stylesheet">
 </head>
 
 <body id="page-top">
@@ -42,13 +41,6 @@
             <!-- Divider -->
             <hr class="sidebar-divider my-0">
 
-            <!-- Nav Item - Dashboard -->
-            <li class="nav-item active">
-                <a class="nav-link" href="index.html">
-                    <i class="fas fa-fw fa-tachometer-alt"></i>
-                    <span>Dashboard</span></a>
-            </li>
-
             <!-- Divider -->
             <hr class="sidebar-divider">
 
@@ -57,17 +49,34 @@
                 Interface
             </div>
 
+            <!-- Nav Item - Pages Collapse Menu -->
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
+                    aria-expanded="true" aria-controls="collapseTwo">
+                    <i class="fas fa-fw fa-cog"></i>
+                    <span>Queries</span>
+                </a>
+                <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <h6 class="collapse-header">Network Engineer Queries:</h6>
+                        <a class="collapse-item" href="#" id="netFirstQuery">IMSI Diagnostics Summary</a>
+                        <a class="collapse-item" href="#" id="netSecondQuery">User Equipment Failures</a>
+                        <a class="collapse-item" href="#" id="netThirdQuery">Device Combinations</a>
+                        <a class="collapse-item" href="#" id="netFourthQuery">Top 10 IMSIs Failures</a>
+                    </div>
+                </div>
+            </li>
             
             <!-- Nav Item - Tables -->
             <li class="nav-item">
-                <a class="nav-link" href="#">
+                <a class="nav-link" href="supportEng.html">
                     <i class="fas fa-fw fa-table"></i>
                     <span>Support Engineer</span></a>
             </li>
 
             <!-- Nav Item - Tables -->
             <li class="nav-item">
-                <a class="nav-link" href="#">
+                <a class="nav-link" href="customerSupport.html">
                     <i class="fas fa-fw fa-table"></i>
                     <span>Customer Representative</span></a>
             </li>
@@ -131,8 +140,6 @@
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <span class="mr-2 d-none d-lg-inline text-gray-600 small">Network Engineer</span>
-                                <img class="img-profile rounded-circle"
-                                    src="img/undraw_profile.svg">
                             </a>
                             <!-- Dropdown - User Information -->
                             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
@@ -155,18 +162,19 @@
 
                     <!-- Page Heading -->
                     <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                        <h1 class="h3 mb-0 text-gray-800">Dashboard</h1>
+                        <h1 class="h3 mb-0 text-gray-800">Network Engineer Dashboard</h1>
                     </div>
                     <!-- Content Row -->
-                    <div class="row">
-                        <div class="col-lg-6 mb-4">
+                    <div class="row" id="networkEngQueryOne">
+                        <div class="col mb-4">
                             <div class="card mt-4">
                                 <div class="card-header">
-                                  IMSI Diagnostics Summary
+                                  Check for Call Failures and Duration within a time period with given IMSI <br/>
+
                                 </div>
                                 <div class="card-body" id="imsiSummaryCard">
-                                    <div class = "row">
-                                        <form id = "imsiSummaryForm">
+                                    <div class = "col">
+                                        <form id = "imsiSummaryForm" autocomplete="off">
                                             <div class = "row">
                                                 <div class = "col">
                                                     <label for="imsiOnIMSISummaryForm" class="form-label fw-bold small">IMSI</label>
@@ -215,17 +223,19 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-lg-6 mb-4">
+                    </div>
+                    <div class="row" id="networkEngQueryTwo">
+                        <div class="col">
                             <div class="card mt-4">
                                 <div class="card-header">
-                                    User Equipment Failures
+                                    Show all unique failure Event Id & Cause Code combinations with given Phone Model (IMSI)
                                 </div>
                                 <div class="card-body" id="userEquipmentFailures">
                                     <form id = "userEquipmentFailuresForm">
                                         <div class = "row">
                                             <div class = "col">
-                                                <label for="selectUserEquipmentDropdown" class="form-label fw-bold small">IMSI</label>
-                                                <select class="form-select" aria-label="Default select example" id="selectUserEquipmentDropdown">
+                                                <label for="selectUserEquipmentDropdown" class="form-label fw-bold small">Phone Model</label>
+                                                <select class="form-control" aria-label="Default select example" id="selectUserEquipmentDropdown">
                                                 </select>
                                                 </div>
                                             <div class = "col">
@@ -252,7 +262,111 @@
                                 </div>
                             </div>
                         </div>
+                    </div>                    
+					<div class="row" id="networkEngQueryThree">
+                        <div class="col">
+                            <div class="card mt-4">
+                                <div class="card-header">
+                                    Show Top 10  Market/Operator/Cell ID combinations Between Given times
+                                </div>
+                                <div class="card-body" id="userTopTenCombinations">
+                                    <form id = "userTop10CombinationsForm">
+                                        <div class = "row">                                                                                
+                                                <div class = "col">
+                                                    <label for="startDateOnIMSISummaryForm" class="form-label fw-bold small">From</label>
+                                                    <input required type="datetime-local" class="form-control" id="startDateOnTop10CombinationsForm" placeholder="name@example.com">
+                                                </div>
+                                                <div class = "col">
+                                                    <label for="endDateOnIMSISummaryForm" class="form-label fw-bold small">To</label>
+                                                    <input required type="datetime-local" class="form-control" id="endDateOnTop10CombinationsForm" placeholder="name@example.com">
+                                                </div>
+                                           		 <div class = "col">
+                                                	<label for="exampleFormControlInput1" class="form-label fw-bold small">Query</label>
+                                                	<input required type="submit" class="form-control btn btn-primary" value="Submit"/>
+                                            	</div>
+                                        </div>
+                                    </form>
+                                    <div class = "row mt-4 p-4" id = "usertop10CombinaitonsFormResult">
+                                        <div class = "col">
+                                            <div class="card mb-4" id="top10ComboChartCard">
+                                                <div class="card-header">Top 10 Market Operator Cell ID Combinations</div>
+                                                <div class="card-body">
+                                                    <div class="chart-bar"><canvas id="top10ComboChart" width="100%" height="100"></canvas></div>
+                                                </div>
+                                                <div class="card-footer small text-muted" id="top10ComboChartDate">NaN</div>
+                                            </div>
+                                            <table id="combinationsTable" class="table table-hover table-bordered">
+                                                <thead>
+                                                    <tr>
+                                                    <th>Cell ID</th>
+                                                    <th>Market</th>
+                                                    <th>Market ID</th>
+                                                    <th>Operator</th>
+                                                    <th>Operator ID</th>
+                                                    <th>Count</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>                                                                                           
+                                                </tbody>
+                                            </table>
+                                            <div class="alert alert-danger col-lg-12" role="alert" id="errorAlertOnTopCombinationsForm">
+                                                Error on Request
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
+                    <div class="row" id="networkEngQueryFour">
+                        <div class="col mb-4">
+                            <div class="card mt-4">
+                                <div class="card-header">
+                                  Top 10 IMSIs with Call Failures
+                                </div>
+                                <div class="card-body" id="imsiTopSummaryCard">
+                                    <form id = "imsiTopSummaryForm">
+                                          <div class = "row">
+                                          	<div class = "col">
+                                                  <label for="startDateOnIMSITopSummaryForm" class="form-label fw-bold small">From</label>
+                                                  <input required type="datetime-local" class="form-control" id="startDateOnIMSITopSummaryForm" placeholder="name@example.com">
+                                              </div>		
+                                              <div class = "col">
+                                                  <label for="endDateOnIMSITopSummaryForm" class="form-label fw-bold small">To</label>
+                                                  <input required type="datetime-local" class="form-control" id="endDateOnIMSITopSummaryForm" placeholder="name@example.com">
+                                              </div>
+                                              <div class = "col">
+                                                  <label for="exampleFormControlInput1" class="form-label fw-bold small">Query</label>
+                                                  <input required type="submit" class="form-control btn btn-primary" value="Submit"/>
+                                              </div>
+                                          </div>
+                                      </form>
+                                    <div class = "row mt-4 p-4" id = "imsiSummaryFormResult">
+                                    	<div class = "col">
+                                            <div class="card mb-4" id="top10IMSIChartCard">
+                                                <div class="card-header">Top 10 IMSIS with Call Failures</div>
+                                                <div class="card-body">
+                                                    <div class="chart-bar"><canvas id="top10IMSIChart" width="100%" height="100"></canvas></div>
+                                                </div>
+                                                <div class="card-footer small text-muted" id="top10IMSIDate">NaN</div>
+                                            </div>
+	                                        <table id="imsiTopSummaryTable" class="table table-hover table-bordered table-responsive">
+	                                            <thead>
+	                                                <tr>
+	                                                  <th>IMSI</th>
+	                                                  <th>Call Failures Count</th>
+	                                                </tr>
+	                                              </thead>
+	                                              <tbody>
+	                                              </tbody>
+	                                        </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
 
                     <!-- Content Row -->
                     <div class="row">
@@ -319,9 +433,6 @@
     <!-- Page level plugins -->
     <script src="vendor/chart.js/Chart.min.js"></script>
 
-    <!-- Page level custom scripts -->
-    <script src="js/demo/chart-area-demo.js"></script>
-    <script src="js/demo/chart-pie-demo.js"></script>
 
     <!-- Data tables -->
     <script src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js" crossorigin="anonymous"></script>
@@ -329,7 +440,7 @@
 
     <!-- Network Engineer Speciifc JS-->
     <script src="js/networkEngineer.js"></script>
-
+    <script src="js/jquery-ui-1.12.1/jquery-ui.js"></script>
 </body>
 
 </html>

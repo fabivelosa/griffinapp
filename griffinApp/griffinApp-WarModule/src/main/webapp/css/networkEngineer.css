@@ -1,3 +1,13 @@
-#imsiSummaryTable, #errorAlertOnSummaryForm, #phoneFailuresTable{
+#imsiSummaryTable, 
+#imsiTopSummaryTable, 
+#errorAlertOnSummaryForm,
+#combinationsTable,
+#errorAlertOnTopCombinationsForm,
+#phoneFailuresTable,
+#networkEngQueryTwo, 
+#networkEngQueryThree, 
+#networkEngQueryFour,
+#top10ComboChartCard,
+#top10IMSIChartCard{
     display:none;
 }
