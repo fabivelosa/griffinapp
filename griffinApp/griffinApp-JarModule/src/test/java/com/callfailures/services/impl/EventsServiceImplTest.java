@@ -28,6 +28,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import com.callfailures.connectionutils.BulkEventProcess;
 import com.callfailures.dao.EventCauseDao;
 import com.callfailures.dao.EventDAO;
 import com.callfailures.dao.FailureClassDAO;
@@ -77,6 +78,8 @@ public class EventsServiceImplTest {
 			"AT&T Wireless-Antigua AG");
 	private Validator validator;
 	private ValidationService validationService;
+	private BulkEventProcess eventProcess = mock(BulkEventProcess.class);
+	
 	private final List<IMSIEvent> imsiEvents = new ArrayList<>();
 	private EventService eventService;
 	private File file;
@@ -97,6 +100,7 @@ public class EventsServiceImplTest {
 		((EventServiceImpl) eventService).eventDAO = eventDAO;
 		((EventServiceImpl) eventService).validationService = validationService;
 		((EventServiceImpl) eventService).uploadDAO = uploadDAO;
+		((EventServiceImpl) eventService).bultEvent = eventProcess;
 
 		upload.setUploadID(uuid);
 	}

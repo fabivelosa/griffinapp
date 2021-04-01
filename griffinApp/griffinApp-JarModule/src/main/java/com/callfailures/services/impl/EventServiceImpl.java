@@ -15,6 +15,7 @@ import javax.inject.Inject;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 
+import com.callfailures.connectionutils.BulkEventProcess;
 import com.callfailures.dao.EventDAO;
 import com.callfailures.dao.UploadDAO;
 import com.callfailures.entity.Events;
@@ -44,6 +45,9 @@ public class EventServiceImpl implements EventService {
 
 	@Inject
 	UploadDAO uploadDAO;
+	
+	@Inject
+	BulkEventProcess bultEvent;
 
 	@Inject
 	ValidationService validationService;
@@ -146,7 +150,7 @@ public class EventServiceImpl implements EventService {
 				eventsToProcess.add(events);
 
 				if (index >= batch_size) {
-					eventDAO.createBulk(eventsToProcess);
+					bultEvent.createBulk(eventsToProcess);
 					eventsToProcess = new ArrayList<Events>();
 					index = 0;
 				}
@@ -154,8 +158,7 @@ public class EventServiceImpl implements EventService {
 			} catch (FieldNotValidException e) {
 				parsingResult.addInvalidRow(new InvalidRow(rowNumber, e.getMessage()));
 			}
-		}
-		//eventDAO.createBulk(eventsToProcess);
+		}		
 		
 	}
 
