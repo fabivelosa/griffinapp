@@ -1,13 +1,13 @@
-const rootURL = "http://localhost:8080/callfailures/api";
-const authToken = 'Bearer ' + sessionStorage.getItem("auth-token");
+const rootURL1 = "http://localhost:8080/callfailures/api";
+const authToken1 = 'Bearer ' + sessionStorage.getItem("auth-token");
 
-const setAuthHeader = function(xhr){
-    xhr.setRequestHeader('Authorization', authToken);
+const setAuthHeader1 = function(xhr){
+    xhr.setRequestHeader('Authorization', authToken1);
 }
 
 const displayPhoneEquipmentFailures = function(phoneFailures){
-    $("#phoneFailuresTable").show();
-    const table = $('#phoneFailuresTable').DataTable();
+    $("#phoneFailuresTableNE").show();
+    const table = $('#phoneFailuresTableNE').DataTable();
     table.clear();
     $(phoneFailures).each(function(index, phoneFailure){
         table.row.add([phoneFailure.userEquipment.model, 
@@ -24,7 +24,7 @@ const queryPhoneEquipmentFailures = function(tac){
     $.ajax({
         type:'GET',
         dataType:'json',
-        url:`${rootURL}/userEquipment/query?tac=${tac}`,
+        url:`${rootURL1}/userEquipment/query?tac=${tac}`,
         beforeSend: setAuthHeader,
         success: displayPhoneEquipmentFailures,
         error: function(jqXHR, textStatus, errorThrown){
@@ -33,36 +33,36 @@ const queryPhoneEquipmentFailures = function(tac){
     });
 }
 
-const addUserEquipmentOptions = function(userEquipments){
-    $("#selectUserEquipmentDropdown").empty();    
+const addUserEquipment1Options = function(userEquipments){
+    $("#selectUserEquipmentDropdownNE").empty();    
     let options = "";
     $(userEquipments).each(function(index, userEquipment){
         options += `<option value=\"${userEquipment.tac}\">${userEquipment.model}</option>`
     });
-    $("#selectUserEquipmentDropdown").append(options);
+    $("#selectUserEquipmentDropdownNE").append(options);
 }
 
-const setUserQuipmentDropdownOptions = function(){
+const setUserQuipmentDropdownOptions1 = function(){
     $.ajax({
         type:'GET',
         dataType:'json',
-        url:`${rootURL}/userEquipment`,
-        beforeSend: setAuthHeader,
-        success: addUserEquipmentOptions,
+        url:`${rootURL1}/userEquipment`,
+        beforeSend: setAuthHeader1,
+        success: addUserEquipment1Options,
         error: function(){
             alert("Failed to fetch user equipment options");
         }
     });
 }
 
-const displayIMSISummary = function(imsiSummary, textStatus, jqXHR){
-    $("#errorAlertOnSummaryForm").hide();
-    $("#imsiSummaryTable").show();
-    $("#imsiSummaryNumber").text(imsiSummary.imsi);
-    $("#imsiSummaryFromDate").text($('#startDateOnIMSISummaryForm').val());
-    $("#imsiSummaryToDate").text($('#endDateOnIMSISummaryForm').val());
-    $("#imsiSummaryCallFailureCount").text(imsiSummary.callFailuresCount);
-    $("#imsiSummaryTotalDuration").text(imsiSummary.totalDurationMs/1000 + " s");
+const displayIMSISummary1 = function(imsiSummary, textStatus, jqXHR){
+    $("#errorAlertOnSummaryFormNE").hide();
+    $("#imsiSummaryTableOne").show();
+    $("#imsiSummaryNENumber").text(imsiSummary.imsi);
+    $("#imsiSummaryNEFromDate").text($('#startDateOnIMSISummaryFormNE').val());
+    $("#imsiSummaryNEToDate").text($('#endDateOnIMSISummaryFormNE').val());
+    $("#imsiSummaryNECallFailureCount").text(imsiSummary.callFailuresCount);
+    $("#imsiSummaryNETotalDuration").text(imsiSummary.totalDurationMs/1000 + " s");
 }
 
 const displayIMSISummaryChart = function(imsiSummary){
@@ -157,31 +157,31 @@ const displayIMSISummaryChart = function(imsiSummary){
       },
     }
   });
-  $("#imsiSummaryFormResultDate").text(`Data from ${$('#startDateOnIMSISummaryForm').val()} to ${$('#endDateOnIMSISummaryForm').val()}`);
+  $("#imsiSummaryFormResultDate").text(`Data from ${$('#startDateOnIMSISummaryFormNE').val()} to ${$('#endDateOnIMSISummaryFormNE').val()}`);
 }
 
-const displayErrorOnIMSISummary = function(jqXHR, textStatus, errorThrown){
-    $("#imsiSummaryTable").hide();
-    $("#imsiSummaryFormResultChartCard").hide();
-    $("#errorAlertOnSummaryForm").show();
-    $("#errorAlertOnSummaryForm").text(jqXHR.responseJSON.errorMessage);
+const displayErrorOnIMSISummary1 = function(jqXHR, textStatus, errorThrown){
+    $("#imsiSummaryTableOne").hide();
+	$("#imsiSummaryFormResultChartCard").hide();
+    $("#errorAlertOnSummaryFormNE").show();
+    $("#errorAlertOnSummaryFormNE").text(jqXHR.responseJSON.errorMessage);
 }
 
-const queryIMSISUmmary = function(imsi, from, to){
+const queryIMSISUmmary1 = function(imsi, from, to){
     $.ajax({
         type: "GET",
         dataType: "json",
         url: `${rootURL}/events/query?imsi=${imsi}&from=${from}&to=${to}&summary=true`,
-        beforeSend: setAuthHeader,
+        beforeSend: setAuthHeader1,
         success: function(imsiSummary){
-          displayIMSISummary(imsiSummary);
+          displayIMSISummary1(imsiSummary);
           if(imsiSummary.callFailuresCount > 0){
             displayIMSISummaryChart(imsiSummary);
           }else{
             $("#imsiSummaryFormResultChartCard").hide();
           }
         },
-        error: displayErrorOnIMSISummary
+        error: displayErrorOnIMSISummary1
     })
 }
 
@@ -301,8 +301,8 @@ const queryTopCombinations = function(from, to){
 	$.ajax({
         type: "GET",
         dataType: "json",
-        url: `${rootURL}/Combinations/query?from=${from}&to=${to}`,
-        beforeSend: setAuthHeader,
+        url: `${rootURL1}/Combinations/query?from=${from}&to=${to}`,
+        beforeSend: setAuthHeader1,
         success: function(combinations){
             displayTopTenCombinations(combinations);
             if(combinations.length > 0){
@@ -314,6 +314,23 @@ const queryTopCombinations = function(from, to){
         error: displayTopCombinationsError
     })
 	
+}
+
+
+const autoCompleteIMSI1 = function(){
+    $.ajax({
+        type: "GET",
+        dataType: "json",
+        url: `${rootURL1}/IMSIs/query/all`,
+        beforeSend: setAuthHeader1,
+        success: function(data){
+            var list = [];
+            for(var i=0; i<data.length; i++){
+                list.push(data[i].imsi)
+            }
+            $("#imsiOnIMSISummaryFormNE").autocomplete({source:list});
+        }
+    })
 }
 
 const displayTop10IMSISummary = function(topTenIMSIFailures){
@@ -455,20 +472,28 @@ const autoCompleteIMSI = function(){
   })
 }
 
+const hideOtherQueries = function(){
+    $.each($("#querySelectors").children(), function(index, selector) {
+            $(`#${$(selector).data("section")}`).hide();
+    });
+}
+
+
 $(document).ready(function(){		
-    setUserQuipmentDropdownOptions();
-    autoCompleteIMSI();
-    $('#imsiSummaryForm').submit(function(event){
+    setUserQuipmentDropdownOptions1();
+    autoCompleteIMSI1();
+
+    $('#imsiSummaryFormNE').submit(function(event){
         event.preventDefault();
-        const imsi = $('#imsiOnIMSISummaryForm').val();
-        const from = new Date($('#startDateOnIMSISummaryForm').val()).valueOf();
-        const to = new Date($('#endDateOnIMSISummaryForm').val()).valueOf();
-        queryIMSISUmmary(imsi, from, to);
+        const imsi = $('#imsiOnIMSISummaryFormNE').val();
+        const from = new Date($('#startDateOnIMSISummaryFormNE').val()).valueOf();
+        const to = new Date($('#endDateOnIMSISummaryFormNE').val()).valueOf();
+        queryIMSISUmmary1(imsi, from, to);
     });
  
-    $("#userEquipmentFailuresForm").submit(function(event){
+    $("#userEquipmentFailuresFormNE").submit(function(event){
         event.preventDefault();
-        const tac = $("#selectUserEquipmentDropdown").val();
+        const tac = $("#selectUserEquipmentDropdownNE").val();
         queryPhoneEquipmentFailures(tac);
     });
 
@@ -488,11 +513,17 @@ $(document).ready(function(){
         queryTop10IMSISummary(from, to);
     });
 
+
     $("#netFirstQuery").click(function(){
         $("#networkEngQueryOne").show();
         $("#networkEngQueryTwo").hide();
 	      $("#networkEngQueryThree").hide();
         $("#networkEngQueryFour").hide();
+		hideOtherQueries();
+
+		//$("#imsiFailuresCountQuery").hide();
+		//$("#equipmentFailuresQuery").hide();
+		//$("#imsiCauseCodesQuery").hide();
     });
 
     $("#netSecondQuery").click(function(){
@@ -500,13 +531,15 @@ $(document).ready(function(){
         $("#networkEngQueryTwo").show();
 	      $("#networkEngQueryThree").hide();
         $("#networkEngQueryFour").hide();
-
+		hideOtherQueries();
     });
+
     $("#netThirdQuery").click(function(){
         $("#networkEngQueryOne").hide();
         $("#networkEngQueryTwo").hide();
 	      $("#networkEngQueryThree").show();
         $("#networkEngQueryFour").hide();
+		hideOtherQueries();
     });
 
      $("#netFourthQuery").click(function(){
@@ -514,6 +547,8 @@ $(document).ready(function(){
         $("#networkEngQueryTwo").hide();
 		$("#networkEngQueryThree").hide();
         $("#networkEngQueryFour").show();
+		hideOtherQueries();
     });
+
 
 });

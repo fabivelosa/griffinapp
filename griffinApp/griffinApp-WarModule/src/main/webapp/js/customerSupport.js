@@ -160,6 +160,10 @@ $(document).ready(function(){
                 $(`#${$(selector).data("section")}`).show();
             }else{
                 $(`#${$(selector).data("section")}`).hide();
+				$("#networkEngQueryOne").hide();
+		        $("#networkEngQueryTwo").hide();
+				$("#networkEngQueryThree").hide();
+		        $("#networkEngQueryFour").hide();
             }
         });
     });
