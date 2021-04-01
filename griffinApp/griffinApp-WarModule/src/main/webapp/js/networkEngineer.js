@@ -123,7 +123,7 @@ const displayIMSISummaryChart = function(imsiSummary){
           },
           scaleLabel: {
             display: true,
-            labelString: 'Call Failures Count'
+            labelString: 'Call Failures Count/Duration'
           },
           gridLines: {
             color: "rgb(234, 236, 244)",
