@@ -5,6 +5,14 @@ const setAuthHeader1 = function(xhr){
     xhr.setRequestHeader('Authorization', authToken1);
 }
 
+const displayResponseSummary = function(response, startTime, endTime){
+  $(".responseWidget").show();
+
+  let count = response instanceof Array ? response.length : response ? 1 : 0;
+  $(".responseRows").text(`The query returned ${count} row${count > 1 ? "s" : ""}`);
+  $(".responseTime").text(`Duration ${(endTime - startTime)/1000} s`);
+}
+
 const displayPhoneEquipmentFailures = function(phoneFailures){
     $("#phoneFailuresTableNE").show();
     const table = $('#phoneFailuresTableNE').DataTable();
@@ -113,12 +121,16 @@ const displayPhoneEquipmentFailuresChart = function(phoneFailures){
 }
 
 const queryPhoneEquipmentFailures = function(tac){
+    const startTime = new Date().getTime();
+
     $.ajax({
         type:'GET',
         dataType:'json',
         url:`${rootURL1}/userEquipment/query?tac=${tac}`,
         beforeSend: setAuthHeader,
         success: function(phoneFailures){
+          const endTime = new Date().getTime();
+          displayResponseSummary(phoneFailures, startTime, endTime);
           displayPhoneEquipmentFailures(phoneFailures);
           if(phoneFailures.length > 0){
             displayPhoneEquipmentFailuresChart(phoneFailures);
@@ -267,12 +279,16 @@ const displayErrorOnIMSISummary1 = function(jqXHR, textStatus, errorThrown){
 }
 
 const queryIMSISUmmary1 = function(imsi, from, to){
+    $(".responseWidget").hide();
+    const startTime = new Date().getTime();
     $.ajax({
         type: "GET",
         dataType: "json",
         url: `${rootURL}/events/query?imsi=${imsi}&from=${from}&to=${to}&summary=true`,
         beforeSend: setAuthHeader1,
         success: function(imsiSummary){
+          const endTime = new Date().getTime();
+          displayResponseSummary(imsiSummary, startTime, endTime);
           displayIMSISummary1(imsiSummary);
           if(imsiSummary.callFailuresCount > 0){
             displayIMSISummaryChart(imsiSummary);
@@ -396,12 +412,15 @@ const displayTopCombinationsError = function(jqXHR, textStatus, errorThrown){
 }
 
 const queryTopCombinations = function(from, to){	
-	$.ajax({
+  const startTime = new Date().getTime();
+  $.ajax({
         type: "GET",
         dataType: "json",
         url: `${rootURL1}/Combinations/query?from=${from}&to=${to}`,
         beforeSend: setAuthHeader1,
         success: function(combinations){
+            const endTime = new Date().getTime();
+            displayResponseSummary(combinations, startTime, endTime);
             displayTopTenCombinations(combinations);
             if(combinations.length > 0){
               displayTopTenCombinationsChart(combinations);
@@ -536,12 +555,15 @@ const displayTopTenIMSIsChart = function(imsis){
 }
 
 const queryTop10IMSISummary = function(from, to){
+    const startTime = new Date().getTime();
     $.ajax({
         type: "GET",
         dataType: "json",
         url: `${rootURL}/IMSIs/query/limit?from=${from}&to=${to}&number=10`,
         beforeSend: setAuthHeader,
         success: function(imsis){
+          const endTime = new Date().getTime();
+          displayResponseSummary(imsis, startTime, endTime);
           displayTop10IMSISummary(imsis);
           if(imsis.length > 0){
             displayTopTenIMSIsChart(imsis);
@@ -554,6 +576,7 @@ const queryTop10IMSISummary = function(from, to){
 }
 
 const hideOtherQueries = function(){
+  $(".responseWidget").hide()
   $.each($("#querySelectors").children(), function(index, selector) {
           $(`#${$(selector).data("section")}`).hide();
   });
@@ -613,6 +636,7 @@ $(document).ready(function(){
         $("#networkEngQueryTwo").hide();
 	      $("#networkEngQueryThree").hide();
         $("#networkEngQueryFour").hide();
+        $(".responseWidget").hide()
 		    hideOtherQueries();
     });
 
@@ -621,6 +645,7 @@ $(document).ready(function(){
         $("#networkEngQueryTwo").show();
 	      $("#networkEngQueryThree").hide();
         $("#networkEngQueryFour").hide();
+        $(".responseWidget").hide()
 		    hideOtherQueries();
     });
 
@@ -629,14 +654,16 @@ $(document).ready(function(){
         $("#networkEngQueryTwo").hide();
 	      $("#networkEngQueryThree").show();
         $("#networkEngQueryFour").hide();
+        $(".responseWidget").hide()
 		    hideOtherQueries();
     });
 
      $("#netFourthQuery").click(function(){
         $("#networkEngQueryOne").hide();
         $("#networkEngQueryTwo").hide();
-		$("#networkEngQueryThree").hide();
+		    $("#networkEngQueryThree").hide();
         $("#networkEngQueryFour").show();
+        $(".responseWidget").hide()
 		    hideOtherQueries();
     });
 

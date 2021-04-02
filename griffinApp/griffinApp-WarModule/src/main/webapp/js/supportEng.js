@@ -5,6 +5,7 @@ const setAuthHeader2 = function(xhr){
     xhr.setRequestHeader('Authorization', authToken2);
 }
 
+
 const displayCallFailures = function(callFailures){
     $("#imsiListTable").show();
     const table = $('#imsiListTable').DataTable();
@@ -17,12 +18,17 @@ const displayCallFailures = function(callFailures){
 }
 
 const queryCallFailures = function(from, to){
+    const startTime = new Date().getTime();
     $.ajax({
         type:'GET',
         dataType:'json',
         url:`${rootURL2}/IMSIs/query?from=${from}&to=${to}`,
         beforeSend: setAuthHeader2,
-        success: displayCallFailures,
+        success: function(response){
+            const endTime = new Date().getTime();
+            displayResponseSummary(response, startTime, endTime);
+            displayCallFailures(response);
+        },
         error: displayErrorOnIMSIList
     });
 }
@@ -95,12 +101,17 @@ const displayErrorOnIFailuresList = function(jqXHR, textStatus, errorThrown){
 
 //Query
 const queryCallIMSIsWithFailure = function(failureClass){
+    const startTime = new Date().getTime();
     $.ajax({
         type: "GET",
         dataType: "json",
         url: `${rootURL}/IMSIs/query/failureClass?failureClass=${failureClass}`,
         beforeSend: setAuthHeader,
-        success: displayIMSIAffectedByFailureClass,
+        success: function(response){
+            const endTime = new Date().getTime();
+            displayResponseSummary(response, startTime, endTime);
+            displayIMSIAffectedByFailureClass(response);
+        },
         error: displayErrorOnIFailuresList
     })
 }
