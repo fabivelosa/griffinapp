@@ -16,6 +16,7 @@
 #supportEngQueryOne,
 #supportEngQueryTwo,
 #phoneFailuresTable,
-#top10ComboChartCard{
+#top10ComboChartCard,
+#userEquipmentFailuresChartCard{
     display:none;
 }

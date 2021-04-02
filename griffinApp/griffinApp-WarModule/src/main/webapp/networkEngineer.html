@@ -205,7 +205,7 @@
                                         </form>
                                     </div>
 
-                                    <div class = "row mt-4 p-2" id = "imsiSummaryFormResult">
+                                    <div class = "col mt-4 p-2" id = "imsiSummaryFormResult">
                                     	<div class="row card mb-4" id="imsiSummaryFormResultChartCard">
                                             <div class="card-header">IMSI Call Failure Count and Duration</div>
                                             <div class="card-body">
@@ -214,26 +214,26 @@
                                             <div class="card-footer small text-muted" id="imsiSummaryFormResultDate">NaN</div>
                                         </div>
                                         <div class ="row">
-                                        <table id="imsiSummaryTableOne" class="table table-hover table-bordered table-responsive">
-                                            <thead>
-                                                <tr>
-                                                  <th scope="col">IMSI</th>
-                                                  <th scope="col">From</th>
-                                                  <th scope="col">To</th>
-                                                  <th scope="col">Call Failures Count</th>
-                                                  <th scope="col">Duration</th>
-                                                </tr>
-                                              </thead>
-                                              <tbody>
-                                                <tr>
-                                                  <th scope="row" id="imsiSummaryNENumber">0</th>
-                                                  <td id="imsiSummaryNEFromDate">NaN</td>
-                                                  <td id="imsiSummaryNEToDate">NaN</td>
-                                                  <td id="imsiSummaryNECallFailureCount">NaN</td>
-                                                  <td id="imsiSummaryNETotalDuration">NaN</td>
-                                                </tr>
-                                              </tbody>
-                                        </table>
+                                            <table id="imsiSummaryTableOne" class="table table-hover table-bordered table-responsive">
+                                                <thead>
+                                                    <tr>
+                                                    <th scope="col">IMSI</th>
+                                                    <th scope="col">From</th>
+                                                    <th scope="col">To</th>
+                                                    <th scope="col">Call Failures Count</th>
+                                                    <th scope="col">Duration</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                    <th scope="row" id="imsiSummaryNENumber">0</th>
+                                                    <td id="imsiSummaryNEFromDate">NaN</td>
+                                                    <td id="imsiSummaryNEToDate">NaN</td>
+                                                    <td id="imsiSummaryNECallFailureCount">NaN</td>
+                                                    <td id="imsiSummaryNETotalDuration">NaN</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
                                         </div>
                                         <div class="alert alert-danger col-lg-12" role="alert" id="errorAlertOnSummaryFormNE">
                                             Error on Request
@@ -264,19 +264,28 @@
                                         </div>
                                     </form>
                                     <div class = "row mt-4 p-4" id = "userEquipmentFailuresFormResult">
-                                        <table id="phoneFailuresTableNE" class="table table-hover table-bordered">
-                                            <thead>
-                                                <tr>
-                                                  <th>User Equipment</th>
-                                                  <th>Event ID</th>
-                                                  <th>Cause Code</th>
-                                                  <th>Description</th>
-                                                  <th>Count</th>
-                                                </tr>
-                                              </thead>
-                                              <tbody>
-                                              </tbody>
-                                        </table>
+                                        <div class = "col">
+                                            <div class="card mb-4" id="userEquipmentFailuresChartCard">
+                                                <div class="card-header">Top 10 IMSIS with Call Failures</div>
+                                                <div class="card-body">
+                                                    <div class="chart-bar"><canvas id="userEquipmentFailuresChart" width="100%" height="100"></canvas></div>
+                                                </div>
+                                                <div class="card-footer small text-muted" id="top10IMSIDate">NaN</div>
+                                            </div>
+                                            <table id="phoneFailuresTableNE" class="table table-hover table-bordered">
+                                                <thead>
+                                                    <tr>
+                                                    <th>User Equipment</th>
+                                                    <th>Event ID</th>
+                                                    <th>Cause Code</th>
+                                                    <th>Description</th>
+                                                    <th>Count</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                </tbody>
+                                            </table>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
