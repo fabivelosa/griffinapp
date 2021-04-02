@@ -42,6 +42,7 @@
 
 .responseWidget{
     background-color: #fbfcff;
+    border-radius: 0.35rem;
     color:#1cc88a;
 }
 
@@ -49,4 +50,12 @@ thead{
     background-color: #4e73df;
     color:#ffffff;
     border-width: 1px !important;
+}
+
+tr{
+    font-size: 0.75rem !important;
+}
+
+td{
+    padding:0.5rem !important;
 }
