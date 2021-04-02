@@ -3,7 +3,8 @@ package com.callfailures.errors;
 public enum ErrorMessage {
 	INVALID_IMSI("The IMSI provided is invalid"),
 	INVALID_PHONE_MODEL("The phone model provided is invalid"),
-	INVALID_DATE("The dates provided are invalid");
+	INVALID_DATE("The dates provided are invalid"),
+	INVALID_FAILURECLASS("The failure class provided is invalid");
 	
 	private final String message;
 

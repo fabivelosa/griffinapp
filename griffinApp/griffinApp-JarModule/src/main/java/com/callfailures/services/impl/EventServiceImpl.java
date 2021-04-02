@@ -33,6 +33,7 @@ import com.callfailures.entity.views.PhoneModelSummary;
 import com.callfailures.entity.views.UniqueIMSI;
 import com.callfailures.exception.FieldNotValidException;
 import com.callfailures.exception.InvalidDateException;
+import com.callfailures.exception.InvalidFailureClassException;
 import com.callfailures.exception.InvalidIMSIException;
 import com.callfailures.exception.InvalidPhoneModelException;
 import com.callfailures.parsingutils.InvalidRow;
@@ -245,5 +246,13 @@ public class EventServiceImpl implements EventService {
 		}
 		return eventDAO.findIMSIS(number, startTime, endTime);
 	}
+	@Override
+	public List<UniqueIMSI> findIMSISByFailure(final int failureClass){
+		if (failureClass < 0) {
+			throw new InvalidFailureClassException();
+		}
+		return eventDAO.findIMSISByFailureClass(failureClass);
+	}
+	
 
 }
