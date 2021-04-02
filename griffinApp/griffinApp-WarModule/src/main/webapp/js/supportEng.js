@@ -1,8 +1,8 @@
-const rootURL = "http://localhost:8080/callfailures/api";
-const authToken = 'Bearer ' + sessionStorage.getItem("auth-token");
+const rootURL2 = "http://localhost:8080/callfailures/api";
+const authToken2 = 'Bearer ' + sessionStorage.getItem("auth-token");
 
-const setAuthHeader = function(xhr){
-    xhr.setRequestHeader('Authorization', authToken);
+const setAuthHeader2 = function(xhr){
+    xhr.setRequestHeader('Authorization', authToken2);
 }
 
 const displayCallFailures = function(callFailures){
@@ -20,8 +20,8 @@ const queryCallFailures = function(from, to){
     $.ajax({
         type:'GET',
         dataType:'json',
-        url:`${rootURL}/IMSIs/query?from=${from}&to=${to}`,
-        beforeSend: setAuthHeader,
+        url:`${rootURL2}/IMSIs/query?from=${from}&to=${to}`,
+        beforeSend: setAuthHeader2,
         success: displayCallFailures,
         error: displayErrorOnIMSIList
     });
@@ -34,7 +34,7 @@ const displayCallFailureCount = function(imsiSummary, textStatus, jqXHR){
     $("#imsiCallFailureCount").text(imsiSummary.callFailuresCount);
 }
 
-const displayErrorOnIMSISummary = function(jqXHR, textStatus, errorThrown){
+const displayErrorOnIMSISummary2 = function(jqXHR, textStatus, errorThrown){
     $("#imsiSummaryTable").hide();
     $("#errorAlertOnCallFailureForm").show();
     $("#errorAlertOnCallFailureForm").text(jqXHR.responseJSON.errorMessage);
@@ -50,19 +50,19 @@ const queryCallFailureCount = function(imsi, from, to){
     $.ajax({
         type: "GET",
         dataType: "json",
-        url: `${rootURL}/events/query/ue?model=${imsi}&from=${from}&to=${to}`,
-        beforeSend: setAuthHeader,
+        url: `${rootURL2}/events/query/ue?model=${imsi}&from=${from}&to=${to}`,
+        beforeSend: setAuthHeader2,
         success: displayCallFailureCount,
-        error: displayErrorOnIMSISummary
+        error: displayErrorOnIMSISummary2
     })
 }
 
-const autoCompleteIMSI = function(){
+const autoCompleteIMSI2 = function(){
     $.ajax({
         type: "GET",
         dataType: "json",
-        url:`${rootURL}/userEquipment`,
-        beforeSend: setAuthHeader,
+        url:`${rootURL2}/userEquipment`,
+        beforeSend: setAuthHeader2,
         success: function(data){
             var list = [];
             for(var i=0; i<data.length; i++){
@@ -106,7 +106,7 @@ const queryCallIMSIsWithFailure = function(failureClass){
 }
 
 $(document).ready(function(){	
-    autoCompleteIMSI();	
+    autoCompleteIMSI2();	
     $('#imsiCallFaluireForm').submit(function(event){
         event.preventDefault();
         const imsi = $('#imsiOnCallFailureForm').val();
