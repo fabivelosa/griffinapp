@@ -16,6 +16,37 @@
 #supportEngQueryOne,
 #supportEngQueryTwo,
 #phoneFailuresTable,
-#top10ComboChartCard{
+#top10ComboChartCard,
+#userEquipmentFailuresChartCard,
+.responseWidget{
     display:none;
+}
+
+#userEquipmentFailuresChartCard .chart-bar{
+    height:40rem !important;
+}
+
+.userEquipmentFailuresChartCardPhoneDetails .form-control{
+    border: 1px solid transparent !important;
+    color: #2b2b2b;
+}
+
+.userEquipmentFailuresChartCardPhoneDetails{
+    padding-bottom: 1rem;
+    border-bottom: 1px solid #eaeaf1 !important;
+}
+
+.responseRows, .responseTime{
+    width:50% !important;
+}
+
+.responseWidget{
+    background-color: #fbfcff;
+    color:#1cc88a;
+}
+
+thead{
+    background-color: #4e73df;
+    color:#ffffff;
+    border-width: 1px !important;
 }

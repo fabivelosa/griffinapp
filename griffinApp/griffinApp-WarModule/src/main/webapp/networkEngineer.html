@@ -179,7 +179,6 @@
                             <div class="card mt-4">
                                 <div class="card-header">
                                   Check for Call Failures and Duration within a time period with given IMSI <br/>
-
                                 </div>
                                 <div class="card-body" id="imsiSummaryCard">
                                     <div class = "col">
@@ -197,7 +196,7 @@
                                                     <label for="endDateOnIMSISummaryFormNE" class="form-label fw-bold small">To</label>
                                                     <input required type="datetime-local" class="form-control" id="endDateOnIMSISummaryFormNE" placeholder="name@example.com">
                                                 </div>
-                                                <div class = "col">
+                                                <div class = "col-2">
                                                     <label for="exampleFormControlInput1" class="form-label fw-bold small">Query</label>
                                                     <input required type="submit" class="form-control btn btn-primary" value="Submit"/>
                                                 </div>
@@ -205,35 +204,45 @@
                                         </form>
                                     </div>
 
-                                    <div class = "row mt-4 p-2" id = "imsiSummaryFormResult">
+                                    <div class = "col mt-4 p-2" id = "imsiSummaryFormResult">
+                                        <div class = "responseWidget p-3 mb-2">
+                                            <div class="d-flex flex-row">
+                                                <div class = "responseRows text-left">
+                                                    NaN rows returned
+                                                </div>
+                                                <div class="responseTime text-right">
+                                                    Duration: NaN seconds
+                                                </div>
+                                            </div>
+                                        </div>
                                     	<div class="row card mb-4" id="imsiSummaryFormResultChartCard">
-                                            <div class="card-header">IMSI Call Failure Count and Duration</div>
+                                            <div class="card-header text-primary">IMSI Call Failure Count and Duration</div>
                                             <div class="card-body">
                                                 <div class="chart-bar"><canvas id="imsiSummaryFormResultChart" width="100%" height="100"></canvas></div>
                                             </div>
                                             <div class="card-footer small text-muted" id="imsiSummaryFormResultDate">NaN</div>
                                         </div>
                                         <div class ="row">
-                                        <table id="imsiSummaryTableOne" class="table table-hover table-bordered table-responsive">
-                                            <thead>
-                                                <tr>
-                                                  <th scope="col">IMSI</th>
-                                                  <th scope="col">From</th>
-                                                  <th scope="col">To</th>
-                                                  <th scope="col">Call Failures Count</th>
-                                                  <th scope="col">Duration</th>
-                                                </tr>
-                                              </thead>
-                                              <tbody>
-                                                <tr>
-                                                  <th scope="row" id="imsiSummaryNENumber">0</th>
-                                                  <td id="imsiSummaryNEFromDate">NaN</td>
-                                                  <td id="imsiSummaryNEToDate">NaN</td>
-                                                  <td id="imsiSummaryNECallFailureCount">NaN</td>
-                                                  <td id="imsiSummaryNETotalDuration">NaN</td>
-                                                </tr>
-                                              </tbody>
-                                        </table>
+                                            <table id="imsiSummaryTableOne" class="table table-hover table-bordered table-responsive">
+                                                <thead>
+                                                    <tr>
+                                                    <th scope="col">IMSI</th>
+                                                    <th scope="col">From</th>
+                                                    <th scope="col">To</th>
+                                                    <th scope="col">Call Failures Count</th>
+                                                    <th scope="col">Duration</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                    <th scope="row" id="imsiSummaryNENumber">0</th>
+                                                    <td id="imsiSummaryNEFromDate">NaN</td>
+                                                    <td id="imsiSummaryNEToDate">NaN</td>
+                                                    <td id="imsiSummaryNECallFailureCount">NaN</td>
+                                                    <td id="imsiSummaryNETotalDuration">NaN</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
                                         </div>
                                         <div class="alert alert-danger col-lg-12" role="alert" id="errorAlertOnSummaryFormNE">
                                             Error on Request
@@ -257,26 +266,63 @@
                                                 <select class="form-control" aria-label="Default select example" id="selectUserEquipmentDropdownNE">
                                                 </select>
                                                 </div>
-                                            <div class = "col">
+                                            <div class = "col-2">
                                                 <label for="exampleFormControlInput1" class="form-label fw-bold small">Query</label>
                                                 <input required type="submit" class="form-control btn btn-primary" value="Submit"/>
                                             </div>
                                         </div>
                                     </form>
                                     <div class = "row mt-4 p-4" id = "userEquipmentFailuresFormResult">
-                                        <table id="phoneFailuresTableNE" class="table table-hover table-bordered">
-                                            <thead>
-                                                <tr>
-                                                  <th>User Equipment</th>
-                                                  <th>Event ID</th>
-                                                  <th>Cause Code</th>
-                                                  <th>Description</th>
-                                                  <th>Count</th>
-                                                </tr>
-                                              </thead>
-                                              <tbody>
-                                              </tbody>
-                                        </table>
+                                        <div class = "col">
+                                            <div class = "responseWidget p-3 mb-2">
+                                                <div class="d-flex flex-row">
+                                                    <div class = "responseRows text-left">
+                                                        NaN rows returned
+                                                    </div>
+                                                    <div class="responseTime text-right">
+                                                        Duration: NaN seconds
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="card mb-4" id="userEquipmentFailuresChartCard">
+                                                <div class="card-header text-primary" id="userEquipmentFailuresTitle">Event Cause Distribution</div>
+                                                <div class="card-body">
+                                                    <div class = "row userEquipmentFailuresChartCardPhoneDetails pl-4 pr-4">
+                                                        <div class = "col">
+                                                            <label for="userEquipmentFailuresChartCardPhoneModel" class="form-label fw-bold small">Phone Model</label>
+                                                            <input readonly type="text" class="form-control" id="userEquipmentFailuresChartCardPhoneModel" placeholder="Phone Model"/>
+                                                        </div>
+                                                        <div class = "col">
+                                                            <label for="userEquipmentFailuresChartCardPhoneTac" class="form-label fw-bold small">TAC</label>
+                                                            <input readonly type="text" class="form-control" id="userEquipmentFailuresChartCardPhoneTAC" placeholder="TAC"/>
+                                                        </div>
+                                                        <div class = "col">
+                                                            <label for="userEquipmentFailuresChartCardPhoneVendor" class="form-label fw-bold small">Vendor</label>
+                                                            <input readonly type="text" class="form-control" id="userEquipmentFailuresChartCardPhoneVendor" placeholder="Vendor"/>
+                                                        </div>
+                                                        <div class = "col">
+                                                            <label for="userEquipmentFailuresChartCardPhoneAccess" class="form-label fw-bold small">Access Capability</label>
+                                                            <input readonly type="text" class="form-control" id="userEquipmentFailuresChartCardPhoneAccess" placeholder="Access"/>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row chart-bar"><canvas id="userEquipmentFailuresChart" width="100%" height="100"></canvas></div>
+                                                </div>
+                                                <div class="card-footer small text-muted" id="userEquipmentFailuresDate">NaN</div>
+                                            </div>
+                                            <table id="phoneFailuresTableNE" class="table table-hover table-bordered">
+                                                <thead>
+                                                    <tr>
+                                                    <th>User Equipment</th>
+                                                    <th>Event ID</th>
+                                                    <th>Cause Code</th>
+                                                    <th>Description</th>
+                                                    <th>Count</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                </tbody>
+                                            </table>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -299,7 +345,7 @@
                                                     <label for="endDateOnIMSISummaryForm" class="form-label fw-bold small">To</label>
                                                     <input required type="datetime-local" class="form-control" id="endDateOnTop10CombinationsForm" placeholder="name@example.com">
                                                 </div>
-                                           		 <div class = "col">
+                                           		 <div class = "col-2">
                                                 	<label for="exampleFormControlInput1" class="form-label fw-bold small">Query</label>
                                                 	<input required type="submit" class="form-control btn btn-primary" value="Submit"/>
                                             	</div>
@@ -307,8 +353,18 @@
                                     </form>
                                     <div class = "row mt-4 p-4" id = "usertop10CombinaitonsFormResult">
                                         <div class = "col">
+                                            <div class = "responseWidget p-3 mb-2">
+                                                <div class="d-flex flex-row">
+                                                    <div class = "responseRows text-left">
+                                                        NaN rows returned
+                                                    </div>
+                                                    <div class="responseTime text-right">
+                                                        Duration: NaN seconds
+                                                    </div>
+                                                </div>
+                                            </div>
                                             <div class="card mb-4" id="top10ComboChartCard">
-                                                <div class="card-header">Top 10 Market Operator Cell ID Combinations</div>
+                                                <div class="card-header text-primary">Top 10 Market Operator Cell ID Combinations</div>
                                                 <div class="card-body">
                                                     <div class="chart-bar"><canvas id="top10ComboChart" width="100%" height="100"></canvas></div>
                                                 </div>
@@ -354,7 +410,7 @@
                                                   <label for="endDateOnIMSITopSummaryForm" class="form-label fw-bold small">To</label>
                                                   <input required type="datetime-local" class="form-control" id="endDateOnIMSITopSummaryForm" placeholder="name@example.com">
                                               </div>
-                                              <div class = "col">
+                                              <div class = "col-2">
                                                   <label for="exampleFormControlInput1" class="form-label fw-bold small">Query</label>
                                                   <input required type="submit" class="form-control btn btn-primary" value="Submit"/>
                                               </div>
@@ -362,8 +418,18 @@
                                       </form>
                                     <div class = "row mt-4 p-4" id = "imsiSummaryFormResult">
                                     	<div class = "col">
+                                            <div class = "responseWidget p-3 mb-2">
+                                                <div class="d-flex flex-row">
+                                                    <div class = "responseRows text-left">
+                                                        NaN rows returned
+                                                    </div>
+                                                    <div class="responseTime text-right">
+                                                        Duration: NaN seconds
+                                                    </div>
+                                                </div>
+                                            </div>
                                             <div class="card mb-4" id="top10IMSIChartCard">
-                                                <div class="card-header">Top 10 IMSIS with Call Failures</div>
+                                                <div class="card-header text-primary">Top 10 IMSIS with Call Failures</div>
                                                 <div class="card-body">
                                                     <div class="chart-bar"><canvas id="top10IMSIChart" width="100%" height="100"></canvas></div>
                                                 </div>
@@ -379,8 +445,8 @@
 	                                              <tbody>
 	                                              </tbody>
 	                                        </table>
-	                      					</div>
-                                        </div>
+	                      				</div>
+                                     </div>
                                     </div>
                                 </div>
                             </div>
@@ -397,19 +463,19 @@
                                         <div class = "col">
                                             <form id = "imsiSummaryForm">
                                                 <div class = "row">
-                                                    <div class = "col-3">
+                                                    <div class = "col">
                                                         <label for="imsiOnIMSISummaryForm" class="form-label fw-bold small">IMSI</label>
                                                         <input required type="text" class="form-control" id="imsiOnIMSISummaryForm" placeholder="IMSI">
                                                     </div>
-                                                    <div class = "col-3">
+                                                    <div class = "col">
                                                         <label for="startDateOnIMSISummaryForm" class="form-label fw-bold small">From</label>
                                                         <input required type="datetime-local" class="form-control" id="startDateOnIMSISummaryForm" placeholder="name@example.com">
                                                     </div>
-                                                    <div class = "col-3">
+                                                    <div class = "col">
                                                         <label for="endDateOnIMSISummaryForm" class="form-label fw-bold small">To</label>
                                                         <input required type="datetime-local" class="form-control" id="endDateOnIMSISummaryForm" placeholder="name@example.com">
                                                     </div>
-                                                    <div class = "col-3">
+                                                    <div class = "col-2">
                                                         <label for="exampleFormControlInput1" class="form-label fw-bold small">Query</label>
                                                         <input required type="submit" class="form-control btn btn-primary" value="Submit"/>
                                                     </div>
@@ -417,26 +483,38 @@
                                             </form>
                                         </div>
                                         <div class = "row mt-4 p-2" id = "imsiSummaryFormResult">
-                                            <table id="imsiSummaryTable" class="table table-hover table-bordered table-responsive">
-                                                <thead>
-                                                    <tr>
-                                                    <th scope="col">IMSI</th>
-                                                    <th scope="col">From</th>
-                                                    <th scope="col">To</th>
-                                                    <th scope="col">Call Failures Count</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    <tr>
-                                                    <th scope="row" id="imsiSummaryNumber">0</th>
-                                                    <td id="imsiSummaryFromDate">NaN</td>
-                                                    <td id="imsiSummaryToDate">NaN</td>
-                                                    <td id="imsiSummaryCallFailureCount">NaN</td>
-                                                    </tr>
-                                                </tbody>
-                                            </table>
-                                            <div class="alert alert-danger col-lg-12" role="alert" id="errorAlertOnSummaryForm">
-                                                Error on Request
+                                            <div class ="col">
+                                                <div class = "responseWidget p-3 mb-2">
+                                                    <div class="d-flex flex-row">
+                                                        <div class = "responseRows text-left">
+                                                            NaN rows returned
+                                                        </div>
+                                                        <div class="responseTime text-right">
+                                                            Duration: NaN seconds
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <table id="imsiSummaryTable" class="table table-hover table-bordered table-responsive">
+                                                    <thead>
+                                                        <tr>
+                                                        <th scope="col">IMSI</th>
+                                                        <th scope="col">From</th>
+                                                        <th scope="col">To</th>
+                                                        <th scope="col">Call Failures Count</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr>
+                                                        <th scope="row" id="imsiSummaryNumber">0</th>
+                                                        <td id="imsiSummaryFromDate">NaN</td>
+                                                        <td id="imsiSummaryToDate">NaN</td>
+                                                        <td id="imsiSummaryCallFailureCount">NaN</td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                                <div class="alert alert-danger col-lg-12" role="alert" id="errorAlertOnSummaryForm">
+                                                    Error on Request
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -457,27 +535,39 @@
                                                     <select class="form-control" aria-label="Default select example" id="selectUserEquipmentDropdown">
                                                     </select>
                                                 </div>
-                                                <div class = "col">
+                                                <div class = "col-2">
                                                     <label for="exampleFormControlInput1" class="form-label fw-bold small">Query</label>
                                                     <input required type="submit" class="form-control btn btn-primary" value="Submit"/>
                                                 </div>
                                             </div>
                                         </form>
                                         <div class = "row mt-4 p-4" id = "userEquipmentFailuresFormResult">
-                                            <table id="phoneFailuresTable" class="table table-hover table-bordered">
-                                                <thead>
-                                                    <tr>
-                                                    <th>IMSI</th>
-                                                    <th>Event ID</th>
-                                                    <th>Cause Code</th>
-                                                    <th>Description</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                </tbody>
-                                            </table>
-                                            <div class="alert alert-danger col-lg-12" role="alert" id="errorAlertOnEquipmentFailuresQuery">
-                                                Error on Request
+                                            <div class = "col">
+                                                <div class = "responseWidget p-3 mb-2">
+                                                    <div class="d-flex flex-row">
+                                                        <div class = "responseRows text-left">
+                                                            NaN rows returned
+                                                        </div>
+                                                        <div class="responseTime text-right">
+                                                            Duration: NaN seconds
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <table id="phoneFailuresTable" class="table table-hover table-bordered">
+                                                    <thead>
+                                                        <tr>
+                                                        <th>IMSI</th>
+                                                        <th>Event ID</th>
+                                                        <th>Cause Code</th>
+                                                        <th>Description</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    </tbody>
+                                                </table>
+                                                <div class="alert alert-danger col-lg-12" role="alert" id="errorAlertOnEquipmentFailuresQuery">
+                                                    Error on Request
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -497,7 +587,7 @@
                                                     <label for="imsiOnImsiCauseCodesForm" class="form-label fw-bold small">IMSI</label>
                                                     <input required type="text" class="form-control" id="imsiOnImsiCauseCodesForm" placeholder="IMSI">
                                                 </div>
-                                                <div class = "col">
+                                                <div class = "col-2">
                                                     <label for="exampleFormControlInput1" class="form-label fw-bold small">Query</label>
                                                     <input required type="submit" class="form-control btn btn-primary" value="Submit"/>
                                                 </div>
@@ -505,6 +595,16 @@
                                         </form>
                                         <div class = "row mt-4 p-4" id = "userEquipmentFailuresFormResult">
                                             <div class = "col">
+                                                <div class = "responseWidget p-3 mb-2">
+                                                    <div class="d-flex flex-row">
+                                                        <div class = "responseRows text-left">
+                                                            NaN rows returned
+                                                        </div>
+                                                        <div class="responseTime text-right">
+                                                            Duration: NaN seconds
+                                                        </div>
+                                                    </div>
+                                                </div>
                                                 <table id="causeCodesTable" class="table table-hover table-bordered table-responsive">
                                                     <thead>
                                                         <tr>
@@ -563,23 +663,34 @@
 										</form>
 									</div>
 									<div class="row mt-4 p-2" id="countCallFailureResult">
-										<table id="imsiFailureTable"
-											class="table table-hover table-bordered table-responsive">
-											<thead>
-												<tr>
-													<th scope="col">IMSI</th>
-													<th scope="col">Count</th>
-												</tr>
-											</thead>
-											<tbody>
-												<tr>
-													<td id="imsiNumber">0</td>
-													<td id="imsiCallFailureCount">0</td>
-												</tr>
-											</tbody>
-										</table>
-										<div class="alert alert-danger col-lg-12" role="alert"
-											id="errorAlertOnCallFailureForm">Error on Request</div>
+                                        <div class = "col">
+                                            <div class = "responseWidget p-3 mb-2">
+                                                <div class="d-flex flex-row">
+                                                    <div class = "responseRows text-left">
+                                                        NaN rows returned
+                                                    </div>
+                                                    <div class="responseTime text-right">
+                                                        Duration: NaN seconds
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <table id="imsiFailureTable"
+                                                class="table table-hover table-bordered table-responsive">
+                                                <thead>
+                                                    <tr>
+                                                        <th scope="col">IMSI</th>
+                                                        <th scope="col">Count</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td id="imsiNumber">0</td>
+                                                        <td id="imsiCallFailureCount">0</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                            <div class="alert alert-danger col-lg-12" role="alert" id="errorAlertOnCallFailureForm">Error on Request</div>
+                                        </div>
 									</div>
 								</div>
 							</div>
@@ -609,7 +720,7 @@
 														required type="datetime-local" class="form-control"
 														id="endDateOnListForm" placeholder="name@example.com">
 												</div>
-												<div class="col">
+												<div class="col-2">
 													<label for="exampleFormControlInput1"
 														class="form-label fw-bold small">Query</label> <input
 														required type="submit"
@@ -619,19 +730,30 @@
 										</form>
 									</div>
 									<div class="row mt-4 p-2" id="imsiList">
-										<table id="imsiListTable"
-											class="table table-hover table-bordered table-responsive">
-											<thead>
-												<tr>
-													<th scope="col">IMSI</th>
-												</tr>
-											</thead>
-											<tbody id="tableBody">
-											</tbody>
-										</table>
-										<div class="alert alert-danger col-lg-12" role="alert"
-											id="errorAlertOnListForm">Error on Request</div>
-									</div>
+                                        <div class = "col">
+                                            <div class = "responseWidget p-3 mb-2">
+                                                <div class="d-flex flex-row">
+                                                    <div class = "responseRows text-left">
+                                                        NaN rows returned
+                                                    </div>
+                                                    <div class="responseTime text-right">
+                                                        Duration: NaN seconds
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <table id="imsiListTable"
+                                                class="table table-hover table-bordered table-responsive">
+                                                <thead>
+                                                    <tr>
+                                                        <th scope="col">IMSI</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="tableBody">
+                                                </tbody>
+                                            </table>
+                                            <div class="alert alert-danger col-lg-12" role="alert" id="errorAlertOnListForm">Error on Request</div>
+                                        </div>
+                                    </div>
 								</div>
 							</div>
 						</div>
@@ -708,9 +830,9 @@
     <script src="https://cdn.datatables.net/1.10.22/js/dataTables.bootstrap4.min.js" crossorigin="anonymous"></script>
 
     <!-- Network Engineer Speciifc JS-->
+    <script src="js/networkEngineer.js"></script>
     <script src="js/customerSupport.js"></script>
     <script src="js/supportEng.js"></script>
-    <script src="js/networkEngineer.js"></script>
     <script src="js/jquery-ui-1.12.1/jquery-ui.js"></script>
 </body>
 

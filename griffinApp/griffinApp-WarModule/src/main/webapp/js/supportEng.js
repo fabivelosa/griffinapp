@@ -17,12 +17,17 @@ const displayCallFailures = function(callFailures){
 }
 
 const queryCallFailures = function(from, to){
+    const startTime = new Date().getTime();
     $.ajax({
         type:'GET',
         dataType:'json',
         url:`${rootURL2}/IMSIs/query?from=${from}&to=${to}`,
         beforeSend: setAuthHeader2,
-        success: displayCallFailures,
+        success: function(response){
+            const endTime = new Date().getTime();
+            displayResponseSummary(response, startTime, endTime);
+            displayCallFailures(response);
+        },
         error: displayErrorOnIMSIList
     });
 }
@@ -47,12 +52,17 @@ const displayErrorOnIMSIList = function(jqXHR, textStatus, errorThrown){
 }
 
 const queryCallFailureCount = function(imsi, from, to){
+    const startTime = new Date().getTime();
     $.ajax({
         type: "GET",
         dataType: "json",
         url: `${rootURL2}/events/query/ue?model=${imsi}&from=${from}&to=${to}`,
         beforeSend: setAuthHeader2,
-        success: displayCallFailureCount,
+        success: function(response){
+            const endTime = new Date().getTime();
+            displayResponseSummary(response, startTime, endTime)
+            displayCallFailureCount(response);
+        },
         error: displayErrorOnIMSISummary2
     })
 }
@@ -95,12 +105,17 @@ const displayErrorOnIFailuresList = function(jqXHR, textStatus, errorThrown){
 
 //Query
 const queryCallIMSIsWithFailure = function(failureClass){
+    const startTime = new Date().getTime();
     $.ajax({
         type: "GET",
         dataType: "json",
         url: `${rootURL}/IMSIs/query/failureClass?failureClass=${failureClass}`,
         beforeSend: setAuthHeader,
-        success: displayIMSIAffectedByFailureClass,
+        success: function(response){
+            const endTime = new Date().getTime();
+            displayResponseSummary(response, startTime, endTime);
+            displayIMSIAffectedByFailureClass(response);
+        },
         error: displayErrorOnIFailuresList
     })
 }
@@ -129,16 +144,19 @@ $(document).ready(function(){
     });
 
     $("#supFirstQuery").click(function(){
+        $(".responseWidget").hide()
         $("#supportEngQueryOne").show();
         $("#supportEngQueryTwo").hide();
 		$("#supportEngQueryThree").hide();
     });
     $("#supSecondQuery").click(function(){
+        $(".responseWidget").hide()
         $("#supportEngQueryOne").hide();
         $("#supportEngQueryTwo").show();
 		$("#supportEngQueryThree").hide();
     });
 	 $("#supThirdQuery").click(function(){
+        $(".responseWidget").hide()
         $("#supportEngQueryOne").hide();
         $("#supportEngQueryTwo").hide();
 		$("#supportEngQueryThree").show();

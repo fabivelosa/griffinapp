@@ -5,7 +5,6 @@ const setAuthHeader = function(xhr){
     xhr.setRequestHeader('Authorization', authToken);
 }
 
-
 const displayIMSICauseCodes = function(causeCodes){
     $("#errorAlertOnCauseCodesQuery").hide();
     $("#causeCodesTable_wrapper").show();
@@ -40,12 +39,17 @@ const displayErrorOnEquipmentFailures = function(jqXHR, textStatus, errorThrown)
 }
 
 const queryFailuresByUserEquipment = function(userEquipment){
+    const startTime = new Date().getTime();
     $.ajax({
         type:'GET',
         dataType:'json',
         url:`${rootURL}/failures/${userEquipment}`,
         beforeSend: setAuthHeader,
-        success: displayEquipmentFailures,
+        success: function(response){
+            const endTime = new Date().getTime();
+            displayResponseSummary(response, startTime, endTime);
+            displayEquipmentFailures(response);
+        },
         error: displayErrorOnEquipmentFailures
     });
 }
@@ -57,12 +61,17 @@ const displayErrorOnQueryCauseCodesByIMSI = function(jqXHR, textStatus, errorThr
 }
 
 const queryCauseCodesByIMSI = function(imsi){
+    const startTime = new Date().getTime();
     $.ajax({
         type:'GET',
         dataType:'json',
         url:`${rootURL}/causecodes/${imsi}`,
         beforeSend: setAuthHeader,
-        success: displayIMSICauseCodes,
+        success: function(response){
+            const endTime = new Date().getTime();
+            displayResponseSummary(response, startTime, endTime);
+            displayIMSICauseCodes(response)
+        },
         error: displayErrorOnQueryCauseCodesByIMSI
     });
 }
@@ -82,7 +91,9 @@ const setUserQuipmentDropdownOptions = function(){
         dataType:'json',
         url:`${rootURL}/IMSIs/query/all`,
         beforeSend: setAuthHeader,
-        success: addUserEquipmentOptions,
+        success: function(response){
+            addUserEquipmentOptions(response)
+        },
         error: function(){
             alert("Failed to fetch user equipment options");
         }
@@ -106,12 +117,17 @@ const displayErrorOnIMSISummary = function(jqXHR, textStatus, errorThrown){
 }
 
 const queryIMSISUmmary = function(imsi, from, to){
+    const startTime = new Date().getTime();
     $.ajax({
         type: "GET",
         dataType: "json",
         url: `${rootURL}/events/query?imsi=${imsi}&from=${from}&to=${to}&summary=true`,
         beforeSend: setAuthHeader,
-        success: displayIMSISummary,
+        success: function(response){
+            const endTime = new Date().getTime();
+            displayResponseSummary(response, startTime, endTime);
+            displayIMSISummary(response)
+        },
         error: displayErrorOnIMSISummary
     })
 }
@@ -155,6 +171,7 @@ $(document).ready(function(){
     });
 
     $("#querySelectors").on("click", "a", function(event){
+        $(".responseWidget").hide()
         $.each($("#querySelectors").children(), function(index, selector) {
             if(event.target == selector){
                 $(`#${$(selector).data("section")}`).show();
