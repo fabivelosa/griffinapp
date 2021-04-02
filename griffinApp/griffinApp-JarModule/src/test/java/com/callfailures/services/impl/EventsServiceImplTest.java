@@ -47,6 +47,7 @@ import com.callfailures.entity.views.PhoneFailures;
 import com.callfailures.entity.views.PhoneModelSummary;
 import com.callfailures.entity.views.UniqueIMSI;
 import com.callfailures.exception.InvalidDateException;
+import com.callfailures.exception.InvalidFailureClassException;
 import com.callfailures.exception.InvalidIMSIException;
 import com.callfailures.parsingutils.InvalidRow;
 import com.callfailures.parsingutils.ParsingResponse;
@@ -58,6 +59,8 @@ public class EventsServiceImplTest {
 	private static final LocalDateTime VALID_START_TIME = LocalDateTime.of(2021, 3, 18, 12, 0);
 	private static final String VALID_IMSI = "344930000000011", LONG_IMSI = "3449300000000111",
 			INVALID_IMSI = "A44930000000011", VALID_PHONE_MODEL = "VEA3";
+	private static final int VALID_FAILURE_CLASS = 1;
+	private static final int INVALID_FAILURE_CLASS = -999;
 	private final EventCauseDao eventCauseDAO = mock(EventCauseDao.class);
 	private final FailureClassDAO failureClassDAO = mock(FailureClassDAO.class);
 	private final UserEquipmentDAO userEquipmentDAO = mock(UserEquipmentDAO.class);
@@ -383,5 +386,25 @@ public class EventsServiceImplTest {
 		verify(eventDAO,times(1)).findTopTenCombinations(VALID_START_TIME, VALID_END_TIME);
 	}
 	
+	@Test
+	void testFindIMSIByFailureClass() {
+		UniqueIMSI imsi = new UniqueIMSI();
+		List<UniqueIMSI> imsis = new ArrayList<>();
+		imsis.add(imsi);
+		when(eventDAO.findIMSISByFailureClass(VALID_FAILURE_CLASS)).thenReturn(imsis);
+		assertEquals(1, eventService.findIMSISByFailure(VALID_FAILURE_CLASS).size());
+		verify(eventDAO,times(1)).findIMSISByFailureClass(VALID_FAILURE_CLASS);
+	}
 
+	@Test
+	void testFindIMSIByInvalidFailureClass() {
+		UniqueIMSI imsi = new UniqueIMSI();
+		List<UniqueIMSI> imsis = new ArrayList<>();
+		imsis.add(imsi);
+		assertThrows(InvalidFailureClassException.class, ()->{
+			eventService.findIMSISByFailure(INVALID_FAILURE_CLASS);
+		});
+		verify(eventDAO,times(0)).findIMSISByFailureClass(INVALID_FAILURE_CLASS);
+	}
+	
 }
