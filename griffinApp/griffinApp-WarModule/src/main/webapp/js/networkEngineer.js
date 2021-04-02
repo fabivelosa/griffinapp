@@ -20,13 +20,111 @@ const displayPhoneEquipmentFailures = function(phoneFailures){
     table.draw();
 }
 
+const displayPhoneEquipmentFailuresChart = function(phoneFailures){
+  let phoneModel = phoneFailures[0];
+  $("#userEquipmentFailuresChartCardPhoneModel").val(phoneModel.userEquipment.model);
+  $("#userEquipmentFailuresChartCardPhoneTAC").val(phoneModel.userEquipment.tac);
+  $("#userEquipmentFailuresChartCardPhoneVendor").val(phoneModel.userEquipment.vendorName);
+  $("#userEquipmentFailuresChartCardPhoneAccess").val(phoneModel.userEquipment.accessCapability);
+
+  $("#userEquipmentFailuresChartCard").show();
+  $("#userEquipmentFailuresTitle").text(`Event Cause Distribution for ${phoneModel.userEquipment.model}`);
+  var ctx = $("#userEquipmentFailuresChart")[0];
+  const phoneFailuresChart = new Chart(ctx, {
+    type: 'horizontalBar',
+    data: {
+      labels: phoneFailures.sort((a,b) => b.count - a.count)
+                        .map(phoneFailure => phoneFailure.eventCause.description),
+      datasets: [{
+        label: `Call Failures`,
+        backgroundColor: "#4e73df",
+        hoverBackgroundColor: "#2e59d9",
+        borderColor: "#4e73df",
+        barThickness:'flex',
+        barPercentage:0.5,
+        categoryPercentage:1.0,
+        data: phoneFailures.map(phoneFailure => phoneFailure.count),
+      }],
+    },
+    options: {
+      maintainAspectRatio: false,
+      layout: {
+        padding: {
+          left: 10,
+          right: 25,
+          top: 25,
+          bottom: 0
+        }
+      },
+      scales: {
+        yAxes: [{
+          type:"category",
+          gridLines: {
+            display: false,
+            drawBorder: false
+          }
+        }],
+        xAxes: [{
+          ticks: {
+            min: 0,
+            max: Math.max(...phoneFailures.map(phoneFailure => phoneFailure.count)),
+            maxTicksLimit: 10,
+            padding: 10
+          },
+          scaleLabel: {
+            display: true,
+            labelString: `Call Failures Count for ${phoneFailures[0].userEquipment.model}`
+          },
+          gridLines: {
+            color: "rgb(234, 236, 244)",
+            zeroLineColor: "rgb(234, 236, 244)",
+            drawBorder: false,
+            borderDash: [2],
+            zeroLineBorderDash: [2]
+          }
+        }],
+      },
+      legend: {
+        display: false
+      },
+      tooltips: {
+        titleMarginBottom: 10,
+        titleFontColor: '#6e707e',
+        titleFontSize: 14,
+        backgroundColor: "rgb(255,255,255)",
+        bodyFontColor: "#858796",
+        borderColor: '#dddfeb',
+        borderWidth: 1,
+        xPadding: 15,
+        yPadding: 15,
+        displayColors: false, 
+        caretPadding: 10,
+        callbacks: {
+          label: function(tooltipItem, chart) {
+            var datasetLabel = chart.datasets[tooltipItem.datasetIndex].label || '';
+            return datasetLabel + ': ' + tooltipItem.xLabel;
+          }
+        }
+      },
+    }
+  });
+  $("#userEquipmentFailuresDate").text(`Data as of ${new Date()}`);
+}
+
 const queryPhoneEquipmentFailures = function(tac){
     $.ajax({
         type:'GET',
         dataType:'json',
         url:`${rootURL1}/userEquipment/query?tac=${tac}`,
         beforeSend: setAuthHeader,
-        success: displayPhoneEquipmentFailures,
+        success: function(phoneFailures){
+          displayPhoneEquipmentFailures(phoneFailures);
+          if(phoneFailures.length > 0){
+            displayPhoneEquipmentFailuresChart(phoneFailures);
+          }else{
+            $("#userEquipmentFailuresChartCard").hide();
+          }
+        },
         error: function(jqXHR, textStatus, errorThrown){
             console.log(jqXHR);
         }
@@ -185,7 +283,6 @@ const queryIMSISUmmary1 = function(imsi, from, to){
     })
 }
 
-//Combinations Handlers
 const displayTopTenCombinations = function(combinations){
     $("#combinationsTable").show();
     const table = $('#combinationsTable').DataTable();
@@ -315,7 +412,6 @@ const queryTopCombinations = function(from, to){
     })
 	
 }
-
 
 const autoCompleteIMSI1 = function(){
     $.ajax({
@@ -456,6 +552,12 @@ const queryTop10IMSISummary = function(from, to){
     })
 }
 
+const hideOtherQueries = function(){
+  $.each($("#querySelectors").children(), function(index, selector) {
+          $(`#${$(selector).data("section")}`).hide();
+  });
+}
+
 const autoCompleteIMSI = function(){
   $.ajax({
       type: "GET",
@@ -471,13 +573,6 @@ const autoCompleteIMSI = function(){
       }
   })
 }
-
-const hideOtherQueries = function(){
-    $.each($("#querySelectors").children(), function(index, selector) {
-            $(`#${$(selector).data("section")}`).hide();
-    });
-}
-
 
 $(document).ready(function(){		
     setUserQuipmentDropdownOptions1();
@@ -505,7 +600,6 @@ $(document).ready(function(){
         queryTopCombinations(from,to);
     });
 
-
     $('#imsiTopSummaryForm').submit(function(event){
         event.preventDefault();
         const from = new Date($('#startDateOnIMSITopSummaryForm').val()).valueOf();
@@ -513,17 +607,12 @@ $(document).ready(function(){
         queryTop10IMSISummary(from, to);
     });
 
-
     $("#netFirstQuery").click(function(){
         $("#networkEngQueryOne").show();
         $("#networkEngQueryTwo").hide();
 	      $("#networkEngQueryThree").hide();
         $("#networkEngQueryFour").hide();
-		hideOtherQueries();
-
-		//$("#imsiFailuresCountQuery").hide();
-		//$("#equipmentFailuresQuery").hide();
-		//$("#imsiCauseCodesQuery").hide();
+		    hideOtherQueries();
     });
 
     $("#netSecondQuery").click(function(){
@@ -531,7 +620,7 @@ $(document).ready(function(){
         $("#networkEngQueryTwo").show();
 	      $("#networkEngQueryThree").hide();
         $("#networkEngQueryFour").hide();
-		hideOtherQueries();
+		    hideOtherQueries();
     });
 
     $("#netThirdQuery").click(function(){
@@ -539,7 +628,7 @@ $(document).ready(function(){
         $("#networkEngQueryTwo").hide();
 	      $("#networkEngQueryThree").show();
         $("#networkEngQueryFour").hide();
-		hideOtherQueries();
+		    hideOtherQueries();
     });
 
      $("#netFourthQuery").click(function(){
@@ -547,7 +636,7 @@ $(document).ready(function(){
         $("#networkEngQueryTwo").hide();
 		$("#networkEngQueryThree").hide();
         $("#networkEngQueryFour").show();
-		hideOtherQueries();
+		    hideOtherQueries();
     });
 
 

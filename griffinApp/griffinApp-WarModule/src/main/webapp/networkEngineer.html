@@ -207,7 +207,7 @@
 
                                     <div class = "col mt-4 p-2" id = "imsiSummaryFormResult">
                                     	<div class="row card mb-4" id="imsiSummaryFormResultChartCard">
-                                            <div class="card-header">IMSI Call Failure Count and Duration</div>
+                                            <div class="card-header text-primary">IMSI Call Failure Count and Duration</div>
                                             <div class="card-body">
                                                 <div class="chart-bar"><canvas id="imsiSummaryFormResultChart" width="100%" height="100"></canvas></div>
                                             </div>
@@ -266,11 +266,29 @@
                                     <div class = "row mt-4 p-4" id = "userEquipmentFailuresFormResult">
                                         <div class = "col">
                                             <div class="card mb-4" id="userEquipmentFailuresChartCard">
-                                                <div class="card-header">Top 10 IMSIS with Call Failures</div>
+                                                <div class="card-header text-primary" id="userEquipmentFailuresTitle">Event Cause Distribution</div>
                                                 <div class="card-body">
-                                                    <div class="chart-bar"><canvas id="userEquipmentFailuresChart" width="100%" height="100"></canvas></div>
+                                                    <div class = "row userEquipmentFailuresChartCardPhoneDetails pl-4 pr-4">
+                                                        <div class = "col">
+                                                            <label for="userEquipmentFailuresChartCardPhoneModel" class="form-label fw-bold small">Phone Model</label>
+                                                            <input readonly type="text" class="form-control" id="userEquipmentFailuresChartCardPhoneModel" placeholder="Phone Model"/>
+                                                        </div>
+                                                        <div class = "col">
+                                                            <label for="userEquipmentFailuresChartCardPhoneTac" class="form-label fw-bold small">TAC</label>
+                                                            <input readonly type="text" class="form-control" id="userEquipmentFailuresChartCardPhoneTAC" placeholder="TAC"/>
+                                                        </div>
+                                                        <div class = "col">
+                                                            <label for="userEquipmentFailuresChartCardPhoneVendor" class="form-label fw-bold small">Vendor</label>
+                                                            <input readonly type="text" class="form-control" id="userEquipmentFailuresChartCardPhoneVendor" placeholder="Vendor"/>
+                                                        </div>
+                                                        <div class = "col">
+                                                            <label for="userEquipmentFailuresChartCardPhoneAccess" class="form-label fw-bold small">Access Capability</label>
+                                                            <input readonly type="text" class="form-control" id="userEquipmentFailuresChartCardPhoneAccess" placeholder="Access"/>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row chart-bar"><canvas id="userEquipmentFailuresChart" width="100%" height="100"></canvas></div>
                                                 </div>
-                                                <div class="card-footer small text-muted" id="top10IMSIDate">NaN</div>
+                                                <div class="card-footer small text-muted" id="userEquipmentFailuresDate">NaN</div>
                                             </div>
                                             <table id="phoneFailuresTableNE" class="table table-hover table-bordered">
                                                 <thead>
@@ -317,7 +335,7 @@
                                     <div class = "row mt-4 p-4" id = "usertop10CombinaitonsFormResult">
                                         <div class = "col">
                                             <div class="card mb-4" id="top10ComboChartCard">
-                                                <div class="card-header">Top 10 Market Operator Cell ID Combinations</div>
+                                                <div class="card-header text-primary">Top 10 Market Operator Cell ID Combinations</div>
                                                 <div class="card-body">
                                                     <div class="chart-bar"><canvas id="top10ComboChart" width="100%" height="100"></canvas></div>
                                                 </div>
@@ -372,7 +390,7 @@
                                     <div class = "row mt-4 p-4" id = "imsiSummaryFormResult">
                                     	<div class = "col">
                                             <div class="card mb-4" id="top10IMSIChartCard">
-                                                <div class="card-header">Top 10 IMSIS with Call Failures</div>
+                                                <div class="card-header text-primary">Top 10 IMSIS with Call Failures</div>
                                                 <div class="card-body">
                                                     <div class="chart-bar"><canvas id="top10IMSIChart" width="100%" height="100"></canvas></div>
                                                 </div>
