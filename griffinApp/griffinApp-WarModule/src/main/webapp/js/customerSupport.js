@@ -46,9 +46,9 @@ const queryFailuresByUserEquipment = function(userEquipment){
         url:`${rootURL}/failures/${userEquipment}`,
         beforeSend: setAuthHeader,
         success: function(response){
+            displayEquipmentFailures(response);
             const endTime = new Date().getTime();
             displayResponseSummary(response, startTime, endTime);
-            displayEquipmentFailures(response);
         },
         error: displayErrorOnEquipmentFailures
     });
@@ -68,9 +68,9 @@ const queryCauseCodesByIMSI = function(imsi){
         url:`${rootURL}/causecodes/${imsi}`,
         beforeSend: setAuthHeader,
         success: function(response){
+            displayIMSICauseCodes(response)
             const endTime = new Date().getTime();
             displayResponseSummary(response, startTime, endTime);
-            displayIMSICauseCodes(response)
         },
         error: displayErrorOnQueryCauseCodesByIMSI
     });
@@ -124,9 +124,9 @@ const queryIMSISUmmary = function(imsi, from, to){
         url: `${rootURL}/events/query?imsi=${imsi}&from=${from}&to=${to}&summary=true`,
         beforeSend: setAuthHeader,
         success: function(response){
+            displayIMSISummary(response);
             const endTime = new Date().getTime();
             displayResponseSummary(response, startTime, endTime);
-            displayIMSISummary(response)
         },
         error: displayErrorOnIMSISummary
     })
