@@ -171,6 +171,7 @@ $(document).ready(function(){
     });
 
     $("#querySelectors").on("click", "a", function(event){
+        $(".responseWidget").hide()
         $.each($("#querySelectors").children(), function(index, selector) {
             if(event.target == selector){
                 $(`#${$(selector).data("section")}`).show();

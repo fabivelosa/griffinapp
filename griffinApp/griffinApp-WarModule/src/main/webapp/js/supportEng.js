@@ -5,7 +5,6 @@ const setAuthHeader2 = function(xhr){
     xhr.setRequestHeader('Authorization', authToken2);
 }
 
-
 const displayCallFailures = function(callFailures){
     $("#imsiListTable").show();
     const table = $('#imsiListTable').DataTable();
@@ -140,16 +139,19 @@ $(document).ready(function(){
     });
 
     $("#supFirstQuery").click(function(){
+        $(".responseWidget").hide()
         $("#supportEngQueryOne").show();
         $("#supportEngQueryTwo").hide();
 		$("#supportEngQueryThree").hide();
     });
     $("#supSecondQuery").click(function(){
+        $(".responseWidget").hide()
         $("#supportEngQueryOne").hide();
         $("#supportEngQueryTwo").show();
 		$("#supportEngQueryThree").hide();
     });
 	 $("#supThirdQuery").click(function(){
+        $(".responseWidget").hide()
         $("#supportEngQueryOne").hide();
         $("#supportEngQueryTwo").hide();
 		$("#supportEngQueryThree").show();
