@@ -27,14 +27,15 @@ const displayPhoneEquipmentFailuresChart = function(phoneFailures){
   $("#userEquipmentFailuresChartCardPhoneVendor").val(phoneModel.userEquipment.vendorName);
   $("#userEquipmentFailuresChartCardPhoneAccess").val(phoneModel.userEquipment.accessCapability);
 
+  let sortedPhoneFailures = phoneFailures.sort((a,b) => b.count - a.count);
+
   $("#userEquipmentFailuresChartCard").show();
   $("#userEquipmentFailuresTitle").text(`Event Cause Distribution for ${phoneModel.userEquipment.model}`);
   var ctx = $("#userEquipmentFailuresChart")[0];
   const phoneFailuresChart = new Chart(ctx, {
     type: 'horizontalBar',
     data: {
-      labels: phoneFailures.sort((a,b) => b.count - a.count)
-                        .map(phoneFailure => phoneFailure.eventCause.description),
+      labels: sortedPhoneFailures.map(phoneFailure => phoneFailure.eventCause.description),
       datasets: [{
         label: `Call Failures`,
         backgroundColor: "#4e73df",
@@ -43,7 +44,7 @@ const displayPhoneEquipmentFailuresChart = function(phoneFailures){
         barThickness:'flex',
         barPercentage:0.5,
         categoryPercentage:1.0,
-        data: phoneFailures.map(phoneFailure => phoneFailure.count),
+        data: sortedPhoneFailures.map(phoneFailure => phoneFailure.count),
       }],
     },
     options: {
