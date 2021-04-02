@@ -52,12 +52,17 @@ const displayErrorOnIMSIList = function(jqXHR, textStatus, errorThrown){
 }
 
 const queryCallFailureCount = function(imsi, from, to){
+    const startTime = new Date().getTime();
     $.ajax({
         type: "GET",
         dataType: "json",
         url: `${rootURL2}/events/query/ue?model=${imsi}&from=${from}&to=${to}`,
         beforeSend: setAuthHeader2,
-        success: displayCallFailureCount,
+        success: function(response){
+            const endTime = new Date().getTime();
+            displayResponseSummary(response, startTime, endTime)
+            displayCallFailureCount(response);
+        },
         error: displayErrorOnIMSISummary2
     })
 }
