@@ -211,22 +211,41 @@
 											</div>
 										</form>
 									</div>
-									<div class="row mt-4 p-2" id="countCallFailureResult">
-										<table id="imsiFailureTable"
-											class="table table-hover table-bordered table-responsive">
-											<thead>
-												<tr>
-													<th scope="col">IMSI</th>
-													<th scope="col">Count</th>
-												</tr>
-											</thead>
-											<tbody>
-												<tr>
-													<td id="imsiNumber">0</td>
-													<td id="imsiCallFailureCount">0</td>
-												</tr>
-											</tbody>
-										</table>
+									<div class="col mt-4 p-2" id="supportCountCallFailureResult">
+										<div class = "responseWidget p-3 mb-2">
+                                            <div class="d-flex flex-row">
+                                                <div class = "responseRows text-left">
+                                                    NaN rows returned
+                                                </div>
+                                                <div class="responseTime text-right">
+                                                    Duration: NaN seconds
+                                                </div>
+                                            </div>
+                                        </div>
+                                    	<div class="row card mb-4 query-chart" id="imsiSummaryFormResultChartCard">
+                                            <div class="card-header text-primary">IMSI Call Failure Count</div>
+                                            <div class="card-body">
+                                                <div class="chart-bar"><canvas id="imsiSummaryFormResultChart" width="100%" height="100"></canvas></div>
+                                            </div>
+                                            <div class="card-footer small text-muted" id="imsiSummaryFormResultDate">NaN</div>
+                                        </div>
+										<div class="row">
+											<table id="imsiFailureTable"
+												class="table table-hover table-bordered table-responsive">
+												<thead>
+													<tr>
+														<th scope="col">IMSI</th>
+														<th scope="col">Count</th>
+													</tr>
+												</thead>
+												<tbody>
+													<tr>
+														<td id="imsiNumber">0</td>
+														<td id="imsiCallFailureCount">0</td>
+													</tr>
+												</tbody>
+											</table>
+										</div>
 										<div class="alert alert-danger col-lg-12" role="alert"
 											id="errorAlertOnCallFailureForm">Error on Request</div>
 									</div>

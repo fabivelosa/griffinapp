@@ -1,4 +1,38 @@
-#imsiFailureTable, #errorAlertOnCallFailureForm, #imsiListTable, #imsiListTable, #errorAlertOnListForm, #supportEngQueryTwo{
+#imsiFailureTable, #errorAlertOnCallFailureForm, #imsiListTable, #imsiListTable, #errorAlertOnListForm, #supportEngQueryTwo, #imsiSummaryFormResultChartCard, .responseWidget{
     display: none;
 }
 
+.query-chart .card-header{
+    background-color: white !important;
+    text-align: center;
+    font-size: 1.25rem;
+    padding: 1rem !important;
+}
+
+.query-chart .card-body{
+    padding: 1rem !important;
+}
+
+.responseRows, .responseTime{
+    width:50% !important;
+}
+
+.responseWidget{
+    background-color: #fbfcff;
+    border-radius: 0.35rem;
+    color:#1cc88a;
+}
+
+thead{
+    background-color: #4e73df;
+    color:#ffffff;
+    border-width: 1px !important;
+}
+
+tr{
+    font-size: 0.75rem !important;
+}
+
+td{
+    padding:0.5rem !important;
+}
