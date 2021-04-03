@@ -85,21 +85,6 @@ const addUserEquipmentOptions = function(IMSIs){
     $("#selectUserEquipmentDropdown").append(options);
 }
 
-const setUserQuipmentDropdownOptions = function(){
-    $.ajax({
-        type:'GET',
-        dataType:'json',
-        url:`${rootURL}/IMSIs/query/all`,
-        beforeSend: setAuthHeader,
-        success: function(response){
-            addUserEquipmentOptions(response)
-        },
-        error: function(){
-            alert("Failed to fetch user equipment options");
-        }
-    });
-}
-
 const displayIMSISummary = function(imsiSummary, textStatus, jqXHR){
     $("#errorAlertOnSummaryForm").hide();
     $("#imsiSummaryTable").show();
@@ -143,12 +128,12 @@ const setIMSIFieldAutoComplete = function(){
             data.forEach(item => imsis.push(item.imsi));    
             $("#imsiOnImsiCauseCodesForm").autocomplete({source:imsis});
             $("#imsiOnIMSISummaryForm").autocomplete({source:imsis});
+            $("#selectUserEquipmentDropdown").autocomplete({source:imsis});
         }
     })
 }
 
 $(document).ready(function(){		
-    setUserQuipmentDropdownOptions();
     setIMSIFieldAutoComplete();
     $('#imsiSummaryForm').submit(function(event){
         event.preventDefault();
