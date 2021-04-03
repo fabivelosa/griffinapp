@@ -130,14 +130,14 @@ const queryPhoneEquipmentFailures = function(tac){
         url:`${rootURL1}/userEquipment/query?tac=${tac}`,
         beforeSend: setAuthHeader1,
         success: function(phoneFailures){
-          const endTime = new Date().getTime();
-          displayResponseSummary(phoneFailures, startTime, endTime);
           displayPhoneEquipmentFailures(phoneFailures);
           if(phoneFailures.length > 0){
             displayPhoneEquipmentFailuresChart(phoneFailures);
           }else{
             $("#userEquipmentFailuresChartCard").hide();
           }
+          const endTime = new Date().getTime();
+          displayResponseSummary(phoneFailures, startTime, endTime);
         },
         error: function(jqXHR, textStatus, errorThrown){
             console.log(jqXHR);
@@ -288,14 +288,14 @@ const queryIMSISUmmary1 = function(imsi, from, to){
         url: `${rootURL}/events/query?imsi=${imsi}&from=${from}&to=${to}&summary=true`,
         beforeSend: setAuthHeader1,
         success: function(imsiSummary){
-          const endTime = new Date().getTime();
-          displayResponseSummary(imsiSummary, startTime, endTime);
           displayIMSISummary1(imsiSummary);
           if(imsiSummary.callFailuresCount > 0){
             displayIMSISummaryChart(imsiSummary);
           }else{
             $("#imsiSummaryFormResultChartCard").hide();
           }
+          const endTime = new Date().getTime();
+          displayResponseSummary(imsiSummary, startTime, endTime);
         },
         error: displayErrorOnIMSISummary1
     })
@@ -420,14 +420,14 @@ const queryTopCombinations = function(from, to){
         url: `${rootURL1}/Combinations/query?from=${from}&to=${to}`,
         beforeSend: setAuthHeader1,
         success: function(combinations){
-            const endTime = new Date().getTime();
-            displayResponseSummary(combinations, startTime, endTime);
             displayTopTenCombinations(combinations);
             if(combinations.length > 0){
               displayTopTenCombinationsChart(combinations);
             }else{
               $("#top10ComboChartCard").hide();
             }
+            const endTime = new Date().getTime();
+            displayResponseSummary(combinations, startTime, endTime);
         },
         error: displayTopCombinationsError
     })
@@ -563,14 +563,14 @@ const queryTop10IMSISummary = function(from, to){
         url: `${rootURL}/IMSIs/query/limit?from=${from}&to=${to}&number=10`,
         beforeSend: setAuthHeader1,
         success: function(imsis){
-          const endTime = new Date().getTime();
-          displayResponseSummary(imsis, startTime, endTime);
           displayTop10IMSISummary(imsis);
           if(imsis.length > 0){
             displayTopTenIMSIsChart(imsis);
           }else{
             $("#top10IMSIChartCard").hide();
           }
+          const endTime = new Date().getTime();
+          displayResponseSummary(imsis, startTime, endTime);
         },
         error: displayTop10IMSIsError
     })
@@ -703,5 +703,4 @@ $(document).ready(function(){
             }
         });
     });
-
 });

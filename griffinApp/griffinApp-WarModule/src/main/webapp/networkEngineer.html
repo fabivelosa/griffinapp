@@ -210,7 +210,7 @@
                         <div class="col mb-4">
                             <div class="card mt-4">
                                 <div class="card-header">
-                                  Check for Call Failures and Duration within a time period with given IMSI <br/>
+                                  Query an IMSI's call failures count and duration within a time period<br/>
                                 </div>
                                 <div class="card-body" id="imsiSummaryCard">
                                     <div class = "col">
@@ -247,7 +247,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                    	<div class="row card mb-4" id="imsiSummaryFormResultChartCard">
+                                    	<div class="row card mb-4 query-chart" id="imsiSummaryFormResultChartCard">
                                             <div class="card-header text-primary">IMSI Call Failure Count and Duration</div>
                                             <div class="card-body">
                                                 <div class="chart-bar"><canvas id="imsiSummaryFormResultChart" width="100%" height="100"></canvas></div>
@@ -288,7 +288,7 @@
                         <div class="col">
                             <div class="card mt-4">
                                 <div class="card-header">
-                                    Show all unique failure Event Id & Cause Code combinations with given Phone Model (IMSI)
+                                    Show a Phone model's unique failure Event Id & Cause Code combinations
                                 </div>
                                 <div class="card-body" id="userEquipmentFailures">
                                     <form id = "userEquipmentFailuresFormNE">
@@ -304,7 +304,7 @@
                                             </div>
                                         </div>
                                     </form>
-                                    <div class = "row mt-4 p-4" id = "userEquipmentFailuresFormResult">
+                                    <div class = "row mt-2 p-4" id = "userEquipmentFailuresFormResult">
                                         <div class = "col">
                                             <div class = "responseWidget p-3 mb-2">
                                                 <div class="d-flex flex-row">
@@ -316,7 +316,7 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="card mb-4" id="userEquipmentFailuresChartCard">
+                                            <div class="card mb-4 query-chart" id="userEquipmentFailuresChartCard">
                                                 <div class="card-header text-primary" id="userEquipmentFailuresTitle">Event Cause Distribution</div>
                                                 <div class="card-body">
                                                     <div class = "row userEquipmentFailuresChartCardPhoneDetails pl-4 pr-4">
@@ -364,7 +364,7 @@
                         <div class="col">
                             <div class="card mt-4">
                                 <div class="card-header">
-                                    Show Top 10  Market/Operator/Cell ID combinations Between Given times
+                                    Show Top 10  Market/Operator/Cell ID combinations in a given period
                                 </div>
                                 <div class="card-body" id="userTopTenCombinations">
                                     <form id = "userTop10CombinationsForm">
@@ -383,7 +383,7 @@
                                             	</div>
                                         </div>
                                     </form>
-                                    <div class = "row mt-4 p-4" id = "usertop10CombinaitonsFormResult">
+                                    <div class = "row mt-2 p-4" id = "usertop10CombinaitonsFormResult">
                                         <div class = "col">
                                             <div class = "responseWidget p-3 mb-2">
                                                 <div class="d-flex flex-row">
@@ -395,7 +395,7 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="card mb-4" id="top10ComboChartCard">
+                                            <div class="card mb-4 query-chart" id="top10ComboChartCard">
                                                 <div class="card-header text-primary">Top 10 Market Operator Cell ID Combinations</div>
                                                 <div class="card-body">
                                                     <div class="chart-bar"><canvas id="top10ComboChart" width="100%" height="100"></canvas></div>
@@ -429,7 +429,7 @@
                         <div class="col mb-4">
                             <div class="card mt-4">
                                 <div class="card-header">
-                                  Top 10 IMSIs with Call Failures
+                                  Show Top 10 IMSIs with Call Failures In A Given Period
                                 </div>
                                 <div class="card-body" id="imsiTopSummaryCard">
                                     <form id = "imsiTopSummaryForm">
@@ -448,7 +448,7 @@
                                               </div>
                                           </div>
                                       </form>
-                                    <div class = "row mt-4 p-4" id = "imsiSummaryFormResult">
+                                    <div class = "row mt-2 p-4" id = "imsiSummaryFormResult">
                                     	<div class = "col">
                                             <div class = "responseWidget p-3 mb-2">
                                                 <div class="d-flex flex-row">
@@ -460,7 +460,7 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="card mb-4" id="top10IMSIChartCard">
+                                            <div class="card mb-4 query-chart" id="top10IMSIChartCard">
                                                 <div class="card-header text-primary">Top 10 IMSIS with Call Failures</div>
                                                 <div class="card-body">
                                                     <div class="chart-bar"><canvas id="top10IMSIChart" width="100%" height="100"></canvas></div>
@@ -514,7 +514,7 @@
                                                 </div>
                                             </form>
                                         </div>
-                                        <div class = "row mt-4 p-2" id = "imsiSummaryFormResult">
+                                        <div class = "row mt-2 p-2" id = "imsiSummaryFormResult">
                                             <div class ="col">
                                                 <div class = "responseWidget p-3 mb-2">
                                                     <div class="d-flex flex-row">
@@ -564,8 +564,7 @@
                                             <div class = "row">
                                                 <div class = "col">
                                                     <label for="selectUserEquipmentDropdown" class="form-label fw-bold small">IMSI</label>
-                                                    <select class="form-control" aria-label="Default select example" id="selectUserEquipmentDropdown">
-                                                    </select>
+                                                    <input required type="text" class="form-control" id="selectUserEquipmentDropdown" placeholder="IMSI">
                                                 </div>
                                                 <div class = "col-2">
                                                     <label for="exampleFormControlInput1" class="form-label fw-bold small">Query</label>
@@ -573,7 +572,7 @@
                                                 </div>
                                             </div>
                                         </form>
-                                        <div class = "row mt-4 p-4" id = "userEquipmentFailuresFormResult">
+                                        <div class = "row mt-2 p-4" id = "userEquipmentFailuresFormResult">
                                             <div class = "col">
                                                 <div class = "responseWidget p-3 mb-2">
                                                     <div class="d-flex flex-row">
@@ -625,7 +624,7 @@
                                                 </div>
                                             </div>
                                         </form>
-                                        <div class = "row mt-4 p-4" id = "userEquipmentFailuresFormResult">
+                                        <div class = "row mt-2 p-4" id = "userEquipmentFailuresFormResult">
                                             <div class = "col">
                                                 <div class = "responseWidget p-3 mb-2">
                                                     <div class="d-flex flex-row">
@@ -694,7 +693,7 @@
 											</div>
 										</form>
 									</div>
-									<div class="row mt-4 p-2" id="countCallFailureResult">
+									<div class="row mt-2 p-2" id="countCallFailureResult">
                                         <div class = "col">
                                             <div class = "responseWidget p-3 mb-2">
                                                 <div class="d-flex flex-row">
@@ -761,7 +760,7 @@
 											</div>
 										</form>
 									</div>
-									<div class="row mt-4 p-2" id="imsiList">
+									<div class="row mt-2 p-2" id="imsiList">
                                         <div class = "col">
                                             <div class = "responseWidget p-3 mb-2">
                                                 <div class="d-flex flex-row">
