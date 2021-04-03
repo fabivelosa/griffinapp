@@ -22,6 +22,18 @@
     display:none;
 }
 
+.query-chart .card-header{
+    background-color: white !important;
+    text-align: center;
+    font-size: 1.25rem;
+    padding: 1rem !important;
+}
+
+.query-chart .card-body{
+    padding: 1rem !important;
+}
+
+
 #userEquipmentFailuresChartCard .chart-bar{
     height:40rem !important;
 }
