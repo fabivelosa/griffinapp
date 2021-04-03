@@ -24,9 +24,9 @@ const queryCallFailures = function(from, to){
         url:`${rootURL2}/IMSIs/query?from=${from}&to=${to}`,
         beforeSend: setAuthHeader2,
         success: function(response){
+            displayCallFailures(response);
             const endTime = new Date().getTime();
             displayResponseSummary(response, startTime, endTime);
-            displayCallFailures(response);
         },
         error: displayErrorOnIMSIList
     });
@@ -59,9 +59,9 @@ const queryCallFailureCount = function(imsi, from, to){
         url: `${rootURL2}/events/query/ue?model=${imsi}&from=${from}&to=${to}`,
         beforeSend: setAuthHeader2,
         success: function(response){
-            const endTime = new Date().getTime();
-            displayResponseSummary(response, startTime, endTime)
             displayCallFailureCount(response);
+            const endTime = new Date().getTime();
+            displayResponseSummary(response, startTime, endTime);
         },
         error: displayErrorOnIMSISummary2
     })
@@ -112,9 +112,9 @@ const queryCallIMSIsWithFailure = function(failureClass){
         url: `${rootURL}/IMSIs/query/failureClass?failureClass=${failureClass}`,
         beforeSend: setAuthHeader,
         success: function(response){
+            displayIMSIAffectedByFailureClass(response);
             const endTime = new Date().getTime();
             displayResponseSummary(response, startTime, endTime);
-            displayIMSIAffectedByFailureClass(response);
         },
         error: displayErrorOnIFailuresList
     })

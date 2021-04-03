@@ -46,9 +46,9 @@ const queryFailuresByUserEquipment = function(userEquipment){
         url:`${rootURL}/failures/${userEquipment}`,
         beforeSend: setAuthHeader,
         success: function(response){
+            displayEquipmentFailures(response);
             const endTime = new Date().getTime();
             displayResponseSummary(response, startTime, endTime);
-            displayEquipmentFailures(response);
         },
         error: displayErrorOnEquipmentFailures
     });
@@ -68,9 +68,9 @@ const queryCauseCodesByIMSI = function(imsi){
         url:`${rootURL}/causecodes/${imsi}`,
         beforeSend: setAuthHeader,
         success: function(response){
+            displayIMSICauseCodes(response)
             const endTime = new Date().getTime();
             displayResponseSummary(response, startTime, endTime);
-            displayIMSICauseCodes(response)
         },
         error: displayErrorOnQueryCauseCodesByIMSI
     });
@@ -83,21 +83,6 @@ const addUserEquipmentOptions = function(IMSIs){
         options += `<option value=\"${IMSI.imsi}\">${IMSI.imsi}</option>`
     });
     $("#selectUserEquipmentDropdown").append(options);
-}
-
-const setUserQuipmentDropdownOptions = function(){
-    $.ajax({
-        type:'GET',
-        dataType:'json',
-        url:`${rootURL}/IMSIs/query/all`,
-        beforeSend: setAuthHeader,
-        success: function(response){
-            addUserEquipmentOptions(response)
-        },
-        error: function(){
-            alert("Failed to fetch user equipment options");
-        }
-    });
 }
 
 const displayIMSISummary = function(imsiSummary, textStatus, jqXHR){
@@ -124,9 +109,9 @@ const queryIMSISUmmary = function(imsi, from, to){
         url: `${rootURL}/events/query?imsi=${imsi}&from=${from}&to=${to}&summary=true`,
         beforeSend: setAuthHeader,
         success: function(response){
+            displayIMSISummary(response);
             const endTime = new Date().getTime();
             displayResponseSummary(response, startTime, endTime);
-            displayIMSISummary(response)
         },
         error: displayErrorOnIMSISummary
     })
@@ -143,12 +128,12 @@ const setIMSIFieldAutoComplete = function(){
             data.forEach(item => imsis.push(item.imsi));    
             $("#imsiOnImsiCauseCodesForm").autocomplete({source:imsis});
             $("#imsiOnIMSISummaryForm").autocomplete({source:imsis});
+            $("#selectUserEquipmentDropdown").autocomplete({source:imsis});
         }
     })
 }
 
 $(document).ready(function(){		
-    setUserQuipmentDropdownOptions();
     setIMSIFieldAutoComplete();
     $('#imsiSummaryForm').submit(function(event){
         event.preventDefault();
