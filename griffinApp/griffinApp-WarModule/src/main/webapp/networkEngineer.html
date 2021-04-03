@@ -52,7 +52,7 @@
             </div>
 
             <!-- Nav Item - Pages Collapse Menu -->
-            <li class="nav-item">
+            <li class="nav-item" id="NESideBar">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
                     aria-expanded="true" aria-controls="collapseTwo">
                     <i class="fas fa-fw fa-cog"></i>
@@ -60,30 +60,48 @@
                 </a>
                 <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
-                        <h6 class="collapse-header">Network Engineer Queries:</h6>
-                        <a class="collapse-item" href="#" id="netFirstQuery">IMSI Diagnostics Summary</a>
-                        <a class="collapse-item" href="#" id="netSecondQuery">User Equipment Failures</a>
-                        <a class="collapse-item" href="#" id="netThirdQuery">Top 10 Device Combinations</a>
-                        <a class="collapse-item" href="#" id="netFourthQuery">Top 10 IMSIs Failures</a>
+                        <h6 class="collapse-header">Network Queries:</h6>
+                        <div id="queryNESelectors">
+	                        <a class="collapse-item" href="#" id="netFirstQuery" data-section="networkEngQueryOne">IMSI Diagnostics Summary</a>
+	                        <a class="collapse-item" href="#" id="netSecondQuery" data-section="networkEngQueryTwo">User Equipment Failures</a>
+	                        <a class="collapse-item" href="#" id="netThirdQuery" data-section="networkEngQueryThree">Top 10 Device Combinations</a>
+	                        <a class="collapse-item" href="#" id="netFourthQuery" data-section="networkEngQueryFour">Top 10 IMSIs Failures</a>
+                        </div>
                     </div>
                 </div>
             </li>
             
-            <li class="nav-item">
+            <li class="nav-item" id="SupportSideBar">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseThree"
-                    aria-expanded="true" aria-controls="collapseTwo">
+                    aria-expanded="true" aria-controls="collapseThree">
                     <i class="fas fa-fw fa-cog"></i>
                     <span>Support Queries</span>
                 </a>
                 <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
-                        <h6 class="collapse-header">Other Support Queries:</h6>
-                        <div id="querySelectors">
+                        <h6 class="collapse-header">Support Queries:</h6>
+                        <div id="querySESelectors">
+                            <a class="collapse-item" href="#" id="supFirstQuery" data-section="supportEngQueryOne">Count Call Failures</a>
+                            <a class="collapse-item" href="#" id="supSecondQuery" data-section="supportEngQueryTwo">Unique Call Failures</a>
+                            <a class="collapse-item" href="#" id="supThreeQuery" data-section="supportEngQueryThree">FailureClass Call Failures</a>                         
+                        </div>
+                    </div>
+                </div>
+            </li>
+            
+            <li class="nav-item" id="CSRepSideBar">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseFour"
+                    aria-expanded="true" aria-controls="collapseTwo">
+                    <i class="fas fa-fw fa-cog"></i>
+                    <span>Customer Queries</span>
+                </a>
+                <div id="collapseFour" class="collapse" aria-labelledby="headingThree" data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <h6 class="collapse-header">Customer Queries:</h6>
+                        <div id="queryCSSelectors">
                             <a class="collapse-item" href="#" id="imsiFailuresCountQuerySelector" data-section="imsiFailuresCountQuery">IMSI Failure Summary</a>
                             <a class="collapse-item" href="#" id="equipmentFailuresQuerySelector" data-section="equipmentFailuresQuery">IMSI Failure Details</a>
-                            <a class="collapse-item" href="#" id="imsiCauseCodesQuerySelector" data-section="imsiCauseCodesQuery">IMSI Cause Codes</a>
-                            <a class="collapse-item" href="#" id="supFirstQuery" data-section="supportEngQueryOne">Count Call Failures</a>
-                            <a class="collapse-item" href="#" id="supSecondQuery" data-section="supportEngQueryTwo">Unique Call Failures</a>                        
+                            <a class="collapse-item" href="#" id="imsiCauseCodesQuerySelector" data-section="imsiCauseCodesQuery">IMSI Cause Codes</a>                   
                         </div>
                     </div>
                 </div>
@@ -146,9 +164,17 @@
 
                         <!-- Nav Item - User Information -->
                         <li class="nav-item dropdown no-arrow">
-                            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
+                            <a class="nav-link dropdown-toggle" href="#" id="userSEDropdown" role="button"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">Network Engineer</span>
+                                <span id="SElogin" class="mr-2 d-none d-lg-inline text-gray-600 small">Support Engineer</span>
+                            </a>
+                            <a class="nav-link dropdown-toggle" href="#" id="userNEDropdown" role="button"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <span id="NElogin" class="mr-2 d-none d-lg-inline text-gray-600 small">Network Engineer</span>
+                            </a>
+                            <a class="nav-link dropdown-toggle" href="#" id="userCSDropdown" role="button"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <span id="NElogin" class="mr-2 d-none d-lg-inline text-gray-600 small">Customer Rep Engineer</span>
                             </a>
                             <!-- Dropdown - User Information -->
                             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
@@ -171,7 +197,13 @@
 
                     <!-- Page Heading -->
                     <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                        <h1 class="h3 mb-0 text-gray-800">Network Engineer Dashboard</h1>
+                        <h1 class="h3 mb-0 text-gray-800" id="NEHeading">Network Engineer Dashboard</h1>
+                    </div>
+                    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                        <h1 class="h3 mb-0 text-gray-800" id="SEHeading">Support Engineer Dashboard</h1>
+                    </div>
+                    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                        <h1 class="h3 mb-0 text-gray-800" id="CSHeading">Customer Service Rep Dashboard</h1>
                     </div>
                     <!-- Content Row -->
                     <div class="row" id="networkEngQueryOne">
@@ -754,6 +786,50 @@
                                             <div class="alert alert-danger col-lg-12" role="alert" id="errorAlertOnListForm">Error on Request</div>
                                         </div>
                                     </div>
+								</div>
+							</div>
+						</div>
+					</div>
+					
+					<div class="row" id="supportEngQueryThree">
+						<div class="col">
+							<div class="card mt-4">
+								<div class="card-header">List of Unique Call Failures for a Failure Class</div>
+
+								<div class="card-body" id="callFailures">									
+										<form id="imsiFailuresForm">
+											<div class="row">
+												<div class="col">
+													<label for="imsiFailuresForm"
+														class="form-label fw-bold small">failureClass</label> <input
+														required type="text" class="form-control"
+														id="failureClassValue" placeholder="FailureClass">
+												</div>
+												<div class="col">
+													<label for="exampleFormControlInput1"
+														class="form-label fw-bold small">Query</label> <input
+														required type="submit"
+														class="form-control btn btn-primary" value="Submit" />
+												</div>
+											</div>
+										</form>								
+									<div class="row mt-4 p-2" id="imsiList">
+										<table id="imsiFailuresTable"
+											class="table table-hover table-bordered table-responsive">
+											<thead>
+												<tr>
+													<th scope="col">IMSI</th>
+												</tr>
+											</thead>
+											<tbody id="tableBody">
+												<tr>
+                                                  <th scope="row" id="imsiFailedNumber">0</th>                                               
+                                            	</tr>
+											</tbody>
+										</table>
+										<div class="alert alert-danger col-lg-12" role="alert"
+											id="errorAlertOnFailuresListForm">Error on Request</div>
+									</div>
 								</div>
 							</div>
 						</div>

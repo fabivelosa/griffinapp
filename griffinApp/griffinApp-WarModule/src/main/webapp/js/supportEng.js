@@ -5,6 +5,14 @@ const setAuthHeader2 = function(xhr){
     xhr.setRequestHeader('Authorization', authToken2);
 }
 
+const displayResponseSummarySup = function(response, startTime, endTime){
+  $(".responseWidget").show();
+
+  let count = response instanceof Array ? response.length : response ? 1 : 0;
+  $(".responseRows").text(`The query returned ${count} row${count > 1 ? "s" : ""}`);
+  $(".responseTime").text(`Duration ${(endTime - startTime)/1000} s`);
+}
+
 const displayCallFailures = function(callFailures){
     $("#imsiListTable").show();
     const table = $('#imsiListTable').DataTable();
@@ -25,7 +33,7 @@ const queryCallFailures = function(from, to){
         beforeSend: setAuthHeader2,
         success: function(response){
             const endTime = new Date().getTime();
-            displayResponseSummary(response, startTime, endTime);
+            displayResponseSummarySup(response, startTime, endTime);
             displayCallFailures(response);
         },
         error: displayErrorOnIMSIList
@@ -60,7 +68,7 @@ const queryCallFailureCount = function(imsi, from, to){
         beforeSend: setAuthHeader2,
         success: function(response){
             const endTime = new Date().getTime();
-            displayResponseSummary(response, startTime, endTime)
+            displayResponseSummarySup(response, startTime, endTime)
             displayCallFailureCount(response);
         },
         error: displayErrorOnIMSISummary2
@@ -109,11 +117,11 @@ const queryCallIMSIsWithFailure = function(failureClass){
     $.ajax({
         type: "GET",
         dataType: "json",
-        url: `${rootURL}/IMSIs/query/failureClass?failureClass=${failureClass}`,
-        beforeSend: setAuthHeader,
+        url: `${rootURL2}/IMSIs/query/failureClass?failureClass=${failureClass}`,
+        beforeSend: setAuthHeader2,
         success: function(response){
             const endTime = new Date().getTime();
-            displayResponseSummary(response, startTime, endTime);
+            displayResponseSummarySup(response, startTime, endTime);
             displayIMSIAffectedByFailureClass(response);
         },
         error: displayErrorOnIFailuresList
@@ -143,27 +151,4 @@ $(document).ready(function(){
         queryCallIMSIsWithFailure(failureClass);
     });
 
-    $("#supFirstQuery").click(function(){
-        $(".responseWidget").hide()
-        $("#supportEngQueryOne").show();
-        $("#supportEngQueryTwo").hide();
-		$("#supportEngQueryThree").hide();
-    });
-    $("#supSecondQuery").click(function(){
-        $(".responseWidget").hide()
-        $("#supportEngQueryOne").hide();
-        $("#supportEngQueryTwo").show();
-		$("#supportEngQueryThree").hide();
-    });
-	 $("#supThirdQuery").click(function(){
-        $(".responseWidget").hide()
-        $("#supportEngQueryOne").hide();
-        $("#supportEngQueryTwo").hide();
-		$("#supportEngQueryThree").show();
-		$("#imsiFailuresTable").hide();
-		$("#errorAlertOnFailuresListForm").hide();
-    });
-
-	$("#supportEngQueryThree").hide();
-	
 });
