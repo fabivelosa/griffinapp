@@ -87,4 +87,6 @@ public interface EventService {
 
 	List<IMSICount> findIMSIS(int number, LocalDateTime startTime, LocalDateTime endTime);
 	
+	//As a Support Engineer I want to display, for a given failure Cause Class, the IMSIs that were affected.
+	List<UniqueIMSI> findIMSISByFailure(final int failureClass);
 }

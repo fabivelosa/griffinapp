@@ -1,8 +1,8 @@
-const rootURL = "http://localhost:8080/callfailures/api";
-const authToken = 'Bearer ' + sessionStorage.getItem("auth-token");
+const rootURL2 = "http://localhost:8080/callfailures/api";
+const authToken2 = 'Bearer ' + sessionStorage.getItem("auth-token");
 
-const setAuthHeader = function(xhr){
-    xhr.setRequestHeader('Authorization', authToken);
+const setAuthHeader2 = function(xhr){
+    xhr.setRequestHeader('Authorization', authToken2);
 }
 
 const displayCallFailures = function(callFailures){
@@ -17,12 +17,17 @@ const displayCallFailures = function(callFailures){
 }
 
 const queryCallFailures = function(from, to){
+    const startTime = new Date().getTime();
     $.ajax({
         type:'GET',
         dataType:'json',
-        url:`${rootURL}/IMSIs/query?from=${from}&to=${to}`,
-        beforeSend: setAuthHeader,
-        success: displayCallFailures,
+        url:`${rootURL2}/IMSIs/query?from=${from}&to=${to}`,
+        beforeSend: setAuthHeader2,
+        success: function(response){
+            displayCallFailures(response);
+            const endTime = new Date().getTime();
+            displayResponseSummary(response, startTime, endTime);
+        },
         error: displayErrorOnIMSIList
     });
 }
@@ -34,7 +39,7 @@ const displayCallFailureCount = function(imsiSummary, textStatus, jqXHR){
     $("#imsiCallFailureCount").text(imsiSummary.callFailuresCount);
 }
 
-const displayErrorOnIMSISummary = function(jqXHR, textStatus, errorThrown){
+const displayErrorOnIMSISummary2 = function(jqXHR, textStatus, errorThrown){
     $("#imsiSummaryTable").hide();
     $("#errorAlertOnCallFailureForm").show();
     $("#errorAlertOnCallFailureForm").text(jqXHR.responseJSON.errorMessage);
@@ -47,17 +52,76 @@ const displayErrorOnIMSIList = function(jqXHR, textStatus, errorThrown){
 }
 
 const queryCallFailureCount = function(imsi, from, to){
+    const startTime = new Date().getTime();
     $.ajax({
         type: "GET",
         dataType: "json",
-        url: `${rootURL}/events/query/ue?model=${imsi}&from=${from}&to=${to}`,
-        beforeSend: setAuthHeader,
-        success: displayCallFailureCount,
-        error: displayErrorOnIMSISummary
+        url: `${rootURL2}/events/query/ue?model=${imsi}&from=${from}&to=${to}`,
+        beforeSend: setAuthHeader2,
+        success: function(response){
+            displayCallFailureCount(response);
+            const endTime = new Date().getTime();
+            displayResponseSummary(response, startTime, endTime);
+        },
+        error: displayErrorOnIMSISummary2
     })
 }
 
-$(document).ready(function(){		
+const autoCompleteIMSI2 = function(){
+    $.ajax({
+        type: "GET",
+        dataType: "json",
+        url:`${rootURL2}/userEquipment`,
+        beforeSend: setAuthHeader2,
+        success: function(data){
+            var list = [];
+            for(var i=0; i<data.length; i++){
+                list.push(data[i].model)
+            }
+            $("#imsiOnCallFailureForm").autocomplete({source:list});
+        }
+    })
+}
+
+//Display
+const displayIMSIAffectedByFailureClass = function(IMSIs){
+    $("#imsiFailuresTable").show();
+	$("#errorAlertOnFailuresListForm").hide();
+	const table = $('#imsiFailuresTable').DataTable();
+    table.clear();
+    $(IMSIs).each(function(index, imsi){
+      table.row.add([imsi.imsi
+        ]);
+    });
+    table.draw();
+    
+}
+
+const displayErrorOnIFailuresList = function(jqXHR, textStatus, errorThrown){
+    $("#imsiFailuresTable").hide();
+    $("#errorAlertOnFailuresListForm").show();
+    $("#errorAlertOnFailuresListForm").text(jqXHR.responseJSON.errorMessage);
+}
+
+//Query
+const queryCallIMSIsWithFailure = function(failureClass){
+    const startTime = new Date().getTime();
+    $.ajax({
+        type: "GET",
+        dataType: "json",
+        url: `${rootURL}/IMSIs/query/failureClass?failureClass=${failureClass}`,
+        beforeSend: setAuthHeader,
+        success: function(response){
+            displayIMSIAffectedByFailureClass(response);
+            const endTime = new Date().getTime();
+            displayResponseSummary(response, startTime, endTime);
+        },
+        error: displayErrorOnIFailuresList
+    })
+}
+
+$(document).ready(function(){	
+    autoCompleteIMSI2();	
     $('#imsiCallFaluireForm').submit(function(event){
         event.preventDefault();
         const imsi = $('#imsiOnCallFailureForm').val();
@@ -72,4 +136,34 @@ $(document).ready(function(){
         const to = new Date($('#endDateOnListForm').val()).valueOf();
         queryCallFailures(from, to);
     });
+
+  $("#imsiFailuresForm").submit(function(event){
+        event.preventDefault();
+        const failureClass = $('#failureClassValue').val();
+        queryCallIMSIsWithFailure(failureClass);
+    });
+
+    $("#supFirstQuery").click(function(){
+        $(".responseWidget").hide()
+        $("#supportEngQueryOne").show();
+        $("#supportEngQueryTwo").hide();
+		$("#supportEngQueryThree").hide();
+    });
+    $("#supSecondQuery").click(function(){
+        $(".responseWidget").hide()
+        $("#supportEngQueryOne").hide();
+        $("#supportEngQueryTwo").show();
+		$("#supportEngQueryThree").hide();
+    });
+	 $("#supThirdQuery").click(function(){
+        $(".responseWidget").hide()
+        $("#supportEngQueryOne").hide();
+        $("#supportEngQueryTwo").hide();
+		$("#supportEngQueryThree").show();
+		$("#imsiFailuresTable").hide();
+		$("#errorAlertOnFailuresListForm").hide();
+    });
+
+	$("#supportEngQueryThree").hide();
+	
 });

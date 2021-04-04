@@ -22,6 +22,7 @@ import com.callfailures.entity.views.UniqueIMSI;
 @Stateless
 @LocalBean
 public class EventDAO {
+
 	private static final String FIND_ALL_EVENTS = "SELECT e FROM event e",
 			FIND_ALL_IMSI = "SELECT DISTINCT NEW com.callfailures.entity.views.UniqueIMSI(e.imsi) " + "FROM event e "
 					+ "ORDER BY e.imsi",
@@ -42,7 +43,9 @@ public class EventDAO {
 					+ "FROM event e " + "WHERE e.ueType.tac = :tac " + "GROUP BY e.ueType, e.eventCause",
 			FIND_TOP_COMBOS = "SELECT DISTINCT NEW com.callfailures.entity.views.DeviceCombination(e.cellId, e.marketOperator, COUNT(e)) "
 					+ "FROM event e " + "WHERE (e.dateTime BETWEEN :startTime AND :endTime) "
-					+ "GROUP BY e.cellId, e.marketOperator " + "ORDER BY COUNT(e) DESC";
+					+ "GROUP BY e.cellId, e.marketOperator " + "ORDER BY COUNT(e) DESC",
+			FIND_IMSI_BY_FAILURECLASS = "SELECT NEW com.callfailures.entity.views.UniqueIMSI(e.imsi)" + "FROM event e "
+					+ "WHERE e.failureClass.failureClass =:failureClass " + "GROUP BY e.imsi";
 
 	@PersistenceContext
 	EntityManager entityManager;
@@ -214,7 +217,21 @@ public class EventDAO {
 		} catch (NoResultException e) {
 			return null;
 		}
-
 	}
 
+	/**
+	 * Query Database for IMSIs with a given FailureClass
+	 * 
+	 * @return list of IMSI affected by failureClass
+	 */
+	@SuppressWarnings("unchecked")
+	public List<UniqueIMSI> findIMSISByFailureClass(final int failureClass) {
+		try {
+			final Query query = entityManager.createQuery(FIND_IMSI_BY_FAILURECLASS);
+			query.setParameter("failureClass", failureClass);
+			return query.getResultList();
+		} catch (NoResultException e) {
+			return null;
+		}
+	}
 }
