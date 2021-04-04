@@ -34,6 +34,7 @@ const queryCallFailures = function(from, to){
 
 const displayCallFailureCount = function(imsiSummary, textStatus, jqXHR){
     $("#errorAlertOnCallFailureForm").hide();
+    $("#countCallFailureResult").show();
     $("#imsiFailureTable").show();
     $("#imsiNumber").text(imsiSummary.model);
     $("#imsiCallFailureCount").text(imsiSummary.callFailuresCount);
@@ -62,7 +63,7 @@ const queryCallFailureCount = function(imsi, from, to){
             displayCallFailureCount(response);
             const endTime = new Date().getTime();
             //displayResponseSummary(response, startTime, endTime);
-            displayIMSISummaryChart(response);
+            displayIMSICallFailureChart(response);
         },
         error: displayErrorOnIMSISummary2
     })
@@ -84,9 +85,9 @@ const autoCompleteIMSI2 = function(){
     })
 }
 
-const displayIMSISummaryChart = function(imsiSummary){
-    $("#imsiSummaryFormResultChartCard").show();
-    var ctx = $("#imsiSummaryFormResultChart")[0];
+const displayIMSICallFailureChart = function(imsiSummary){
+    $("#imsiCallFailureResultCard").show();
+    var ctx = $("#imsiCallFailureResultChart")[0];
     const imsiSummaryChart = new Chart(ctx, {
       type: 'bar',
       data: {
@@ -167,7 +168,7 @@ const displayIMSISummaryChart = function(imsiSummary){
         },
       }
     });
-    $("#imsiSummaryFormResultDate").text(`Data from ${$('#startDateOnCallFailureForm').val()} to ${$('#endDateOnCallFailureForm').val()}`);
+    $("#imsiCallFailureResultDate").text(`Data from ${$('#startDateOnCallFailureForm').val()} to ${$('#endDateOnCallFailureForm').val()}`);
   }
 
 //Display
