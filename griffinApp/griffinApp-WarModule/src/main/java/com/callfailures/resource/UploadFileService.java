@@ -128,17 +128,19 @@ public class UploadFileService {
 				final ParsingResponse<EventCause> eventCauses = causeService.read(sheet);
 				currentUpload.setUploadStatus(5);
 				uploadDAO.update(currentUpload);
+
+				final ParsingResponse<FailureClass> failureClasses = failClassService.read(sheet);
 				currentUpload.setUploadStatus(10);
 				uploadDAO.update(currentUpload);
-				final ParsingResponse<FailureClass> failureClasses = failClassService.read(sheet);
+
+				final ParsingResponse<UserEquipment> userEquipment = userEquipmentService.read(sheet);
 				currentUpload.setUploadStatus(15);
 				uploadDAO.update(currentUpload);
-				final ParsingResponse<UserEquipment> userEquipment = userEquipmentService.read(sheet);
+
+				final ParsingResponse<MarketOperator> marketOperator = marketOperatorService.read(sheet);
 				currentUpload.setUploadStatus(20);
 				uploadDAO.update(currentUpload);
-				final ParsingResponse<MarketOperator> marketOperator = marketOperatorService.read(sheet);
-				currentUpload.setUploadStatus(25);
-				uploadDAO.update(currentUpload);
+
 				final long starEvents = System.nanoTime();
 				final ParsingResponse<Events> events = processEvents(currentUpload);
 
@@ -194,8 +196,8 @@ public class UploadFileService {
 
 		final Thread t2 = new Thread() {
 			public void run() {
-				System.out.println("Init :" + Thread.currentThread().getName() + " from id: " + slice + " to: "
-						+ slice2 + " at " + System.currentTimeMillis());
+				System.out.println("Init :" + Thread.currentThread().getName() + " from id: " + slice + " to: " + slice2
+						+ " at " + System.currentTimeMillis());
 				eventsList = eventService.read(eventSheet, slice, slice2, currentUpload);
 				System.out.println("End :" + Thread.currentThread().getName() + " at " + System.currentTimeMillis());
 
@@ -233,8 +235,8 @@ public class UploadFileService {
 		try {
 			t1.join();
 			t2.join();
-			 t3.join();
-			 t4.join();
+			t3.join();
+			t4.join();
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
@@ -261,14 +263,18 @@ public class UploadFileService {
 
 		uploadsOverallResult.add(new EventsUploadResponseDTO("Event Cause", eventCauses.getValidObjects().size(),
 				eventCauses.getInvalidRows()));
+
 		uploadsOverallResult.add(new EventsUploadResponseDTO("Failure Class", failureClasses.getValidObjects().size(),
 				failureClasses.getInvalidRows()));
+
 		uploadsOverallResult.add(new EventsUploadResponseDTO("User Equipment", userEquipment.getValidObjects().size(),
 				userEquipment.getInvalidRows()));
+
 		uploadsOverallResult.add(new EventsUploadResponseDTO("MCC-NCC", marketOperator.getValidObjects().size(),
 				marketOperator.getInvalidRows()));
+
 		uploadsOverallResult.add(
-				new EventsUploadResponseDTO("Base Data", events.getValidObjects().size(), events.getInvalidRows()));
+				new EventsUploadResponseDTO("Event Data", events.getValidObjects().size(), events.getInvalidRows()));
 
 		writeFileToServer(uploadsOverallResult, reportFile);
 
@@ -283,18 +289,27 @@ public class UploadFileService {
 
 			file = new FileOutputStream(DOWNLOADFILEPATH + filename);
 			reportFile.setReportFile(filename);
+
 			for (final EventsUploadResponseDTO result : uploadsOverallResult) {
 
+				table = result.getTabName();
 				if (result.getTabName().equals(table.toString())) {
-					file.write(("Table: " + table + " , has Ignored Rows").getBytes(Charset.forName("UTF-8")));
 					table = result.getTabName();
+					int ignored = result.getErroneousData().size();
+					int valid = result.getValidRowCount();
+					file.write(("Table: " + table + " , has " + ignored + " Ignored Rows")
+							.getBytes(Charset.forName("UTF-8")));
 					file.write(System.getProperty("line.separator").getBytes(Charset.forName("UTF-8")));
+					reportFile.setTotalInvalidRecords(reportFile.getTotalInvalidRecords() + ignored);
+					reportFile.setTotalValidRecords(reportFile.getTotalValidRecords() + valid);
+					;
 				}
 
 				for (final InvalidRow invalidItem : result.getErroneousData()) {
 					file.write(("Row :" + invalidItem.getRowNumber() + " , Caused :" + invalidItem.getErrorMessage())
 							.getBytes(Charset.forName("UTF-8")));
 					file.write(System.getProperty("line.separator").getBytes(Charset.forName("UTF-8")));
+
 				}
 			}
 			file.flush();
