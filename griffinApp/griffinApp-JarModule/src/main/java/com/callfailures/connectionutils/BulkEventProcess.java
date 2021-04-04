@@ -24,31 +24,31 @@ public class BulkEventProcess {
 	public static void createBulk(final List<Events> events) {
 
 		Connection connection = null;
+		PreparedStatement pstmt = null;
+
 		try {
 			connection = com.callfailures.connectionutils.ConnectionHelper.getConnection();
 			connection.setAutoCommit(false);
 		} catch (SQLException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
 
-		String sqlInsert = "insert into eventdb.event (cellId, dateTime, duration, causeCode, eventCauseId, failureClass, hier321Id, hier32Id, "
+		final String sqlInsert = "insert into eventdb.event (cellId, dateTime, duration, causeCode, eventCauseId, failureClass, hier321Id, hier32Id, "
 				+ " hier3Id, imsi, countryCode, operatorCode, neVersion, tac)"
 				+ " values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-		PreparedStatement pstmt = null;
-		int index = 0;
 
-		try {
-			pstmt = connection.prepareStatement(sqlInsert);
-		} catch (SQLException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
+		if (pstmt == null) {
+			try {
+				pstmt = connection.prepareStatement(sqlInsert);
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
 		}
 
 		for (final Events event : events) {
 			try {
 
-				LocalDateTime out = event.getDateTime().atZone(ZoneId.systemDefault()).toLocalDateTime();
+				final LocalDateTime out = event.getDateTime().atZone(ZoneId.systemDefault()).toLocalDateTime();
 				pstmt.setInt(1, event.getCellId());
 				pstmt.setDate(2, java.sql.Date.valueOf(out.toLocalDate()));
 				pstmt.setInt(3, event.getDuration());
@@ -71,16 +71,23 @@ public class BulkEventProcess {
 		}
 
 		try {
-			pstmt.executeBatch();
-			connection.commit();
-			pstmt.close();
-			connection.setAutoCommit(true);
-			connection.close();
+			if (pstmt != null && connection != null) {
+				pstmt.executeBatch();
+				connection.commit();
+				connection.setAutoCommit(true);
+			}
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
+		} finally {
+			try {
+				if (pstmt != null && connection != null) {
+					pstmt.close();
+					connection.close();
+				}
+
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
 		}
-
 	}
-
 }

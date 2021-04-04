@@ -4,13 +4,11 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-public class ConnectionHelper
-{
-	private String url ="jdbc:mysql://localhost:3307/eventdb?autoReconnect=true&useSSL=false&user=root&password=admin123";
+public class ConnectionHelper {
+	final static private String url = "jdbc:mysql://localhost:3307/eventdb?autoReconnect=true&useSSL=false&user=root&password=admin123";
 	private static ConnectionHelper instance;
 
-	private ConnectionHelper()
-	{
+	private ConnectionHelper() {
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
 		} catch (Exception e) {
@@ -28,9 +26,8 @@ public class ConnectionHelper
 			throw e;
 		}
 	}
-	
-	public static void close(Connection connection)
-	{
+
+	public static void close(final Connection connection) {
 		try {
 			if (connection != null) {
 				connection.close();

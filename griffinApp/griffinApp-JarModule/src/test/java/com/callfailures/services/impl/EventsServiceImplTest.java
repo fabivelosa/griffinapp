@@ -103,7 +103,7 @@ public class EventsServiceImplTest {
 		((EventServiceImpl) eventService).eventDAO = eventDAO;
 		((EventServiceImpl) eventService).validationService = validationService;
 		((EventServiceImpl) eventService).uploadDAO = uploadDAO;
-		((EventServiceImpl) eventService).bultEvent = eventProcess;
+		((EventServiceImpl) eventService).bulkEvent = eventProcess;
 
 		upload.setUploadID(uuid);
 	}
@@ -206,7 +206,6 @@ public class EventsServiceImplTest {
 		try {
 			workbook = new XSSFWorkbook(file);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 

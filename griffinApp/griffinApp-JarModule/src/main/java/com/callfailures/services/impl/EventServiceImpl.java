@@ -46,9 +46,9 @@ public class EventServiceImpl implements EventService {
 
 	@Inject
 	UploadDAO uploadDAO;
-	
+
 	@Inject
-	BulkEventProcess bultEvent;
+	BulkEventProcess bulkEvent;
 
 	@Inject
 	ValidationService validationService;
@@ -114,7 +114,7 @@ public class EventServiceImpl implements EventService {
 		if ((rowTotal > 0) || sheet.getPhysicalNumberOfRows() > 0) {
 			rowTotal++;
 		}
-
+		System.out.println("row total dentro da thread "+rowTotal);
 		readRows(currentUpload, eventsToProcess, parsingResult, sheet, ini, end, rowTotal);
 
 		return parsingResult;
@@ -138,29 +138,21 @@ public class EventServiceImpl implements EventService {
 			index++;
 			row = sheet.getRow(i);
 
-			if (i == rowTotal / 8) {
-				updateProgress(currentUpload, 45);
-			} else if (i == rowTotal / 4) {
-				updateProgress(currentUpload, 55);
-			} else if (i == rowTotal / 2) {
-				updateProgress(currentUpload, 75);
-			}
 			try {
 				final Events events = createEventObject(row);
 				parsingResult.addValidObject(events);
 				eventsToProcess.add(events);
 
 				if (index >= batch_size) {
-					bultEvent.createBulk(eventsToProcess);
+					bulkEvent.createBulk(eventsToProcess);
 					eventsToProcess = new ArrayList<Events>();
 					index = 0;
+					updateProgress(currentUpload, currentUpload.getUploadStatus() + 5);
 				}
-
 			} catch (FieldNotValidException e) {
 				parsingResult.addInvalidRow(new InvalidRow(rowNumber, e.getMessage()));
 			}
-		}		
-		
+		}
 	}
 
 	@TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
@@ -217,7 +209,6 @@ public class EventServiceImpl implements EventService {
 		if (startTime.isAfter(endTime)) {
 			throw new InvalidDateException();
 		}
-
 		return eventDAO.findIMSISBetweenDates(startTime, endTime);
 	}
 
@@ -242,13 +233,12 @@ public class EventServiceImpl implements EventService {
 		}
 		return eventDAO.findIMSIS(number, startTime, endTime);
 	}
+
 	@Override
-	public List<UniqueIMSI> findIMSISByFailure(final int failureClass){
+	public List<UniqueIMSI> findIMSISByFailure(final int failureClass) {
 		if (failureClass < 0) {
 			throw new InvalidFailureClassException();
 		}
 		return eventDAO.findIMSISByFailureClass(failureClass);
 	}
-	
-
 }

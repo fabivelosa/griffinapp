@@ -24,6 +24,7 @@ import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -109,11 +110,11 @@ public class UploadFileService {
 			}
 		}
 
-		try {
-			Thread.sleep(3 * 1000);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
+//		try {
+//			Thread.sleep(3 * 1000);
+//		} catch (InterruptedException e) {
+//			e.printStackTrace();
+//		}
 		createUploadThread(currentUpload);
 		return Response.status(200).entity(currentUpload).build();
 
@@ -163,83 +164,94 @@ public class UploadFileService {
 	}
 
 	private ParsingResponse<Events> processEvents(final Upload currentUpload) {
-
-		Workbook workbook = null;
-
+		final int num_threads = 4;
+		Workbook workbook;
 		try {
 			workbook = new XSSFWorkbook(sheet);
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			final Sheet eventSheet = workbook.getSheetAt(0);
+			try {
+				workbook.close();
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			} finally {
+				if (workbook != null) {
+					workbook.close();
+				}
+			}
+
+			int rowTotal = eventSheet.getLastRowNum();
+			if ((rowTotal > 0) || eventSheet.getPhysicalNumberOfRows() > 0) {
+				rowTotal++;
+			}
+
+			final int slice = rowTotal / num_threads; //30000/4=7500
+
+			final Thread thread1 = new Thread() {
+				public void run() {
+					System.out.println("Init :" + Thread.currentThread().getName() + " from id: " + 1 + " to: "
+							+ (slice - 1) + " at " + System.currentTimeMillis());
+					eventsList = eventService.read(eventSheet, 1, slice - 1, currentUpload);
+					System.out
+							.println("End :" + Thread.currentThread().getName() + " at " + System.currentTimeMillis());
+
+				}
+			};
+
+			final int slice2 = (slice * 2) - 1;
+
+			final Thread thread2 = new Thread() {
+				public void run() {
+					System.out.println("Init :" + Thread.currentThread().getName() + " from id: " + slice + " to: "
+							+ slice2 + " at " + System.currentTimeMillis());
+					eventsList = eventService.read(eventSheet, slice, slice2, currentUpload);
+					System.out
+							.println("End :" + Thread.currentThread().getName() + " at " + System.currentTimeMillis());
+
+				}
+			};
+
+			final int slice3 = (slice * 3) - 1;
+
+			final Thread thread3 = new Thread() {
+				public void run() {
+					System.out.println("Init :" + Thread.currentThread().getName() + " from id: " + slice * 2 + " to: "
+							+ slice3 + " at " + System.currentTimeMillis());
+					eventService.read(eventSheet, slice * 2, slice3, currentUpload);
+					System.out
+							.println("End :" + Thread.currentThread().getName() + " at " + System.currentTimeMillis());
+
+				}
+			};
+
+			final Thread thread4 = new Thread() {
+				public void run() {
+					System.out.println("Init :" + Thread.currentThread().getName() + " from id: " + (slice * 3)
+							+ " to: " + eventSheet.getLastRowNum() + " at " + System.currentTimeMillis());
+					eventService.read(eventSheet, slice * 3, eventSheet.getLastRowNum(), currentUpload);
+					System.out
+							.println("End :" + Thread.currentThread().getName() + " at " + System.currentTimeMillis());
+
+				}
+			};
+
+			thread1.start();
+			thread2.start();
+			thread3.start();
+			thread4.start();
+
+			try {
+				thread1.join();
+				thread2.join();
+				thread3.join();
+				thread4.join();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+
+		} catch (InvalidFormatException | IOException e1) {
+			e1.printStackTrace();
 		}
 
-		final Sheet eventSheet = workbook.getSheetAt(0);
-
-		int rowTotal = eventSheet.getLastRowNum();
-		if ((rowTotal > 0) || eventSheet.getPhysicalNumberOfRows() > 0) {
-			rowTotal++;
-		}
-		final int num_threads = 4;
-		final int slice = rowTotal / num_threads;
-
-		final Thread t1 = new Thread() {
-			public void run() {
-				System.out.println("Init :" + Thread.currentThread().getName() + " from id: " + 1 + " to: "
-						+ (slice - 1) + " at " + System.currentTimeMillis());
-				eventsList = eventService.read(eventSheet, 1, slice - 1, currentUpload);
-				System.out.println("End :" + Thread.currentThread().getName() + " at " + System.currentTimeMillis());
-
-			}
-		};
-
-		int slice2 = (slice * 2) - 1;
-
-		final Thread t2 = new Thread() {
-			public void run() {
-				System.out.println("Init :" + Thread.currentThread().getName() + " from id: " + slice + " to: " + slice2
-						+ " at " + System.currentTimeMillis());
-				eventsList = eventService.read(eventSheet, slice, slice2, currentUpload);
-				System.out.println("End :" + Thread.currentThread().getName() + " at " + System.currentTimeMillis());
-
-			}
-		};
-
-		final int slice3 = (slice * 3) - 1;
-
-		final Thread t3 = new Thread() {
-			public void run() {
-				System.out.println("Init :" + Thread.currentThread().getName() + " from id: " + slice * 2 + " to: "
-						+ slice3 + " at " + System.currentTimeMillis());
-				ParsingResponse<Events> events = eventService.read(eventSheet, slice * 2, slice3, currentUpload);
-				System.out.println("End :" + Thread.currentThread().getName() + " at " + System.currentTimeMillis());
-
-			}
-		};
-
-		final Thread t4 = new Thread() {
-			public void run() {
-				System.out.println("Init :" + Thread.currentThread().getName() + " from id: " + (slice * 3) + " to: "
-						+ eventSheet.getLastRowNum() + " at " + System.currentTimeMillis());
-				ParsingResponse<Events> events = eventService.read(eventSheet, slice * 3, eventSheet.getLastRowNum(),
-						currentUpload);
-				System.out.println("End :" + Thread.currentThread().getName() + " at " + System.currentTimeMillis());
-
-			}
-		};
-
-		t1.start();
-		t2.start();
-		t3.start();
-		t4.start();
-
-		try {
-			t1.join();
-			t2.join();
-			t3.join();
-			t4.join();
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
 		currentUpload.setUploadStatus(95);
 		uploadDAO.update(currentUpload);
 		return eventsList;
@@ -282,7 +294,7 @@ public class UploadFileService {
 
 	private void writeFileToServer(final List<EventsUploadResponseDTO> uploadsOverallResult, final Upload reportFile) {
 		String table = "";
-		final String filename = "Error" + System.currentTimeMillis() + ".txt";
+		final String filename = "Error_" + System.currentTimeMillis() + ".txt";
 		FileOutputStream file = null;
 
 		try {
@@ -295,8 +307,8 @@ public class UploadFileService {
 				table = result.getTabName();
 				if (result.getTabName().equals(table.toString())) {
 					table = result.getTabName();
-					int ignored = result.getErroneousData().size();
-					int valid = result.getValidRowCount();
+					final int ignored = result.getErroneousData().size();
+					final int valid = result.getValidRowCount();
 					file.write(("Table: " + table + " , has " + ignored + " Ignored Rows")
 							.getBytes(Charset.forName("UTF-8")));
 					file.write(System.getProperty("line.separator").getBytes(Charset.forName("UTF-8")));
