@@ -9,11 +9,15 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.io.File;
+import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -44,7 +48,7 @@ public class UserEquipmentImplTest {
 	public void setUp() throws Exception {
 		userEquipment = new UserEquipment();
 	}
-	
+
 	@Test
 	public void testFindAll() {
 		userEquipment.setTac(0);
@@ -56,7 +60,7 @@ public class UserEquipmentImplTest {
 		assertEquals(1, retrievedEquipmentList.size());
 		verify(userEquipmentDAO, times(1)).findAll();
 	}
-	
+
 	@Test
 	public void testSuccessForFindById() {
 		userEquipment.setTac(0);
@@ -85,21 +89,23 @@ public class UserEquipmentImplTest {
 	}
 
 	@Test
-	public void testSuccessForRead() {
-		final File workbookFile = new File(absolutePath + "/userEquipmentService/validData.xlsx");
+	public void testSuccessForRead() throws InvalidFormatException, IOException {
+		final File file = new File(absolutePath + "/userEquipmentService/validData.xlsx");
+		Workbook workbook = new XSSFWorkbook(file);
 		Mockito.doNothing().when(userEquipmentDAO).create(any(UserEquipment.class));
 		when(validationService.checkExistingUserEquipmentType(any(UserEquipment.class))).thenReturn(null);
-		final ParsingResponse<UserEquipment> parseResult = userEquipmentImpl.read(workbookFile);
+		final ParsingResponse<UserEquipment> parseResult = userEquipmentImpl.read(workbook);
 		final Collection<UserEquipment> validObjects = parseResult.getValidObjects();
 		assertEquals(false, validObjects.isEmpty());
 	}
 
 	@Test
-	public void testFailureForRead() {
-		final File workbookFile = new File(absolutePath + "/userEquipmentService/invalidData.xlsx");
+	public void testFailureForRead() throws InvalidFormatException, IOException {
+		final File file = new File(absolutePath + "/userEquipmentService/invalidData.xlsx");
+		Workbook workbook = new XSSFWorkbook(file);
 		Mockito.doThrow(Exception.class).when(userEquipmentDAO).create(any(UserEquipment.class));
 		when(validationService.checkExistingUserEquipmentType(any(UserEquipment.class))).thenReturn(null);
-		final ParsingResponse<UserEquipment> parseResult = userEquipmentImpl.read(workbookFile);
+		final ParsingResponse<UserEquipment> parseResult = userEquipmentImpl.read(workbook);
 		final Collection<InvalidRow> invalidRows = parseResult.getInvalidRows();
 		assertEquals(false, invalidRows.isEmpty());
 	}

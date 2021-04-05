@@ -6,9 +6,15 @@ import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+
 import java.io.File;
+import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.Collection;
+
+import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -16,6 +22,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mockito;
 import org.mockito.internal.verification.Times;
 import org.mockito.runners.MockitoJUnitRunner;
+
 import com.callfailures.dao.EventCauseDao;
 import com.callfailures.entity.EventCause;
 import com.callfailures.entity.EventCausePK;
@@ -38,7 +45,7 @@ public class EventCauseServiceImplTest {
 	@Before
 	public void setUp() throws Exception {
 		eventCausePK = new EventCausePK();
-		eventCause = new EventCause();	
+		eventCause = new EventCause();
 	}
 
 	@Test
@@ -57,7 +64,7 @@ public class EventCauseServiceImplTest {
 	@Test
 	public void testFailureForFindById() {
 		when(eventCauseDAO.getEventCause(eventCausePK)).thenReturn(eventCause);
-		assertNotEquals(eventCause, eventCauseServiceImpl.findById(new EventCausePK(1,1)));
+		assertNotEquals(eventCause, eventCauseServiceImpl.findById(new EventCausePK(1, 1)));
 	}
 
 	@Test
@@ -69,20 +76,22 @@ public class EventCauseServiceImplTest {
 	}
 
 	@Test
-	public void testSuccessForRead() {
-		final File workbookFile = new File(absolutePath + "/eventCauseService/validData.xlsx");
+	public void testSuccessForRead() throws InvalidFormatException, IOException {
+		final File file = new File(absolutePath + "/eventCauseService/validData.xlsx");
+		Workbook workbook = new XSSFWorkbook(file);
 		Mockito.doNothing().when(eventCauseDAO).create(any(EventCause.class));
 		when(validationService.checkExistingEventCause(any(EventCause.class))).thenReturn(null);
-		final ParsingResponse<EventCause> parseResult = eventCauseServiceImpl.read(workbookFile);
+		final ParsingResponse<EventCause> parseResult = eventCauseServiceImpl.read(workbook);
 		final Collection<EventCause> validObjects = parseResult.getValidObjects();
 		assertEquals(false, validObjects.isEmpty());
 	}
 
 	@Test
-	public void testFailureForRead() {
-		final File workbookFile = new File(absolutePath + "/eventCauseService/invalidData.xlsx");
+	public void testFailureForRead() throws InvalidFormatException, IOException {
+		final File file = new File(absolutePath + "/eventCauseService/invalidData.xlsx");
+		Workbook workbook = new XSSFWorkbook(file);
 		Mockito.doThrow(Exception.class).when(eventCauseDAO).create(any(EventCause.class));
-		final ParsingResponse<EventCause> parseResult = eventCauseServiceImpl.read(workbookFile);
+		final ParsingResponse<EventCause> parseResult = eventCauseServiceImpl.read(workbook);
 		final Collection<InvalidRow> invalidRows = parseResult.getInvalidRows();
 		assertEquals(false, invalidRows.isEmpty());
 	}
