@@ -5,6 +5,14 @@ const setAuthHeader = function(xhr){
     xhr.setRequestHeader('Authorization', authToken);
 }
 
+const displayResponseSummaryCS = function(response, startTime, endTime){
+  $(".responseWidget").show();
+
+  let count = response instanceof Array ? response.length : response ? 1 : 0;
+  $(".responseRows").text(`The query returned ${count} row${count > 1 ? "s" : ""}`);
+  $(".responseTime").text(`Duration ${(endTime - startTime)/1000} s`);
+}
+
 const displayIMSICauseCodes = function(causeCodes){
     $("#errorAlertOnCauseCodesQuery").hide();
     $("#causeCodesTable_wrapper").show();
@@ -46,9 +54,9 @@ const queryFailuresByUserEquipment = function(userEquipment){
         url:`${rootURL}/failures/${userEquipment}`,
         beforeSend: setAuthHeader,
         success: function(response){
-            displayEquipmentFailures(response);
             const endTime = new Date().getTime();
-            displayResponseSummary(response, startTime, endTime);
+            displayResponseSummaryCS(response, startTime, endTime);
+            displayEquipmentFailures(response);
         },
         error: displayErrorOnEquipmentFailures
     });
@@ -68,9 +76,9 @@ const queryCauseCodesByIMSI = function(imsi){
         url:`${rootURL}/causecodes/${imsi}`,
         beforeSend: setAuthHeader,
         success: function(response){
-            displayIMSICauseCodes(response)
             const endTime = new Date().getTime();
-            displayResponseSummary(response, startTime, endTime);
+            displayResponseSummaryCS(response, startTime, endTime);
+            displayIMSICauseCodes(response)
         },
         error: displayErrorOnQueryCauseCodesByIMSI
     });
@@ -109,9 +117,9 @@ const queryIMSISUmmary = function(imsi, from, to){
         url: `${rootURL}/events/query?imsi=${imsi}&from=${from}&to=${to}&summary=true`,
         beforeSend: setAuthHeader,
         success: function(response){
-            displayIMSISummary(response);
             const endTime = new Date().getTime();
-            displayResponseSummary(response, startTime, endTime);
+            displayResponseSummaryCS(response, startTime, endTime);
+            displayIMSISummary(response)
         },
         error: displayErrorOnIMSISummary
     })
@@ -155,18 +163,4 @@ $(document).ready(function(){
         queryCauseCodesByIMSI(imsi);
     });
 
-    $("#querySelectors").on("click", "a", function(event){
-        $(".responseWidget").hide()
-        $.each($("#querySelectors").children(), function(index, selector) {
-            if(event.target == selector){
-                $(`#${$(selector).data("section")}`).show();
-            }else{
-                $(`#${$(selector).data("section")}`).hide();
-				$("#networkEngQueryOne").hide();
-		        $("#networkEngQueryTwo").hide();
-				$("#networkEngQueryThree").hide();
-		        $("#networkEngQueryFour").hide();
-            }
-        });
-    });
 });

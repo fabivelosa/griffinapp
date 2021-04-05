@@ -1,5 +1,6 @@
 const rootURL1 = "http://localhost:8080/callfailures/api";
 const authToken1 = 'Bearer ' + sessionStorage.getItem("auth-token");
+const userType = sessionStorage.getItem("auth-type");
 
 const setAuthHeader1 = function(xhr){
     xhr.setRequestHeader('Authorization', authToken1);
@@ -127,7 +128,7 @@ const queryPhoneEquipmentFailures = function(tac){
         type:'GET',
         dataType:'json',
         url:`${rootURL1}/userEquipment/query?tac=${tac}`,
-        beforeSend: setAuthHeader,
+        beforeSend: setAuthHeader1,
         success: function(phoneFailures){
           displayPhoneEquipmentFailures(phoneFailures);
           if(phoneFailures.length > 0){
@@ -560,7 +561,7 @@ const queryTop10IMSISummary = function(from, to){
         type: "GET",
         dataType: "json",
         url: `${rootURL}/IMSIs/query/limit?from=${from}&to=${to}&number=10`,
-        beforeSend: setAuthHeader,
+        beforeSend: setAuthHeader1,
         success: function(imsis){
           displayTop10IMSISummary(imsis);
           if(imsis.length > 0){
@@ -575,9 +576,23 @@ const queryTop10IMSISummary = function(from, to){
     })
 }
 
-const hideOtherQueries = function(){
+const hideSEQueries = function(){
   $(".responseWidget").hide()
-  $.each($("#querySelectors").children(), function(index, selector) {
+  $.each($("#querySESelectors").children(), function(index, selector) {
+          $(`#${$(selector).data("section")}`).hide();
+  });
+}
+
+const hideCSQueries = function(){
+  $(".responseWidget").hide()
+  $.each($("#queryCSSelectors").children(), function(index, selector) {
+          $(`#${$(selector).data("section")}`).hide();
+  });
+}
+
+const hideNEQueries = function(){
+  $(".responseWidget").hide()
+  $.each($("#queryNESelectors").children(), function(index, selector) {
           $(`#${$(selector).data("section")}`).hide();
   });
 }
@@ -587,7 +602,7 @@ const autoCompleteIMSI = function(){
       type: "GET",
       dataType: "json",
       url: `${rootURL}/IMSIs/query/all`,
-      beforeSend: setAuthHeader,
+      beforeSend: setAuthHeader1,
       success: function(data){
           var list = [];
           for(var i=0; i<data.length; i++){
@@ -598,7 +613,26 @@ const autoCompleteIMSI = function(){
   })
 }
 
-$(document).ready(function(){		
+$(document).ready(function(){
+	if (userType == 'SUPPORTENG') {
+			$("#SupportSideBar").show();
+			$("#CSRepSideBar").show();
+			$("#userSEDropdown").show();
+			$("#SEHeading").show();
+			} 
+	else if (userType == 'CUSTSERVREP') {
+				$("#CSRepSideBar").show();
+				$("#userCSDropdown").show();
+				$("#CSHeading").show();
+			} 
+	else if (userType == 'NETWORKMNG') {
+				$("#SupportSideBar").show();
+				$("#CSRepSideBar").show();
+				$("#NESideBar").show();
+				$("#userNEDropdown").show();
+				$("#NEHeading").show();
+			}
+		
     setUserQuipmentDropdownOptions1();
     autoCompleteIMSI1();
 
@@ -631,39 +665,42 @@ $(document).ready(function(){
         queryTop10IMSISummary(from, to);
     });
 
-    $("#netFirstQuery").click(function(){
-        $("#networkEngQueryOne").show();
-        $("#networkEngQueryTwo").hide();
-	      $("#networkEngQueryThree").hide();
-        $("#networkEngQueryFour").hide();
+	$("#queryNESelectors").on("click", "a", function(event){
         $(".responseWidget").hide()
-		    hideOtherQueries();
+		hideSEQueries();
+		hideCSQueries();
+        $.each($("#queryNESelectors").children(), function(index, selector) {
+            if(event.target == selector){
+                $(`#${$(selector).data("section")}`).show();
+            }else{
+                $(`#${$(selector).data("section")}`).hide();
+            }
+        });
     });
 
-    $("#netSecondQuery").click(function(){
-        $("#networkEngQueryOne").hide();
-        $("#networkEngQueryTwo").show();
-	      $("#networkEngQueryThree").hide();
-        $("#networkEngQueryFour").hide();
+	$("#queryCSSelectors").on("click", "a", function(event){
         $(".responseWidget").hide()
-		    hideOtherQueries();
+		hideSEQueries();
+		hideNEQueries();
+        $.each($("#queryCSSelectors").children(), function(index, selector) {
+            if(event.target == selector){
+                $(`#${$(selector).data("section")}`).show();
+            }else{
+                $(`#${$(selector).data("section")}`).hide();
+            }
+        });
     });
 
-    $("#netThirdQuery").click(function(){
-        $("#networkEngQueryOne").hide();
-        $("#networkEngQueryTwo").hide();
-	      $("#networkEngQueryThree").show();
-        $("#networkEngQueryFour").hide();
+    $("#querySESelectors").on("click", "a", function(event){
         $(".responseWidget").hide()
-		    hideOtherQueries();
-    });
-
-     $("#netFourthQuery").click(function(){
-        $("#networkEngQueryOne").hide();
-        $("#networkEngQueryTwo").hide();
-		    $("#networkEngQueryThree").hide();
-        $("#networkEngQueryFour").show();
-        $(".responseWidget").hide()
-		    hideOtherQueries();
+		hideCSQueries();
+		hideNEQueries();
+        $.each($("#querySESelectors").children(), function(index, selector) {
+            if(event.target == selector){
+                $(`#${$(selector).data("section")}`).show();
+            }else{
+                $(`#${$(selector).data("section")}`).hide();
+            }
+        });
     });
 });

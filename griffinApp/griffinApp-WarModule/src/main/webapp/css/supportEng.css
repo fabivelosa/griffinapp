@@ -1,4 +1,12 @@
-#imsiFailureTable, #errorAlertOnCallFailureForm, #imsiListTable, #imsiListTable, #errorAlertOnListForm, #supportEngQueryTwo, #countCallFailureResult, .responseWidget{
+#imsiFailureTable, 
+#errorAlertOnCallFailureForm, 
+#imsiListTable, 
+#imsiListTable, 
+#errorAlertOnListForm, 
+#supportEngQueryTwo
+#supportEngQueryOne
+#supportEngQueryThree
+{
     display: none;
 }
 
