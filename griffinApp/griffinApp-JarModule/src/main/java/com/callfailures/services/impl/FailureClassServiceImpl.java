@@ -1,18 +1,14 @@
 package com.callfailures.services.impl;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.Iterator;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 
-import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import com.callfailures.dao.FailureClassDAO;
 import com.callfailures.entity.FailureClass;
@@ -43,40 +39,37 @@ public class FailureClassServiceImpl implements FailureClassService {
 	}
 
 	@Override
-	public ParsingResponse<FailureClass> read(final File workbookFile) {
+	public ParsingResponse<FailureClass> read(final Workbook workbook) {
 		final ParsingResponse<FailureClass> result = new ParsingResponse<>();
 
-		try (Workbook workbook = new XSSFWorkbook(workbookFile)) {
-			final Sheet sheet = workbook.getSheetAt(2);
-			final Iterator<Row> rowIterator = sheet.rowIterator();
-			FailureClass failureClass = null;
-			Row row = rowIterator.next();
-			while (rowIterator.hasNext()) {
-				row = rowIterator.next();
+		final Sheet sheet = workbook.getSheetAt(2);
+		final Iterator<Row> rowIterator = sheet.rowIterator();
+		FailureClass failureClass = null;
+		Row row = rowIterator.next();
+		while (rowIterator.hasNext()) {
+			row = rowIterator.next();
 
-				final Iterator<Cell> cellIterator = row.cellIterator();
+			final Iterator<Cell> cellIterator = row.cellIterator();
 
-				failureClass = new FailureClass();
+			failureClass = new FailureClass();
 
-				Cell cell = cellIterator.next();
+			Cell cell = cellIterator.next();
 
-				try {
-					failureClass.setFailureClass((int) cell.getNumericCellValue());
-					cell = cellIterator.next();
-					failureClass.setFailureDesc(cell.getStringCellValue());
+			try {
+				failureClass.setFailureClass((int) cell.getNumericCellValue());
+				cell = cellIterator.next();
+				failureClass.setFailureDesc(cell.getStringCellValue());
 
-					if (validationService.checkExistingFailureClass(failureClass) == null) {
-						failureClassDAO.create(failureClass);
-						result.addValidObject(failureClass);
-					}
-
-				} catch (Exception e) {
-					result.addInvalidRow(new InvalidRow(cell.getRowIndex(), e.getMessage()));
+				if (validationService.checkExistingFailureClass(failureClass) == null) {
+					failureClassDAO.create(failureClass);
+					result.addValidObject(failureClass);
 				}
+
+			} catch (Exception e) {
+				result.addInvalidRow(new InvalidRow(cell.getRowIndex(), e.getMessage()));
 			}
-		} catch (IOException | InvalidFormatException e) {
-			e.printStackTrace();
 		}
+
 		return result;
 	}
 }
