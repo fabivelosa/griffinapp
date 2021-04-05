@@ -1,8 +1,8 @@
 package com.callfailures.services;
 
-import java.io.File;
-
 import javax.ejb.Local;
+
+import org.apache.poi.ss.usermodel.Workbook;
 
 import com.callfailures.entity.FailureClass;
 import com.callfailures.parsingutils.ParsingResponse;
@@ -14,5 +14,5 @@ public interface FailureClassService {
 
 	void create(FailureClass obj);
 
-	ParsingResponse<FailureClass> read(File workbookFile);
+	ParsingResponse<FailureClass> read(final Workbook workbook);
 }
