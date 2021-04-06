@@ -37,7 +37,6 @@ import com.callfailures.parsingutils.ParsingResponse;
 import com.callfailures.services.EventService;
 import com.callfailures.services.ValidationService;
 
-
 @Stateless
 @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
 public class EventServiceImpl implements EventService {
@@ -154,7 +153,7 @@ public class EventServiceImpl implements EventService {
 		}
 	}
 
-	@TransactionAttribute(TransactionAttributeType.REQUIRES_NEW) 
+	@TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
 	private void updateProgress(final Upload currentUpload, final int percent) {
 		currentUpload.setUploadStatus(percent);
 		final Upload newobject = uploadDAO.getUploadByRef(currentUpload.getUploadID());
@@ -208,6 +207,7 @@ public class EventServiceImpl implements EventService {
 		if (startTime.isAfter(endTime)) {
 			throw new InvalidDateException();
 		}
+
 		return eventDAO.findIMSISBetweenDates(startTime, endTime);
 	}
 
@@ -240,4 +240,14 @@ public class EventServiceImpl implements EventService {
 		}
 		return eventDAO.findIMSISByFailureClass(failureClass);
 	}
+
+	@Override
+	public List<Events> findListofIMSIEventsByDate(final String imsi, final LocalDateTime startTime,
+			final LocalDateTime endTime) {
+		if (!isValidIMSI(imsi)) {
+			throw new InvalidIMSIException();
+		}
+		return eventDAO.findAllIMSIEventsByDate(imsi, startTime, endTime);
+	}
+
 }

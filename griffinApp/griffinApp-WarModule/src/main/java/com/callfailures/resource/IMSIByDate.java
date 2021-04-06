@@ -1,9 +1,7 @@
 package com.callfailures.resource;
 
-import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.TimeZone;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -14,13 +12,16 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import com.callfailures.entity.Events;
 import com.callfailures.entity.Secured;
 import com.callfailures.entity.views.IMSICount;
 import com.callfailures.entity.views.UniqueIMSI;
 import com.callfailures.errors.ErrorMessage;
 import com.callfailures.errors.ErrorMessages;
 import com.callfailures.exception.InvalidDateException;
+import com.callfailures.exception.InvalidIMSIException;
 import com.callfailures.services.EventService;
+import com.callfailures.utils.DateConverterUtil;
 
 @Path("/IMSIs")
 @Stateless
@@ -30,12 +31,14 @@ public class IMSIByDate {
 	//http://localhost:8080/callfailures/api/IMSIs/query?from=1578762900000&to=1578763800000
 	@EJB
 	private  EventService eventService;
+
 	
 	/**
-	 * Support Engineer: Retreive List of IMSIs with failures during a given time period
-	 * @param fromEpoch - the starting Date parameter converted to long or UNIX timestamp
-	 * @param toEpoch - the starting Date parameter converted to long or UNIX timestamp
-	 * @return Returns List of IMSI names
+	 * Queries List of IMSIs with failures during a given time period
+	 * @param fromEpoch -the starting Date parameter converted to long or UNIX timestamp
+	 * @param toEpoch the starting Date parameter converted to long or UNIX timestamp
+	 * @param imsi - Optional IMSI
+	 * @return List of Events if IMSI is present in the query param, ereturns list of unique IMSI names
 	 */
 	@GET
 	@Secured
@@ -43,16 +46,27 @@ public class IMSIByDate {
 	@Produces({ MediaType.APPLICATION_JSON })
 	public Response getIMSIsByDate(
 			@QueryParam("from") final Long fromEpoch,
-			@QueryParam("to") final Long toEpoch) {
+			@QueryParam("to") final Long toEpoch,
+			@QueryParam("imsi") final String imsi) {
 	
-		final LocalDateTime startTime = convertLongToLocalDateTime(fromEpoch); 
-		final LocalDateTime endTime = convertLongToLocalDateTime(toEpoch); 
+		final LocalDateTime startTime = DateConverterUtil.convertLongToLocalDateTime(fromEpoch); 
+		final LocalDateTime endTime = DateConverterUtil.convertLongToLocalDateTime(toEpoch); 
+		
+		System.out.println("THE IMSI PARAMETER IS " + imsi);
+		
 		try {
-			final List<UniqueIMSI> imsis = eventService.findIMSISBetweenDates(startTime, endTime);
-			return Response.status(200).entity(imsis).build();
-		} catch (InvalidDateException exception) {
+			if(imsi == null || imsi.isEmpty()) {
+				final List<UniqueIMSI> imsis = eventService.findIMSISBetweenDates(startTime, endTime);
+				return Response.status(200).entity(imsis).build();
+			}else {
+				final List<Events> events = eventService.findListofIMSIEventsByDate(imsi, startTime, endTime);
+				return Response.status(200).entity(events).build();
+			}
+		}catch (InvalidDateException exception){
 			return Response.status(404).entity(new ErrorMessages(ErrorMessage.INVALID_DATE.getMessage())).build();
-		}		
+		}catch (InvalidIMSIException exception) {
+			return Response.status(404).entity(new ErrorMessages(ErrorMessage.INVALID_IMSI.getMessage())).build();
+		}
 	}
 	
 	
@@ -85,8 +99,8 @@ public class IMSIByDate {
 			@QueryParam("from") final Long fromEpoch,
 			@QueryParam("to") final Long toEpoch) {
 		
-		final LocalDateTime startTime = convertLongToLocalDateTime(fromEpoch); 
-		final LocalDateTime endTime = convertLongToLocalDateTime(toEpoch); 
+		final LocalDateTime startTime = DateConverterUtil.convertLongToLocalDateTime(fromEpoch); 
+		final LocalDateTime endTime = DateConverterUtil.convertLongToLocalDateTime(toEpoch); 
 		
 		try {
 			final List<IMSICount> imsis = eventService.findIMSIS(number, startTime, endTime);
@@ -115,10 +129,5 @@ public class IMSIByDate {
 		}
 		
 	}
-	
-	
-	private LocalDateTime convertLongToLocalDateTime(final Long startEpoch) {
-		return LocalDateTime.ofInstant(Instant.ofEpochMilli(startEpoch), TimeZone.getDefault().toZoneId());
-}
 	
 }
