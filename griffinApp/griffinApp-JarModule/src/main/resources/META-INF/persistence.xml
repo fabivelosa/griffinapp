@@ -4,7 +4,7 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_2.xsd">
 
-	<persistence-unit name="eventdb">
+	<persistence-unit name="eventdb" transaction-type="JTA">
 		<provider>org.hibernate.ejb.HibernatePersistence</provider>
 		<jta-data-source>java:/MySQLDSEvents</jta-data-source>
 		<shared-cache-mode>ENABLE_SELECTIVE</shared-cache-mode>
@@ -24,6 +24,7 @@
 			<property name="hibernate.jdbc.batch_size" value="2000" />
 			<property name="hibernate.order_inserts" value="true" />
 			<property name="hibernate.order_updates" value="true" />
+			<property name="hibernate.generate_statistics" value="false" />
 		</properties>
 	</persistence-unit>
 </persistence> 
