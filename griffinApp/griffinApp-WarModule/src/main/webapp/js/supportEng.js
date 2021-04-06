@@ -5,6 +5,14 @@ const setAuthHeader2 = function(xhr){
     xhr.setRequestHeader('Authorization', authToken2);
 }
 
+const displayResponseSummarySup = function(response, startTime, endTime){
+  $(".responseWidget").show();
+
+  let count = response instanceof Array ? response.length : response ? 1 : 0;
+  $(".responseRows").text(`The query returned ${count} row${count > 1 ? "s" : ""}`);
+  $(".responseTime").text(`Duration ${(endTime - startTime)/1000} s`);
+}
+
 const displayCallFailures = function(callFailures){
     $("#imsiListTable").show();
     const table = $('#imsiListTable').DataTable();
@@ -24,9 +32,9 @@ const queryCallFailures = function(from, to){
         url:`${rootURL2}/IMSIs/query?from=${from}&to=${to}`,
         beforeSend: setAuthHeader2,
         success: function(response){
-            displayCallFailures(response);
             const endTime = new Date().getTime();
-            displayResponseSummary(response, startTime, endTime);
+            displayResponseSummarySup(response, startTime, endTime);
+            displayCallFailures(response);
         },
         error: displayErrorOnIMSIList
     });
@@ -34,6 +42,7 @@ const queryCallFailures = function(from, to){
 
 const displayCallFailureCount = function(imsiSummary, textStatus, jqXHR){
     $("#errorAlertOnCallFailureForm").hide();
+    $("#countCallFailureResult").show();
     $("#imsiFailureTable").show();
     $("#imsiNumber").text(imsiSummary.model);
     $("#imsiCallFailureCount").text(imsiSummary.callFailuresCount);
@@ -59,9 +68,10 @@ const queryCallFailureCount = function(imsi, from, to){
         url: `${rootURL2}/events/query/ue?model=${imsi}&from=${from}&to=${to}`,
         beforeSend: setAuthHeader2,
         success: function(response){
-            displayCallFailureCount(response);
             const endTime = new Date().getTime();
-            displayResponseSummary(response, startTime, endTime);
+            displayResponseSummarySup(response, startTime, endTime)
+            displayCallFailureCount(response);
+            displayIMSICallFailureChart(response);
         },
         error: displayErrorOnIMSISummary2
     })
@@ -82,6 +92,92 @@ const autoCompleteIMSI2 = function(){
         }
     })
 }
+
+const displayIMSICallFailureChart = function(imsiSummary){
+    $("#imsiCallFailureResultCard").show();
+    var ctx = $("#imsiCallFailureResultChart")[0];
+    const imsiSummaryChart = new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: [imsiSummary.model],
+        datasets: [{
+          label: "Total Count",
+          backgroundColor: "#4e73df",
+          hoverBackgroundColor: "#4e73df",
+          borderColor: "#4e73df",
+          barPercentage:0.5,
+          categoryPercentage:1.0,
+          maxBarThickness:200,
+          data: [imsiSummary.callFailuresCount],
+        }],
+      },
+      options: {
+        maintainAspectRatio: false,
+        layout: {
+          padding: {
+            left: 10,
+            right: 25,
+            top: 25,
+            bottom: 0
+          }
+        },
+        scales: {
+          xAxes: [{
+            type:"category",
+            gridLines: {
+              display: false,
+              drawBorder: false
+            },
+            ticks: {
+              maxTicksLimit: 1
+            }
+          }],
+          yAxes: [{
+            ticks: {
+              min: 0,
+              max: Math.ceil((imsiSummary.callFailuresCount)),       
+              padding: 10,
+            },
+            scaleLabel: {
+              display: true,
+              labelString: 'Call Failures Count'
+            },
+            gridLines: {
+              color: "rgb(234, 236, 244)",
+              zeroLineColor: "rgb(234, 236, 244)",
+              drawBorder: false,
+              borderDash: [2],
+              zeroLineBorderDash: [2]
+            }
+          }],
+        },
+        legend: {
+          display: true,
+          position:'bottom'
+        },
+        tooltips: {
+          titleMarginBottom: 10,
+          titleFontColor: '#6e707e',
+          titleFontSize: 14,
+          backgroundColor: "rgb(255,255,255)",
+          bodyFontColor: "#858796",
+          borderColor: '#dddfeb',
+          borderWidth: 1,
+          xPadding: 15,
+          yPadding: 15,
+          displayColors: false, 
+          caretPadding: 10,
+          callbacks: {
+            label: function(tooltipItem, chart) {
+              var datasetLabel = chart.datasets[tooltipItem.datasetIndex].label || '';
+              return datasetLabel + ': ' + tooltipItem.yLabel;
+            }
+          }
+        },
+      }
+    });
+    $("#imsiCallFailureResultDate").text(`Data from ${$('#startDateOnCallFailureForm').val()} to ${$('#endDateOnCallFailureForm').val()}`);
+  }
 
 //Display
 const displayIMSIAffectedByFailureClass = function(IMSIs){
@@ -109,12 +205,12 @@ const queryCallIMSIsWithFailure = function(failureClass){
     $.ajax({
         type: "GET",
         dataType: "json",
-        url: `${rootURL}/IMSIs/query/failureClass?failureClass=${failureClass}`,
-        beforeSend: setAuthHeader,
+        url: `${rootURL2}/IMSIs/query/failureClass?failureClass=${failureClass}`,
+        beforeSend: setAuthHeader2,
         success: function(response){
-            displayIMSIAffectedByFailureClass(response);
             const endTime = new Date().getTime();
-            displayResponseSummary(response, startTime, endTime);
+            displayResponseSummarySup(response, startTime, endTime);
+            displayIMSIAffectedByFailureClass(response);
         },
         error: displayErrorOnIFailuresList
     })
@@ -143,27 +239,4 @@ $(document).ready(function(){
         queryCallIMSIsWithFailure(failureClass);
     });
 
-    $("#supFirstQuery").click(function(){
-        $(".responseWidget").hide()
-        $("#supportEngQueryOne").show();
-        $("#supportEngQueryTwo").hide();
-		$("#supportEngQueryThree").hide();
-    });
-    $("#supSecondQuery").click(function(){
-        $(".responseWidget").hide()
-        $("#supportEngQueryOne").hide();
-        $("#supportEngQueryTwo").show();
-		$("#supportEngQueryThree").hide();
-    });
-	 $("#supThirdQuery").click(function(){
-        $(".responseWidget").hide()
-        $("#supportEngQueryOne").hide();
-        $("#supportEngQueryTwo").hide();
-		$("#supportEngQueryThree").show();
-		$("#imsiFailuresTable").hide();
-		$("#errorAlertOnFailuresListForm").hide();
-    });
-
-	$("#supportEngQueryThree").hide();
-	
 });

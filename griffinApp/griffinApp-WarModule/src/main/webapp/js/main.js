@@ -43,13 +43,14 @@ function authenticateUser() {
 			console.log("Successful user authentication." + authInfo.userType);
 			sessionStorage.setItem("auth-token", authInfo.token);
 			sessionStorage.setItem("auth-id", authInfo.userId);
+			sessionStorage.setItem("auth-type", authInfo.userType)
 			// render the subpage for the specific user category
 			if (authInfo.userType == 'SYSADMIN') {
 				renderSysAdminContent();
 			} else if (authInfo.userType == 'SUPPORTENG') {
-				renderSuppEngContent();
+				renderNetwManagContent();
 			} else if (authInfo.userType == 'CUSTSERVREP') {
-				renderCustServRepContent();
+				renderNetwManagContent();
 			} else if (authInfo.userType == 'NETWORKMNG') {
 				renderNetwManagContent();
 			}
