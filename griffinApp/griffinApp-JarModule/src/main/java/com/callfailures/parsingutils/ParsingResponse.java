@@ -4,9 +4,18 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 public class ParsingResponse<T> {
-	private final Collection<InvalidRow> invalidRows = new ArrayList<>();
-	private final Collection<T> validObjects = new ArrayList<>();
+	private  Collection<InvalidRow> invalidRows = new ArrayList<>();
+	private  Collection<T> validObjects = new ArrayList<>();
 		
+	
+	public void setInvalidRows(final Collection<InvalidRow> invalidRows) {
+		this.invalidRows = invalidRows;
+	}
+	
+	public void setValidRows(final Collection<T> validObjects) {
+		this.validObjects = validObjects;
+	}
+	
 	public Collection<InvalidRow> getInvalidRows() {
 		return invalidRows;
 	}

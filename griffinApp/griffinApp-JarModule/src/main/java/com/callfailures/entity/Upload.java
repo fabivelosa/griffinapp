@@ -20,9 +20,9 @@ public class Upload {
 	private UUID uploadID;
 
 	private int uploadStatus;
-	
 	private String reportFile;
-	
+	private int totalValidRecords;
+	private int totalInvalidRecords;
 
 	public String getReportFile() {
 		return reportFile;
@@ -46,6 +46,22 @@ public class Upload {
 
 	public void setUploadStatus(final int uploadStatus) {
 		this.uploadStatus = uploadStatus;
+	}
+
+	public int getTotalValidRecords() {
+		return totalValidRecords;
+	}
+
+	public void setTotalValidRecords(final int totalValidRecords) {
+		this.totalValidRecords = totalValidRecords;
+	}
+
+	public int getTotalInvalidRecords() {
+		return totalInvalidRecords;
+	}
+
+	public void setTotalInvalidRecords(final int totalInvalidRecords) {
+		this.totalInvalidRecords = totalInvalidRecords;
 	}
 
 }

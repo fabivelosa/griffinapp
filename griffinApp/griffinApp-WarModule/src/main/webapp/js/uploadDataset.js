@@ -26,7 +26,7 @@ var submitdata = function() {
 function updateProgress(data) {
 	var uuid = data.uploadID;
 	var width = getUploadStatus(uuid);
-		var id = setInterval(frame, 300); 
+		var id = setInterval(frame, 2000); 
 	 	function frame() {
       if (width >= 100) {
         clearInterval(id);

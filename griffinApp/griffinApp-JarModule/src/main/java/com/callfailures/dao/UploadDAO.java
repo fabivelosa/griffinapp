@@ -22,10 +22,10 @@ public class UploadDAO {
 
 	public void create(final Upload obj) {
 		entityManager.persist(obj);
+		entityManager.flush();
 	}
 
 	public void update(final Upload obj) {
 		entityManager.merge(obj);
 	}
-
 }

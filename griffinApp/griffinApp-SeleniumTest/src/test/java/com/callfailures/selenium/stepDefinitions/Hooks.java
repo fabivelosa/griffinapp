@@ -31,7 +31,7 @@ public class Hooks {
 
 	@Before("@SystemAdmin")
 	public void loginSetup() {
-		Hooks.driver.get(SYSTEM_ADMIN_PAGE);
+		Hooks.driver.get(LOGIN_PAGE);
 	}
 	
 	@Before("@NetworkEngineer")

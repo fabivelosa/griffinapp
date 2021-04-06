@@ -1,7 +1,5 @@
 package com.callfailures.services.impl;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
@@ -10,13 +8,11 @@ import java.util.stream.Collectors;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 
-import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.DataFormatter;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import com.callfailures.dao.UserEquipmentDAO;
 import com.callfailures.entity.UserEquipment;
@@ -43,47 +39,42 @@ public class UserEquipmentServceImpl implements UserEquipmentService {
 		userEquipmentDAO.create(obj);
 	}
 
-	public List<UserEquipment> findAll(){
-		return userEquipmentDAO.findAll().stream()
-				.sorted(Comparator.comparing(UserEquipment::getModel))
+	public List<UserEquipment> findAll() {
+		return userEquipmentDAO.findAll().stream().sorted(Comparator.comparing(UserEquipment::getModel))
 				.collect(Collectors.toList());
 	}
-	
+
 	@Override
-	public ParsingResponse<UserEquipment> read(final File workbookFile) {
+	public ParsingResponse<UserEquipment> read(final Workbook workbook) {
 
 		final ParsingResponse<UserEquipment> result = new ParsingResponse<>();
-		try (Workbook workbook = new XSSFWorkbook(workbookFile)) {
 
-			final DataFormatter dataFormatter = new DataFormatter();
-			final Sheet sheet = workbook.getSheetAt(3);
-			final Iterator<Row> rowIterator = sheet.rowIterator();
-			UserEquipment userEquipment = null;
-			Row row = rowIterator.next();
-			while (rowIterator.hasNext()) {
-				row = rowIterator.next();
+		final DataFormatter dataFormatter = new DataFormatter();
+		final Sheet sheet = workbook.getSheetAt(3);
+		final Iterator<Row> rowIterator = sheet.rowIterator();
+		UserEquipment userEquipment = null;
+		Row row = rowIterator.next();
+		while (rowIterator.hasNext()) {
+			row = rowIterator.next();
 
-				final Iterator<Cell> cellIterator = row.cellIterator();
+			final Iterator<Cell> cellIterator = row.cellIterator();
 
-				userEquipment = new UserEquipment();
+			userEquipment = new UserEquipment();
 
-				Cell cell = cellIterator.next();
+			Cell cell = cellIterator.next();
 
-				try {
-					cell = readCellValue(dataFormatter, userEquipment, cellIterator, cell);
+			try {
+				cell = readCellValue(dataFormatter, userEquipment, cellIterator, cell);
 
-					if (validationService.checkExistingUserEquipmentType(userEquipment) == null) {
-						userEquipmentDAO.create(userEquipment);
-						result.addValidObject(userEquipment);
-					}
-				} catch (Exception e) {
-					result.addInvalidRow(new InvalidRow(cell.getRowIndex(), e.getMessage()));
+				if (validationService.checkExistingUserEquipmentType(userEquipment) == null) {
+					userEquipmentDAO.create(userEquipment);
+					result.addValidObject(userEquipment);
 				}
+			} catch (Exception e) {
+				result.addInvalidRow(new InvalidRow(cell.getRowIndex(), e.getMessage()));
 			}
-
-		} catch (IOException | InvalidFormatException e) {
-			e.printStackTrace();
 		}
+
 		return result;
 	}
 
