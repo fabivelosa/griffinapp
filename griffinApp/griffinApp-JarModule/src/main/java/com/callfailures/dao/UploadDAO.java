@@ -27,7 +27,5 @@ public class UploadDAO {
 
 	public void update(final Upload obj) {
 		entityManager.merge(obj);
-	
 	}
-
 }

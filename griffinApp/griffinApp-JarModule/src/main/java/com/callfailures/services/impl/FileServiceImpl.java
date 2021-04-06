@@ -34,6 +34,7 @@ import com.callfailures.services.MarketOperatorService;
 import com.callfailures.services.UserEquipmentService;
 
 @Stateless
+@TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
 public class FileServiceImpl implements FileService {
 
 	@Inject
@@ -61,42 +62,46 @@ public class FileServiceImpl implements FileService {
 	private Collection<Events> validObjects;
 
 	@Override
-	public void processFile(Workbook workbook, Upload currentUpload) {
+	public void processFile(final Workbook workbook, final Upload currentUpload) {
+		new Thread() {
+			public void run() {
 
-		final List<EventsUploadResponseDTO> uploadsOverallResult = new ArrayList<>();
-		final long startNano = System.nanoTime();
+				final List<EventsUploadResponseDTO> uploadsOverallResult = new ArrayList<>();
+				final long startNano = System.nanoTime();
 
-		final ParsingResponse<EventCause> eventCauses = causeService.read(workbook);
-		updateProgress(currentUpload, 5);
+				final ParsingResponse<EventCause> eventCauses = causeService.read(workbook);
+				updateProgress(currentUpload, 5);
 
-		final ParsingResponse<FailureClass> failureClasses = failClassService.read(workbook);
-		updateProgress(currentUpload, 10);
+				final ParsingResponse<FailureClass> failureClasses = failClassService.read(workbook);
+				updateProgress(currentUpload, 10);
 
-		final ParsingResponse<UserEquipment> userEquipment = userEquipmentService.read(workbook);
-		updateProgress(currentUpload, 15);
+				final ParsingResponse<UserEquipment> userEquipment = userEquipmentService.read(workbook);
+				updateProgress(currentUpload, 15);
 
-		final ParsingResponse<MarketOperator> marketOperator = marketOperatorService.read(workbook);
-		updateProgress(currentUpload, 20);
+				final ParsingResponse<MarketOperator> marketOperator = marketOperatorService.read(workbook);
+				updateProgress(currentUpload, 20);
 
-		final long starEvents = System.nanoTime();
-		final ParsingResponse<Events> events = processEvents(currentUpload, workbook);
+				final long starEvents = System.nanoTime();
+				final ParsingResponse<Events> events = processEvents(currentUpload, workbook);
 
-		generateReportFile(uploadsOverallResult, eventCauses, failureClasses, userEquipment, marketOperator, events,
-				currentUpload);
+				generateReportFile(uploadsOverallResult, eventCauses, failureClasses, userEquipment, marketOperator,
+						events, currentUpload);
 
-		updateProgress(currentUpload, 100);
+				updateProgress(currentUpload, 100);
 
-		final long endNano = System.nanoTime();
-		final long duration = (endNano - startNano) / 1000000000;
-		final long durationOthers = (starEvents - startNano) / 1000000000;
-		final long durationEvents = (endNano - starEvents) / 1000000000;
-		System.out.println("It took " + duration + "seconds to validate and store the data");
-		System.out.println("It took " + durationOthers + "seconds to validate and store the others data");
-		System.out.println("It took " + durationEvents + "seconds to validate and store the events data");
+				final long endNano = System.nanoTime();
+				final long duration = (endNano - startNano) / 1000000000;
+				final long durationOthers = (starEvents - startNano) / 1000000000;
+				final long durationEvents = (endNano - starEvents) / 1000000000;
+				System.out.println("It took " + duration + "seconds to validate and store the data");
+				System.out.println("It took " + durationOthers + "seconds to validate and store the others data");
+				System.out.println("It took " + durationEvents + "seconds to validate and store the events data");
+			}
+		}.start();
 
 	}
 
-	private ParsingResponse<Events> processEvents(final Upload currentUpload, Workbook workbook) {
+	private ParsingResponse<Events> processEvents(final Upload currentUpload, final Workbook workbook) {
 		final int num_threads = 4;
 		eventsList = new ParsingResponse<Events>();
 		validObjects = new ArrayList<>();

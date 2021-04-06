@@ -23,7 +23,6 @@ import javax.ws.rs.core.Response;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
-import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.jboss.resteasy.plugins.providers.multipart.InputPart;
 import org.jboss.resteasy.plugins.providers.multipart.MultipartFormDataInput;
@@ -77,10 +76,8 @@ public class UploadFileService {
 				return Response.status(400).entity(e.getStackTrace()).build();
 			}
 		}
-		Workbook workbook = new XSSFWorkbook(sheet);
 
-		fileService.processFile(workbook, currentUpload);
-
+		fileService.processFile(new XSSFWorkbook(sheet), currentUpload);
 		return Response.status(200).entity(currentUpload).build();
 
 	}

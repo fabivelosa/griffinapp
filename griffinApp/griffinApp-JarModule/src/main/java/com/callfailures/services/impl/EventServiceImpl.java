@@ -37,8 +37,9 @@ import com.callfailures.parsingutils.ParsingResponse;
 import com.callfailures.services.EventService;
 import com.callfailures.services.ValidationService;
 
-@TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
+
 @Stateless
+@TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
 public class EventServiceImpl implements EventService {
 
 	@Inject
@@ -114,9 +115,7 @@ public class EventServiceImpl implements EventService {
 		if ((rowTotal > 0) || sheet.getPhysicalNumberOfRows() > 0) {
 			rowTotal++;
 		}
-		System.out.println("row total dentro da thread "+rowTotal);
 		readRows(currentUpload, eventsToProcess, parsingResult, sheet, ini, end, rowTotal);
-
 		return parsingResult;
 	}
 
@@ -155,7 +154,7 @@ public class EventServiceImpl implements EventService {
 		}
 	}
 
-	@TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
+	@TransactionAttribute(TransactionAttributeType.REQUIRES_NEW) 
 	private void updateProgress(final Upload currentUpload, final int percent) {
 		currentUpload.setUploadStatus(percent);
 		final Upload newobject = uploadDAO.getUploadByRef(currentUpload.getUploadID());
