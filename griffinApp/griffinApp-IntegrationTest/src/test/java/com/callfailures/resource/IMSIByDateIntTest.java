@@ -1,6 +1,10 @@
 package com.callfailures.resource;
 
+import static com.callfailures.commontests.utils.FileTestNameUtils.*;
+import static com.callfailures.commontests.utils.JsonTestUtils.*;
 import static com.callfailures.commontests.utils.FileTestNameUtils.getPathFileRequest;
+import static com.callfailures.commontests.utils.FileTestNameUtils.getPathFileResponse;
+import static com.callfailures.commontests.utils.JsonTestUtils.assertJsonMatchesFileContent;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 
@@ -31,8 +35,8 @@ import com.google.gson.JsonObject;
 
 
 @RunWith(Arquillian.class)
-public class UniqueIMSIRetreivalIntTest {
-
+public class IMSIByDateIntTest {
+	private final static String IMSI = "344930000000011";
 	private final static String FROM_TIME = "1616061600000"; // March 18, 2021 10:00AM
 	private final static String TO_TIME = "1616065200000"; // March 18, 2021 11:00AM
 	private final static String FROM_TIME_INVALID = "1516061600000"; 
@@ -169,6 +173,19 @@ public class UniqueIMSIRetreivalIntTest {
 		
 		final JsonObject uniqueImsis = JsonReader.readAsJsonObject(responseGet.readEntity(String.class));
 		assertEquals(ErrorMessage.INVALID_DATE.getMessage(), uniqueImsis.get("errorMessage").getAsString());
+	}
+	
+	@Test
+	@RunAsClient
+	public void testGetListOfEventsOfIMSIByDate() {	
+		final String urlForIMSI = UNIQUE_IMSIS_URL + FROM_TIME + "&to=" + TO_TIME + "&imsi=" + IMSI;
+		final Response responseGet = resourceClient.resourcePath(urlForIMSI).get(token);
+		assertEquals(200, responseGet.getStatus());
+		assertJsonResponseWithFile(responseGet, "response.json");
+	}
+	
+	private void assertJsonResponseWithFile(final Response response, final String fileName) {
+		assertJsonMatchesFileContent(response.readEntity(String.class), getPathFileResponse("imsis", fileName));
 	}
 	
 }
