@@ -1,6 +1,10 @@
 const rootURL1 = "http://localhost:8080/callfailures/api";
 const authToken1 = 'Bearer ' + sessionStorage.getItem("auth-token");
 
+
+
+
+
 const setAuthHeader1 = function(xhr){
     xhr.setRequestHeader('Authorization', authToken1);
 }
@@ -487,6 +491,7 @@ const displayTopTenIMSIsChart = function(imsis){
       }],
     },
     options: {
+      onClick: topTenIMSIDrillDown,
       maintainAspectRatio: false,
       layout: {
         padding: {
@@ -530,6 +535,7 @@ const displayTopTenIMSIsChart = function(imsis){
         display: false
       },
       tooltips: {
+        intersect: false,
         titleMarginBottom: 10,
         titleFontColor: '#6e707e',
         titleFontSize: 14,
@@ -538,7 +544,7 @@ const displayTopTenIMSIsChart = function(imsis){
         borderColor: '#dddfeb',
         borderWidth: 1,
         xPadding: 15,
-        yPadding: 15,
+        yPadding: 15, 
         displayColors: false, 
         caretPadding: 10,
         callbacks: {
@@ -601,6 +607,8 @@ const autoCompleteIMSI = function(){
 $(document).ready(function(){		
     setUserQuipmentDropdownOptions1();
     autoCompleteIMSI1();
+
+    drillDownInit();
 
     $('#imsiSummaryFormNE').submit(function(event){
         event.preventDefault();
