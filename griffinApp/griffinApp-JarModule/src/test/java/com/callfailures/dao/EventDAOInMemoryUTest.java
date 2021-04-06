@@ -230,6 +230,14 @@ class EventDAOInMemoryUTest {
 		final List<IMSICount> topIMISs = eventDAO.findIMSIS(10, startTime, endTime);
 		assertEquals(1, topIMISs.size());
 	}
+	
+	@Test
+	void testFindAllIMSIEventsByDate() {
+		final List<Events> allEvents = eventDAO.findAllIMSIEventsByDate(IMSI, startTime, endTime);
+		assertEquals(1, allEvents.size());
+		Events event = allEvents.get(0);
+		assertEquals(IMSI, event.getImsi());
+	}
 }
 
 
