@@ -172,20 +172,18 @@
 								<div class="card-body">
 								
 									<div class="input-group mb-3">
-										<span class="input-group-text">User ID</span> <input
+										<input
 											type="text" class="form-control" id="userId"
 											placeholder="User ID" aria-label="User ID"
 											aria-describedby="basic-addon1" required>
 									</div>
 									<div class="input-group mb-3">
-                                		<span class="input-group-text">User Name</span>
                                         <input type="text" class="form-control" id="userName" placeholder="User name" aria-label="User name" aria-describedby="basic-addon1" required>                            
                                 	</div>
 									<div class="input-group mb-3">
-
-                                		<span class="input-group-text">User Type</span>
 										<div id="dropdown">
 											<select class="form-control" id="userType" name="types">
+                                                <option value="" selected disabled hidden>User Type</option>
 												<option value="SYSADMIN">System Admin</option>
 												<option value="CUSTSERVREP">Customer Service Rep</option>
 												<option value="SUPPORTENG">Support Engineer</option>
@@ -194,15 +192,13 @@
 										</div>
                                 	</div>
                                     <div class="input-group mb-3">
-                                        <span class="input-group-text">Password</span>
                                        <!--  <input type="password" id="userPassword" class="form-control" placeholder="Password" aria-label="Password" aria-describedby="basic-addon1" required>-->
                                        <input type="password" id="userPassword" class="form-control" placeholder="Password" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"  required>
-                                      </div>
+                                    </div>
                                       
-                                      <div class="input-group mb-3">
-                                        <span class="input-group-text">Confirm Password</span>
+                                    <div class="input-group mb-3">
                                         <input type="password" id="confirmPassword" class="form-control" placeholder="Confirm Password" aria-label="Password" aria-describedby="basic-addon1" required>
-                                      </div>
+                                    </div>
                                   
                                       <div class="input-group">
                                         <button type="button" id="createUserButton" class="btn btn-primary">Create User</button>
@@ -232,33 +228,28 @@
                         </div>
                     <!-- Content Row -->
 						<div class="row">
-						<div class="col-lg-7 mb-3">
-							<div class="card shadow mb-4">
-								<div class="card-header py-3">
-									<h6 class="m-0 font-weight-bold text-primary">Upload File</h6>
-								</div>
-								<div class="card-body">
-									<form id="fileUploadForm" name="uploadInfo">
-										<input class="form-control" name="uploadedFile" type="file"
-											id="uploadFile"> <br>
-										<div id="myProgress">
-											<div id="myBar"></div>
-										</div>
-										<br>
-										<div class="input-group">
-										<button
-											class="d-sm-inline-block btn btn-sm btn-primary shadow-sm"
-											type="submit" id="uploadBtn">Upload File</button>
-											<button
-												class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"
-												id="downloadBtn"><i
-												class="fas fa-download fa-sm text-white-50"></i> View Report</button>
-												</div>	
-											</form>
-											</div>
-										</div>
-									</div>
-								</div>
+                            <div class="col-lg-7 mb-3">
+                                <div class="card shadow mb-4">
+                                    <div class="card-header py-3">
+                                        <h6 class="m-0 font-weight-bold text-primary">Upload File</h6>
+                                    </div>
+                                    <div class="card-body">
+                                        <form id="fileUploadForm" name="uploadInfo">
+                                            <input class="form-control" name="uploadedFile" type="file"
+                                                id="uploadFile"> <br>
+                                            <div id="myProgress">
+                                                <div id="myBar"></div>
+                                            </div>
+                                            <br>
+                                            <div class="input-group">
+                                                <button class="d-sm-inline-block btn btn-sm btn-primary shadow-sm" type="submit" id="uploadBtn" style="margin-right: 20px;">Upload File</button>
+                                                <button class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm" id="downloadBtn"><i class="fas fa-download fa-sm text-white-50"></i> View Report</button>
+                                            </div>	
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+					    </div>
                     <!-- Content Row -->
                     <div class="row">
 
