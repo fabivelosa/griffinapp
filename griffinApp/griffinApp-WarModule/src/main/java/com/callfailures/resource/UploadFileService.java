@@ -77,8 +77,8 @@ public class UploadFileService {
 				return Response.status(400).entity(e.getStackTrace()).build();
 			}
 		}
-
 		Workbook workbook = new XSSFWorkbook(sheet);
+
 		fileService.processFile(workbook, currentUpload);
 
 		return Response.status(200).entity(currentUpload).build();
