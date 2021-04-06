@@ -15,6 +15,11 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 import org.hibernate.annotations.Type;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.callfailures.common.serializers.LocalDateTimeDeserializer;
+import com.callfailures.common.serializers.LocalDateTimeSerializer;
+
 @Entity(name = "event")
 @XmlRootElement
 @Table(name = "event")
@@ -34,6 +39,8 @@ public class Events {
 
 	@NotNull
 	@Type(type= "org.hibernate.type.LocalDateTimeType")
+	@JsonDeserialize(using = LocalDateTimeDeserializer.class)  
+	@JsonSerialize(using = LocalDateTimeSerializer.class)
 	private LocalDateTime dateTime;
 
 	@ManyToOne
