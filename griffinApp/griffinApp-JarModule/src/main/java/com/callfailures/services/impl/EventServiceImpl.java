@@ -256,7 +256,7 @@ public class EventServiceImpl implements EventService {
 	}
 
 	@Override
-	public List<Events> findListofIMSIEventsByDate(String imsi, LocalDateTime startTime, LocalDateTime endTime) {
+	public List<Events> findListofIMSIEventsByDate(final String imsi, final LocalDateTime startTime, final LocalDateTime endTime) {
 		if (!isValidIMSI(imsi)) {
 			throw new InvalidIMSIException();
 		}
