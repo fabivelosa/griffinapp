@@ -8,7 +8,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
-import javax.ejb.Asynchronous;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
@@ -62,24 +61,22 @@ public class FileServiceImpl implements FileService {
 	private Collection<Events> validObjects;
 
 	@Override
-	@Asynchronous
-	@TransactionAttribute(TransactionAttributeType.REQUIRED)
 	public void processFile(Workbook workbook, Upload currentUpload) {
 
 		final List<EventsUploadResponseDTO> uploadsOverallResult = new ArrayList<>();
 		final long startNano = System.nanoTime();
 
 		final ParsingResponse<EventCause> eventCauses = causeService.read(workbook);
-		updateProgress(currentUpload,5);
+		updateProgress(currentUpload, 5);
 
 		final ParsingResponse<FailureClass> failureClasses = failClassService.read(workbook);
-		updateProgress(currentUpload,10);
+		updateProgress(currentUpload, 10);
 
 		final ParsingResponse<UserEquipment> userEquipment = userEquipmentService.read(workbook);
-		updateProgress(currentUpload,15);
+		updateProgress(currentUpload, 15);
 
 		final ParsingResponse<MarketOperator> marketOperator = marketOperatorService.read(workbook);
-		updateProgress(currentUpload,20);
+		updateProgress(currentUpload, 20);
 
 		final long starEvents = System.nanoTime();
 		final ParsingResponse<Events> events = processEvents(currentUpload, workbook);
@@ -87,7 +84,7 @@ public class FileServiceImpl implements FileService {
 		generateReportFile(uploadsOverallResult, eventCauses, failureClasses, userEquipment, marketOperator, events,
 				currentUpload);
 
-		updateProgress(currentUpload,100);
+		updateProgress(currentUpload, 100);
 
 		final long endNano = System.nanoTime();
 		final long duration = (endNano - startNano) / 1000000000;
@@ -180,7 +177,7 @@ public class FileServiceImpl implements FileService {
 			e.printStackTrace();
 		}
 
-		updateProgress(currentUpload,95);
+		updateProgress(currentUpload, 95);
 		eventsList.setInvalidRows(invalidRows);
 		eventsList.setValidRows(validObjects);
 		return eventsList;
@@ -269,15 +266,11 @@ public class FileServiceImpl implements FileService {
 		return uploadDAO.getUploadByRef(uploadUUID);
 
 	}
-	
-	@TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
+
 	public void updateProgress(final Upload currentUpload, final int percent) {
 		currentUpload.setUploadStatus(percent);
-		final Upload newobject = uploadDAO.getUploadByRef(currentUpload.getUploadID());
-		if (newobject.getUploadStatus() < percent) {
-			newobject.setUploadStatus(percent);
-			uploadDAO.update(newobject);
-		}
+		uploadDAO.update(currentUpload);
+
 	}
 
 }
