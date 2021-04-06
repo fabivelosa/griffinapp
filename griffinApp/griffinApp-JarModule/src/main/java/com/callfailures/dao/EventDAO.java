@@ -60,10 +60,10 @@ public class EventDAO {
 			FIND_IMSI_BY_FAILURECLASS="SELECT NEW com.callfailures.entity.views.UniqueIMSI(e.imsi)"
 					+"FROM event e "
 					+"WHERE e.failureClass.failureClass =:failureClass "
-					+"GROUP BY e.imsi";
-	
-
-
+					+"GROUP BY e.imsi",
+			DRILL_DOWN_FIND_ALL_IMSI_EVENTS_BY_DATE = "SELECT e FROM event e "
+					+ "WHERE (e.dateTime BETWEEN :startTime AND :endTime) "
+					+ "AND e.imsi = :imsi";
 	
 	@PersistenceContext
 	EntityManager entityManager;
@@ -250,6 +250,26 @@ public class EventDAO {
 		final Query query = entityManager.createQuery(FIND_IMSI_BY_FAILURECLASS);
 		query.setParameter("failureClass", failureClass);
 		return query.getResultList();
+		} catch (NoResultException e) {
+			return null;
+		}
+	}
+	
+	/**
+	 * Queries the drilldown data for an IMSI in a given period
+	 * @param IMSI
+	 * @param startTime
+	 * @param endTime
+	 * @return list of Events for an IMSI
+	 */
+	@SuppressWarnings("unchecked")
+	public List<Events> findAllIMSIEventsByDate(final String IMSI, final LocalDateTime startTime, final LocalDateTime endTime){
+		final Query query = entityManager.createQuery(DRILL_DOWN_FIND_ALL_IMSI_EVENTS_BY_DATE, Events.class);
+		query.setParameter("imsi", IMSI);
+		query.setParameter("startTime", startTime);
+		query.setParameter("endTime", endTime);
+		try {
+			return query.getResultList();
 		} catch (NoResultException e) {
 			return null;
 		}

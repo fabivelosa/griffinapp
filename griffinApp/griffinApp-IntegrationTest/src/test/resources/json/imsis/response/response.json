@@ -1,0 +1,64 @@
+[{"eventId":1,
+	"eventCause":{
+		"eventCauseId":{
+			"eventCauseId":4098,
+			"causeCode":1},
+		"description":"S1 SIG CONN SETUP-S1 INTERFACE DOWN"},
+	"dateTime":"2021-03-18T10:00:00",
+	"failureClass":{
+		"failureClass":1,
+		"failureDesc":"HIGH PRIORITY ACCESS"},
+	"ueType":{
+		"tac":21060800,
+		"model":"VEA3",
+		"vendorName":"S.A.R.L. B  & B International",
+		"accessCapability":"GSM 1800, GSM 900",
+		"deviceType":null,
+		"ueType":null,
+		"deviceOS":null,
+		"inputMode":null},
+	"marketOperator":{
+		"marketOperatorId":{
+			"countryCode":344,
+			"operatorCode":930},
+		"countryDesc":"Antigua and Barbuda",
+		"operatorDesc":"AT&T Wireless-Antigua AG "},
+	"cellId":4,
+	"duration":1000,
+	"neVersion":"11B",
+	"imsi":"344930000000011",
+	"hier3Id":"1150444940909480000",
+	"hier32Id":"8226896360947470000",
+	"hier321Id":"4809532081614990000"},
+{"eventId":2,
+	"eventCause":{
+		"eventCauseId":{
+			"eventCauseId":4098,
+			"causeCode":1},
+		"description":"S1 SIG CONN SETUP-S1 INTERFACE DOWN"},
+		"dateTime":"2021-03-18T10:30:00",
+		"failureClass":{
+			"failureClass":1,
+			"failureDesc":"HIGH PRIORITY ACCESS"},
+		"ueType":{
+			"tac":21060800,
+			"model":"VEA3",
+			"vendorName":"S.A.R.L. B  & B International",
+			"accessCapability":"GSM 1800, GSM 900",
+			"deviceType":null,
+			"ueType":null,
+			"deviceOS":null,
+			"inputMode":null},
+		"marketOperator":{
+			"marketOperatorId":{
+				"countryCode":344,
+				"operatorCode":930},
+			"countryDesc":"Antigua and Barbuda",
+			"operatorDesc":"AT&T Wireless-Antigua AG "},
+		"cellId":4,
+		"duration":1000,
+		"neVersion":"11B",
+		"imsi":"344930000000011",
+		"hier3Id":"1150444940909480000",
+		"hier32Id":"8226896360947470000",
+		"hier321Id":"4809532081614990000"}]
