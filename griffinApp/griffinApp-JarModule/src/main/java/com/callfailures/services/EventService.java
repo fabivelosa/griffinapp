@@ -87,4 +87,15 @@ public interface EventService {
 	
 	//As a Support Engineer I want to display, for a given failure Cause Class, the IMSIs that were affected.
 	List<UniqueIMSI> findIMSISByFailure(final int failureClass);
+	
+	
+	/**
+	 * Drill down of all IMSI Events By Date
+	 * @param imsi
+	 * @param startTime
+	 * @param endTime
+	 * @return the list of events associated with an IMSI
+	 * @throws InvalidIMSIException
+	 */
+	List<Events> findListofIMSIEventsByDate(final String imsi, final LocalDateTime startTime, final LocalDateTime endTime) throws InvalidIMSIException;
 }

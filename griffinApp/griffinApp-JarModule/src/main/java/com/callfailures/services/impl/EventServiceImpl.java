@@ -246,6 +246,7 @@ public class EventServiceImpl implements EventService {
 		}
 		return eventDAO.findIMSIS(number, startTime, endTime);
 	}
+	
 	@Override
 	public List<UniqueIMSI> findIMSISByFailure(final int failureClass){
 		if (failureClass < 0) {
@@ -253,6 +254,13 @@ public class EventServiceImpl implements EventService {
 		}
 		return eventDAO.findIMSISByFailureClass(failureClass);
 	}
-	
 
+	@Override
+	public List<Events> findListofIMSIEventsByDate(String imsi, LocalDateTime startTime, LocalDateTime endTime) {
+		if (!isValidIMSI(imsi)) {
+			throw new InvalidIMSIException();
+		}
+		return eventDAO.findAllIMSIEventsByDate(imsi, startTime, endTime);
+	}
+	
 }
