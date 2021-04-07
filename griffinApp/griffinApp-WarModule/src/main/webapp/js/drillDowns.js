@@ -59,17 +59,25 @@ const imsiLineChartConfig = {
       scales: {
         xAxes: [{
           type: "time",
-          distribution: "linear"
+          min:0,
+          distribution: "linear",
+          ticks:{
+            source:'data'
+          },
+          gridLines: {
+            display: false,
+            drawBorder: false
+          }
         }],
         yAxes: [{
-        ticks: {
-          min: 0,
-          max: 100,     
-          padding: 10,
-        },
+          ticks: {
+            min: 0,
+            max: 100,     
+            padding: 10,
+         },
         scaleLabel: {
           display: true,
-          labelString: 'Call Failures Count/Duration'
+          labelString: 'Call Failures Count'
         },
         gridLines: {
           color: "rgb(234, 236, 244)",
