@@ -61,6 +61,22 @@ public class EventDAO {
 	}
 
 	/**
+	 * Stores the Events object to the database
+	 * 
+	 * @param event - the object to be persisted
+	 */
+	public void createEvents(final List<Events> events) {
+
+		for (final Events event : events) {
+			entityManager.persist(event);
+
+		}
+		entityManager.flush();
+		entityManager.clear();
+
+	}
+
+	/**
 	 * Queries all the Events stored in the database
 	 * 
 	 * @return the list of the results of events

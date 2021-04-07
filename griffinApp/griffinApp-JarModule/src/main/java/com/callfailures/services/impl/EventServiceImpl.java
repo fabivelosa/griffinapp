@@ -15,7 +15,6 @@ import javax.inject.Inject;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 
-import com.callfailures.connectionutils.BulkEventProcess;
 import com.callfailures.dao.EventDAO;
 import com.callfailures.dao.UploadDAO;
 import com.callfailures.entity.Events;
@@ -46,9 +45,6 @@ public class EventServiceImpl implements EventService {
 
 	@Inject
 	UploadDAO uploadDAO;
-
-	@Inject
-	BulkEventProcess bulkEvent;
 
 	@Inject
 	ValidationService validationService;
@@ -108,19 +104,21 @@ public class EventServiceImpl implements EventService {
 	@Override
 	public ParsingResponse<Events> read(final Sheet sheet, final int ini, final int end, final Upload currentUpload) {
 
-		final List<Events> eventsToProcess = new ArrayList<Events>();
+		//final List<Events> eventsToProcess = new ArrayList<Events>();
 		final ParsingResponse<Events> parsingResult = new ParsingResponse<>();
 		int rowTotal = sheet.getLastRowNum();
 		if ((rowTotal > 0) || sheet.getPhysicalNumberOfRows() > 0) {
 			rowTotal++;
 		}
-		readRows(currentUpload, eventsToProcess, parsingResult, sheet, ini, end, rowTotal);
+		readRows(currentUpload, parsingResult, sheet, ini, end, rowTotal);
 		return parsingResult;
 	}
 
-	private void readRows(final Upload currentUpload, List<Events> eventsToProcess,
+	private void readRows(final Upload currentUpload,
 			final ParsingResponse<Events> parsingResult, final Sheet sheet, final int ini, final int end,
 			final int rowTotal) {
+		
+		List<Events> eventsToProcess = new ArrayList<Events>();
 		final Iterator<Row> rowIterator = sheet.rowIterator();
 		Row row = rowIterator.next();
 		int rowNumber = 0;
@@ -142,7 +140,7 @@ public class EventServiceImpl implements EventService {
 				eventsToProcess.add(events);
 
 				if (index >= batch_size) {
-					bulkEvent.createBulk(eventsToProcess);
+					eventDAO.createEvents(eventsToProcess);
 					eventsToProcess = new ArrayList<Events>();
 					index = 0;
 					updateProgress(currentUpload, currentUpload.getUploadStatus() + 5);
@@ -151,6 +149,7 @@ public class EventServiceImpl implements EventService {
 				parsingResult.addInvalidRow(new InvalidRow(rowNumber, e.getMessage()));
 			}
 		}
+		
 	}
 
 	@TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
