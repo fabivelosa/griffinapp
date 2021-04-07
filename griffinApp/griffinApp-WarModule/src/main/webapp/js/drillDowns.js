@@ -1,10 +1,11 @@
 /* Util Methods for the Graph*/
-const getRoundedUpYAxisMaxValue = function(chartData){
-    const maxValue = Math.max(...chartData.map(data => data.y));
+const getRoundedUpYAxisMaxValue = function(durations, counts){
+    const durationsMaxValue = Math.max(...durations.map(data => data.y));
+    const countsMaxValue = Math.max(...counts.map(data => data.y));
+    const maxValue = Math.max(durationsMaxValue, countsMaxValue);
     const roundedUp =  maxValue <= 10 ? 10 : (Math.ceil(maxValue/10)) * (Math.pow(10, Math.ceil(Math.log10(maxValue)))/10);
     return roundedUp;
 }
-
 
 const getMinXAxisValue = function(chartData){
     return new Date(Math.min(...chartData.map(data => new Date(data.x)))).toDateString();
@@ -221,7 +222,7 @@ const displayNetworkEngQueryFourDrillDownChart = function(imsiEventsList){
     const incrementalCounts = generateIncrementalTimeSeriesData(imsiEventsList)["counts"];
     networkEngQueryFourDrillDownChart.data.datasets[0].data = cumulativeDurations;
     networkEngQueryFourDrillDownChart.data.datasets[1].data = cumulativeCounts;
-    imsiLineChartConfig.options.scales.yAxes[0].ticks.max = getRoundedUpYAxisMaxValue(cumulativeDurations);
+    imsiLineChartConfig.options.scales.yAxes[0].ticks.max = getRoundedUpYAxisMaxValue(cumulativeDurations, cumulativeCounts);
     networkEngQueryFourDrillDownChart.update();
     $("#networkEngQueryFourDrillDownChartTitleType").text("Cumulative")
     $("#networkEngQueryFourDrillDownChartTitleDescription").text(`IMSI ${imsiEventsList[0].imsi} Failures`);
@@ -236,7 +237,7 @@ const initDrillDownButtons = function(chart, cumulativeDurations, incrementalDur
         $("#networkEngQueryFourDrillDownChartTitleType").text("Incremental ")
         chart.data.datasets[0].data = incrementalDurations;
         chart.data.datasets[1].data = incrementalCounts;
-        imsiLineChartConfig.options.scales.yAxes[0].ticks.max = getRoundedUpYAxisMaxValue(incrementalDurations)["durations"];
+        imsiLineChartConfig.options.scales.yAxes[0].ticks.max = getRoundedUpYAxisMaxValue(incrementalDurations, incrementalCounts);
         chart.update();
         console.log(imsiLineChartConfig);
     });
@@ -247,7 +248,7 @@ const initDrillDownButtons = function(chart, cumulativeDurations, incrementalDur
         $("#networkEngQueryFourDrillDownChartTitleType").text("Cumulative ")
         chart.data.datasets[0].data = cumulativeDurations;
         chart.data.datasets[1].data = cumulativeCounts;
-        imsiLineChartConfig.options.scales.yAxes[0].ticks.max = getRoundedUpYAxisMaxValue(cumulativeDurations)["durations"];
+        imsiLineChartConfig.options.scales.yAxes[0].ticks.max = getRoundedUpYAxisMaxValue(cumulativeDurations, cumulativeCounts);
         chart.update();
     });
 };
