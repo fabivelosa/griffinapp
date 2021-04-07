@@ -14,8 +14,10 @@ const displayResponseSummaryCS = function(response, startTime, endTime){
 }
 
 const displayIMSICauseCodes = function(causeCodes){
+	$("#emptyCauseCode").hide();
     $("#errorAlertOnCauseCodesQuery").hide();
     $("#causeCodesTable_wrapper").show();
+	$("#causeCodeDiv").show();
     $("#causeCodesTable").show();
     const table = $('#causeCodesTable').DataTable();
     table.clear();
@@ -27,6 +29,8 @@ const displayIMSICauseCodes = function(causeCodes){
 
 const displayEquipmentFailures = function(IMSIfailures){
     $("#errorAlertOnEquipmentFailuresQuery").hide();
+	$("#emptyFailDetail").hide();
+	$("#failDetailDiv").show();
     $("#phoneFailuresTable").show();
     const table = $('#phoneFailuresTable').DataTable();
     table.clear();
@@ -41,6 +45,9 @@ const displayEquipmentFailures = function(IMSIfailures){
 }
 
 const displayErrorOnEquipmentFailures = function(jqXHR, textStatus, errorThrown){
+	$("#emptyFailDetail").hide();
+	$("#failDetailDiv").hide();
+	$(".responseWidget").hide();
     $("#phoneFailuresTable").hide();
     $("#errorAlertOnEquipmentFailuresQuery").show();
     $("#errorAlertOnEquipmentFailuresQuery").text(jqXHR.responseJSON.errorMessage);
@@ -54,15 +61,26 @@ const queryFailuresByUserEquipment = function(userEquipment){
         url:`${rootURL}/failures/${userEquipment}`,
         beforeSend: setAuthHeader,
         success: function(response){
+			if(response.length > 0){
             const endTime = new Date().getTime();
             displayResponseSummaryCS(response, startTime, endTime);
             displayEquipmentFailures(response);
+			}else{
+				$("#errorAlertOnEquipmentFailuresQuery").hide();
+				$("#emptyFailDetail").show();
+				$("#failDetailDiv").hide();
+			    $("#phoneFailuresTable").hide();
+				$(".responseWidget").hide();
+			}
         },
         error: displayErrorOnEquipmentFailures
     });
 }
 
 const displayErrorOnQueryCauseCodesByIMSI = function(jqXHR, textStatus, errorThrown){
+	$("#emptyCauseCode").hide();
+	$("#causeCodeDiv").hide();
+	$(".responseWidget").hide();
     $("#causeCodesTable_wrapper").hide();
     $("#errorAlertOnCauseCodesQuery").show();
     $("#errorAlertOnCauseCodesQuery").text(jqXHR.responseJSON.errorMessage);
@@ -76,9 +94,18 @@ const queryCauseCodesByIMSI = function(imsi){
         url:`${rootURL}/causecodes/${imsi}`,
         beforeSend: setAuthHeader,
         success: function(response){
+			if(response.length > 0){
             const endTime = new Date().getTime();
             displayResponseSummaryCS(response, startTime, endTime);
             displayIMSICauseCodes(response)
+			}else{
+				$("#emptyCauseCode").show();
+			    $("#errorAlertOnCauseCodesQuery").hide();
+			    $("#causeCodesTable_wrapper").hide();
+				$("#causeCodeDiv").hide();
+			    $("#causeCodesTable").hide();
+				$(".responseWidget").hide();
+			}
         },
         error: displayErrorOnQueryCauseCodesByIMSI
     });
@@ -95,6 +122,8 @@ const addUserEquipmentOptions = function(IMSIs){
 
 const displayIMSISummary = function(imsiSummary, textStatus, jqXHR){
     $("#errorAlertOnSummaryForm").hide();
+	$("#emptyImsiSumm").hide();
+	$("#imsiSummDiv").show();
     $("#imsiSummaryTable").show();
     $("#imsiSummaryNumber").text(imsiSummary.imsi);
     $("#imsiSummaryFromDate").text($('#startDateOnIMSISummaryForm').val());
@@ -104,6 +133,9 @@ const displayIMSISummary = function(imsiSummary, textStatus, jqXHR){
 }
 
 const displayErrorOnIMSISummary = function(jqXHR, textStatus, errorThrown){
+	$("#emptyImsiSumm").hide();
+	$(".responseWidget").hide();
+	$("#imsiSummDiv").hide();
     $("#imsiSummaryTable").hide();
     $("#errorAlertOnSummaryForm").show();
     $("#errorAlertOnSummaryForm").text(jqXHR.responseJSON.errorMessage);
@@ -117,9 +149,17 @@ const queryIMSISUmmary = function(imsi, from, to){
         url: `${rootURL}/events/query?imsi=${imsi}&from=${from}&to=${to}&summary=true`,
         beforeSend: setAuthHeader,
         success: function(response){
+			if(response.callFailuresCount > 0){
             const endTime = new Date().getTime();
             displayResponseSummaryCS(response, startTime, endTime);
             displayIMSISummary(response)
+			}else{
+				$(".responseWidget").hide();
+				$("#errorAlertOnSummaryForm").hide();
+				$("#emptyImsiSumm").show();
+				$("#imsiSummDiv").hide();
+			    $("#imsiSummaryTable").hide();
+			}
         },
         error: displayErrorOnIMSISummary
     })
