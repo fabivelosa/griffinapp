@@ -216,8 +216,8 @@ const displayNetworkEngQueryFourDrillDownTable = function(imsiEventsList){
 }
 
 const displayNetworkEngQueryFourDrillDownChart = function(imsiEventsList){    
-    networkEngQueryFourDrillDownChart.destroy();
-    networkEngQueryFourDrillDownChart = new Chart($("#networkEngQueryFourDrillDownChart")[0], imsiLineChartConfig);
+    // networkEngQueryFourDrillDownChart.destroy();
+    // networkEngQueryFourDrillDownChart = new Chart($("#networkEngQueryFourDrillDownChart")[0], imsiLineChartConfig);
     const cumulativeDurations = generateCumulativeTimeSeriesData(imsiEventsList)["durations"];
     const incrementalDurations = generateIncrementalTimeSeriesData(imsiEventsList)["durations"];
     const cumulativeCounts = generateCumulativeTimeSeriesData(imsiEventsList)["counts"];
@@ -229,6 +229,7 @@ const displayNetworkEngQueryFourDrillDownChart = function(imsiEventsList){
     $("#networkEngQueryFourDrillDownChartTitleType").text("Cumulative")
     $("#networkEngQueryFourDrillDownChartTitleDescription").text(`IMSI ${imsiEventsList[0].imsi} Failures`);
     $("#networkEngQueryFourIncrementalBtn").show();
+    $("#networkEngQueryFourCumulativeBtn").hide();
     initDrillDownButtons(networkEngQueryFourDrillDownChart, cumulativeDurations, incrementalDurations, cumulativeCounts, incrementalCounts);
 }
 
