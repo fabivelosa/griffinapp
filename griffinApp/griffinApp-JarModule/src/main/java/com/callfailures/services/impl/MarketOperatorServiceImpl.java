@@ -1,18 +1,14 @@
 package com.callfailures.services.impl;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.Iterator;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 
-import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import com.callfailures.dao.MarketOperatorDAO;
 import com.callfailures.entity.MarketOperator;
@@ -42,44 +38,41 @@ public class MarketOperatorServiceImpl implements MarketOperatorService {
 	}
 
 	@Override
-	public ParsingResponse<MarketOperator> read(final File workbookFile) {
+	public ParsingResponse<MarketOperator> read(final Workbook workbook) {
 		final ParsingResponse<MarketOperator> result = new ParsingResponse<>();
 
-		try (Workbook workbook = new XSSFWorkbook(workbookFile)) {
-			final Sheet sheet = workbook.getSheetAt(4);
-			final Iterator<Row> rowIterator = sheet.rowIterator();
-			MarketOperator operator = null;
-			MarketOperatorPK operatorPK = null;
+		final Sheet sheet = workbook.getSheetAt(4);
+		final Iterator<Row> rowIterator = sheet.rowIterator();
+		MarketOperator operator = null;
+		MarketOperatorPK operatorPK = null;
 
-			Row row = rowIterator.next();
-			while (rowIterator.hasNext()) {
-				row = rowIterator.next();
+		Row row = rowIterator.next();
+		while (rowIterator.hasNext()) {
+			row = rowIterator.next();
 
-				final Iterator<Cell> cellIterator = row.cellIterator();
+			final Iterator<Cell> cellIterator = row.cellIterator();
 
-				Cell cell = cellIterator.next();
-				try {
-					operator = new MarketOperator();
-					operatorPK = new MarketOperatorPK();
-					operatorPK.setCountryCode((int) cell.getNumericCellValue());
-					cell = cellIterator.next();
-					operatorPK.setOperatorCode((int) cell.getNumericCellValue());
-					operator.setMarketOperatorId(operatorPK);
-					cell = cellIterator.next();
-					operator.setCountryDesc(cell.getStringCellValue());
-					cell = cellIterator.next();
-					operator.setOperatorDesc(cell.getStringCellValue());
-					if (validationService.checkExistingMarketOperator(operator) == null) {
-						marketOperatorDAO.create(operator);
-						result.addValidObject(operator);
-					}
-				} catch (Exception e) {
-					result.addInvalidRow(new InvalidRow(cell.getRowIndex(), e.getMessage()));
+			Cell cell = cellIterator.next();
+			try {
+				operator = new MarketOperator();
+				operatorPK = new MarketOperatorPK();
+				operatorPK.setCountryCode((int) cell.getNumericCellValue());
+				cell = cellIterator.next();
+				operatorPK.setOperatorCode((int) cell.getNumericCellValue());
+				operator.setMarketOperatorId(operatorPK);
+				cell = cellIterator.next();
+				operator.setCountryDesc(cell.getStringCellValue());
+				cell = cellIterator.next();
+				operator.setOperatorDesc(cell.getStringCellValue());
+				if (validationService.checkExistingMarketOperator(operator) == null) {
+					marketOperatorDAO.create(operator);
+					result.addValidObject(operator);
 				}
+			} catch (Exception e) {
+				result.addInvalidRow(new InvalidRow(cell.getRowIndex(), e.getMessage()));
 			}
-		} catch (IOException | InvalidFormatException e) {
-			e.printStackTrace();
 		}
+
 		return result;
 	}
 }

@@ -1,16 +1,20 @@
 package com.callfailures.services.impl;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.io.File;
+import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.Collection;
 
+import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -70,20 +74,23 @@ public class FailureClassServiceImplTest {
 	}
 
 	@Test
-	public void testSuccessForRead() {
-		final File workbookFile = new File(absolutePath + "/failureClassService/validData.xlsx");
+	public void testSuccessForRead() throws InvalidFormatException, IOException {
+		final File file = new File(absolutePath + "/failureClassService/validData.xlsx");
+		Workbook workbook = new XSSFWorkbook(file);
 		Mockito.doNothing().when(failureClassDAO).create(any(FailureClass.class));
 		when(validationService.checkExistingFailureClass(any(FailureClass.class))).thenReturn(null);
-		final ParsingResponse<FailureClass> parseResult = failureClassServiceImpl.read(workbookFile);
+		final ParsingResponse<FailureClass> parseResult = failureClassServiceImpl.read(workbook);
 		final Collection<FailureClass> validObjects = parseResult.getValidObjects();
 		assertEquals(false, validObjects.isEmpty());
 	}
 
-	// @Test
-	public void testFailureForRead() {
-		final File workbookFile = new File(absolutePath + "/failureClassService/invalidData.xlsx");
+	@Test
+	public void testFailureForRead() throws InvalidFormatException, IOException {
+		final File file = new File(absolutePath + "/failureClassService/invalidData.xlsx");
+		Workbook workbook = new XSSFWorkbook(file);
 		Mockito.doThrow(Exception.class).when(failureClassDAO).create(any(FailureClass.class));
-		final ParsingResponse<FailureClass> parseResult = failureClassServiceImpl.read(workbookFile);
+		when(validationService.checkExistingFailureClass(any(FailureClass.class))).thenReturn(null);
+		final ParsingResponse<FailureClass> parseResult = failureClassServiceImpl.read(workbook);
 		final Collection<InvalidRow> invalidRows = parseResult.getInvalidRows();
 		assertEquals(false, invalidRows.isEmpty());
 	}

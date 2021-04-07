@@ -7,9 +7,15 @@ import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+
 import java.io.File;
+import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.Collection;
+
+import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -17,6 +23,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mockito;
 import org.mockito.internal.verification.Times;
 import org.mockito.runners.MockitoJUnitRunner;
+
 import com.callfailures.dao.MarketOperatorDAO;
 import com.callfailures.entity.MarketOperator;
 import com.callfailures.entity.MarketOperatorPK;
@@ -39,7 +46,7 @@ public class MarketOperatorServiceImplTest {
 	@Before
 	public void setUp() throws Exception {
 		marketOperatorPK = new MarketOperatorPK();
-		marketOperator = new MarketOperator();	
+		marketOperator = new MarketOperator();
 	}
 
 	@Test
@@ -58,7 +65,7 @@ public class MarketOperatorServiceImplTest {
 	@Test
 	public void testFailureForFindById() {
 		when(marketOperatorDAO.getMarketOperator(marketOperatorPK)).thenReturn(marketOperator);
-		assertNotEquals(marketOperator, marketOperatorServiceImpl.findById(new MarketOperatorPK(1,1)));
+		assertNotEquals(marketOperator, marketOperatorServiceImpl.findById(new MarketOperatorPK(1, 1)));
 	}
 
 	@Test
@@ -70,11 +77,12 @@ public class MarketOperatorServiceImplTest {
 	}
 
 	@Test
-	public void testSuccessForRead() {
-		final File workbookFile = new File(absolutePath + "/marketOperatorService/validData.xlsx");
+	public void testSuccessForRead() throws InvalidFormatException, IOException {
+		final File file = new File(absolutePath + "/marketOperatorService/validData.xlsx");
+		Workbook workbook = new XSSFWorkbook(file);
 		Mockito.doNothing().when(marketOperatorDAO).create(any(MarketOperator.class));
 		when(validationService.checkExistingMarketOperator(any(MarketOperator.class))).thenReturn(null);
-		final ParsingResponse<MarketOperator> parseResult = marketOperatorServiceImpl.read(workbookFile);
+		final ParsingResponse<MarketOperator> parseResult = marketOperatorServiceImpl.read(workbook);
 		final Collection<MarketOperator> validObjects = parseResult.getValidObjects();
 		assertFalse(validObjects.isEmpty());
 		final MarketOperator marketOperator = validObjects.iterator().next();
@@ -86,10 +94,11 @@ public class MarketOperatorServiceImplTest {
 	}
 
 	@Test
-	public void testFailureForRead() {
-		final File workbookFile = new File(absolutePath + "/marketOperatorService/invalidData.xlsx");
+	public void testFailureForRead() throws InvalidFormatException, IOException {
+		final File file = new File(absolutePath + "/marketOperatorService/invalidData.xlsx");
+		Workbook workbook = new XSSFWorkbook(file);
 		Mockito.doThrow(Exception.class).when(marketOperatorDAO).create(any(MarketOperator.class));
-		final ParsingResponse<MarketOperator> parseResult = marketOperatorServiceImpl.read(workbookFile);
+		final ParsingResponse<MarketOperator> parseResult = marketOperatorServiceImpl.read(workbook);
 		final Collection<InvalidRow> invalidRows = parseResult.getInvalidRows();
 		assertEquals(false, invalidRows.isEmpty());
 	}

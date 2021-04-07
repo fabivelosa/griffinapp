@@ -1,18 +1,14 @@
 package com.callfailures.services.impl;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.Iterator;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 
-import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import com.callfailures.dao.EventCauseDao;
 import com.callfailures.entity.EventCause;
@@ -42,44 +38,40 @@ public class EventCauseServiceImpl implements EventCauseService {
 	}
 
 	@Override
-	public ParsingResponse<EventCause> read(final File workbookFile) {
+	public ParsingResponse<EventCause> read(final Workbook workbook) {
 		final ParsingResponse<EventCause> result = new ParsingResponse<>();
 
-		try (Workbook workbook = new XSSFWorkbook(workbookFile)) {
-			final Sheet sheet = workbook.getSheetAt(1);
-			final Iterator<Row> rowIterator = sheet.rowIterator();
-			EventCause eventCause = null;
-			EventCausePK eventCausePK = null;
+		final Sheet sheet = workbook.getSheetAt(1);
+		final Iterator<Row> rowIterator = sheet.rowIterator();
+		EventCause eventCause = null;
+		EventCausePK eventCausePK = null;
 
-			Row row = rowIterator.next();
-			while (rowIterator.hasNext()) {
-				row = rowIterator.next();
+		Row row = rowIterator.next();
+		while (rowIterator.hasNext()) {
+			row = rowIterator.next();
 
-				final Iterator<Cell> cellIterator = row.cellIterator();
+			final Iterator<Cell> cellIterator = row.cellIterator();
 
-				Cell cell = cellIterator.next();
-				eventCause = new EventCause();
-				eventCausePK = new EventCausePK();
-				eventCausePK.setCauseCode((int) cell.getNumericCellValue());
-				cell = cellIterator.next();
-				eventCausePK.setEventCauseId((int) cell.getNumericCellValue());
-				cell = cellIterator.next();
-				eventCause.setEventCauseId(eventCausePK);
-				eventCause.setDescription(cell.getStringCellValue());
+			Cell cell = cellIterator.next();
+			eventCause = new EventCause();
+			eventCausePK = new EventCausePK();
+			eventCausePK.setCauseCode((int) cell.getNumericCellValue());
+			cell = cellIterator.next();
+			eventCausePK.setEventCauseId((int) cell.getNumericCellValue());
+			cell = cellIterator.next();
+			eventCause.setEventCauseId(eventCausePK);
+			eventCause.setDescription(cell.getStringCellValue());
 
-				try {
-					if (validationService.checkExistingEventCause(eventCause) == null) {
-						eventCauseDAO.create(eventCause);
-						result.addValidObject(eventCause);
-					}
-				} catch (Exception e) {
-					result.addInvalidRow(new InvalidRow(cell.getRowIndex(), e.getMessage()));
+			try {
+				if (validationService.checkExistingEventCause(eventCause) == null) {
+					eventCauseDAO.create(eventCause);
+					result.addValidObject(eventCause);
 				}
+			} catch (Exception e) {
+				result.addInvalidRow(new InvalidRow(cell.getRowIndex(), e.getMessage()));
 			}
-
-		} catch (IOException | InvalidFormatException e) {
-			e.printStackTrace();
 		}
+
 		return result;
 	}
 }
