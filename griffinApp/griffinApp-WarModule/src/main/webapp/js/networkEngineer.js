@@ -20,6 +20,7 @@ const displayResponseSummary = function(response, startTime, endTime){
 
 const displayPhoneEquipmentFailures = function(phoneFailures){
     $("#phoneFailuresTableNE").show();
+	$("#alertModelNoData").hide();
     const table = $('#phoneFailuresTableNE').DataTable();
     table.clear();
     $(phoneFailures).each(function(index, phoneFailure){
@@ -133,15 +134,19 @@ const queryPhoneEquipmentFailures = function(tac){
         dataType:'json',
         url:`${rootURL1}/userEquipment/query?tac=${tac}`,
         beforeSend: setAuthHeader1,
-        success: function(phoneFailures){
-          displayPhoneEquipmentFailures(phoneFailures);
+        success: function(phoneFailures){  
           if(phoneFailures.length > 0){
+			displayPhoneEquipmentFailures(phoneFailures);
             displayPhoneEquipmentFailuresChart(phoneFailures);
+			const endTime = new Date().getTime();
+          	displayResponseSummary(phoneFailures, startTime, endTime);
           }else{
             $("#userEquipmentFailuresChartCard").hide();
+			$(".responseWidget").hide();
+			$("#phoneTableDiv").hide();
+			$("#phoneFailuresTableNE").hide();
+			$("#alertModelNoData").show();
           }
-          const endTime = new Date().getTime();
-          displayResponseSummary(phoneFailures, startTime, endTime);
         },
         error: function(jqXHR, textStatus, errorThrown){
             console.log(jqXHR);
@@ -173,12 +178,19 @@ const setUserQuipmentDropdownOptions1 = function(){
 
 const displayIMSISummary1 = function(imsiSummary, textStatus, jqXHR){
     $("#errorAlertOnSummaryFormNE").hide();
+	$("#alertIMSISNoData").hide();
     $("#imsiSummaryTableOne").show();
     $("#imsiSummaryNENumber").text(imsiSummary.imsi);
     $("#imsiSummaryNEFromDate").text($('#startDateOnIMSISummaryFormNE').val());
     $("#imsiSummaryNEToDate").text($('#endDateOnIMSISummaryFormNE').val());
     $("#imsiSummaryNECallFailureCount").text(imsiSummary.callFailuresCount);
     $("#imsiSummaryNETotalDuration").text(imsiSummary.totalDurationMs/1000 + " s");
+}
+
+const displayIMSINoData = function(){
+    $("#errorAlertOnSummaryFormNE").hide();
+    $("#imsiSummaryTableOne").hide();
+	$("#alertIMSISNoData").show();
 }
 
 const displayIMSISummaryChart = function(imsiSummary){
@@ -279,6 +291,7 @@ const displayIMSISummaryChart = function(imsiSummary){
 const displayErrorOnIMSISummary1 = function(jqXHR, textStatus, errorThrown){
     $("#imsiSummaryTableOne").hide();
 	$("#imsiSummaryFormResultChartCard").hide();
+	$("#alertIMSISNoData").hide();
     $("#errorAlertOnSummaryFormNE").show();
     $("#errorAlertOnSummaryFormNE").text(jqXHR.responseJSON.errorMessage);
 }
@@ -292,14 +305,15 @@ const queryIMSISUmmary1 = function(imsi, from, to){
         url: `${rootURL}/events/query?imsi=${imsi}&from=${from}&to=${to}&summary=true`,
         beforeSend: setAuthHeader1,
         success: function(imsiSummary){
-          displayIMSISummary1(imsiSummary);
           if(imsiSummary.callFailuresCount > 0){
+			displayIMSISummary1(imsiSummary);
             displayIMSISummaryChart(imsiSummary);
+			const endTime = new Date().getTime();
+          	displayResponseSummary(imsiSummary, startTime, endTime);
           }else{
             $("#imsiSummaryFormResultChartCard").hide();
+			displayIMSINoData();
           }
-          const endTime = new Date().getTime();
-          displayResponseSummary(imsiSummary, startTime, endTime);
         },
         error: displayErrorOnIMSISummary1
     })
@@ -307,6 +321,7 @@ const queryIMSISUmmary1 = function(imsi, from, to){
 
 const displayTopTenCombinations = function(combinations){
     $("#combinationsTable").show();
+	$("#alertNoCombinations").hide();
     const table = $('#combinationsTable').DataTable();
     table.clear();
     $(combinations).each(function(index, combination){
@@ -411,6 +426,7 @@ const displayTopTenCombinationsChart = function(combinations){
 const displayTopCombinationsError = function(jqXHR, textStatus, errorThrown){
     $("#combinationsTable").hide();
     $("#combinationsTable_wrapper").hide();
+	$("#alertNoCombinations").hide();
     $("#top10ComboChartCard").hide();
     $("#errorAlertOnTopCombinationsForm").show();
     $("#errorAlertOnSummaryForm").text(jqXHR.responseJSON.errorMessage);
@@ -424,14 +440,19 @@ const queryTopCombinations = function(from, to){
         url: `${rootURL1}/Combinations/query?from=${from}&to=${to}`,
         beforeSend: setAuthHeader1,
         success: function(combinations){
-            displayTopTenCombinations(combinations);
             if(combinations.length > 0){
+			  displayTopTenCombinations(combinations);
               displayTopTenCombinationsChart(combinations);
+			  const endTime = new Date().getTime();
+              displayResponseSummary(combinations, startTime, endTime);
             }else{
               $("#top10ComboChartCard").hide();
+			  $(".responseWidget").hide();
+			  $("#combiTableDiv").hide();
+			  $("#combinationsTable").hide();
+			  $("#alertNoCombinations").show();
             }
-            const endTime = new Date().getTime();
-            displayResponseSummary(combinations, startTime, endTime);
+            
         },
         error: displayTopCombinationsError
     })
@@ -456,6 +477,7 @@ const autoCompleteIMSI1 = function(){
 
 const displayTop10IMSISummary = function(topTenIMSIFailures){
 	$("#imsiTopSummaryTable").show();
+	$("#alertNoTopModels").hide();
 	const table = $('#imsiTopSummaryTable').DataTable();
     table.clear();
     $(topTenIMSIFailures).each(function(index, topTenIMSIFailure){
@@ -470,6 +492,7 @@ const displayTop10IMSISummary = function(topTenIMSIFailures){
 const displayTop10IMSIsError = function(jqXHR, textStatus, errorThrown){
   $("#imsiTopSummaryTable").hide();
   $("#top10IMSIChartCard").hide();
+  $("#alertNoTopModels").hide();
   $("#errorAlertOnTopCombinationsForm").show();
   $("#errorAlertOnSummaryForm").text(jqXHR.responseJSON.errorMessage);
 }
@@ -569,14 +592,18 @@ const queryTop10IMSISummary = function(from, to){
         url: `${rootURL}/IMSIs/query/limit?from=${from}&to=${to}&number=10`,
         beforeSend: setAuthHeader1,
         success: function(imsis){
-          displayTop10IMSISummary(imsis);
           if(imsis.length > 0){
+			displayTop10IMSISummary(imsis);
             displayTopTenIMSIsChart(imsis);
+			const endTime = new Date().getTime();
+            displayResponseSummary(imsis, startTime, endTime);
           }else{
             $("#top10IMSIChartCard").hide();
+			$(".responseWidget").hide();
+			$("#imsiTopDiv").hide();
+			$("#imsiTopSummaryTable").hide();
+			$("#alertNoTopModels").show();
           }
-          const endTime = new Date().getTime();
-          displayResponseSummary(imsis, startTime, endTime);
         },
         error: displayTop10IMSIsError
     })
