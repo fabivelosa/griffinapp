@@ -11,6 +11,14 @@ const getRoundedUpYAxisMaxValue = function(chartData){
     return Math.pow(10, Math.ceil(Math.log10(maxValue)));
 }
 
+const getMinXAxisValue = function(chartData){
+    return new Date(Math.min(...chartData.map(data => new Date(data.x)))).toDateString();
+};
+
+const getMaxXAxisValue = function(chartData){
+    return new Date(Math.max(...chartData.map(data => new Date(data.x)))).toDateString();
+};
+
 const generateIncrementalTimeSeriesData = function(dataset){
     const countPerTimeMap = dataset.reduce((map,event) => {
         let key = new Date(event.dateTime).toISOString();
@@ -123,13 +131,17 @@ const displayNetworkEngQueryFourDrillDownTable = function(imsiEventsList){
     table.draw();
 }
 
-const displayNetworkEngQueryFourDrillDownChart = function(imsiEventsList){
+const displayNetworkEngQueryFourDrillDownChart = function(imsiEventsList){    
     const context = $("#networkEngQueryFourDrillDownChart")[0];
     const networkEngQueryFourDrillDownChart = new Chart(context, imsiLineChartConfig);
     let chartData = generateIncrementalTimeSeriesData(imsiEventsList);
     networkEngQueryFourDrillDownChart.data.datasets[0].data = chartData;
     imsiLineChartConfig.options.scales.yAxes[0].ticks.max = getRoundedUpYAxisMaxValue(chartData);
     networkEngQueryFourDrillDownChart.update();
+
+    $("#networkEngQueryFourDrillDownChartTitle").text(`IMSI ${imsiEventsList[0].imsi} Failures`)
+
+
 }
 
 const queryListOfIMSIEventForDrillDown = function(imsi, fromTime, toTime){
