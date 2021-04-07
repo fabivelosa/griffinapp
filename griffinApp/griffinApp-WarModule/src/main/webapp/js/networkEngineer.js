@@ -492,7 +492,7 @@ const displayTopTenIMSIsChart = function(imsis){
       }],
     },
     options: {
-      onClick: topTenIMSIDrillDown,
+      onClick: topTenIMSIDrillDownEventHandler,
       maintainAspectRatio: false,
       layout: {
         padding: {
@@ -641,8 +641,6 @@ $(document).ready(function(){
 		
     setUserQuipmentDropdownOptions1();
     autoCompleteIMSI1();
-
-    drillDownInit();
 
     $('#imsiSummaryFormNE').submit(function(event){
         event.preventDefault();
