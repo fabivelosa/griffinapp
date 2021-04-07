@@ -213,7 +213,7 @@ const displayIMSISummaryChart = function(imsiSummary){
       {
         label: "Total Duration (seconds) ",
         backgroundColor: "#FFA500",
-        hoverBackgroundColor: "#2e59d9",
+        hoverBackgroundColor: "#FFA500",
         borderColor: "#FFA500",
         data: [imsiSummary.totalDurationMs/1000],
         type:"line"
@@ -221,6 +221,7 @@ const displayIMSISummaryChart = function(imsiSummary){
       ],
     },
     options: {
+      onClick: imsiSummaryDrillDownEventHandler,
       maintainAspectRatio: false,
       layout: {
         padding: {
@@ -481,7 +482,6 @@ const displayTop10IMSISummary = function(topTenIMSIFailures){
 	const table = $('#imsiTopSummaryTable').DataTable();
     table.clear();
     $(topTenIMSIFailures).each(function(index, topTenIMSIFailure){
-        console.log(topTenIMSIFailure);
         table.row.add([topTenIMSIFailure.imsi, 
             topTenIMSIFailure.callFailuresCount
         ]);
@@ -515,7 +515,7 @@ const displayTopTenIMSIsChart = function(imsis){
       }],
     },
     options: {
-      onClick: topTenIMSIDrillDown,
+      onClick: topTenIMSIDrillDownEventHandler,
       maintainAspectRatio: false,
       layout: {
         padding: {
@@ -669,8 +669,6 @@ $(document).ready(function(){
     setUserQuipmentDropdownOptions1();
     autoCompleteIMSI1();
 
-    drillDownInit();
-
     $('#imsiSummaryFormNE').submit(function(event){
         event.preventDefault();
         const imsi = $('#imsiOnIMSISummaryFormNE').val();
@@ -701,7 +699,8 @@ $(document).ready(function(){
     });
 
 	$("#queryNESelectors").on("click", "a", function(event){
-        $(".responseWidget").hide()
+    $(".responseWidget").hide();
+    $(".drillDownSections").hide();
 		hideSEQueries();
 		hideCSQueries();
         $.each($("#queryNESelectors").children(), function(index, selector) {
@@ -714,7 +713,8 @@ $(document).ready(function(){
     });
 
 	$("#queryCSSelectors").on("click", "a", function(event){
-        $(".responseWidget").hide()
+    $(".responseWidget").hide();
+    $(".drillDownSections").hide();
 		hideSEQueries();
 		hideNEQueries();
         $.each($("#queryCSSelectors").children(), function(index, selector) {
@@ -727,7 +727,8 @@ $(document).ready(function(){
     });
 
     $("#querySESelectors").on("click", "a", function(event){
-        $(".responseWidget").hide()
+    $(".responseWidget").hide();
+    $(".drillDownSections").hide();
 		hideCSQueries();
 		hideNEQueries();
         $.each($("#querySESelectors").children(), function(index, selector) {
@@ -738,4 +739,12 @@ $(document).ready(function(){
             }
         });
     });
+
+    // Drill Down Back Event Handler
+    $("#drillDownBackIcon").click(function(event){
+      hideAllSections();
+      $(".drillDownSections").hide();
+      $(`#${$(this).data("target")}`).show();
+    });
+
 });
