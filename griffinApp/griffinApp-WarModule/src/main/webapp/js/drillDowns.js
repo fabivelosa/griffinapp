@@ -8,7 +8,7 @@
 /* Util Methods for the Graph*/
 const getRoundedUpYAxisMaxValue = function(chartData){
     const maxValue = Math.max(...chartData.map(data => data.y));
-    return Math.pow(10, Math.ceil(Math.log10(maxValue)));
+    return (Math.ceil(maxValue/10)) * (Math.pow(10, Math.ceil(Math.log10(maxValue)))/10);
 }
 
 const getMinXAxisValue = function(chartData){
@@ -38,6 +38,35 @@ const generateIncrementalTimeSeriesData = function(dataset){
     };
     return timeSeriesData;
 };
+
+const generateCumulativeTimeSeriesData = function(dataset){
+    const countPerTimeMap = dataset.reduce((map,event) => {
+        let key = new Date(event.dateTime).toISOString();    
+        if(key in map){
+            map[key] += 1;
+        }else{
+            map[key] = 1;
+        }  
+
+        for(existingKey in map){
+            if(new Date(existingKey) > new Date(key)){
+                map[existingKey] += 1;
+            }
+        }
+
+        return map;
+    }, {});
+    const timeSeriesData = [];
+    for(key in countPerTimeMap){
+        timeSeriesData.push({
+            x:key,
+            y: countPerTimeMap[key]
+        })
+    };
+    return timeSeriesData;
+};
+
+
 
 const hideAllSections = function(){
     $.each($("#queryNESelectors").children(), function(index, selector) {
@@ -134,7 +163,7 @@ const displayNetworkEngQueryFourDrillDownTable = function(imsiEventsList){
 const displayNetworkEngQueryFourDrillDownChart = function(imsiEventsList){    
     const context = $("#networkEngQueryFourDrillDownChart")[0];
     const networkEngQueryFourDrillDownChart = new Chart(context, imsiLineChartConfig);
-    let chartData = generateIncrementalTimeSeriesData(imsiEventsList);
+    let chartData = generateCumulativeTimeSeriesData(imsiEventsList);
     networkEngQueryFourDrillDownChart.data.datasets[0].data = chartData;
     imsiLineChartConfig.options.scales.yAxes[0].ticks.max = getRoundedUpYAxisMaxValue(chartData);
     networkEngQueryFourDrillDownChart.update();
