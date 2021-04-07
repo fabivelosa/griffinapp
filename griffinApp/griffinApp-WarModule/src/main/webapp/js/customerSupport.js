@@ -14,8 +14,10 @@ const displayResponseSummaryCS = function(response, startTime, endTime){
 }
 
 const displayIMSICauseCodes = function(causeCodes){
+	$("#emptyCauseCode").hide();
     $("#errorAlertOnCauseCodesQuery").hide();
     $("#causeCodesTable_wrapper").show();
+	$("#causeCodeDiv").show();
     $("#causeCodesTable").show();
     const table = $('#causeCodesTable').DataTable();
     table.clear();
@@ -27,6 +29,8 @@ const displayIMSICauseCodes = function(causeCodes){
 
 const displayEquipmentFailures = function(IMSIfailures){
     $("#errorAlertOnEquipmentFailuresQuery").hide();
+	$("#emptyFailDetail").hide();
+	$("#failDetailDiv").show();
     $("#phoneFailuresTable").show();
     const table = $('#phoneFailuresTable').DataTable();
     table.clear();
@@ -41,6 +45,9 @@ const displayEquipmentFailures = function(IMSIfailures){
 }
 
 const displayErrorOnEquipmentFailures = function(jqXHR, textStatus, errorThrown){
+	$("#emptyFailDetail").hide();
+	$("#failDetailDiv").hide();
+	$(".responseWidget").hide();
     $("#phoneFailuresTable").hide();
     $("#errorAlertOnEquipmentFailuresQuery").show();
     $("#errorAlertOnEquipmentFailuresQuery").text(jqXHR.responseJSON.errorMessage);
@@ -54,15 +61,26 @@ const queryFailuresByUserEquipment = function(userEquipment){
         url:`${rootURL}/failures/${userEquipment}`,
         beforeSend: setAuthHeader,
         success: function(response){
+			if(response.length > 0){
             const endTime = new Date().getTime();
             displayResponseSummaryCS(response, startTime, endTime);
             displayEquipmentFailures(response);
+			}else{
+				$("#errorAlertOnEquipmentFailuresQuery").hide();
+				$("#emptyFailDetail").show();
+				$("#failDetailDiv").hide();
+			    $("#phoneFailuresTable").hide();
+				$(".responseWidget").hide();
+			}
         },
         error: displayErrorOnEquipmentFailures
     });
 }
 
 const displayErrorOnQueryCauseCodesByIMSI = function(jqXHR, textStatus, errorThrown){
+	$("#emptyCauseCode").hide();
+	$("#causeCodeDiv").hide();
+	$(".responseWidget").hide();
     $("#causeCodesTable_wrapper").hide();
     $("#errorAlertOnCauseCodesQuery").show();
     $("#errorAlertOnCauseCodesQuery").text(jqXHR.responseJSON.errorMessage);
@@ -76,9 +94,18 @@ const queryCauseCodesByIMSI = function(imsi){
         url:`${rootURL}/causecodes/${imsi}`,
         beforeSend: setAuthHeader,
         success: function(response){
+			if(response.length > 0){
             const endTime = new Date().getTime();
             displayResponseSummaryCS(response, startTime, endTime);
             displayIMSICauseCodes(response)
+			}else{
+				$("#emptyCauseCode").show();
+			    $("#errorAlertOnCauseCodesQuery").hide();
+			    $("#causeCodesTable_wrapper").hide();
+				$("#causeCodeDiv").hide();
+			    $("#causeCodesTable").hide();
+				$(".responseWidget").hide();
+			}
         },
         error: displayErrorOnQueryCauseCodesByIMSI
     });
@@ -95,6 +122,8 @@ const addUserEquipmentOptions = function(IMSIs){
 
 const displayIMSISummary = function(imsiSummary, textStatus, jqXHR){
     $("#errorAlertOnSummaryForm").hide();
+	$("#emptyImsiSumm").hide();
+	$("#imsiSummDiv").show();
     $("#imsiSummaryTable").show();
     $("#imsiSummaryNumber").text(imsiSummary.imsi);
     $("#imsiSummaryFromDate").text($('#startDateOnIMSISummaryForm').val());
@@ -104,6 +133,9 @@ const displayIMSISummary = function(imsiSummary, textStatus, jqXHR){
 }
 
 const displayErrorOnIMSISummary = function(jqXHR, textStatus, errorThrown){
+	$("#emptyImsiSumm").hide();
+	$(".responseWidget").hide();
+	$("#imsiSummDiv").hide();
     $("#imsiSummaryTable").hide();
     $("#errorAlertOnSummaryForm").show();
     $("#errorAlertOnSummaryForm").text(jqXHR.responseJSON.errorMessage);
@@ -117,9 +149,18 @@ const queryIMSISUmmary = function(imsi, from, to){
         url: `${rootURL}/events/query?imsi=${imsi}&from=${from}&to=${to}&summary=true`,
         beforeSend: setAuthHeader,
         success: function(response){
+			if(response.callFailuresCount > 0){
             const endTime = new Date().getTime();
             displayResponseSummaryCS(response, startTime, endTime);
-            displayIMSISummary(response)
+            displayIMSISummary(response);
+			displayIMSIFailureDateChart(response);
+			}else{
+				$(".responseWidget").hide();
+				$("#errorAlertOnSummaryForm").hide();
+				$("#emptyImsiSumm").show();
+				$("#imsiSummDiv").hide();
+			    $("#imsiSummaryTable").hide();
+			}
         },
         error: displayErrorOnIMSISummary
     })
@@ -141,7 +182,96 @@ const setIMSIFieldAutoComplete = function(){
     })
 }
 
+const displayIMSIFailureDateChart = function(imsiSummary){
+	console.log('displayIMSIFailureDateChart called');
+    $("#imsisFailureDateResultChartCard").show();
+    var ctx = $("#imsisFailureDateResultChart")[0];
+    const imsiSummaryChart = new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: [imsiSummary.imsi],
+        datasets: [{
+          label: "Total Count",
+          backgroundColor: "#4e73df",
+          hoverBackgroundColor: "#4e73df",
+          borderColor: "#4e73df",
+          barPercentage:0.5,
+          categoryPercentage:1.0,
+          maxBarThickness:200,
+          data: [imsiSummary.callFailuresCount],
+        }],
+      },
+      options: {
+        maintainAspectRatio: false,
+        layout: {
+          padding: {
+            left: 10,
+            right: 25,
+            top: 25,
+            bottom: 0
+          }
+        },
+        scales: {
+          xAxes: [{
+            type:"category",
+            gridLines: {
+              display: false,
+              drawBorder: false
+            },
+            ticks: {
+              maxTicksLimit: 1
+            }
+          }],
+          yAxes: [{
+            ticks: {
+              min: 0,
+              max: Math.ceil((imsiSummary.callFailuresCount)),       
+              padding: 10,
+            },
+            scaleLabel: {
+              display: true,
+              labelString: 'Call Failures Count'
+            },
+            gridLines: {
+              color: "rgb(234, 236, 244)",
+              zeroLineColor: "rgb(234, 236, 244)",
+              drawBorder: false,
+              borderDash: [2],
+              zeroLineBorderDash: [2]
+            }
+          }],
+        },
+        legend: {
+          display: true,
+          position:'bottom'
+        },
+        tooltips: {
+          titleMarginBottom: 10,
+          titleFontColor: '#6e707e',
+          titleFontSize: 14,
+          backgroundColor: "rgb(255,255,255)",
+          bodyFontColor: "#858796",
+          borderColor: '#dddfeb',
+          borderWidth: 1,
+          xPadding: 15,
+          yPadding: 15,
+          displayColors: false, 
+          caretPadding: 10,
+          callbacks: {
+            label: function(tooltipItem, chart) {
+              var datasetLabel = chart.datasets[tooltipItem.datasetIndex].label || '';
+              return datasetLabel + ': ' + tooltipItem.yLabel;
+            }
+          }
+        },
+      }
+    });
+   // $("#imsisFailureDateResultChartCard").text(`Data from ${$('#startDateOnIMSISummaryForm').val()} to ${$('#endDateOnIMSISummaryForm').val()}`);
+  }
+
+
 $(document).ready(function(){		
+	console.log('can this fucking word 236');
     setIMSIFieldAutoComplete();
     $('#imsiSummaryForm').submit(function(event){
         event.preventDefault();

@@ -279,6 +279,9 @@
                                         <div class="alert alert-danger col-lg-12" role="alert" id="errorAlertOnSummaryFormNE">
                                             Error on Request
                                         </div>
+                                        <div class="alert alert-danger col-lg-12" role="alert" id="alertIMSISNoData">
+                                            No data found for the given inputs.
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -341,19 +344,24 @@
                                                 </div>
                                                 <div class="card-footer small text-muted" id="userEquipmentFailuresDate">NaN</div>
                                             </div>
-                                            <table id="phoneFailuresTableNE" class="table table-hover table-bordered">
-                                                <thead>
-                                                    <tr>
-                                                    <th>User Equipment</th>
-                                                    <th>Event ID</th>
-                                                    <th>Cause Code</th>
-                                                    <th>Description</th>
-                                                    <th>Count</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                </tbody>
-                                            </table>
+                                            <div id="phoneTableDiv">
+	                                            <table id="phoneFailuresTableNE" class="table table-hover table-bordered">
+	                                                <thead>
+	                                                    <tr>
+	                                                    <th>User Equipment</th>
+	                                                    <th>Event ID</th>
+	                                                    <th>Cause Code</th>
+	                                                    <th>Description</th>
+	                                                    <th>Count</th>
+	                                                    </tr>
+	                                                </thead>
+	                                                <tbody>
+	                                                </tbody>
+	                                            </table>
+                                            </div>
+                                            <div class="alert alert-danger col-lg-12" role="alert" id="alertModelNoData">
+                                            	No Event Id & Cause Code combinations for selected phone model
+                                        	</div>
                                         </div>
                                     </div>
                                 </div>
@@ -402,6 +410,7 @@
                                                 </div>
                                                 <div class="card-footer small text-muted" id="top10ComboChartDate">NaN</div>
                                             </div>
+                                            <div id="combiTableDiv">
                                             <table id="combinationsTable" class="table table-hover table-bordered">
                                                 <thead>
                                                     <tr>
@@ -416,8 +425,12 @@
                                                 <tbody>                                                                                           
                                                 </tbody>
                                             </table>
+                                            </div>
                                             <div class="alert alert-danger col-lg-12" role="alert" id="errorAlertOnTopCombinationsForm">
                                                 Error on Request
+                                            </div>
+                                            <div class="alert alert-danger col-lg-12" role="alert" id="alertNoCombinations">
+                                                No data found for the given time period
                                             </div>
                                         </div>
                                     </div>
@@ -467,6 +480,7 @@
                                                 </div>
                                                 <div class="card-footer small text-muted" id="top10IMSIDate">NaN</div>
                                             </div>
+                                            <div id="imsiTopDiv">
 	                                        <table id="imsiTopSummaryTable" class="table table-hover table-bordered table-responsive">
 	                                            <thead>
 	                                                <tr>
@@ -477,6 +491,10 @@
 	                                              <tbody>
 	                                              </tbody>
 	                                        </table>
+	                                        </div>
+	                                        <div class="alert alert-danger col-lg-12" role="alert" id="alertNoTopModels">
+                                                No data found for the given time period
+                                            </div>
 	                      				</div>
                                      </div>
                                     </div>
@@ -603,6 +621,16 @@
                                                 </div>
                                             </form>
                                         </div>
+                                        
+                                        <div class="row card mb-4 query-chart" id="imsisFailureDateResultChartCard">
+                                            <div class="card-header text-primary">IMSI Call Failure Count</div>
+                                            <div class="card-body">
+                                                <div class="chart-bar">
+                                                <canvas id="imsisFailureDateResultChart" width="100%" height="100"></canvas>
+                                                </div>
+                                            </div>
+                                            <div class="card-footer small text-muted" id="imsiSummaryFormResultDate">NaN</div>
+                                        </div>
                                         <div class = "row mt-2 p-2" id = "imsiSummaryFormResult">
                                             <div class ="col">
                                                 <div class = "responseWidget p-3 mb-2">
@@ -615,6 +643,7 @@
                                                         </div>
                                                     </div>
                                                 </div>
+                                                <div id="imsiSummDiv">
                                                 <table id="imsiSummaryTable" class="table table-hover table-bordered table-responsive">
                                                     <thead>
                                                         <tr>
@@ -633,8 +662,12 @@
                                                         </tr>
                                                     </tbody>
                                                 </table>
+                                                </div>
                                                 <div class="alert alert-danger col-lg-12" role="alert" id="errorAlertOnSummaryForm">
                                                     Error on Request
+                                                </div>
+                                                <div class="alert alert-danger col-lg-12" role="alert" id="emptyImsiSumm">
+                                                    No data found for the given IMSI and time period
                                                 </div>
                                             </div>
                                         </div>
@@ -673,6 +706,7 @@
                                                         </div>
                                                     </div>
                                                 </div>
+                                                <div id="failDetailDiv">
                                                 <table id="phoneFailuresTable" class="table table-hover table-bordered">
                                                     <thead>
                                                         <tr>
@@ -685,8 +719,12 @@
                                                     <tbody>
                                                     </tbody>
                                                 </table>
+                                                </div>
                                                 <div class="alert alert-danger col-lg-12" role="alert" id="errorAlertOnEquipmentFailuresQuery">
                                                     Error on Request
+                                                </div>
+                                                <div class="alert alert-danger col-lg-12" role="alert" id="emptyFailDetail">
+                                                    No Event ID and Cause Code found for the given IMSI
                                                 </div>
                                             </div>
                                         </div>
@@ -725,6 +763,7 @@
                                                         </div>
                                                     </div>
                                                 </div>
+                                                <div id=causeCodeDiv>
                                                 <table id="causeCodesTable" class="table table-hover table-bordered table-responsive">
                                                     <thead>
                                                         <tr>
@@ -734,8 +773,12 @@
                                                     <tbody>
                                                     </tbody>
                                                 </table>
+                                                </div>
                                                 <div class="alert alert-danger col-lg-12" role="alert" id="errorAlertOnCauseCodesQuery">
                                                     Error on Request
+                                                </div>
+                                                <div class="alert alert-danger col-lg-12" role="alert" id="emptyCauseCode">
+                                                    No cause codes found for the given IMSI
                                                 </div>
                                             </div>
                                         </div>
@@ -801,7 +844,7 @@
                                                 </div>
                                                 <div class="card-footer small text-muted" id="imsiCallFailureResultDate">NaN</div>
                                             </div>
-                                            <div class="row">
+                                            <div class="row" id="imsiFailDiv">
                                                 <table id="imsiFailureTable"
                                                     class="table table-hover table-bordered table-responsive">
                                                     <thead>
@@ -819,6 +862,9 @@
                                                 </table>
                                             </div>
                                             <div class="alert alert-danger col-lg-12" role="alert" id="errorAlertOnCallFailureForm">Error on Request</div>
+                                            <div class="alert alert-danger col-lg-12" role="alert" id="emptySEquery1">
+                                            	No data found for the given inputs
+                                            </div>
                                         </div>
 									</div>
 								</div>
@@ -870,6 +916,7 @@
                                                     </div>
                                                 </div>
                                             </div>
+                                            <div id="imsiListDiv">
                                             <table id="imsiListTable"
                                                 class="table table-hover table-bordered table-responsive">
                                                 <thead>
@@ -880,7 +927,11 @@
                                                 <tbody id="tableBody">
                                                 </tbody>
                                             </table>
+                                            </div>
                                             <div class="alert alert-danger col-lg-12" role="alert" id="errorAlertOnListForm">Error on Request</div>
+                                            <div class="alert alert-danger col-lg-12" role="alert" id="emptyCallFail">
+                                            	No call failures found for the given time period
+                                            </div>
                                         </div>
                                     </div>
 								</div>
@@ -922,6 +973,7 @@
                                                 </div>
                                             </div>
                                         </div>
+										<div id="failClassDiv">
 										<table id="imsiFailuresTable"
 											class="table table-hover table-bordered table-responsive">
 											<thead>
@@ -935,8 +987,11 @@
                                             	</tr>
 											</tbody>
 										</table>
+										</div>
 										<div class="alert alert-danger col-lg-12" role="alert"
 											id="errorAlertOnFailuresListForm">Error on Request</div>
+										<div class="alert alert-danger col-lg-12" role="alert"
+											id="emptyFailClass">No call failures for the given Failure Class</div>
 										</div>
 									</div>
 								</div>

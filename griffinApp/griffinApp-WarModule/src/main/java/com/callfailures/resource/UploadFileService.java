@@ -28,10 +28,8 @@ import org.jboss.resteasy.plugins.providers.multipart.InputPart;
 import org.jboss.resteasy.plugins.providers.multipart.MultipartFormDataInput;
 
 import com.callfailures.dao.UploadDAO;
-import com.callfailures.entity.Events;
 import com.callfailures.entity.Secured;
 import com.callfailures.entity.Upload;
-import com.callfailures.parsingutils.ParsingResponse;
 import com.callfailures.services.FileService;
 
 @Path("/file")
@@ -48,8 +46,6 @@ public class UploadFileService {
 
 	@EJB
 	protected FileService fileService;
-
-	protected ParsingResponse<Events> eventsList = new ParsingResponse<Events>();
 
 	@POST
 	@Path("/upload")

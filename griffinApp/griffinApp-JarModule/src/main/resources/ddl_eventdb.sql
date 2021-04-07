@@ -1,7 +1,7 @@
 create table event (
 	eventId integer not null auto_increment,
 	cellId integer not null,
-	dateTime tinyblob,
+	dateTime datetime,
 	duration integer not null,
 	hier321Id varchar(255),
 	hier32Id varchar(255),
@@ -30,12 +30,31 @@ create table failureClass (
 	primary key (failureClass)
 );
 
+create table imsiCount (
+	imsi varchar(255) not null,
+	callFailuresCount bigint not null,
+	primary key (imsi)
+);
+
+create table imsiSummary (
+	imsi varchar(255) not null,
+	callFailuresCount bigint not null,
+	totalDurationMs bigint not null,
+	primary key (imsi)
+);
+
 create table mccmnc (
 	countryCode integer not null,
 	operatorCode integer not null,
 	countryDesc varchar(255),
 	operatorDesc varchar(255),
 	primary key (countryCode,operatorCode)
+);
+
+create table phoneModelSummary (
+	model varchar(255) not null,
+	callFailuresCount bigint not null,
+	primary key (model)
 );
 
 create table ue (
@@ -50,8 +69,18 @@ create table ue (
 	primary key (tac)
 );
 
+create table upload (
+	uploadID varchar(255) not null,
+	reportFile varchar(255),
+	totalInvalidRecords integer not null,
+	totalValidRecords integer not null,
+	uploadStatus integer not null,
+	primary key (uploadID)
+);
+
 create table users (
 	userId varchar(255) not null,
+	token varchar(255),
 	userName varchar(255),
 	userPassword varchar(255),
 	userType varchar(255),
