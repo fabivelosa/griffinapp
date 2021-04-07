@@ -124,7 +124,7 @@ clear.onblur=function(){
 
 $(document).ready(function(){
 	$('#createUserButton').click(function() {
-		if (($('#userId').val() == "")||($('#userName').val() == "")||($('#userType').val() == "")||($('#userPassword').val() == "")){
+		if (($('#userId').val() == "")||($('#userName').val() == "")||($('#userType').val() == null)||($('#userPassword').val() == "")){
 		document.getElementById("alertMissingField").style.display= "block";
 		}
 		else if($('#userPassword').val() != $('#confirmPassword').val())

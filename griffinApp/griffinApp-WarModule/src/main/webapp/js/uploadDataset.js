@@ -9,7 +9,8 @@ var submitdata = function() {
 	var formData = new FormData();
 	var formData = new FormData($('#fileUploadForm')[0]);
 	$('#uploadFile')[0].files;
-
+	$('#validRecords').hide();
+	$('#invalidRecords').hide();
 	$.ajax({
 		type: 'POST',
 		url: 'http://localhost:8080/callfailures/api/file/upload',
@@ -26,19 +27,23 @@ var submitdata = function() {
 function updateProgress(data) {
 	var uuid = data.uploadID;
 	var width = getUploadStatus(uuid);
-		var id = setInterval(frame, 300); 
-	 	function frame() {
-      if (width >= 100) {
-        clearInterval(id);
-        width = 0;
-      } else {
-        width = getUploadStatus(uuid);
+	var id = setInterval(frame, 300); 
+	function frame() {
+		if (width >= 100) {
+			$('#validRecords').text("Valid Records: "+validRecords);
+			$('#invalidRecords').text("Invalid Records: "+invalidRecords);
+			$('#validRecords').show();
+			$('#invalidRecords').show();
+			clearInterval(id);
+			width = 0;
+		} else {
+			width = getUploadStatus(uuid);
 			console.log(width);
 			console.log("width is <100");
 			$("#myBar").width(width + '%');
-      }
-    }
-  }
+		}
+	}
+}
 
 
 var getUploadStatus = function(id) {
@@ -52,6 +57,8 @@ var getUploadStatus = function(id) {
 		success: function(data) {
 			currentStatus = data.uploadStatus;
 			reportfilename = data.reportFile;
+			validRecords = data.totalValidRecords;
+			invalidRecords = data.totalInvalidRecords;
 		}
 	});
 	return currentStatus;

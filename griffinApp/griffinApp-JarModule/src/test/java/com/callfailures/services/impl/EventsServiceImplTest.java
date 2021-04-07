@@ -3,6 +3,7 @@ package com.callfailures.services.impl;
 import static org.junit.Assert.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyInt;
 import static org.mockito.Matchers.anyObject;
 import static org.mockito.Mockito.mock;
@@ -12,6 +13,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.io.File;
+import java.io.IOException;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -22,8 +24,13 @@ import java.util.UUID;
 import javax.validation.Validation;
 import javax.validation.Validator;
 
+import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 
 import com.callfailures.dao.EventCauseDao;
 import com.callfailures.dao.EventDAO;
@@ -40,8 +47,8 @@ import com.callfailures.entity.MarketOperatorPK;
 import com.callfailures.entity.Upload;
 import com.callfailures.entity.UserEquipment;
 import com.callfailures.entity.views.DeviceCombination;
-import com.callfailures.entity.views.IMSIEvent;
 import com.callfailures.entity.views.IMSICount;
+import com.callfailures.entity.views.IMSIEvent;
 import com.callfailures.entity.views.IMSISummary;
 import com.callfailures.entity.views.PhoneFailures;
 import com.callfailures.entity.views.PhoneModelSummary;
@@ -77,6 +84,7 @@ public class EventsServiceImplTest {
 			"AT&T Wireless-Antigua AG");
 	private Validator validator;
 	private ValidationService validationService;
+
 	private final List<IMSIEvent> imsiEvents = new ArrayList<>();
 	private EventService eventService;
 	private File file;
@@ -104,7 +112,7 @@ public class EventsServiceImplTest {
 	@Test
 	public void findUniqueEventCauseCountByPhoneModel() {
 		final PhoneFailures phoneFailures = new PhoneFailures(userEquipment, eventCause, 10);
-	    final List<PhoneFailures> testList = new ArrayList<>();
+		final List<PhoneFailures> testList = new ArrayList<>();
 		testList.add(phoneFailures);
 
 		when(eventDAO.findUniqueEventCauseCountByPhoneModel(1)).thenReturn(testList);
@@ -186,18 +194,23 @@ public class EventsServiceImplTest {
 	}
 
 	@Test
-	void testSuccessfuleReadOfFile() {
+	void testSuccessfuleReadOfFile() throws InvalidFormatException, IOException {
 		when(eventCauseDAO.getEventCause(anyObject())).thenReturn(eventCause);
 		when(failureClassDAO.getFailureClass(anyInt())).thenReturn(failureClass);
 		when(userEquipmentDAO.getUserEquipment(21060800)).thenReturn(userEquipment);
 		when(marketOperatorDAO.getMarketOperator(marketOperatorPK)).thenReturn(marketOperator);
 		when(uploadDAO.getUploadByRef(uuid)).thenReturn(upload);
+		Mockito.doNothing().when(eventDAO).create(any(Events.class));
 		file = new File(absolutePath + "/importData/validData.xlsx");
 		upload.setUploadStatus(10);
+		Workbook workbook = new XSSFWorkbook(file);
 
-		final ParsingResponse<Events> parsingResults = eventService.read(file, upload);
+		final ParsingResponse<Events> parsingResults = eventService.read(workbook.getSheetAt(0), 1, 5, upload);
+
+		workbook.close();
 		assertEquals(4, parsingResults.getValidObjects().size());
 		assertEquals(0, parsingResults.getInvalidRows().size());
+
 	}
 
 	@Test
@@ -340,8 +353,18 @@ public class EventsServiceImplTest {
 		assertInvalidRowMessage("Inexistent MCC and MNC combination");
 	}
 
-	private void assertInvalidRowMessage(final String invalidRowMessage) {
-		final ParsingResponse<Events> parsingResults = eventService.read(file, upload);
+	private void assertInvalidRowMessage(final String invalidRowMessage)  {
+
+		Workbook workbook = null;
+		try {
+			workbook = new XSSFWorkbook(file);
+		} catch (InvalidFormatException | IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		final Sheet eventSheet = workbook.getSheetAt(0);
+
+		final ParsingResponse<Events> parsingResults = eventService.read(eventSheet, 1, 2, upload);
 		assertEquals(0, parsingResults.getValidObjects().size());
 		assertEquals(1, parsingResults.getInvalidRows().size());
 		final Iterator<InvalidRow> eventsIterator = parsingResults.getInvalidRows().iterator();
@@ -359,7 +382,7 @@ public class EventsServiceImplTest {
 		verify(eventDAO, times(1)).findIMSIS();
 
 	}
-	
+
 	@Test
 	void testForTopIMSIs() {
 		final IMSICount imsiCount = new IMSICount();
@@ -369,11 +392,10 @@ public class EventsServiceImplTest {
 		assertEquals(imsiCounts, eventService.findIMSIS(10, VALID_START_TIME, VALID_END_TIME));
 		verify(eventDAO, times(1)).findIMSIS(10, VALID_START_TIME, VALID_END_TIME);
 	}
-	
+
 	@Test
 	public void testInvalidTimeForTopIMSIs() {
-		assertThrows(InvalidDateException.class,
-				() -> eventService.findIMSIS(10, VALID_END_TIME, VALID_START_TIME));
+		assertThrows(InvalidDateException.class, () -> eventService.findIMSIS(10, VALID_END_TIME, VALID_START_TIME));
 	}
 
 	@Test
@@ -383,9 +405,9 @@ public class EventsServiceImplTest {
 		combinations.add(combination);
 		when(eventDAO.findTopTenCombinations(VALID_START_TIME, VALID_END_TIME)).thenReturn(combinations);
 		assertEquals(1, eventService.findTopTenEvents(VALID_START_TIME, VALID_END_TIME).size());
-		verify(eventDAO,times(1)).findTopTenCombinations(VALID_START_TIME, VALID_END_TIME);
+		verify(eventDAO, times(1)).findTopTenCombinations(VALID_START_TIME, VALID_END_TIME);
 	}
-	
+
 	@Test
 	void testFindIMSIByFailureClass() {
 		UniqueIMSI imsi = new UniqueIMSI();
@@ -393,7 +415,7 @@ public class EventsServiceImplTest {
 		imsis.add(imsi);
 		when(eventDAO.findIMSISByFailureClass(VALID_FAILURE_CLASS)).thenReturn(imsis);
 		assertEquals(1, eventService.findIMSISByFailure(VALID_FAILURE_CLASS).size());
-		verify(eventDAO,times(1)).findIMSISByFailureClass(VALID_FAILURE_CLASS);
+		verify(eventDAO, times(1)).findIMSISByFailureClass(VALID_FAILURE_CLASS);
 	}
 
 	@Test
@@ -401,10 +423,9 @@ public class EventsServiceImplTest {
 		UniqueIMSI imsi = new UniqueIMSI();
 		List<UniqueIMSI> imsis = new ArrayList<>();
 		imsis.add(imsi);
-		assertThrows(InvalidFailureClassException.class, ()->{
+		assertThrows(InvalidFailureClassException.class, () -> {
 			eventService.findIMSISByFailure(INVALID_FAILURE_CLASS);
 		});
-		verify(eventDAO,times(0)).findIMSISByFailureClass(INVALID_FAILURE_CLASS);
+		verify(eventDAO, times(0)).findIMSISByFailureClass(INVALID_FAILURE_CLASS);
 	}
-	
 }

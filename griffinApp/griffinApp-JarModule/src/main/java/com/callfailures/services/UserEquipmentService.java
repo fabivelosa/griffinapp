@@ -1,9 +1,10 @@
 package com.callfailures.services;
 
-import java.io.File;
 import java.util.List;
 
 import javax.ejb.Local;
+
+import org.apache.poi.ss.usermodel.Workbook;
 
 import com.callfailures.entity.UserEquipment;
 import com.callfailures.parsingutils.ParsingResponse;
@@ -15,7 +16,7 @@ public interface UserEquipmentService {
 
 	void create(UserEquipment obj);
 	
-	ParsingResponse<UserEquipment> read(File workbookFile);
+	ParsingResponse<UserEquipment> read(final Workbook workbook);
 	
 	List<UserEquipment> findAll();
 }
