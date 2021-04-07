@@ -459,7 +459,6 @@ const displayTop10IMSISummary = function(topTenIMSIFailures){
 	const table = $('#imsiTopSummaryTable').DataTable();
     table.clear();
     $(topTenIMSIFailures).each(function(index, topTenIMSIFailure){
-        console.log(topTenIMSIFailure);
         table.row.add([topTenIMSIFailure.imsi, 
             topTenIMSIFailure.callFailuresCount
         ]);
@@ -672,7 +671,8 @@ $(document).ready(function(){
     });
 
 	$("#queryNESelectors").on("click", "a", function(event){
-        $(".responseWidget").hide()
+    $(".responseWidget").hide();
+    $(".drillDownSections").hide();
 		hideSEQueries();
 		hideCSQueries();
         $.each($("#queryNESelectors").children(), function(index, selector) {
@@ -685,7 +685,8 @@ $(document).ready(function(){
     });
 
 	$("#queryCSSelectors").on("click", "a", function(event){
-        $(".responseWidget").hide()
+    $(".responseWidget").hide();
+    $(".drillDownSections").hide();
 		hideSEQueries();
 		hideNEQueries();
         $.each($("#queryCSSelectors").children(), function(index, selector) {
@@ -698,7 +699,8 @@ $(document).ready(function(){
     });
 
     $("#querySESelectors").on("click", "a", function(event){
-        $(".responseWidget").hide()
+    $(".responseWidget").hide();
+    $(".drillDownSections").hide();
 		hideCSQueries();
 		hideNEQueries();
         $.each($("#querySESelectors").children(), function(index, selector) {
