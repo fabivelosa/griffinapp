@@ -102,7 +102,8 @@ const imsiLineChartConfig = {
         label: "Call Failures Duration",
         borderColor: "#FFA500",        
         borderDash: [2,2],
-        borderWidth:2
+        borderWidth:2,
+        fill:false,
      },{
         label: "Call Failures Count",
         backgroundColor: "#4e73df",
