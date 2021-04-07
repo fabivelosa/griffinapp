@@ -178,7 +178,7 @@ public class EventServiceImpl implements EventService {
 	}
 
 	private boolean isValidIMSI(final String imsi) {
-		if (imsi == null || imsi.length() > 15) {
+		if (imsi == null || imsi.length() != 15 ) {
 			return false;
 		}
 
