@@ -201,7 +201,7 @@ const displayIMSISummaryChart = function(imsiSummary){
       {
         label: "Total Duration (seconds) ",
         backgroundColor: "#FFA500",
-        hoverBackgroundColor: "#2e59d9",
+        hoverBackgroundColor: "#FFA500",
         borderColor: "#FFA500",
         data: [imsiSummary.totalDurationMs/1000],
         type:"line"
@@ -209,6 +209,7 @@ const displayIMSISummaryChart = function(imsiSummary){
       ],
     },
     options: {
+      onClick: imsiSummaryDrillDownEventHandler,
       maintainAspectRatio: false,
       layout: {
         padding: {
@@ -711,4 +712,12 @@ $(document).ready(function(){
             }
         });
     });
+
+    // Drill Down Back Event Handler
+    $("#drillDownBackIcon").click(function(event){
+      hideAllSections();
+      $(".drillDownSections").hide();
+      $(`#${$(this).data("target")}`).show();
+    });
+
 });

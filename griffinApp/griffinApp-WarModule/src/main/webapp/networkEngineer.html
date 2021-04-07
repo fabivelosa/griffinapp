@@ -488,10 +488,10 @@
                                 <div class="card mt-4">
                                     <div class="card-header">
                                       <div class ="d-flex flex-row justify-content-start">
-                                          <div id="drillDownBackIcon mr-4">
+                                          <div id="drillDownBackIcon">
                                             <span><i class="fas fa-arrow-left"></i></span>
                                           </div>
-                                          <div id="drillDownTitls">
+                                          <div class = "mx-4" id="networkEngQueryFourDrillDownTitle">
                                           </div>
                                       </div>
                                     </div>
@@ -545,21 +545,27 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <table id="networkEngQueryFourDrillDownTable" class="table table-hover table-bordered table-responsive">
-                                                    <thead>
-                                                        <tr>
-                                                            <th>Date</th>
-                                                            <th>IMSI</th>
-                                                            <th>Failure Class</th>
-                                                            <th>Failure Description</th>
-                                                            <th>Event ID</th>
-                                                            <th>Cause Code</th>
-                                                            <th>Description</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                    </tbody>
-                                                </table>                                                   
+                                                <div class ="row">
+                                                    <div class="col">
+                                                        <table id="networkEngQueryFourDrillDownTable" class="table table-hover table-bordered">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>Date</th>
+                                                                    <th>IMSI</th>
+                                                                    <th>Duration (ms)</th>
+                                                                    <th>Cell ID</th>
+                                                                    <th>Failure Class</th>
+                                                                    <th>Failure Description</th>
+                                                                    <th>Event ID</th>
+                                                                    <th>Cause Code</th>
+                                                                    <th>Description</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>                                                 
                                             </div>
                                          </div>
                                     </div>
