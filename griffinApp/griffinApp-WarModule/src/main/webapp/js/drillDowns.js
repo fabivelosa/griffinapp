@@ -34,7 +34,7 @@ const generateCumulativeTimeSeriesData = function(dataset){
         let key = new Date(data.dateTime).toISOString();
         if(!(key in durationPerTimeMap)){
             durationPerTimeMap[key] = (data.duration/1000);
-            countPerTimeMap[key] += 1;
+            countPerTimeMap[key] = 1;
             let maxExistingKey = new Date(0);
             for(existingKey in durationPerTimeMap){
                 if(new Date(key) > new Date(existingKey) && new Date(existingKey) > new Date(maxExistingKey)){
@@ -49,7 +49,7 @@ const generateCumulativeTimeSeriesData = function(dataset){
             for(existingKey in durationPerTimeMap){
                 if(new Date(existingKey) >= new Date(key)){
                     durationPerTimeMap[existingKey] += (data.duration/1000);
-                    countPerTimeMap[key] += 1;
+                    countPerTimeMap[existingKey] += 1;
                 } 
             }
         }
@@ -73,6 +73,7 @@ const generateTimeSeriesData = function(countPerTimeMap, durationPerTimeMap) {
             y: countPerTimeMap[key]
         });
     };
+
 
     return timeSeriesData;
 }
@@ -216,8 +217,8 @@ const displayNetworkEngQueryFourDrillDownChart = function(imsiEventsList){
     const networkEngQueryFourDrillDownChart = new Chart(context, imsiLineChartConfig);
     const cumulativeDurations = generateCumulativeTimeSeriesData(imsiEventsList)["durations"];
     const incrementalDurations = generateIncrementalTimeSeriesData(imsiEventsList)["durations"];
-    const cumulativeCounts = generateCumulativeTimeSeriesData(imsiEventsList)["durations"];
-    const incrementalCounts = generateIncrementalTimeSeriesData(imsiEventsList)["durations"];
+    const cumulativeCounts = generateCumulativeTimeSeriesData(imsiEventsList)["counts"];
+    const incrementalCounts = generateIncrementalTimeSeriesData(imsiEventsList)["counts"];
     networkEngQueryFourDrillDownChart.data.datasets[0].data = cumulativeDurations;
     networkEngQueryFourDrillDownChart.data.datasets[1].data = cumulativeCounts;
     imsiLineChartConfig.options.scales.yAxes[0].ticks.max = getRoundedUpYAxisMaxValue(cumulativeDurations);

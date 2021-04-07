@@ -32,7 +32,9 @@
 #imsiFailuresTable,
 #errorAlertOnFailuresListForm,
 .responseWidget,
-#networkEngQueryFourDrillDown{
+#networkEngQueryFourDrillDown,
+#networkEngQueryFourCumulativeBtn,
+#networkEngQueryFourIncrementalBtn{
     display:none;
 }
 
@@ -85,4 +87,25 @@ tr{
 
 td{
     padding:0.5rem !important;
+}
+
+/* Drill Down CSS */
+.networkEngQueryFourDrillDownChartCardIMSIDetails{
+    padding-top: 0.25rem;
+    background-color: #fbfcff;
+    border: 1px solid #fbfcff;
+}
+
+.networkEngQueryFourDrillDownChartCardIMSIDetails label{
+    font-size: .75rem;
+    font-weight: bold;
+    margin: 0;
+    color:#4e73df;
+    text-align: left !important;
+}
+.networkEngQueryFourDrillDownChartCardIMSIDetails .form-control{
+    padding: 0;
+    border: none;
+    color:#5a5c69;
+    background-color: #fbfcff;
 }
