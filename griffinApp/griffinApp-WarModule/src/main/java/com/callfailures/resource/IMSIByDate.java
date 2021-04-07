@@ -66,6 +66,8 @@ public class IMSIByDate {
 			return Response.status(404).entity(new ErrorMessages(ErrorMessage.INVALID_DATE.getMessage())).build();
 		}catch (InvalidIMSIException exception) {
 			return Response.status(404).entity(new ErrorMessages(ErrorMessage.INVALID_IMSI.getMessage())).build();
+		}finally {
+			System.out.println("query called 70");
 		}
 	}
 	

@@ -152,7 +152,8 @@ const queryIMSISUmmary = function(imsi, from, to){
 			if(response.callFailuresCount > 0){
             const endTime = new Date().getTime();
             displayResponseSummaryCS(response, startTime, endTime);
-            displayIMSISummary(response)
+            displayIMSISummary(response);
+			displayIMSIFailureDateChart(response);
 			}else{
 				$(".responseWidget").hide();
 				$("#errorAlertOnSummaryForm").hide();
@@ -181,7 +182,96 @@ const setIMSIFieldAutoComplete = function(){
     })
 }
 
+const displayIMSIFailureDateChart = function(imsiSummary){
+	console.log('displayIMSIFailureDateChart called');
+    $("#imsisFailureDateResultChartCard").show();
+    var ctx = $("#imsisFailureDateResultChart")[0];
+    const imsiSummaryChart = new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: [imsiSummary.imsi],
+        datasets: [{
+          label: "Total Count",
+          backgroundColor: "#4e73df",
+          hoverBackgroundColor: "#4e73df",
+          borderColor: "#4e73df",
+          barPercentage:0.5,
+          categoryPercentage:1.0,
+          maxBarThickness:200,
+          data: [imsiSummary.callFailuresCount],
+        }],
+      },
+      options: {
+        maintainAspectRatio: false,
+        layout: {
+          padding: {
+            left: 10,
+            right: 25,
+            top: 25,
+            bottom: 0
+          }
+        },
+        scales: {
+          xAxes: [{
+            type:"category",
+            gridLines: {
+              display: false,
+              drawBorder: false
+            },
+            ticks: {
+              maxTicksLimit: 1
+            }
+          }],
+          yAxes: [{
+            ticks: {
+              min: 0,
+              max: Math.ceil((imsiSummary.callFailuresCount)),       
+              padding: 10,
+            },
+            scaleLabel: {
+              display: true,
+              labelString: 'Call Failures Count'
+            },
+            gridLines: {
+              color: "rgb(234, 236, 244)",
+              zeroLineColor: "rgb(234, 236, 244)",
+              drawBorder: false,
+              borderDash: [2],
+              zeroLineBorderDash: [2]
+            }
+          }],
+        },
+        legend: {
+          display: true,
+          position:'bottom'
+        },
+        tooltips: {
+          titleMarginBottom: 10,
+          titleFontColor: '#6e707e',
+          titleFontSize: 14,
+          backgroundColor: "rgb(255,255,255)",
+          bodyFontColor: "#858796",
+          borderColor: '#dddfeb',
+          borderWidth: 1,
+          xPadding: 15,
+          yPadding: 15,
+          displayColors: false, 
+          caretPadding: 10,
+          callbacks: {
+            label: function(tooltipItem, chart) {
+              var datasetLabel = chart.datasets[tooltipItem.datasetIndex].label || '';
+              return datasetLabel + ': ' + tooltipItem.yLabel;
+            }
+          }
+        },
+      }
+    });
+   // $("#imsisFailureDateResultChartCard").text(`Data from ${$('#startDateOnIMSISummaryForm').val()} to ${$('#endDateOnIMSISummaryForm').val()}`);
+  }
+
+
 $(document).ready(function(){		
+	console.log('can this fucking word 236');
     setIMSIFieldAutoComplete();
     $('#imsiSummaryForm').submit(function(event){
         event.preventDefault();
