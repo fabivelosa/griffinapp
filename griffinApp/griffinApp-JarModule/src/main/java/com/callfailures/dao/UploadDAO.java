@@ -1,11 +1,14 @@
 package com.callfailures.dao;
 
+import java.util.Collection;
+import java.util.List;
 import java.util.UUID;
 
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 
 import com.callfailures.entity.Upload;
 
@@ -28,4 +31,11 @@ public class UploadDAO {
 	public void update(final Upload obj) {
 		entityManager.merge(obj);
 	}
+	
+	public List<Upload> findAllUploads() {
+		System.err.println("2");
+	    Query query = entityManager.createQuery("SELECT e FROM upload e",Upload.class);
+	    System.err.println("3");
+	    return query.getResultList();
+	  }
 }

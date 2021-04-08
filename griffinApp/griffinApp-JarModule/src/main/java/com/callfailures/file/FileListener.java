@@ -28,7 +28,7 @@ public class FileListener {
 
 	@PostConstruct
 	public void init() {
-		System.out.println("File Listener running");
+		System.err.println("File Listener running");
 		try {
 			beginWatch();
 		} catch (Exception e) {
