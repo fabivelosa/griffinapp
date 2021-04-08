@@ -2,10 +2,6 @@ const rootURL1 = "http://localhost:8080/callfailures/api";
 const authToken1 = 'Bearer ' + sessionStorage.getItem("auth-token");
 const userType = sessionStorage.getItem("auth-type");
 
-
-
-
-
 const setAuthHeader1 = function(xhr){
     xhr.setRequestHeader('Authorization', authToken1);
 }
@@ -185,7 +181,8 @@ const displayIMSISummary1 = function(imsiSummary, textStatus, jqXHR){
     $("#errorAlertOnSummaryFormNE").hide();
 	$("#alertIMSISNoData").hide();
     $("#imsiSummaryTableOne").show();
-    $("#imsiSummaryNENumber").text(imsiSummary.imsi);
+    let imsiHtml = `<span class="imsiDrillDownLinks"><a href=\"#\">${imsiSummary.imsi}</a></span>`
+    $("#imsiSummaryNENumber").html(imsiHtml);
     $("#imsiSummaryNEFromDate").text($('#startDateOnIMSISummaryFormNE').val());
     $("#imsiSummaryNEToDate").text($('#endDateOnIMSISummaryFormNE').val());
     $("#imsiSummaryNECallFailureCount").text(imsiSummary.callFailuresCount);
@@ -497,7 +494,8 @@ const displayTop10IMSISummary = function(topTenIMSIFailures){
 	const table = $('#imsiTopSummaryTable').DataTable();
     table.clear();
     $(topTenIMSIFailures).each(function(index, topTenIMSIFailure){
-        table.row.add([topTenIMSIFailure.imsi, 
+      let imsiHtml = `<span class="imsiDrillDownLinks"><a href=\"#\">${topTenIMSIFailure.imsi}</a></span>`
+        table.row.add([imsiHtml, 
             topTenIMSIFailure.callFailuresCount
         ]);
     });
@@ -765,6 +763,11 @@ $(document).ready(function(){
       hideAllSections();
       $(".drillDownSections").hide();
       $(`#${$(this).data("target")}`).show();
+    });
+
+    $("body").on("click", ".imsiDrillDownLinks a", function(event){
+      const parentContainer = $(this).closest(".queryContainer").attr("id")
+      imsiClickFromTableEventHandler($(this).text(), parentContainer);
     });
 
 });

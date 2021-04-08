@@ -33,14 +33,11 @@ const generateIncrementalTimeSeriesData = function(dataset){
         durationPerTimeMap[key] = durationPerTimeMap[key] ? durationPerTimeMap[key] + (data.duration/1000) : (data.duration/1000);
         countPerTimeMap[key] = countPerTimeMap[key] ? countPerTimeMap[key] + 1 : 1;
     });
-
-    console.log(generateTimeSeriesData(countPerTimeMap, durationPerTimeMap));
     return generateTimeSeriesData(countPerTimeMap, durationPerTimeMap);
 };
 
 
 const generateCumulativeTimeSeriesData = function(dataset){
-    console.log(dataset);
     const durationPerTimeMap = {};
     const countPerTimeMap = {};
     dataset.forEach(data => {
@@ -68,8 +65,6 @@ const generateCumulativeTimeSeriesData = function(dataset){
             }
         }
     });
-
-    console.log(generateTimeSeriesData(countPerTimeMap, durationPerTimeMap));
     return generateTimeSeriesData(countPerTimeMap, durationPerTimeMap);
 };
 
@@ -134,7 +129,6 @@ const displayListOfIMSIEventForDrillDown = function(imsiEventsList){
 }
 
 const displayNetworkEngQueryFourDrillDownTable = function(imsiEventsList){
-    console.log(imsiEventsList);
     const table = $('#networkEngQueryFourDrillDownTable').DataTable();
     table.clear();
     $(imsiEventsList).each(function(index, event){
@@ -212,8 +206,6 @@ const generateCellIDBarChart = function(imsiEventsList){
     networkEngQueryFourDrillDownCellIDChart.data.datasets[0].data = data;
     networkEngQueryFourDrillDownCellIDChart.data.labels = labels;
     networkEngQueryFourDrillDownCellIDChart.data.datasets[0].backgroundColor = colorPalette.slice(0, data.length);
-
-    console.log(d3.schemeCategory10);
     networkEngQueryFourDrillDownCellIDChart.update();
 }
 
@@ -242,7 +234,6 @@ const initDrillDownButtons = function(chart, cumulativeDurations, incrementalDur
 };
 
 const displayIMSIDetails = function(imsi){
-    console.log("Updating IMSI Details")
     $("#networkEngQueryFourDrillDownChartCardIMSIDetailsIMSI").val(imsi.imsi);
     $("#networkEngQueryFourDrillDownChartCardIMSIDetailsCountry").val(imsi.marketOperator.countryDesc);
     $("#networkEngQueryFourDrillDownChartCardIMSIDetailsOperator").val(imsi.marketOperator.operatorDesc);
@@ -271,7 +262,6 @@ const queryListOfIMSIEventForDrillDown = function(imsi, fromTime, toTime){
 const topTenIMSIDrillDownEventHandler = function(event, array){
     $("#drillDownBackIcon").data("target", "networkEngQueryFour");
     imsiLineChartConfig.options.scales.xAxes[0].ticks.minRotation = 45;
-
     let activeBar = this.getElementAtEvent(event);
     if(activeBar[0]){
         let index = activeBar[0]["_index"];
@@ -285,7 +275,6 @@ const topTenIMSIDrillDownEventHandler = function(event, array){
 const imsiSummaryDrillDownEventHandler = function(event, array){
     $("#drillDownBackIcon").data("target", "networkEngQueryOne");
     imsiLineChartConfig.options.scales.xAxes[0].ticks.minRotation = 0;
-
     let activeBar = this.getElementAtEvent(event);
     if(activeBar[0]){
         let index = activeBar[0]["_index"];
@@ -294,6 +283,24 @@ const imsiSummaryDrillDownEventHandler = function(event, array){
         let toTime = new Date($('#endDateOnIMSISummaryFormNE').val()).valueOf();        
         queryListOfIMSIEventForDrillDown(imsi, fromTime, toTime);
     }
+}
+
+const imsiFailuresDrillDownEventHandler = function(event, array){
+    $("#drillDownBackIcon").data("target", "imsiFailuresCountQuery");
+    imsiLineChartConfig.options.scales.xAxes[0].ticks.minRotation = 0;
+    let activeBar = this.getElementAtEvent(event);
+    if(activeBar[0]){
+        let index = activeBar[0]["_index"];
+        let imsi = this.data.labels[index];
+        let fromTime = new Date($('#startDateOnIMSISummaryForm').val()).valueOf();
+        let toTime = new Date($('#endDateOnIMSISummaryForm').val()).valueOf();        
+        queryListOfIMSIEventForDrillDown(imsi, fromTime, toTime);
+    }
+};
+
+const imsiClickFromTableEventHandler = function(imsi, parentContainer){
+    $("#drillDownBackIcon").data("target", parentContainer);
+    queryListOfIMSIEventForDrillDown(imsi, 0, 8640000000000000);    
 }
 
 

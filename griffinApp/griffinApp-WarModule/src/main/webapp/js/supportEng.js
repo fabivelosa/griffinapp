@@ -21,8 +21,8 @@ const displayCallFailures = function(callFailures){
     const table = $('#imsiListTable').DataTable();
     table.clear();
     $(callFailures).each(function(index, callFailure){
-        console.log(callFailure);
-        table.row.add([callFailure.imsi]);
+        let imsiHtml = `<span class="imsiDrillDownLinks"><a href=\"#\">${callFailure.imsi}</a></span>`
+        table.row.add([imsiHtml]);
     });
     table.draw();
 }
@@ -215,8 +215,8 @@ const displayIMSIAffectedByFailureClass = function(IMSIs){
 	const table = $('#imsiFailuresTable').DataTable();
     table.clear();
     $(IMSIs).each(function(index, imsi){
-      table.row.add([imsi.imsi
-        ]);
+      let imsiHtml = `<span class="imsiDrillDownLinks"><a href=\"#\">${imsi.imsi}</a></span>`
+      table.row.add([imsiHtml]);
     });
     table.draw();
     
