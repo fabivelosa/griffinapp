@@ -54,6 +54,7 @@ const queryCallFailures = function(from, to){
 const displayCallFailureCount = function(imsiSummary, textStatus, jqXHR){
     $("#errorAlertOnCallFailureForm").hide();
 	$("#emptySEquery1").hide();
+	$("#imsiFailDiv").show();
     $("#imsiFailureTable").show();
     $("#imsiNumber").text(imsiSummary.model);
     $("#imsiCallFailureCount").text(imsiSummary.callFailuresCount);

@@ -159,6 +159,8 @@ const queryIMSISUmmary = function(imsi, from, to){
 			}else{
 				$(".responseWidget").hide();
 				$("#errorAlertOnSummaryForm").hide();
+				$("#imsisFailureDateResultChartCard").hide();
+				$("#imsisFailureDateResultChart").hide();
 				$("#emptyImsiSumm").show();
 				$("#imsiSummDiv").hide();
 			    $("#imsiSummaryTable").hide();
@@ -187,6 +189,7 @@ const setIMSIFieldAutoComplete = function(){
 const displayIMSIFailureDateChart = function(imsiSummary){
 	console.log('displayIMSIFailureDateChart called');
     $("#imsisFailureDateResultChartCard").show();
+	$("#imsisFailureDateResultChart").show();
     var ctx = $("#imsisFailureDateResultChart")[0];
     const imsiSummaryChart = new Chart(ctx, {
       type: 'bar',
