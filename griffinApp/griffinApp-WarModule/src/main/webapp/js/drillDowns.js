@@ -285,4 +285,22 @@ const imsiSummaryDrillDownEventHandler = function(event, array){
     }
 }
 
+const imsiFailuresDrillDownEventHandler = function(event, array){
+    $("#drillDownBackIcon").data("target", "imsiFailuresCountQuery");
+    imsiLineChartConfig.options.scales.xAxes[0].ticks.minRotation = 0;
+    let activeBar = this.getElementAtEvent(event);
+    if(activeBar[0]){
+        let index = activeBar[0]["_index"];
+        let imsi = this.data.labels[index];
+        let fromTime = new Date($('#startDateOnIMSISummaryForm').val()).valueOf();
+        let toTime = new Date($('#endDateOnIMSISummaryForm').val()).valueOf();        
+        queryListOfIMSIEventForDrillDown(imsi, fromTime, toTime);
+    }
+};
+
+const imsiClickFromTableEventHandler = function(imsi, parentContainer){
+    $("#drillDownBackIcon").data("target", parentContainer);
+    queryListOfIMSIEventForDrillDown(imsi, 0, 8640000000000000);    
+}
+
 
