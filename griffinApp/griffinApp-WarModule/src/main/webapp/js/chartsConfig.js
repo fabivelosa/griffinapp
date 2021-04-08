@@ -5,13 +5,13 @@ const imsiLineChartConfig = {
       datasets: [{
         type: 'line',
         data: [],
-        label: "Call Failures Duration",
+        label: "Call Failures Duration (seconds)",
         borderColor: "#FFA500",        
         borderDash: [2,2],
         borderWidth:2,
         fill:false,
      },{
-        label: "Call Failures Count (seconds)",
+        label: "Call Failures Count",
         backgroundColor: "#4e73df",
         hoverBackgroundColor: "#002593",
         borderColor: "#4e73df",
