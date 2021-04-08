@@ -29,6 +29,7 @@ const generateIncrementalTimeSeriesData = function(dataset){
 
 
 const generateCumulativeTimeSeriesData = function(dataset){
+    console.log(dataset);
     const durationPerTimeMap = {};
     const countPerTimeMap = {};
     dataset.forEach(data => {
@@ -58,7 +59,6 @@ const generateCumulativeTimeSeriesData = function(dataset){
     return generateTimeSeriesData(countPerTimeMap, durationPerTimeMap);
 };
 
-
 const generateTimeSeriesData = function(countPerTimeMap, durationPerTimeMap) {
     const timeSeriesData = {counts:[], durations:[]};
     for (key in durationPerTimeMap) {
@@ -74,11 +74,17 @@ const generateTimeSeriesData = function(countPerTimeMap, durationPerTimeMap) {
             y: countPerTimeMap[key]
         });
     };
-
-
     return timeSeriesData;
 }
 
+
+const generateFailureClassDisribution = function(dataset){
+    const failureMap = {};
+    dataset.forEach(data => {
+        failureMap[data.failureClass.failureDesc] = failureMap[data.failureClass.failureDesc] ? failureMap[data.failureClass.failureDesc] + 1 : 1;
+    })
+    return failureMap;
+};
 
 const hideAllSections = function(){
     $.each($("#queryNESelectors").children(), function(index, selector) {
@@ -91,101 +97,6 @@ const hideAllSections = function(){
         $(`#${$(selector).data("section")}`).hide();
     });
 }
-
-
-/* Line Chart Config*/
-const imsiLineChartConfig = {
-    type: "bar",
-    data: {
-      labels: [],
-      datasets: [{
-        type: 'line',
-        data: [],
-        label: "Call Failures Duration",
-        borderColor: "#FFA500",        
-        borderDash: [2,2],
-        borderWidth:2,
-        fill:false,
-     },{
-        label: "Call Failures Count",
-        backgroundColor: "#4e73df",
-        hoverBackgroundColor: "#002593",
-        borderColor: "#4e73df",
-        barPercentage:0.5,
-        categoryPercentage:1.0,
-        maxBarThickness:50,
-        data: [],
-      }]
-    },
-    options: {
-      scales: {
-        xAxes: [{
-          type: "time",
-          min:0,
-          distribution: "linear",
-          ticks:{
-            source:'data'
-          },
-          gridLines: {
-            display: false,
-            drawBorder: false
-          },
-          offset: true
-        }],
-        yAxes: [{
-          ticks: {
-            min: 0,
-            max: 100,     
-            padding: 10,
-         },
-        scaleLabel: {
-          display: true,
-          labelString: 'Call Failures Count'
-        },
-        gridLines: {
-          color: "rgb(234, 236, 244)",
-          zeroLineColor: "rgb(234, 236, 244)",
-          drawBorder: false,
-          borderDash: [2],
-          zeroLineBorderDash: [2]
-        }
-      }],
-        title: {
-          display: false
-        }
-      },
-      maintainAspectRatio: false,
-      layout: {
-        padding: {
-          left: 10,
-          right: 25,
-          top: 25,
-          bottom: 0
-        }
-      },
-      tooltips: {
-        titleMarginBottom: 10,
-        titleFontColor: '#6e707e',
-        titleFontSize: 14,
-        backgroundColor: "rgb(255,255,255)",
-        bodyFontColor: "#858796",
-        borderColor: '#dddfeb',
-        borderWidth: 1,
-        xPadding: 15,
-        yPadding: 15,
-        displayColors: false, 
-        caretPadding: 10,
-        callbacks: {
-          label: function(tooltipItem, chart) {
-            var datasetLabel = chart.datasets[tooltipItem.datasetIndex].label || '';
-            return datasetLabel + ': ' + tooltipItem.yLabel;
-          }
-        }
-      }
-    }
-};
-
-let networkEngQueryFourDrillDownChart = new Chart($("#networkEngQueryFourDrillDownChart")[0], imsiLineChartConfig);
 
 const displayListOfIMSIEventForDrillDown = function(imsiEventsList){
     hideAllSections();
@@ -215,22 +126,45 @@ const displayNetworkEngQueryFourDrillDownTable = function(imsiEventsList){
     table.draw();
 }
 
+
 const displayNetworkEngQueryFourDrillDownChart = function(imsiEventsList){    
-    // networkEngQueryFourDrillDownChart.destroy();
-    // networkEngQueryFourDrillDownChart = new Chart($("#networkEngQueryFourDrillDownChart")[0], imsiLineChartConfig);
+    generateBarLineChart(imsiEventsList);
+    generateFailureClassPieChart(imsiEventsList);
+}
+
+let networkEngQueryFourDrillDownBarChart = new Chart($("#networkEngQueryFourDrillDownChart")[0], imsiLineChartConfig);
+
+const generateBarLineChart = function(imsiEventsList) {
     const cumulativeDurations = generateCumulativeTimeSeriesData(imsiEventsList)["durations"];
     const incrementalDurations = generateIncrementalTimeSeriesData(imsiEventsList)["durations"];
     const cumulativeCounts = generateCumulativeTimeSeriesData(imsiEventsList)["counts"];
     const incrementalCounts = generateIncrementalTimeSeriesData(imsiEventsList)["counts"];
-    networkEngQueryFourDrillDownChart.data.datasets[0].data = cumulativeDurations;
-    networkEngQueryFourDrillDownChart.data.datasets[1].data = cumulativeCounts;
+    networkEngQueryFourDrillDownBarChart.data.datasets[0].data = cumulativeDurations;
+    networkEngQueryFourDrillDownBarChart.data.datasets[1].data = cumulativeCounts;
     imsiLineChartConfig.options.scales.yAxes[0].ticks.max = getRoundedUpYAxisMaxValue(cumulativeDurations, cumulativeCounts);
-    networkEngQueryFourDrillDownChart.update();
-    $("#networkEngQueryFourDrillDownChartTitleType").text("Cumulative")
+    networkEngQueryFourDrillDownBarChart.update();
+    $("#networkEngQueryFourDrillDownChartTitleType").text("Cumulative");
     $("#networkEngQueryFourDrillDownChartTitleDescription").text(`IMSI ${imsiEventsList[0].imsi} Failures`);
     $("#networkEngQueryFourIncrementalBtn").show();
     $("#networkEngQueryFourCumulativeBtn").hide();
-    initDrillDownButtons(networkEngQueryFourDrillDownChart, cumulativeDurations, incrementalDurations, cumulativeCounts, incrementalCounts);
+    initDrillDownButtons(networkEngQueryFourDrillDownBarChart, cumulativeDurations, incrementalDurations, cumulativeCounts, incrementalCounts);
+};
+
+let networkEngQueryFourDrillDownPieChart = new Chart($("#networkEngQueryFourDrillDownFailureClassChart")[0], failureClassPieChartConfig);
+
+const generateFailureClassPieChart = function(imsiEventsList){
+    const dataset = generateFailureClassDisribution(imsiEventsList);
+    const labels =  Object.keys(dataset);
+    const data = [];
+    for(let i = 0; i < labels.length; i++){
+        data[i] = dataset[labels[i]];
+    }
+    networkEngQueryFourDrillDownPieChart.destroy();
+    networkEngQueryFourDrillDownPieChart = new Chart($("#networkEngQueryFourDrillDownFailureClassChart")[0], failureClassPieChartConfig);
+    networkEngQueryFourDrillDownPieChart.data.datasets[0].data = data;
+    networkEngQueryFourDrillDownPieChart.data.labels = labels;
+    networkEngQueryFourDrillDownPieChart.data.datasets[0].backgroundColor = d3.schemeCategory10.slice(0, data.length);
+    networkEngQueryFourDrillDownPieChart.update();
 }
 
 const initDrillDownButtons = function(chart, cumulativeDurations, incrementalDurations, cumulativeCounts, incrementalCounts){
@@ -242,7 +176,6 @@ const initDrillDownButtons = function(chart, cumulativeDurations, incrementalDur
         chart.data.datasets[1].data = incrementalCounts;
         imsiLineChartConfig.options.scales.yAxes[0].ticks.max = getRoundedUpYAxisMaxValue(incrementalDurations, incrementalCounts);
         chart.update();
-        console.log(imsiLineChartConfig);
     });
 
     $("#networkEngQueryFourCumulativeBtn").click(function (event) {
@@ -308,4 +241,6 @@ const imsiSummaryDrillDownEventHandler = function(event, array){
         queryListOfIMSIEventForDrillDown(imsi, fromTime, toTime);
     }
 }
+
+
 
