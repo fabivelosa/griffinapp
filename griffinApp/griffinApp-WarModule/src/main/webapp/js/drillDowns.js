@@ -16,14 +16,25 @@ const getMaxXAxisValue = function(chartData){
     return new Date(Math.max(...chartData.map(data => new Date(data.x)))).toDateString();
 };
 
+const roundDateToNearestHour = function(data) {
+    let date = new Date(data.dateTime);
+    date.setMinutes(date.getMinutes() + 30);
+    date.setMinutes(0);
+    return date;
+};
+
 const generateIncrementalTimeSeriesData = function(dataset){
     const durationPerTimeMap = {};
     const countPerTimeMap = {};
     dataset.forEach(data => {
-        let key = new Date(data.dateTime).toISOString();
+        let date = roundDateToNearestHour(data);
+
+        let key = new Date(date).toISOString();
         durationPerTimeMap[key] = durationPerTimeMap[key] ? durationPerTimeMap[key] + (data.duration/1000) : (data.duration/1000);
         countPerTimeMap[key] = countPerTimeMap[key] ? countPerTimeMap[key] + 1 : 1;
     });
+
+    console.log(generateTimeSeriesData(countPerTimeMap, durationPerTimeMap));
     return generateTimeSeriesData(countPerTimeMap, durationPerTimeMap);
 };
 
@@ -33,7 +44,8 @@ const generateCumulativeTimeSeriesData = function(dataset){
     const durationPerTimeMap = {};
     const countPerTimeMap = {};
     dataset.forEach(data => {
-        let key = new Date(data.dateTime).toISOString();
+        let date = roundDateToNearestHour(data);
+        let key = new Date(date).toISOString();
         if(!(key in durationPerTimeMap)){
             durationPerTimeMap[key] = (data.duration/1000);
             countPerTimeMap[key] = 1;
@@ -56,6 +68,8 @@ const generateCumulativeTimeSeriesData = function(dataset){
             }
         }
     });
+
+    console.log(generateTimeSeriesData(countPerTimeMap, durationPerTimeMap));
     return generateTimeSeriesData(countPerTimeMap, durationPerTimeMap);
 };
 
@@ -74,6 +88,10 @@ const generateTimeSeriesData = function(countPerTimeMap, durationPerTimeMap) {
             y: countPerTimeMap[key]
         });
     };
+
+    const dateComparator = (current, next) => new Date(current.x) - new Date(next.x);
+    timeSeriesData["counts"].sort(dateComparator);
+    timeSeriesData["durations"].sort(dateComparator);
     return timeSeriesData;
 }
 
@@ -252,6 +270,7 @@ const queryListOfIMSIEventForDrillDown = function(imsi, fromTime, toTime){
 
 const topTenIMSIDrillDownEventHandler = function(event, array){
     $("#drillDownBackIcon").data("target", "networkEngQueryFour");
+    imsiLineChartConfig.options.scales.xAxes[0].ticks.minRotation = 45;
 
     let activeBar = this.getElementAtEvent(event);
     if(activeBar[0]){
@@ -265,6 +284,7 @@ const topTenIMSIDrillDownEventHandler = function(event, array){
 
 const imsiSummaryDrillDownEventHandler = function(event, array){
     $("#drillDownBackIcon").data("target", "networkEngQueryOne");
+    imsiLineChartConfig.options.scales.xAxes[0].ticks.minRotation = 0;
 
     let activeBar = this.getElementAtEvent(event);
     if(activeBar[0]){
@@ -275,6 +295,5 @@ const imsiSummaryDrillDownEventHandler = function(event, array){
         queryListOfIMSIEventForDrillDown(imsi, fromTime, toTime);
     }
 }
-
 
 

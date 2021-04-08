@@ -1,9 +1,8 @@
 const imsiLineChartConfig = {
-    type: "bar",
+    type: "line",
     data: {
       labels: [],
       datasets: [{
-        type: 'line',
         data: [],
         label: "Call Failures Duration (seconds)",
         borderColor: "#FFA500",        
@@ -11,6 +10,7 @@ const imsiLineChartConfig = {
         borderWidth:2,
         fill:false,
      },{
+        type: 'bar',
         label: "Call Failures Count",
         backgroundColor: "#4e73df",
         hoverBackgroundColor: "#002593",
@@ -25,10 +25,22 @@ const imsiLineChartConfig = {
       scales: {
         xAxes: [{
           type: "time",
+          time: {
+            displayFormats: {
+               'millisecond': 'MMM DD HH:mm:ss',
+               'second': 'MMM DD HH:mm:ss',
+               'minute': 'MMM DD HH:mm:ss',
+               'hour': 'MMM DD HH:mm:ss',
+               'day': 'MMM DD HH:mm:ss',
+            },
+          },
           min:0,
           distribution: "linear",
           ticks:{
-            source:'data'
+            source:'data',
+            autoSkip: false,
+            maxRotation: 90,
+            minRotation: 0
           },
           gridLines: {
             display: false,
