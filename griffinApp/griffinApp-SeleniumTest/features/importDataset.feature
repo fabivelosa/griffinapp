@@ -11,11 +11,12 @@ Feature: As the System Administrator,
     And The Choose File button is present
     When The user imported the file "<fileName>"
     And The user clicked on Upload
-    Then The parsing message "<parseMessage>" is displayed
+    Then The valid rows message "<validRowCount>" is displayed
+    And The invalid rows message "<invalidRowCount>" is displayed
 
     Examples: 
-      | fileName  																				  		| userName | password |
-      | /resources/testdatasets/complete_dataset_zero_row.xlsx 	| lisa1		 | Admin123 |
-      | /resources/testdatasets/complete_dataset_one_row.xlsx 	| lisa1		 | Admin123 |
-      | /resources/testdatasets/complete_dataset.xlsx 					| lisa1		 | Admin123 |
+      | fileName  																				  		| userName | password | validRowCount | invalidRowCount |
+      | /resources/testdatasets/mini_dataset.xlsx 							| lisa1		 | Admin123 |		505					|			715					|
+      | /resources/testdatasets/mini_set_one_row.xlsx 					| lisa1		 | Admin123 |		497					|			697					|
+      | /resources/testdatasets/full_dataset.xlsx 							| lisa1		 | Admin123 |			0					|				0					|
                  

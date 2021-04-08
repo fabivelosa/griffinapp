@@ -47,12 +47,9 @@ public class ImportDatasetStepDefinition {
 	public void the_user_imported_the_file(String fileLocation) throws Throwable {
 	    // Write code here that turns the phrase above into concrete actions
 		final String filePath = Hooks.ROOT_DIRECTORY + fileLocation;
-		
 		Thread.sleep(1000);
-		
 		Hooks.driver.findElement(By.id("uploadFile")).sendKeys(filePath);
-		
-		Thread.sleep(2000);
+		Thread.sleep(1000);
 	}
 
 	@When("^The user clicked on Upload$")
@@ -62,18 +59,23 @@ public class ImportDatasetStepDefinition {
 		Thread.sleep(3000);
 	}
 
-	@Then("^The parsing message \"([^\"]*)\" is displayed$")
-	public void the_parsing_message_is_displayed(String arg1) throws Throwable {
-	    // Write code here that turns the phrase above into concrete actions
-	   
-	}
 	
-	//Old
+	@Then("^The valid rows message \"([^\"]*)\" is displayed$")
+	public void the_valid_rows_message_is_displayed(String validRows) throws Throwable {
+		   // Write code here that turns the phrase above into concrete actions
+			//Valid Records: 505
+			//invalidRecords
+			//Invalid Records: 715
+		assertNotNull(Hooks.driver.findElement(By.id("validRecords")));
+		final String expected = "Valid Records: " +validRows;
+		assertEquals(expected, Hooks.driver.findElement(By.id("validRecords")).getText());
+	}
 
-	@Then("^The storage message \"([^\"]*)\" is displayed$")
-	public void the_storage_message_is_displayed(final String expectedMessage) throws Throwable {
-		final String actualMessage = Hooks.driver.findElement(By.id("storageMessage")).getAttribute("innerText");
-		
-		assertEquals(actualMessage, expectedMessage);
+	@Then("^The invalid rows message \"([^\"]*)\" is displayed$")
+	public void the_invalid_rows_message_is_displayed(String invalidRows) throws Throwable {
+	    // Write code here that turns the phrase above into concrete actions
+		assertNotNull(Hooks.driver.findElement(By.id("invalidRecords")));
+		final String expected = "Valid Records: " +invalidRows;
+		assertEquals(expected, Hooks.driver.findElement(By.id("validRecords")).getText());
 	}
 }
