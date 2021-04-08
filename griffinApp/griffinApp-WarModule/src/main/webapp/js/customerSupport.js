@@ -35,7 +35,8 @@ const displayEquipmentFailures = function(IMSIfailures){
     const table = $('#phoneFailuresTable').DataTable();
     table.clear();
     $(IMSIfailures).each(function(index, IMSIfailure){
-        table.row.add([IMSIfailure.imsi, 
+      let imsiHtml = `<span class="imsiDrillDownLinks"><a href=\"#\">${IMSIfailure.imsi}</a></span>`
+        table.row.add([imsiHtml, 
             IMSIfailure.eventCause.eventCauseId.eventCauseId, 
             IMSIfailure.eventCause.eventCauseId.causeCode,
             IMSIfailure.eventCause.description
@@ -125,7 +126,8 @@ const displayIMSISummary = function(imsiSummary, textStatus, jqXHR){
 	$("#emptyImsiSumm").hide();
 	$("#imsiSummDiv").show();
     $("#imsiSummaryTable").show();
-    $("#imsiSummaryNumber").text(imsiSummary.imsi);
+    let imsiHtml = `<span class="imsiDrillDownLinks"><a href=\"#\">${imsiSummary.imsi}</a></span>`
+    $("#imsiSummaryNumber").html(imsiHtml);
     $("#imsiSummaryFromDate").text($('#startDateOnIMSISummaryForm').val());
     $("#imsiSummaryToDate").text($('#endDateOnIMSISummaryForm').val());
     $("#imsiSummaryCallFailureCount").text(imsiSummary.callFailuresCount);
@@ -202,6 +204,7 @@ const displayIMSIFailureDateChart = function(imsiSummary){
         }],
       },
       options: {
+        onClick: imsiFailuresDrillDownEventHandler,
         maintainAspectRatio: false,
         layout: {
           padding: {

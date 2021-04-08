@@ -206,7 +206,7 @@
                         <h1 class="h3 mb-0 text-gray-800" id="CSHeading">Customer Service Rep Dashboard</h1>
                     </div>
                     <!-- Content Row -->
-                    <div class="row" id="networkEngQueryOne">
+                    <div class="row queryContainer" id="networkEngQueryOne">
                         <div class="col mb-4">
                             <div class="card mt-4">
                                 <div class="card-header">
@@ -287,7 +287,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="row" id="networkEngQueryTwo">
+                    <div class="row queryContainer" id="networkEngQueryTwo">
                         <div class="col">
                             <div class="card mt-4">
                                 <div class="card-header">
@@ -340,7 +340,11 @@
                                                             <input readonly type="text" class="form-control" id="userEquipmentFailuresChartCardPhoneAccess" placeholder="Access"/>
                                                         </div>
                                                     </div>
-                                                    <div class="row chart-bar"><canvas id="userEquipmentFailuresChart" width="100%" height="100"></canvas></div>
+                                                    <div class = "row">
+                                                        <div class="row chart-bar">
+                                                            <canvas id="userEquipmentFailuresChart" width="100%" height="100"></canvas>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                                 <div class="card-footer small text-muted" id="userEquipmentFailuresDate">NaN</div>
                                             </div>
@@ -368,7 +372,7 @@
                             </div>
                         </div>
                     </div>                    
-					<div class="row" id="networkEngQueryThree">
+					<div class="row queryContainer" id="networkEngQueryThree">
                         <div class="col">
                             <div class="card mt-4">
                                 <div class="card-header">
@@ -438,7 +442,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="row" id="networkEngQueryFour">
+                    <div class="row queryContainer" id="networkEngQueryFour">
                         <div class="col mb-4">
                             <div class="card mt-4">
                                 <div class="card-header">
@@ -522,8 +526,7 @@
                                                         <span id="networkEngQueryFourDrillDownChartTitleDescription"></span>
                                                     </div>
                                                     <div class="card-body">
-                                                        <div class="chart-bar"><canvas id="networkEngQueryFourDrillDownChart" width="100%" height="100"></canvas></div>
-                                                        <div class = "row networkEngQueryFourDrillDownChartCardIMSIDetails pl-2 pr-2 mx-4 mt-4">
+                                                        <div class = "row networkEngQueryFourDrillDownChartCardIMSIDetails pl-2 pr-2 mx-4">
                                                             <div class = "col">
                                                                 <label for="networkEngQueryFourDrillDownChartCardIMSIDetailsIMSI" class="form-label fw-bold small">IMSI</label>
                                                                 <input readonly type="text" class="form-control" id="networkEngQueryFourDrillDownChartCardIMSIDetailsIMSI" placeholder="IMSI"/>
@@ -543,6 +546,25 @@
                                                             <div class = "col">
                                                                 <label for="networkEngQueryFourDrillDownChartCardIMSIDetailsPhoneVendor" class="form-label fw-bold small">Vendor</label>
                                                                 <input readonly type="text" class="form-control" id="networkEngQueryFourDrillDownChartCardIMSIDetailsPhoneVendor" placeholder="Vendor"/>
+                                                            </div>
+                                                        </div>
+                                                        <div class="d-flex flex-column">
+                                                            <div class = "d-flex flex-row align-items-stretch">
+                                                                <div class="col-6" id="drillDownFailureClassChart">
+                                                                    <div class="row mx-4 align-center"><h4>Failure Class Distribution</h4></div>
+                                                                    <div class="row chart-pie">
+                                                                        <canvas id="networkEngQueryFourDrillDownFailureClassChart" width="100%" height="100"></canvas>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-6" id="drillDownCellIDChart">
+                                                                    <div class="row mx-4 align-center"><h4>Cell Distribution</h4></div>
+                                                                    <div class="row chart-bar">
+                                                                        <canvas id="networkEngQueryFourDrillDownCellIDChart" width="100%" height="100"></canvas>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="chart-bar">
+                                                                <canvas id="networkEngQueryFourDrillDownChart" width="100%" height="100"></canvas>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -592,7 +614,7 @@
                         </div>
              
                  <!--  Support Queries -->
-                    <div class="row" id="imsiFailuresCountQuery">
+                    <div class="row queryContainer" id="imsiFailuresCountQuery">
                             <div class="col mb-4">
                                 <div class="card mt-4">
                                     <div class="card-header">
@@ -675,7 +697,7 @@
                                 </div>
                             </div>
                         </div>
-                    <div class="row" id="equipmentFailuresQuery">
+                    <div class="row queryContainer" id="equipmentFailuresQuery">
                             <div class="col mb-4">
                                 <div class="card mt-4">
                                     <div class="card-header">
@@ -732,7 +754,7 @@
                                 </div>
                             </div>
                         </div>
-                    <div class="row" id="imsiCauseCodesQuery">
+                    <div class="row queryContainer" id="imsiCauseCodesQuery">
                             <div class="col mb-4">
                                 <div class="card mt-4">
                                     <div class="card-header">
@@ -788,7 +810,7 @@
                         </div>
                <!--  </div> -->
                
-               <div class="row" id="supportEngQueryOne">
+               <div class="row queryContainer" id="supportEngQueryOne">
 						<div class="col">
 							<div class="card mt-4">
 								<div class="card-header">Count Call Failures for given Phone Model within time period</div>
@@ -874,7 +896,7 @@
 					</div>
 
 					<!-- Content Row -->
-					<div class="row" id="supportEngQueryTwo">
+					<div class="row queryContainer" id="supportEngQueryTwo">
 						<div class="col">
 							<div class="card mt-4">
 								<div class="card-header">List of Unique Call Failures within time period</div>
@@ -939,7 +961,7 @@
 						</div>
 					</div>
 					
-					<div class="row" id="supportEngQueryThree">
+					<div class="row queryContainer" id="supportEngQueryThree">
 						<div class="col">
 							<div class="card mt-4">
 								<div class="card-header">List of Unique Call Failures for a Failure Class</div>
@@ -1063,13 +1085,23 @@
 
     <!-- Page level plugins -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
-    <script src="vendor/chart.js/Chart.min.js"></script>
+    <!-- <script src="vendor/chart.js/Chart.min.js"></script> -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.js" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@0.4.0/dist/chartjs-plugin-datalabels.min.js"></script> 
+
+
 
     <!-- Data tables -->
     <script src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js" crossorigin="anonymous"></script>
     <script src="https://cdn.datatables.net/1.10.22/js/dataTables.bootstrap4.min.js" crossorigin="anonymous"></script>
 
+    <!-- D3 Scale Chromatic -->
+    <script src="https://d3js.org/d3-color.v1.min.js"></script>
+    <script src="https://d3js.org/d3-interpolate.v1.min.js"></script>
+    <script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
+
     <!-- Network Engineer Speciifc JS-->
+    <script src="js/chartsConfig.js"></script>
     <script src="js/drillDowns.js"></script>
     <script src="js/networkEngineer.js"></script>
     <script src="js/customerSupport.js"></script>
