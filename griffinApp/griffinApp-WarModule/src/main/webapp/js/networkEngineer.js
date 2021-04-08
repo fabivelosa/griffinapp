@@ -102,6 +102,11 @@ const displayPhoneEquipmentFailuresChart = function(phoneFailures){
       legend: {
         display: false
       },
+      plugins: {
+        datalabels: {
+            display: false,
+        },
+      },
       tooltips: {
         titleMarginBottom: 10,
         titleFontColor: '#6e707e',
@@ -265,6 +270,11 @@ const displayIMSISummaryChart = function(imsiSummary){
         display: true,
         position:'bottom'
       },
+      plugins: {
+        datalabels: {
+            display: false,
+        },
+      },
       tooltips: {
         titleMarginBottom: 10,
         titleFontColor: '#6e707e',
@@ -398,6 +408,11 @@ const displayTopTenCombinationsChart = function(combinations){
         },
         legend: {
           display: false
+        },
+        plugins: {
+          datalabels: {
+              display: false,
+          },
         },
         tooltips: {
           titleMarginBottom: 10,
@@ -557,6 +572,11 @@ const displayTopTenIMSIsChart = function(imsis){
       },
       legend: {
         display: false
+      },
+      plugins: {
+        datalabels: {
+            display: false,
+        },
       },
       tooltips: {
         intersect: false,
