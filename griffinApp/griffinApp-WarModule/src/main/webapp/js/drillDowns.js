@@ -86,6 +86,14 @@ const generateFailureClassDisribution = function(dataset){
     return failureMap;
 };
 
+const generateCellDistribution = function(dataset){
+    const cells = {};
+    dataset.forEach(data => {
+        cells[data.cellId] = cells[data.cellId] ? cells[data.cellId] + 1 : 1;
+    })
+    return cells;
+};
+
 const hideAllSections = function(){
     $.each($("#queryNESelectors").children(), function(index, selector) {
         $(`#${$(selector).data("section")}`).hide();
@@ -103,7 +111,7 @@ const displayListOfIMSIEventForDrillDown = function(imsiEventsList){
     $("#networkEngQueryFourDrillDown").show();
     $("#networkEngQueryFourDrillDownTitle").text(`Drilldown : ${imsiEventsList[0].imsi}`)
     displayNetworkEngQueryFourDrillDownTable(imsiEventsList);
-    displayNetworkEngQueryFourDrillDownChart(imsiEventsList);
+    displayNetworkEngQueryFourDrillDownCharts(imsiEventsList);
     displayIMSIDetails(imsiEventsList[0]);
 }
 
@@ -127,12 +135,16 @@ const displayNetworkEngQueryFourDrillDownTable = function(imsiEventsList){
 }
 
 
-const displayNetworkEngQueryFourDrillDownChart = function(imsiEventsList){    
+const displayNetworkEngQueryFourDrillDownCharts = function(imsiEventsList){    
     generateBarLineChart(imsiEventsList);
     generateFailureClassPieChart(imsiEventsList);
+    generateCellIDBarChart(imsiEventsList);
 }
 
 let networkEngQueryFourDrillDownBarChart = new Chart($("#networkEngQueryFourDrillDownChart")[0], imsiLineChartConfig);
+
+let colorPalette = ["#4e73df", "#ff7f0e", "#2ca02c", "#d62728", "#9467bd", "#8c564b", "#e377c2", "#7f7f7f", "#bcbd22", "#17becf"];
+
 
 const generateBarLineChart = function(imsiEventsList) {
     const cumulativeDurations = generateCumulativeTimeSeriesData(imsiEventsList)["durations"];
@@ -163,9 +175,31 @@ const generateFailureClassPieChart = function(imsiEventsList){
     networkEngQueryFourDrillDownPieChart = new Chart($("#networkEngQueryFourDrillDownFailureClassChart")[0], failureClassPieChartConfig);
     networkEngQueryFourDrillDownPieChart.data.datasets[0].data = data;
     networkEngQueryFourDrillDownPieChart.data.labels = labels;
-    networkEngQueryFourDrillDownPieChart.data.datasets[0].backgroundColor = d3.schemeCategory10.slice(0, data.length);
+    networkEngQueryFourDrillDownPieChart.data.datasets[0].backgroundColor = colorPalette.slice(0, data.length);
     networkEngQueryFourDrillDownPieChart.update();
 }
+
+let networkEngQueryFourDrillDownCellIDChart = new Chart($("#networkEngQueryFourDrillDownCellIDChart")[0], cellIDChartConfig);
+
+const generateCellIDBarChart = function(imsiEventsList){
+    const dataset = generateCellDistribution(imsiEventsList);
+    const labels =  Object.keys(dataset);
+    const data = [];
+    for(let i = 0; i < labels.length; i++){
+        data[i] = dataset[labels[i]];
+    }
+    networkEngQueryFourDrillDownCellIDChart.destroy();
+    cellIDChartConfig.options.scales.yAxes[0].ticks.max = Math.max(...data);
+    networkEngQueryFourDrillDownCellIDChart = new Chart($("#networkEngQueryFourDrillDownCellIDChart")[0], cellIDChartConfig);
+    networkEngQueryFourDrillDownCellIDChart.data.datasets[0].data = data;
+    networkEngQueryFourDrillDownCellIDChart.data.labels = labels;
+    networkEngQueryFourDrillDownCellIDChart.data.datasets[0].backgroundColor = colorPalette.slice(0, data.length);
+
+    console.log(d3.schemeCategory10);
+    networkEngQueryFourDrillDownCellIDChart.update();
+}
+
+
 
 const initDrillDownButtons = function(chart, cumulativeDurations, incrementalDurations, cumulativeCounts, incrementalCounts){
     $("#networkEngQueryFourIncrementalBtn").click(function (event) {
