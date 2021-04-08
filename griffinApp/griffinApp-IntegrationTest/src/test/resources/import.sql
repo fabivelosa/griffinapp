@@ -11,5 +11,5 @@ INSERT INTO users (userId, userName, userPassword, userType) VALUES('se10','bonn
 INSERT INTO users (userId, userName, userPassword, userType) VALUES('cs11','joe','MTIzNA==', 'CUSTSERVREP');
 INSERT INTO upload (uploadID, uploadStatus, reportFile, totalInvalidRecords, totalValidRecords) VALUES('0fa3df6f-a95a-499d-ab70-95602255fa35','0','Error1616842256588.txt', 0,0);
 INSERT INTO upload (uploadID, uploadStatus, reportFile, totalInvalidRecords, totalValidRecords) VALUES('0fa3df6f-a95a-488d-ab70-95602255fa35','0','Error1616842256588.txt', 0,0);
-INSERT INTO upload (uploadID, uploadStatus, reportFile, totalInvalidRecords, totalValidRecords) VALUES('0fa3df6f-a95a-488d-ab70-95602255fa35','0','Error1616842256588.txt', 0,0);
+INSERT INTO upload (uploadID, uploadStatus, reportFile, totalInvalidRecords, totalValidRecords) VALUES('0fa3df6f-a95a-488d-ab70-95602255fa36','0','Error1616842256588.txt', 0,0);
 INSERT INTO upload (uploadID, uploadStatus, reportFile, totalInvalidRecords, totalValidRecords) VALUES('0fa3df6f-a95a-566d-ab70-95602255fa35','0','Error1616842256588.txt', 0,0);

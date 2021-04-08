@@ -34,7 +34,7 @@ public class AutomaticUploadTest {
 
 	private final String resourcePath = "src/test/resources/mini_data.xlsx";
 	final String serverfilePath = "opt/wildfly/bin/fileUploads";
-	final String localFilePath = "C:\\Users\\Peter\\Documents\\College work\\AIT\\MASE\\Semester2\\Web Technologies\\Week1\\L1 Server setup\\Lab1-1\\wildfly-8.2.1.Final\\bin\\fileUploads\\mini_data.xlsx";
+	final String localFilePath = "\\fileUploads\\mini_data.xlsx";
 	
 	final String uploadPath = "";
 	
@@ -77,8 +77,8 @@ public class AutomaticUploadTest {
 				.getAsString();
 	}
 	
-	//@Test
-	//@RunAsClient
+	@Test
+	@RunAsClient
 	public void testItem() throws InterruptedException, IOException {	
 
 		//check responcse size
@@ -90,19 +90,19 @@ public class AutomaticUploadTest {
 		final Response responseGet = resourceClient.resourcePath(allUploads).get(token);
 		assertEquals(200, responseGet.getStatus());
 		final JsonArray uploads = JsonReader.readAsJsonArray(responseGet.readEntity(String.class));
-		assertEquals(3, uploads.size());
+		assertEquals(4, uploads.size());
 		JsonObject uploadList = uploads.get(0).getAsJsonObject();
 	
 		//check responcse size
 		File testFile = new File(System.getProperty("user.dir")+ "\\src\\test\\resources\\mini_data.xlsx");
-		File dest = new File(localFilePath);
+		File dest = new File(System.getProperty("user.dir")+localFilePath);
 		FileUtils.copyFile(testFile, dest);
 		Thread.sleep(10000);
 		
 		final Response responseGet2 = resourceClient.resourcePath(allUploads).get(token);
-		assertEquals(200, responseGet.getStatus());
+		assertEquals(200, responseGet2.getStatus());
 		final JsonArray uploads2 = JsonReader.readAsJsonArray(responseGet2.readEntity(String.class));
-		assertEquals(4, uploads.size());
+		assertEquals(5, uploads2.size());
 		
 		//check response size again
 	
@@ -111,7 +111,8 @@ public class AutomaticUploadTest {
 	
 	@After
 	public void removeItems() {
-		
+		final File newFile = new File(System.getProperty("user.dir")+"\\fileUploads\\mini_data.xlsx");
+		newFile.delete();
 	}
 	
 	
