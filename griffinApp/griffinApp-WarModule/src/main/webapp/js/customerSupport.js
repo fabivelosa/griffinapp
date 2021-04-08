@@ -271,7 +271,6 @@ const displayIMSIFailureDateChart = function(imsiSummary){
 
 
 $(document).ready(function(){		
-	console.log('can this fucking word 236');
     setIMSIFieldAutoComplete();
     $('#imsiSummaryForm').submit(function(event){
         event.preventDefault();
