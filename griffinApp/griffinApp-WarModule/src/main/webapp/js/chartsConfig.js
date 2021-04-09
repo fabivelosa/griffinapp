@@ -4,7 +4,7 @@ const imsiLineChartConfig = {
       labels: [],
       datasets: [{
         data: [],
-        label: "Call Failures Duration (seconds)",
+        label: "Hourly Failures Duration (seconds)",
         borderColor: "#FFA500",        
         borderDash: [2,2],
         borderWidth:2,
@@ -27,11 +27,11 @@ const imsiLineChartConfig = {
           type: "time",
           time: {
             displayFormats: {
-               'millisecond': 'MMM DD HH:mm:ss',
-               'second': 'MMM DD HH:mm:ss',
-               'minute': 'MMM DD HH:mm:ss',
-               'hour': 'MMM DD HH:mm:ss',
-               'day': 'MMM DD HH:mm:ss',
+               'millisecond': 'MMM DD HH:mm',
+               'second': 'MMM DD HH:mm',
+               'minute': 'MMM DD HH:mm',
+               'hour': 'MMM DD HH:mm',
+               'day': 'MMM DD HH:mm',
             },
           },
           min:0,
@@ -56,7 +56,7 @@ const imsiLineChartConfig = {
          },
         scaleLabel: {
           display: true,
-          labelString: 'Call Failures Count/Duration(s)'
+          labelString: 'Hourly Failures Count/Duration(s)'
         },
         gridLines: {
           color: "rgb(234, 236, 244)",

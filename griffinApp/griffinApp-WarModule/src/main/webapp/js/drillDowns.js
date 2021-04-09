@@ -3,10 +3,7 @@ const getRoundedUpYAxisMaxValue = function(durations, counts){
     const durationsMaxValue = Math.max(...durations.map(data => data.y));
     const countsMaxValue = Math.max(...counts.map(data => data.y));
     const maxValue = Math.max(durationsMaxValue, countsMaxValue);
-    // const roundedUp =  maxValue <= 10 ? 10 : (Math.ceil(maxValue/10)) * (Math.pow(10, Math.ceil(Math.log10(maxValue)))/10);
-    const roundedUp = maxValue <= 10 ? 10 : (Math.ceil(maxValue/(10 * Math.ceil(Math.log10(maxValue)))) * (Math.pow(10, Math.ceil(Math.log10(maxValue)))/10));
     return Math.ceil(maxValue) + (10 - (Math.ceil(maxValue) % 10));
-
 }
 
 const getMinXAxisValue = function(chartData){
@@ -20,7 +17,6 @@ const getMaxXAxisValue = function(chartData){
 
 const roundDateToNearestHour = function(data) {
     let date = new Date(data.dateTime);
-    date.setMinutes(date.getMinutes() + 30);
     date.setMinutes(0);
     return date;
 };

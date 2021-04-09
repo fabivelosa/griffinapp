@@ -37,11 +37,10 @@ const generateCellFailuresBarLineChart = function(eventsList){
     const incrementalDurations = generateIncrementalTimeSeriesData(eventsList)["durations"];
     const incrementalCounts = generateIncrementalTimeSeriesData(eventsList)["counts"];
     imsiLineChartConfig.options.scales.yAxes[0].ticks.max = getRoundedUpYAxisMaxValue(incrementalDurations, incrementalCounts);
+    imsiLineChartConfig.options.onClick = drillDownLineChartEventHandler;
     networkEngQueryThreeDrillDownBarChart.data.datasets[0].data = incrementalDurations;
     networkEngQueryThreeDrillDownBarChart.data.datasets[1].data = incrementalCounts;
     networkEngQueryThreeDrillDownBarChart.update();
-    console.log(imsiLineChartConfig);
-
 };
 
 
@@ -49,6 +48,12 @@ const displayCellDetails = function(event){
     $("#networkEngQueryThreeDrillDownChartCardDetailsCellID").val(event.cellId);
     $("#networkEngQueryThreeDrillDownChartCardDetailsCountry").val(event.marketOperator.countryDesc);
     $("#networkEngQueryThreeDrillDownChartCardDetailsOperator").val(event.marketOperator.operatorDesc);
+}
+
+const cacheDrillDownData = function(data){
+    $("#networkEngQueryThreeDrillDown").data("id", data[0].cellId);
+    $("#networkEngQueryThreeDrillDown").data("type", "cell");
+    $("#networkEngQueryThreeDrillDown").data("events", data);
 }
 
 const queryListOfCellEventForDrillDown = function(cellId, country, operator){
@@ -60,6 +65,7 @@ const queryListOfCellEventForDrillDown = function(cellId, country, operator){
         beforeSend: setAuthHeader1,
         success: function(eventsList){
             displayListOfCellEventForDrillDown(eventsList);
+            cacheDrillDownData(eventsList);
             const endTime = new Date();
             displayResponseSummary(eventsList, startTime, endTime);
         },
@@ -67,6 +73,27 @@ const queryListOfCellEventForDrillDown = function(cellId, country, operator){
             console.log("There is an error in queryListOfIMSIEventForDrillDown")
         }
     });
+}
+
+
+const filterHourlyEventData = function(date, storedData){    
+    return storedData.filter(data => {
+        return roundDateToNearestHour(data).toISOString() == new Date(date).toISOString();
+    });
+}
+
+
+const drillDownLineChartEventHandler = function(event, array){
+    const storedData = $(this.canvas).closest(".drillDownSections").data("events");
+    console.log(storedData);
+    const activeBar = this.getElementAtEvent(event);
+    if(activeBar[0]){
+        const index = activeBar[0]["_index"];
+        const date = this.data.datasets[0].data[index].x;
+        const filteredData = filterHourlyEventData(date, storedData);
+        
+    
+    }
 }
 
 const cellDrillDownEventHandler = function(event, array){
@@ -80,8 +107,7 @@ const cellDrillDownEventHandler = function(event, array){
         const country = marketOperatorComboArr[0];
         const operator = marketOperatorComboArr[1];
         const cellId = marketOperatorComboArr[2].split(" ")[1];
-        $("networkEngQueryThreeDrillDown").data("id", cellId);
-        $("networkEngQueryThreeDrillDown").data("type", "cell");
         queryListOfCellEventForDrillDown(cellId, country, operator);
     }
 };
+
