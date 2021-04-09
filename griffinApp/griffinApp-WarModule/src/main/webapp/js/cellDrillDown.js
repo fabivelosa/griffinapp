@@ -27,21 +27,77 @@ const displayNetworkEngQueryThreeDrillDownTable = function(eventsList){
 
 const displayNetworkEngQueryThreeDrillDownCharts = function(eventsList){
     generateCellFailuresBarLineChart(eventsList);
+    generateCellFailureClassPieChart(eventsList);
+    generateCellIMSIBarChart(eventsList);
+    generateCellPhoneBarChart(eventsList);
 }
 
 let networkEngQueryThreeDrillDownBarChart = new Chart($("#networkEngQueryThreeDrillDownChart")[0], imsiLineChartConfig);
-
 const generateCellFailuresBarLineChart = function(eventsList){
     networkEngQueryThreeDrillDownBarChart.destroy();
     networkEngQueryThreeDrillDownBarChart = new Chart($("#networkEngQueryThreeDrillDownChart")[0], imsiLineChartConfig);
     const incrementalDurations = generateIncrementalTimeSeriesData(eventsList)["durations"];
     const incrementalCounts = generateIncrementalTimeSeriesData(eventsList)["counts"];
+    
     imsiLineChartConfig.options.scales.yAxes[0].ticks.max = getRoundedUpYAxisMaxValue(incrementalDurations, incrementalCounts);
     imsiLineChartConfig.options.onClick = drillDownLineChartEventHandler;
+    
     networkEngQueryThreeDrillDownBarChart.data.datasets[0].data = incrementalDurations;
     networkEngQueryThreeDrillDownBarChart.data.datasets[1].data = incrementalCounts;
     networkEngQueryThreeDrillDownBarChart.update();
 };
+
+let networkEngQueryThreeDrillDownPieChart = new Chart($("#networkEngQueryThreeDrillDownFailureClassChart")[0], failureClassPieChartConfig);
+const generateCellFailureClassPieChart = function(eventsList){
+    const dataset = generateFailureClassDisribution(eventsList);
+    const labels =  Object.keys(dataset);
+    const data = [];
+    for(let i = 0; i < labels.length; i++){
+        data[i] = dataset[labels[i]];
+    }
+    networkEngQueryThreeDrillDownPieChart.destroy();
+    networkEngQueryThreeDrillDownPieChart = new Chart($("#networkEngQueryThreeDrillDownFailureClassChart")[0], failureClassPieChartConfig);
+    networkEngQueryThreeDrillDownPieChart.data.datasets[0].data = data;
+    networkEngQueryThreeDrillDownPieChart.data.labels = labels;
+    networkEngQueryThreeDrillDownPieChart.data.datasets[0].backgroundColor = colorPalette.slice(0, data.length);
+    networkEngQueryThreeDrillDownPieChart.update();
+}
+
+let networkEngQueryThreeDrillDownIMSIBarChart = new Chart($("#networkEngQueryThreeDrillDownIMSIChart")[0], top10IMSIHorizontalBarConfig);
+const generateCellIMSIBarChart = function(eventsList){
+    const dataset = generateTop10IMSIDistribution(eventsList);
+    const labels =  Object.keys(dataset);
+    const data = [];
+    for(let i = 0; i < labels.length; i++){
+        data[i] = dataset[labels[i]];
+    }
+    networkEngQueryThreeDrillDownIMSIBarChart.destroy();
+    top10IMSIHorizontalBarConfig.options.scales.xAxes[0].ticks.max = Math.max(...data);
+    networkEngQueryThreeDrillDownIMSIBarChart = new Chart($("#networkEngQueryThreeDrillDownIMSIChart")[0], top10IMSIHorizontalBarConfig);
+    networkEngQueryThreeDrillDownIMSIBarChart.data.datasets[0].data = data;
+    networkEngQueryThreeDrillDownIMSIBarChart.data.labels = labels;
+    networkEngQueryThreeDrillDownIMSIBarChart.data.datasets[0].backgroundColor = "#4e73df";
+    networkEngQueryThreeDrillDownIMSIBarChart.update();
+}
+
+
+let networkEngQueryThreeDrillDownPhoneModelBarChart = new Chart($("#networkEngQueryThreeDrillDownPhoneModelChart")[0], top10PhoneModelHorizontalBarConfig);
+const generateCellPhoneBarChart = function(eventsList){
+    const dataset = generateTop10PhoneModelDistribution(eventsList);
+    console.log(dataset);
+    const labels =  Object.keys(dataset);
+    const data = [];
+    for(let i = 0; i < labels.length; i++){
+        data[i] = dataset[labels[i]];
+    }
+    networkEngQueryThreeDrillDownPhoneModelBarChart.destroy();
+    top10PhoneModelHorizontalBarConfig.options.scales.xAxes[0].ticks.max = Math.max(...data);
+    networkEngQueryThreeDrillDownPhoneModelBarChart = new Chart($("#networkEngQueryThreeDrillDownPhoneModelChart")[0], top10PhoneModelHorizontalBarConfig);
+    networkEngQueryThreeDrillDownPhoneModelBarChart.data.datasets[0].data = data;
+    networkEngQueryThreeDrillDownPhoneModelBarChart.data.labels = labels;
+    networkEngQueryThreeDrillDownPhoneModelBarChart.data.datasets[0].backgroundColor = d3.quantize(d3.interpolateHcl("#4e73df", "#60c96e"), data.length);
+    networkEngQueryThreeDrillDownPhoneModelBarChart.update();
+}
 
 
 const displayCellDetails = function(event){
@@ -82,17 +138,17 @@ const filterHourlyEventData = function(date, storedData){
     });
 }
 
-
-const drillDownLineChartEventHandler = function(event, array){
+const drillDownLineChartEventHandler = function(event, array){    
     const storedData = $(this.canvas).closest(".drillDownSections").data("events");
-    console.log(storedData);
     const activeBar = this.getElementAtEvent(event);
     if(activeBar[0]){
         const index = activeBar[0]["_index"];
         const date = this.data.datasets[0].data[index].x;
         const filteredData = filterHourlyEventData(date, storedData);
-        
-    
+        imsiLineChartConfig.options.scales.xAxes[0].ticks.minRotation = 0;
+        displayListOfCellEventForDrillDown(filteredData);
+    }else{
+        displayListOfCellEventForDrillDown(storedData);
     }
 }
 

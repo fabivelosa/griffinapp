@@ -105,6 +105,33 @@ const generateCellDistribution = function(dataset){
     return cells;
 };
 
+const generateTop10IMSIDistribution = function(dataset){
+    const imsis = {};
+    dataset.forEach(data => {
+        imsis[data.imsi] = imsis[data.imsi] ? imsis[data.imsi] + 1 : 1;
+    });
+    const top10IMSIsArray =  Object.entries(imsis).sort((a,b)=>b[1]-a[1]).slice(0,10);    
+    const top10IMSISObject ={};
+    top10IMSIsArray.forEach(imsi => {
+        top10IMSISObject[imsi[0]] = imsi[1];
+    });
+    return top10IMSISObject;
+};
+
+const generateTop10PhoneModelDistribution = function(dataset){
+    const items = {};
+    dataset.forEach(data => {
+        items[data.ueType.model] = items[data.ueType.model] ? items[data.ueType.model] + 1 : 1;
+    });
+    const top10Array =  Object.entries(items).sort((a,b)=>b[1]-a[1]).slice(0,10);    
+    const top10Object ={};
+    top10Array.forEach(item => {
+        top10Object[item[0]] = item[1];
+    });
+    return top10Object;
+};
+
+
 const hideAllSections = function(){
     $.each($("#queryNESelectors").children(), function(index, selector) {
         $(`#${$(selector).data("section")}`).hide();
