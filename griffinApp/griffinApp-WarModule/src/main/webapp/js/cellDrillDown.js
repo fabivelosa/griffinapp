@@ -2,7 +2,37 @@ const displayListOfCellEventForDrillDown = function(eventsList){
     hideAllSections();
     $("#networkEngQueryThreeDrillDown").show();
     $("#networkEngQueryThreeDrillDownTitle").text(`Drilldown : Cell ${eventsList[0].cellId} of ${eventsList[0].marketOperator.operatorDesc} | ${eventsList[0].marketOperator.countryDesc} `)
+    displayCellDetails(eventsList[0]);
+    displayNetworkEngQueryThreeDrillDownTable(eventsList);
+}
+
+
+const displayNetworkEngQueryThreeDrillDownTable = function(eventsList){
+    console.log(" I am happening");
     console.log(eventsList);
+    const table = $('#networkEngQueryThreeDrillDownTable').DataTable();
+    table.clear();
+    $(eventsList).each(function(index, event){
+        table.row.add([event.dateTime, 
+            event.imsi,
+            event.duration,
+            event.cellId,
+            event.failureClass.failureClass,
+            event.failureClass.failureDesc,
+            event.eventCause.eventCauseId.eventCauseId,
+            event.eventCause.eventCauseId.causeCode,
+            event.eventCause.description
+        ]);
+    });
+    table.draw();
+}
+
+
+
+const displayCellDetails = function(event){
+    $("#networkEngQueryThreeDrillDownChartCardDetailsCellID").val(event.cellId);
+    $("#networkEngQueryFourDrillDownChartCardDetailsCountry").val(event.marketOperator.countryDesc);
+    $("#networkEngQueryFourDrillDownChartCardDetailsOperator").val(event.marketOperator.operatorDesc);
 }
 
 const queryListOfCellEventForDrillDown = function(cellId, country, operator){
@@ -22,7 +52,6 @@ const queryListOfCellEventForDrillDown = function(cellId, country, operator){
         }
     });
 }
-
 
 const cellDrillDownEventHandler = function(event, array){
     $("#cellDrillDownBackIcon").data("target", "networkEngQueryThree");
