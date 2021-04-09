@@ -28,16 +28,17 @@ public class FileListener {
 
 	@PostConstruct
 	public void init() {
-		System.err.println("File Listener running");
+		
 		try {
 			beginWatch();
 		} catch (Exception e) {
+			System.err.println("Error Occured, could not run file listener");
 			System.err.println(e.getMessage());
 		}
 	}
 
 	private void beginWatch() throws IOException {
-		System.out.println("File Listener Beginning");
+		System.out.println("File Listener started");
 		new Thread() {
 			public void run() {
 				try {
@@ -45,6 +46,7 @@ public class FileListener {
 					final Path directory = Paths.get(System.getProperty("user.dir") + "/fileUploads/");
 					final WatchKey watchKey = directory.register(FileSystems.getDefault().newWatchService(),
 							StandardWatchEventKinds.ENTRY_CREATE);
+					System.out.println("Now deploying file Listenering"+"\nAutomatic upload enabled\nDrop datasets into the fileUploads Directory to upload new datasets");
 					while (true) {
 						for (final WatchEvent<?> event : watchKey.pollEvents()) {
 							final Path filePath = directory.resolve((Path) event.context());
@@ -61,7 +63,7 @@ public class FileListener {
 						}
 					}
 				} catch (Exception e) {
-					System.err.println(e.getMessage());
+					System.err.println("File Listener encountered a problem:\n"+e.getMessage());
 					e.printStackTrace();
 				}
 			}
