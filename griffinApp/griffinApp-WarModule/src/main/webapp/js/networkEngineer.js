@@ -363,6 +363,7 @@ const displayTopTenCombinationsChart = function(combinations){
         }],
       },
       options: {
+        onClick: cellDrillDownEventHandler,
         maintainAspectRatio: false,
         layout: {
           padding: {
@@ -766,7 +767,7 @@ $(document).ready(function(){
     });
 
     $("body").on("click", ".imsiDrillDownLinks a", function(event){
-      const parentContainer = $(this).closest(".queryContainer").attr("id")
+      const parentContainer = $(this).closest(".queryContainer").attr("id");
       imsiClickFromTableEventHandler($(this).text(), parentContainer);
     });
 
