@@ -2,10 +2,6 @@ const rootURL1 = "http://localhost:8080/callfailures/api";
 const authToken1 = 'Bearer ' + sessionStorage.getItem("auth-token");
 const userType = sessionStorage.getItem("auth-type");
 
-
-
-
-
 const setAuthHeader1 = function(xhr){
     xhr.setRequestHeader('Authorization', authToken1);
 }
@@ -20,6 +16,7 @@ const displayResponseSummary = function(response, startTime, endTime){
 
 const displayPhoneEquipmentFailures = function(phoneFailures){
     $("#phoneFailuresTableNE").show();
+	$("#alertModelNoData").hide();
     const table = $('#phoneFailuresTableNE').DataTable();
     table.clear();
     $(phoneFailures).each(function(index, phoneFailure){
@@ -101,6 +98,11 @@ const displayPhoneEquipmentFailuresChart = function(phoneFailures){
       legend: {
         display: false
       },
+      plugins: {
+        datalabels: {
+            display: false,
+        },
+      },
       tooltips: {
         titleMarginBottom: 10,
         titleFontColor: '#6e707e',
@@ -133,15 +135,19 @@ const queryPhoneEquipmentFailures = function(tac){
         dataType:'json',
         url:`${rootURL1}/userEquipment/query?tac=${tac}`,
         beforeSend: setAuthHeader1,
-        success: function(phoneFailures){
-          displayPhoneEquipmentFailures(phoneFailures);
+        success: function(phoneFailures){  
           if(phoneFailures.length > 0){
+			displayPhoneEquipmentFailures(phoneFailures);
             displayPhoneEquipmentFailuresChart(phoneFailures);
+			const endTime = new Date().getTime();
+          	displayResponseSummary(phoneFailures, startTime, endTime);
           }else{
             $("#userEquipmentFailuresChartCard").hide();
+			$(".responseWidget").hide();
+			$("#phoneTableDiv").hide();
+			$("#phoneFailuresTableNE").hide();
+			$("#alertModelNoData").show();
           }
-          const endTime = new Date().getTime();
-          displayResponseSummary(phoneFailures, startTime, endTime);
         },
         error: function(jqXHR, textStatus, errorThrown){
             console.log(jqXHR);
@@ -173,12 +179,20 @@ const setUserQuipmentDropdownOptions1 = function(){
 
 const displayIMSISummary1 = function(imsiSummary, textStatus, jqXHR){
     $("#errorAlertOnSummaryFormNE").hide();
+	$("#alertIMSISNoData").hide();
     $("#imsiSummaryTableOne").show();
-    $("#imsiSummaryNENumber").text(imsiSummary.imsi);
+    let imsiHtml = `<span class="imsiDrillDownLinks"><a href=\"#\">${imsiSummary.imsi}</a></span>`
+    $("#imsiSummaryNENumber").html(imsiHtml);
     $("#imsiSummaryNEFromDate").text($('#startDateOnIMSISummaryFormNE').val());
     $("#imsiSummaryNEToDate").text($('#endDateOnIMSISummaryFormNE').val());
     $("#imsiSummaryNECallFailureCount").text(imsiSummary.callFailuresCount);
     $("#imsiSummaryNETotalDuration").text(imsiSummary.totalDurationMs/1000 + " s");
+}
+
+const displayIMSINoData = function(){
+    $("#errorAlertOnSummaryFormNE").hide();
+    $("#imsiSummaryTableOne").hide();
+	$("#alertIMSISNoData").show();
 }
 
 const displayIMSISummaryChart = function(imsiSummary){
@@ -201,7 +215,7 @@ const displayIMSISummaryChart = function(imsiSummary){
       {
         label: "Total Duration (seconds) ",
         backgroundColor: "#FFA500",
-        hoverBackgroundColor: "#2e59d9",
+        hoverBackgroundColor: "#FFA500",
         borderColor: "#FFA500",
         data: [imsiSummary.totalDurationMs/1000],
         type:"line"
@@ -209,6 +223,7 @@ const displayIMSISummaryChart = function(imsiSummary){
       ],
     },
     options: {
+      onClick: imsiSummaryDrillDownEventHandler,
       maintainAspectRatio: false,
       layout: {
         padding: {
@@ -252,6 +267,11 @@ const displayIMSISummaryChart = function(imsiSummary){
         display: true,
         position:'bottom'
       },
+      plugins: {
+        datalabels: {
+            display: false,
+        },
+      },
       tooltips: {
         titleMarginBottom: 10,
         titleFontColor: '#6e707e',
@@ -279,6 +299,7 @@ const displayIMSISummaryChart = function(imsiSummary){
 const displayErrorOnIMSISummary1 = function(jqXHR, textStatus, errorThrown){
     $("#imsiSummaryTableOne").hide();
 	$("#imsiSummaryFormResultChartCard").hide();
+	$("#alertIMSISNoData").hide();
     $("#errorAlertOnSummaryFormNE").show();
     $("#errorAlertOnSummaryFormNE").text(jqXHR.responseJSON.errorMessage);
 }
@@ -292,14 +313,15 @@ const queryIMSISUmmary1 = function(imsi, from, to){
         url: `${rootURL}/events/query?imsi=${imsi}&from=${from}&to=${to}&summary=true`,
         beforeSend: setAuthHeader1,
         success: function(imsiSummary){
-          displayIMSISummary1(imsiSummary);
           if(imsiSummary.callFailuresCount > 0){
+			displayIMSISummary1(imsiSummary);
             displayIMSISummaryChart(imsiSummary);
+			const endTime = new Date().getTime();
+          	displayResponseSummary(imsiSummary, startTime, endTime);
           }else{
             $("#imsiSummaryFormResultChartCard").hide();
+			displayIMSINoData();
           }
-          const endTime = new Date().getTime();
-          displayResponseSummary(imsiSummary, startTime, endTime);
         },
         error: displayErrorOnIMSISummary1
     })
@@ -307,6 +329,7 @@ const queryIMSISUmmary1 = function(imsi, from, to){
 
 const displayTopTenCombinations = function(combinations){
     $("#combinationsTable").show();
+	$("#alertNoCombinations").hide();
     const table = $('#combinationsTable').DataTable();
     table.clear();
     $(combinations).each(function(index, combination){
@@ -383,6 +406,11 @@ const displayTopTenCombinationsChart = function(combinations){
         legend: {
           display: false
         },
+        plugins: {
+          datalabels: {
+              display: false,
+          },
+        },
         tooltips: {
           titleMarginBottom: 10,
           titleFontColor: '#6e707e',
@@ -411,6 +439,7 @@ const displayTopTenCombinationsChart = function(combinations){
 const displayTopCombinationsError = function(jqXHR, textStatus, errorThrown){
     $("#combinationsTable").hide();
     $("#combinationsTable_wrapper").hide();
+	$("#alertNoCombinations").hide();
     $("#top10ComboChartCard").hide();
     $("#errorAlertOnTopCombinationsForm").show();
     $("#errorAlertOnSummaryForm").text(jqXHR.responseJSON.errorMessage);
@@ -424,14 +453,19 @@ const queryTopCombinations = function(from, to){
         url: `${rootURL1}/Combinations/query?from=${from}&to=${to}`,
         beforeSend: setAuthHeader1,
         success: function(combinations){
-            displayTopTenCombinations(combinations);
             if(combinations.length > 0){
+			  displayTopTenCombinations(combinations);
               displayTopTenCombinationsChart(combinations);
+			  const endTime = new Date().getTime();
+              displayResponseSummary(combinations, startTime, endTime);
             }else{
               $("#top10ComboChartCard").hide();
+			  $(".responseWidget").hide();
+			  $("#combiTableDiv").hide();
+			  $("#combinationsTable").hide();
+			  $("#alertNoCombinations").show();
             }
-            const endTime = new Date().getTime();
-            displayResponseSummary(combinations, startTime, endTime);
+            
         },
         error: displayTopCombinationsError
     })
@@ -456,11 +490,12 @@ const autoCompleteIMSI1 = function(){
 
 const displayTop10IMSISummary = function(topTenIMSIFailures){
 	$("#imsiTopSummaryTable").show();
+	$("#alertNoTopModels").hide();
 	const table = $('#imsiTopSummaryTable').DataTable();
     table.clear();
     $(topTenIMSIFailures).each(function(index, topTenIMSIFailure){
-        console.log(topTenIMSIFailure);
-        table.row.add([topTenIMSIFailure.imsi, 
+      let imsiHtml = `<span class="imsiDrillDownLinks"><a href=\"#\">${topTenIMSIFailure.imsi}</a></span>`
+        table.row.add([imsiHtml, 
             topTenIMSIFailure.callFailuresCount
         ]);
     });
@@ -470,6 +505,7 @@ const displayTop10IMSISummary = function(topTenIMSIFailures){
 const displayTop10IMSIsError = function(jqXHR, textStatus, errorThrown){
   $("#imsiTopSummaryTable").hide();
   $("#top10IMSIChartCard").hide();
+  $("#alertNoTopModels").hide();
   $("#errorAlertOnTopCombinationsForm").show();
   $("#errorAlertOnSummaryForm").text(jqXHR.responseJSON.errorMessage);
 }
@@ -492,7 +528,7 @@ const displayTopTenIMSIsChart = function(imsis){
       }],
     },
     options: {
-      onClick: topTenIMSIDrillDown,
+      onClick: topTenIMSIDrillDownEventHandler,
       maintainAspectRatio: false,
       layout: {
         padding: {
@@ -535,6 +571,11 @@ const displayTopTenIMSIsChart = function(imsis){
       legend: {
         display: false
       },
+      plugins: {
+        datalabels: {
+            display: false,
+        },
+      },
       tooltips: {
         intersect: false,
         titleMarginBottom: 10,
@@ -569,14 +610,18 @@ const queryTop10IMSISummary = function(from, to){
         url: `${rootURL}/IMSIs/query/limit?from=${from}&to=${to}&number=10`,
         beforeSend: setAuthHeader1,
         success: function(imsis){
-          displayTop10IMSISummary(imsis);
           if(imsis.length > 0){
+			displayTop10IMSISummary(imsis);
             displayTopTenIMSIsChart(imsis);
+			const endTime = new Date().getTime();
+            displayResponseSummary(imsis, startTime, endTime);
           }else{
             $("#top10IMSIChartCard").hide();
+			$(".responseWidget").hide();
+			$("#imsiTopDiv").hide();
+			$("#imsiTopSummaryTable").hide();
+			$("#alertNoTopModels").show();
           }
-          const endTime = new Date().getTime();
-          displayResponseSummary(imsis, startTime, endTime);
         },
         error: displayTop10IMSIsError
     })
@@ -642,8 +687,6 @@ $(document).ready(function(){
     setUserQuipmentDropdownOptions1();
     autoCompleteIMSI1();
 
-    drillDownInit();
-
     $('#imsiSummaryFormNE').submit(function(event){
         event.preventDefault();
         const imsi = $('#imsiOnIMSISummaryFormNE').val();
@@ -674,7 +717,8 @@ $(document).ready(function(){
     });
 
 	$("#queryNESelectors").on("click", "a", function(event){
-        $(".responseWidget").hide()
+    $(".responseWidget").hide();
+    $(".drillDownSections").hide();
 		hideSEQueries();
 		hideCSQueries();
         $.each($("#queryNESelectors").children(), function(index, selector) {
@@ -687,7 +731,8 @@ $(document).ready(function(){
     });
 
 	$("#queryCSSelectors").on("click", "a", function(event){
-        $(".responseWidget").hide()
+    $(".responseWidget").hide();
+    $(".drillDownSections").hide();
 		hideSEQueries();
 		hideNEQueries();
         $.each($("#queryCSSelectors").children(), function(index, selector) {
@@ -700,7 +745,8 @@ $(document).ready(function(){
     });
 
     $("#querySESelectors").on("click", "a", function(event){
-        $(".responseWidget").hide()
+    $(".responseWidget").hide();
+    $(".drillDownSections").hide();
 		hideCSQueries();
 		hideNEQueries();
         $.each($("#querySESelectors").children(), function(index, selector) {
@@ -711,4 +757,17 @@ $(document).ready(function(){
             }
         });
     });
+
+    // Drill Down Back Event Handler
+    $("#drillDownBackIcon").click(function(event){
+      hideAllSections();
+      $(".drillDownSections").hide();
+      $(`#${$(this).data("target")}`).show();
+    });
+
+    $("body").on("click", ".imsiDrillDownLinks a", function(event){
+      const parentContainer = $(this).closest(".queryContainer").attr("id")
+      imsiClickFromTableEventHandler($(this).text(), parentContainer);
+    });
+
 });

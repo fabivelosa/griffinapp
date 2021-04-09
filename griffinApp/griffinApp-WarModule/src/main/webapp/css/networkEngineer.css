@@ -1,4 +1,8 @@
-#imsiSummaryTableOne, 
+#imsiSummaryTableOne,
+#alertIMSISNoData,
+#alertModelNoData, 
+#alertNoCombinations,
+#alertNoTopModels,
 #imsiSummaryTable,
 #imsiTopSummaryTable, 
 #errorAlertOnSummaryFormNE,
@@ -31,7 +35,10 @@
 #supportEngQueryThree,
 #imsiFailuresTable,
 #errorAlertOnFailuresListForm,
-.responseWidget{
+.responseWidget,
+#networkEngQueryFourDrillDown,
+#networkEngQueryFourCumulativeBtn,
+#networkEngQueryFourIncrementalBtn{
     display:none;
 }
 
@@ -77,10 +84,43 @@ thead{
     border-width: 1px !important;
 }
 
+
 tr{
     font-size: 0.75rem !important;
 }
 
 td{
     padding:0.5rem !important;
+}
+
+/* Drill Down CSS */
+.networkEngQueryFourDrillDownChartCardIMSIDetails{
+    padding-top: 0.25rem;
+    background-color: #fbfcff;
+    border: 1px solid #fbfcff;
+}
+
+.networkEngQueryFourDrillDownChartCardIMSIDetails label{
+    font-size: .75rem;
+    font-weight: bold;
+    margin: 0;
+    color:#4e73df;
+    text-align: left !important;
+}
+.networkEngQueryFourDrillDownChartCardIMSIDetails .form-control{
+    padding: 0;
+    border: none;
+    color:#5a5c69;
+    background-color: #fbfcff;
+}
+
+#drillDownFailureClassChart, #drillDownCellIDChart{
+    padding: 2rem;
+    margin-top: 1rem;
+    border: 1px solid rgb(239, 238, 238);
+}
+
+#networkEngQueryFourDrillDownCard h4{
+    text-align: center;
+    font-size: 1rem;
 }

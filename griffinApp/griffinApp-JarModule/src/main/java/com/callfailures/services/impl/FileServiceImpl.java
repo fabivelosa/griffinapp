@@ -114,59 +114,21 @@ public class FileServiceImpl implements FileService {
 			rowTotal++;
 		}
 
+		int start = 1;
 		final int slice = rowTotal / num_threads; // 30000/4=7500
+		final Thread thread1 = startThread(currentUpload, eventSheet, start, slice);
 
-		final Thread thread1 = new Thread() {
-			public void run() {
-				System.out.println("Init :" + Thread.currentThread().getName() + " from id: " + 1 + " to: "
-						+ (slice - 1) + " at " + System.currentTimeMillis());
-				eventsList = eventService.read(eventSheet, 1, slice - 1, currentUpload);
-				invalidRows.addAll(eventsList.getInvalidRows());
-				validObjects.addAll(eventsList.getValidObjects());
-				System.out.println("End :" + Thread.currentThread().getName() + " at " + System.currentTimeMillis());
+		start = slice;
+		int end = (slice * 2); // 15000
+		final Thread thread2 = startThread(currentUpload, eventSheet, start, end);
 
-			}
-		};
+		start = end;
+		end = (slice * 3); // 22500
+		final Thread thread3 = startThread(currentUpload, eventSheet, start, end);
 
-		final int slice2 = (slice * 2) - 1;
-
-		final Thread thread2 = new Thread() {
-			public void run() {
-				System.out.println("Init :" + Thread.currentThread().getName() + " from id: " + slice + " to: " + slice2
-						+ " at " + System.currentTimeMillis());
-				eventsList = eventService.read(eventSheet, slice, slice2, currentUpload);
-				invalidRows.addAll(eventsList.getInvalidRows());
-				validObjects.addAll(eventsList.getValidObjects());
-				System.out.println("End :" + Thread.currentThread().getName() + " at " + System.currentTimeMillis());
-
-			}
-		};
-
-		final int slice3 = (slice * 3) - 1;
-
-		final Thread thread3 = new Thread() {
-			public void run() {
-				System.out.println("Init :" + Thread.currentThread().getName() + " from id: " + slice * 2 + " to: "
-						+ slice3 + " at " + System.currentTimeMillis());
-				eventsList = eventService.read(eventSheet, slice * 2, slice3, currentUpload);
-				invalidRows.addAll(eventsList.getInvalidRows());
-				validObjects.addAll(eventsList.getValidObjects());
-				System.out.println("End :" + Thread.currentThread().getName() + " at " + System.currentTimeMillis());
-
-			}
-		};
-
-		final Thread thread4 = new Thread() {
-			public void run() {
-				System.out.println("Init :" + Thread.currentThread().getName() + " from id: " + (slice * 3) + " to: "
-						+ eventSheet.getLastRowNum() + " at " + System.currentTimeMillis());
-				eventsList = eventService.read(eventSheet, slice * 3, eventSheet.getLastRowNum(), currentUpload);
-				invalidRows.addAll(eventsList.getInvalidRows());
-				validObjects.addAll(eventsList.getValidObjects());
-				System.out.println("End :" + Thread.currentThread().getName() + " at " + System.currentTimeMillis());
-
-			}
-		};
+		start = end;
+		end = (slice * 4);// 30000
+		final Thread thread4 = startThread(currentUpload, eventSheet, start, end);
 
 		thread1.start();
 		thread2.start();
@@ -187,6 +149,21 @@ public class FileServiceImpl implements FileService {
 		eventsList.setValidRows(validObjects);
 		return eventsList;
 
+	}
+
+	private Thread startThread(final Upload currentUpload, final Sheet eventSheet, final int start, final int end) {
+		final Thread thread = new Thread() {
+			public void run() {
+				System.out.println("Init :" + Thread.currentThread().getName() + " from id: " + start + " to: " + end
+						+ " at " + System.currentTimeMillis());
+				eventsList = eventService.read(eventSheet, start, end - 1, currentUpload);
+				invalidRows.addAll(eventsList.getInvalidRows());
+				validObjects.addAll(eventsList.getValidObjects());
+				System.out.println("End :" + Thread.currentThread().getName() + " at " + System.currentTimeMillis());
+
+			}
+		};
+		return thread;
 	}
 
 	private void generateReportFile(final List<EventsUploadResponseDTO> uploadsOverallResult,

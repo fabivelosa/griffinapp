@@ -206,7 +206,7 @@
                         <h1 class="h3 mb-0 text-gray-800" id="CSHeading">Customer Service Rep Dashboard</h1>
                     </div>
                     <!-- Content Row -->
-                    <div class="row" id="networkEngQueryOne">
+                    <div class="row queryContainer" id="networkEngQueryOne">
                         <div class="col mb-4">
                             <div class="card mt-4">
                                 <div class="card-header">
@@ -279,12 +279,15 @@
                                         <div class="alert alert-danger col-lg-12" role="alert" id="errorAlertOnSummaryFormNE">
                                             Error on Request
                                         </div>
+                                        <div class="alert alert-danger col-lg-12" role="alert" id="alertIMSISNoData">
+                                            No data found for the given inputs.
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="row" id="networkEngQueryTwo">
+                    <div class="row queryContainer" id="networkEngQueryTwo">
                         <div class="col">
                             <div class="card mt-4">
                                 <div class="card-header">
@@ -337,30 +340,39 @@
                                                             <input readonly type="text" class="form-control" id="userEquipmentFailuresChartCardPhoneAccess" placeholder="Access"/>
                                                         </div>
                                                     </div>
-                                                    <div class="row chart-bar"><canvas id="userEquipmentFailuresChart" width="100%" height="100"></canvas></div>
+                                                    <div class = "row">
+                                                        <div class="row chart-bar">
+                                                            <canvas id="userEquipmentFailuresChart" width="100%" height="100"></canvas>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                                 <div class="card-footer small text-muted" id="userEquipmentFailuresDate">NaN</div>
                                             </div>
-                                            <table id="phoneFailuresTableNE" class="table table-hover table-bordered">
-                                                <thead>
-                                                    <tr>
-                                                    <th>User Equipment</th>
-                                                    <th>Event ID</th>
-                                                    <th>Cause Code</th>
-                                                    <th>Description</th>
-                                                    <th>Count</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                </tbody>
-                                            </table>
+                                            <div id="phoneTableDiv">
+	                                            <table id="phoneFailuresTableNE" class="table table-hover table-bordered">
+	                                                <thead>
+	                                                    <tr>
+	                                                    <th>User Equipment</th>
+	                                                    <th>Event ID</th>
+	                                                    <th>Cause Code</th>
+	                                                    <th>Description</th>
+	                                                    <th>Count</th>
+	                                                    </tr>
+	                                                </thead>
+	                                                <tbody>
+	                                                </tbody>
+	                                            </table>
+                                            </div>
+                                            <div class="alert alert-danger col-lg-12" role="alert" id="alertModelNoData">
+                                            	No Event Id & Cause Code combinations for selected phone model
+                                        	</div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>                    
-					<div class="row" id="networkEngQueryThree">
+					<div class="row queryContainer" id="networkEngQueryThree">
                         <div class="col">
                             <div class="card mt-4">
                                 <div class="card-header">
@@ -402,6 +414,7 @@
                                                 </div>
                                                 <div class="card-footer small text-muted" id="top10ComboChartDate">NaN</div>
                                             </div>
+                                            <div id="combiTableDiv">
                                             <table id="combinationsTable" class="table table-hover table-bordered">
                                                 <thead>
                                                     <tr>
@@ -416,8 +429,12 @@
                                                 <tbody>                                                                                           
                                                 </tbody>
                                             </table>
+                                            </div>
                                             <div class="alert alert-danger col-lg-12" role="alert" id="errorAlertOnTopCombinationsForm">
                                                 Error on Request
+                                            </div>
+                                            <div class="alert alert-danger col-lg-12" role="alert" id="alertNoCombinations">
+                                                No data found for the given time period
                                             </div>
                                         </div>
                                     </div>
@@ -425,7 +442,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="row" id="networkEngQueryFour">
+                    <div class="row queryContainer" id="networkEngQueryFour">
                         <div class="col mb-4">
                             <div class="card mt-4">
                                 <div class="card-header">
@@ -467,6 +484,7 @@
                                                 </div>
                                                 <div class="card-footer small text-muted" id="top10IMSIDate">NaN</div>
                                             </div>
+                                            <div id="imsiTopDiv">
 	                                        <table id="imsiTopSummaryTable" class="table table-hover table-bordered table-responsive">
 	                                            <thead>
 	                                                <tr>
@@ -477,15 +495,126 @@
 	                                              <tbody>
 	                                              </tbody>
 	                                        </table>
+	                                        </div>
+	                                        <div class="alert alert-danger col-lg-12" role="alert" id="alertNoTopModels">
+                                                No data found for the given time period
+                                            </div>
 	                      				</div>
                                      </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
+                        <div class="row drillDownSections" id="networkEngQueryFourDrillDown">
+                            <div class="col mb-4">
+                                <div class="card mt-4">
+                                    <div class="card-header">
+                                      <div class ="d-flex flex-row justify-content-start">
+                                          <div id="drillDownBackIcon">
+                                            <span><i class="fas fa-arrow-left"></i></span>
+                                          </div>
+                                          <div class = "mx-4" id="networkEngQueryFourDrillDownTitle">
+                                          </div>
+                                      </div>
+                                    </div>
+                                    <div class="card-body" id="networkEngQueryFourDrillDownCard">
+                                        <div class = "row mt-2 p-4" id = "networkEngQueryFourDrillDownSummaryFormResult">
+                                            <div class = "col">
+                                                <div class="card mb-4 query-chart" id="networkEngQueryFourDrillDownChartCard">
+                                                    <div class="card-header text-primary" id="networkEngQueryFourDrillDownChartTitle">
+                                                        <span id="networkEngQueryFourDrillDownChartTitleType"></span> 
+                                                        <span id="networkEngQueryFourDrillDownChartTitleDescription"></span>
+                                                    </div>
+                                                    <div class="card-body">
+                                                        <div class = "row networkEngQueryFourDrillDownChartCardIMSIDetails pl-2 pr-2 mx-4">
+                                                            <div class = "col">
+                                                                <label for="networkEngQueryFourDrillDownChartCardIMSIDetailsIMSI" class="form-label fw-bold small">IMSI</label>
+                                                                <input readonly type="text" class="form-control" id="networkEngQueryFourDrillDownChartCardIMSIDetailsIMSI" placeholder="IMSI"/>
+                                                            </div>
+                                                            <div class = "col">
+                                                                <label for="networkEngQueryFourDrillDownChartCardIMSIDetailsCountry" class="form-label fw-bold small">Country</label>
+                                                                <input readonly type="text" class="form-control" id="networkEngQueryFourDrillDownChartCardIMSIDetailsCountry" placeholder="Country"/>
+                                                            </div>
+                                                            <div class = "col">
+                                                                <label for="networkEngQueryFourDrillDownChartCardIMSIDetailsOperator" class="form-label fw-bold small">Operator</label>
+                                                                <input readonly type="text" class="form-control" id="networkEngQueryFourDrillDownChartCardIMSIDetailsOperator" placeholder="Operator"/>
+                                                            </div>
+                                                            <div class = "col">
+                                                                <label for="networkEngQueryFourDrillDownChartCardIMSIDetailsPhoneModel" class="form-label fw-bold small">Phone Model</label>
+                                                                <input readonly type="text" class="form-control" id="networkEngQueryFourDrillDownChartCardIMSIDetailsPhoneModel" placeholder="Phone Model"/>
+                                                            </div>
+                                                            <div class = "col">
+                                                                <label for="networkEngQueryFourDrillDownChartCardIMSIDetailsPhoneVendor" class="form-label fw-bold small">Vendor</label>
+                                                                <input readonly type="text" class="form-control" id="networkEngQueryFourDrillDownChartCardIMSIDetailsPhoneVendor" placeholder="Vendor"/>
+                                                            </div>
+                                                        </div>
+                                                        <div class="d-flex flex-column">
+                                                            <div class = "d-flex flex-row align-items-stretch">
+                                                                <div class="col-6" id="drillDownFailureClassChart">
+                                                                    <div class="row mx-4 align-center"><h4>Failure Class Distribution</h4></div>
+                                                                    <div class="row chart-pie">
+                                                                        <canvas id="networkEngQueryFourDrillDownFailureClassChart" width="100%" height="100"></canvas>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-6" id="drillDownCellIDChart">
+                                                                    <div class="row mx-4 align-center"><h4>Cell Distribution</h4></div>
+                                                                    <div class="row chart-bar">
+                                                                        <canvas id="networkEngQueryFourDrillDownCellIDChart" width="100%" height="100"></canvas>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="chart-bar">
+                                                                <canvas id="networkEngQueryFourDrillDownChart" width="100%" height="100"></canvas>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="card-footer small text-muted" id="networkEngQueryFourDrillDownChartCardFooter">
+                                                        <div class="d-flex flex-row justify-content-end">
+                                                            <button class="btn btn-primary mx-2" type="button" id="networkEngQueryFourIncrementalBtn">Incremental Count View</button>
+                                                            <button class="btn btn-primary mx-2" type="button" id="networkEngQueryFourCumulativeBtn">Cumulative Count View</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class = "responseWidget p-3 mb-2">
+                                                    <div class="d-flex flex-row">
+                                                        <div class = "responseRows text-left">
+                                                            NaN rows returned
+                                                        </div>
+                                                        <div class="responseTime text-right">
+                                                            Duration: NaN seconds
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class ="row">
+                                                    <div class="col">
+                                                        <table id="networkEngQueryFourDrillDownTable" class="table table-hover table-bordered">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>Date</th>
+                                                                    <th>IMSI</th>
+                                                                    <th>Duration (ms)</th>
+                                                                    <th>Cell ID</th>
+                                                                    <th>Failure Class</th>
+                                                                    <th>Failure Description</th>
+                                                                    <th>Event ID</th>
+                                                                    <th>Cause Code</th>
+                                                                    <th>Description</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>                                                 
+                                            </div>
+                                         </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
              
                  <!--  Support Queries -->
-                    <div class="row" id="imsiFailuresCountQuery">
+                    <div class="row queryContainer" id="imsiFailuresCountQuery">
                             <div class="col mb-4">
                                 <div class="card mt-4">
                                     <div class="card-header">
@@ -514,6 +643,7 @@
                                                 </div>
                                             </form>
                                         </div>
+                                        
                                         <div class = "row mt-2 p-2" id = "imsiSummaryFormResult">
                                             <div class ="col">
                                                 <div class = "responseWidget p-3 mb-2">
@@ -526,6 +656,7 @@
                                                         </div>
                                                     </div>
                                                 </div>
+                                                <div id="imsiSummDiv">
                                                 <table id="imsiSummaryTable" class="table table-hover table-bordered table-responsive">
                                                     <thead>
                                                         <tr>
@@ -544,16 +675,31 @@
                                                         </tr>
                                                     </tbody>
                                                 </table>
+                                                </div>
                                                 <div class="alert alert-danger col-lg-12" role="alert" id="errorAlertOnSummaryForm">
                                                     Error on Request
                                                 </div>
+                                                <div class="alert alert-danger col-lg-12" role="alert" id="emptyImsiSumm">
+                                                    No data found for the given IMSI and time period
+                                                </div>
                                             </div>
                                         </div>
+                                        
+                                        <div class="row card mb-4 query-chart" id="imsisFailureDateResultChartCard">
+                                            <div class="card-header text-primary">IMSI Call Failure Count</div>
+                                            <div class="card-body">
+                                                <div class="chart-bar">
+                                                <canvas id="imsisFailureDateResultChart" width="100%" height="100"></canvas>
+                                                </div>
+                                            </div>
+                                            <div class="card-footer small text-muted" id="imsiSummaryFormResultDate">NaN</div>
+                                        </div>
+                                        
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    <div class="row" id="equipmentFailuresQuery">
+                    <div class="row queryContainer" id="equipmentFailuresQuery">
                             <div class="col mb-4">
                                 <div class="card mt-4">
                                     <div class="card-header">
@@ -584,6 +730,7 @@
                                                         </div>
                                                     </div>
                                                 </div>
+                                                <div id="failDetailDiv">
                                                 <table id="phoneFailuresTable" class="table table-hover table-bordered">
                                                     <thead>
                                                         <tr>
@@ -596,8 +743,12 @@
                                                     <tbody>
                                                     </tbody>
                                                 </table>
+                                                </div>
                                                 <div class="alert alert-danger col-lg-12" role="alert" id="errorAlertOnEquipmentFailuresQuery">
                                                     Error on Request
+                                                </div>
+                                                <div class="alert alert-danger col-lg-12" role="alert" id="emptyFailDetail">
+                                                    No Event ID and Cause Code found for the given IMSI
                                                 </div>
                                             </div>
                                         </div>
@@ -605,7 +756,7 @@
                                 </div>
                             </div>
                         </div>
-                    <div class="row" id="imsiCauseCodesQuery">
+                    <div class="row queryContainer" id="imsiCauseCodesQuery">
                             <div class="col mb-4">
                                 <div class="card mt-4">
                                     <div class="card-header">
@@ -636,6 +787,7 @@
                                                         </div>
                                                     </div>
                                                 </div>
+                                                <div id=causeCodeDiv>
                                                 <table id="causeCodesTable" class="table table-hover table-bordered table-responsive">
                                                     <thead>
                                                         <tr>
@@ -645,8 +797,12 @@
                                                     <tbody>
                                                     </tbody>
                                                 </table>
+                                                </div>
                                                 <div class="alert alert-danger col-lg-12" role="alert" id="errorAlertOnCauseCodesQuery">
                                                     Error on Request
+                                                </div>
+                                                <div class="alert alert-danger col-lg-12" role="alert" id="emptyCauseCode">
+                                                    No cause codes found for the given IMSI
                                                 </div>
                                             </div>
                                         </div>
@@ -656,7 +812,7 @@
                         </div>
                <!--  </div> -->
                
-               <div class="row" id="supportEngQueryOne">
+               <div class="row queryContainer" id="supportEngQueryOne">
 						<div class="col">
 							<div class="card mt-4">
 								<div class="card-header">Count Call Failures for given Phone Model within time period</div>
@@ -712,12 +868,12 @@
                                                 </div>
                                                 <div class="card-footer small text-muted" id="imsiCallFailureResultDate">NaN</div>
                                             </div>
-                                            <div class="row">
+                                            <div class="row" id="imsiFailDiv">
                                                 <table id="imsiFailureTable"
                                                     class="table table-hover table-bordered table-responsive">
                                                     <thead>
                                                         <tr>
-                                                            <th scope="col">IMSI</th>
+                                                            <th scope="col">Model</th>
                                                             <th scope="col">Count</th>
                                                         </tr>
                                                     </thead>
@@ -730,6 +886,9 @@
                                                 </table>
                                             </div>
                                             <div class="alert alert-danger col-lg-12" role="alert" id="errorAlertOnCallFailureForm">Error on Request</div>
+                                            <div class="alert alert-danger col-lg-12" role="alert" id="emptySEquery1">
+                                            	No data found for the given inputs
+                                            </div>
                                         </div>
 									</div>
 								</div>
@@ -739,7 +898,7 @@
 					</div>
 
 					<!-- Content Row -->
-					<div class="row" id="supportEngQueryTwo">
+					<div class="row queryContainer" id="supportEngQueryTwo">
 						<div class="col">
 							<div class="card mt-4">
 								<div class="card-header">List of Unique Call Failures within time period</div>
@@ -781,6 +940,7 @@
                                                     </div>
                                                 </div>
                                             </div>
+                                            <div id="imsiListDiv">
                                             <table id="imsiListTable"
                                                 class="table table-hover table-bordered table-responsive">
                                                 <thead>
@@ -791,7 +951,11 @@
                                                 <tbody id="tableBody">
                                                 </tbody>
                                             </table>
+                                            </div>
                                             <div class="alert alert-danger col-lg-12" role="alert" id="errorAlertOnListForm">Error on Request</div>
+                                            <div class="alert alert-danger col-lg-12" role="alert" id="emptyCallFail">
+                                            	No call failures found for the given time period
+                                            </div>
                                         </div>
                                     </div>
 								</div>
@@ -799,7 +963,7 @@
 						</div>
 					</div>
 					
-					<div class="row" id="supportEngQueryThree">
+					<div class="row queryContainer" id="supportEngQueryThree">
 						<div class="col">
 							<div class="card mt-4">
 								<div class="card-header">List of Unique Call Failures for a Failure Class</div>
@@ -833,6 +997,7 @@
                                                 </div>
                                             </div>
                                         </div>
+										<div id="failClassDiv">
 										<table id="imsiFailuresTable"
 											class="table table-hover table-bordered table-responsive">
 											<thead>
@@ -846,8 +1011,11 @@
                                             	</tr>
 											</tbody>
 										</table>
+										</div>
 										<div class="alert alert-danger col-lg-12" role="alert"
 											id="errorAlertOnFailuresListForm">Error on Request</div>
+										<div class="alert alert-danger col-lg-12" role="alert"
+											id="emptyFailClass">No call failures for the given Failure Class</div>
 										</div>
 									</div>
 								</div>
@@ -918,13 +1086,24 @@
     <script src="js/sb-admin-2.min.js"></script>
 
     <!-- Page level plugins -->
-    <script src="vendor/chart.js/Chart.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+    <!-- <script src="vendor/chart.js/Chart.min.js"></script> -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.js" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@0.4.0/dist/chartjs-plugin-datalabels.min.js"></script> 
+
+
 
     <!-- Data tables -->
     <script src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js" crossorigin="anonymous"></script>
     <script src="https://cdn.datatables.net/1.10.22/js/dataTables.bootstrap4.min.js" crossorigin="anonymous"></script>
 
+    <!-- D3 Scale Chromatic -->
+    <script src="https://d3js.org/d3-color.v1.min.js"></script>
+    <script src="https://d3js.org/d3-interpolate.v1.min.js"></script>
+    <script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
+
     <!-- Network Engineer Speciifc JS-->
+    <script src="js/chartsConfig.js"></script>
     <script src="js/drillDowns.js"></script>
     <script src="js/networkEngineer.js"></script>
     <script src="js/customerSupport.js"></script>

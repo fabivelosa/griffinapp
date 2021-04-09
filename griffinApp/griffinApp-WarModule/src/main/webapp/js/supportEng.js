@@ -14,12 +14,15 @@ const displayResponseSummarySup = function(response, startTime, endTime){
 }
 
 const displayCallFailures = function(callFailures){
+	$("#errorAlertOnListForm").hide();
+	$("#emptyCallFail").hide();
+	$("#imsiListDiv").show();
     $("#imsiListTable").show();
     const table = $('#imsiListTable').DataTable();
     table.clear();
     $(callFailures).each(function(index, callFailure){
-        console.log(callFailure);
-        table.row.add([callFailure.imsi]);
+        let imsiHtml = `<span class="imsiDrillDownLinks"><a href=\"#\">${callFailure.imsi}</a></span>`
+        table.row.add([imsiHtml]);
     });
     table.draw();
 }
@@ -32,9 +35,17 @@ const queryCallFailures = function(from, to){
         url:`${rootURL2}/IMSIs/query?from=${from}&to=${to}`,
         beforeSend: setAuthHeader2,
         success: function(response){
+			if(response.length > 0){
             const endTime = new Date().getTime();
             displayResponseSummarySup(response, startTime, endTime);
             displayCallFailures(response);
+			}else{
+				$("#errorAlertOnListForm").hide();
+				$("#imsiListDiv").hide();
+			    $("#imsiListTable").hide();
+				$(".responseWidget").hide();
+				$("#emptyCallFail").show();
+			}
         },
         error: displayErrorOnIMSIList
     });
@@ -42,19 +53,27 @@ const queryCallFailures = function(from, to){
 
 const displayCallFailureCount = function(imsiSummary, textStatus, jqXHR){
     $("#errorAlertOnCallFailureForm").hide();
-    $("#countCallFailureResult").show();
+	$("#emptySEquery1").hide();
+	$("#imsiFailDiv").show();
     $("#imsiFailureTable").show();
     $("#imsiNumber").text(imsiSummary.model);
     $("#imsiCallFailureCount").text(imsiSummary.callFailuresCount);
 }
 
 const displayErrorOnIMSISummary2 = function(jqXHR, textStatus, errorThrown){
-    $("#imsiSummaryTable").hide();
+	$("#imsiCallFailureResultCard").hide();
+	$(".responseWidget").hide();
+	$("#imsiFailDiv").hide();
+    $("#imsiFailureTable").hide();
+	$("#emptySEquery1").hide();
     $("#errorAlertOnCallFailureForm").show();
     $("#errorAlertOnCallFailureForm").text(jqXHR.responseJSON.errorMessage);
 }
 
 const displayErrorOnIMSIList = function(jqXHR, textStatus, errorThrown){
+	$(".responseWidget").hide();
+	$("#imsiListDiv").hide();
+	$("#emptyCallFail").hide();
     $("#imsiListTable").hide();
     $("#errorAlertOnListForm").show();
     $("#errorAlertOnListForm").text(jqXHR.responseJSON.errorMessage);
@@ -68,10 +87,19 @@ const queryCallFailureCount = function(imsi, from, to){
         url: `${rootURL2}/events/query/ue?model=${imsi}&from=${from}&to=${to}`,
         beforeSend: setAuthHeader2,
         success: function(response){
+			if(response.callFailuresCount > 0){
             const endTime = new Date().getTime();
             displayResponseSummarySup(response, startTime, endTime)
             displayCallFailureCount(response);
             displayIMSICallFailureChart(response);
+			}else {
+			  $("#imsiCallFailureResultCard").hide();
+			  $(".responseWidget").hide();
+			  $("#imsiFailDiv").hide();
+			  $("#errorAlertOnCallFailureForm").hide();
+              $("#imsiFailureTable").hide();
+			  $("#emptySEquery1").show();
+			}
         },
         error: displayErrorOnIMSISummary2
     })
@@ -181,19 +209,24 @@ const displayIMSICallFailureChart = function(imsiSummary){
 
 //Display
 const displayIMSIAffectedByFailureClass = function(IMSIs){
-    $("#imsiFailuresTable").show();
 	$("#errorAlertOnFailuresListForm").hide();
+	$("#emptyFailClass").hide();
+	$("#failClassDiv").show();
+    $("#imsiFailuresTable").show();
 	const table = $('#imsiFailuresTable').DataTable();
     table.clear();
     $(IMSIs).each(function(index, imsi){
-      table.row.add([imsi.imsi
-        ]);
+      let imsiHtml = `<span class="imsiDrillDownLinks"><a href=\"#\">${imsi.imsi}</a></span>`
+      table.row.add([imsiHtml]);
     });
     table.draw();
     
 }
 
 const displayErrorOnIFailuresList = function(jqXHR, textStatus, errorThrown){
+	$("#emptyFailClass").hide();
+	$("#failClassDiv").hide();
+	$(".responseWidget").hide();
     $("#imsiFailuresTable").hide();
     $("#errorAlertOnFailuresListForm").show();
     $("#errorAlertOnFailuresListForm").text(jqXHR.responseJSON.errorMessage);
@@ -208,9 +241,17 @@ const queryCallIMSIsWithFailure = function(failureClass){
         url: `${rootURL2}/IMSIs/query/failureClass?failureClass=${failureClass}`,
         beforeSend: setAuthHeader2,
         success: function(response){
+		if(response.length > 0){	
             const endTime = new Date().getTime();
             displayResponseSummarySup(response, startTime, endTime);
             displayIMSIAffectedByFailureClass(response);
+		}else{
+			$("#errorAlertOnFailuresListForm").hide();
+			$("#emptyFailClass").show();
+			$("#failClassDiv").hide();
+		    $("#imsiFailuresTable").hide();
+			$(".responseWidget").hide();
+		}
         },
         error: displayErrorOnIFailuresList
     })

@@ -3,6 +3,7 @@ package com.callfailures.services.impl;
 import static org.junit.Assert.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyInt;
 import static org.mockito.Matchers.anyObject;
 import static org.mockito.Mockito.mock;
@@ -12,6 +13,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.io.File;
+import java.io.IOException;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -22,13 +24,14 @@ import java.util.UUID;
 import javax.validation.Validation;
 import javax.validation.Validator;
 
+import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 
-import com.callfailures.connectionutils.BulkEventProcess;
 import com.callfailures.dao.EventCauseDao;
 import com.callfailures.dao.EventDAO;
 import com.callfailures.dao.FailureClassDAO;
@@ -81,7 +84,6 @@ public class EventsServiceImplTest {
 			"AT&T Wireless-Antigua AG");
 	private Validator validator;
 	private ValidationService validationService;
-	private BulkEventProcess eventProcess = mock(BulkEventProcess.class);
 
 	private final List<IMSIEvent> imsiEvents = new ArrayList<>();
 	private EventService eventService;
@@ -103,7 +105,6 @@ public class EventsServiceImplTest {
 		((EventServiceImpl) eventService).eventDAO = eventDAO;
 		((EventServiceImpl) eventService).validationService = validationService;
 		((EventServiceImpl) eventService).uploadDAO = uploadDAO;
-		((EventServiceImpl) eventService).bulkEvent = eventProcess;
 
 		upload.setUploadID(uuid);
 	}
@@ -193,32 +194,23 @@ public class EventsServiceImplTest {
 	}
 
 	@Test
-	void testSuccessfuleReadOfFile() {
+	void testSuccessfuleReadOfFile() throws InvalidFormatException, IOException {
 		when(eventCauseDAO.getEventCause(anyObject())).thenReturn(eventCause);
 		when(failureClassDAO.getFailureClass(anyInt())).thenReturn(failureClass);
 		when(userEquipmentDAO.getUserEquipment(21060800)).thenReturn(userEquipment);
 		when(marketOperatorDAO.getMarketOperator(marketOperatorPK)).thenReturn(marketOperator);
 		when(uploadDAO.getUploadByRef(uuid)).thenReturn(upload);
+		Mockito.doNothing().when(eventDAO).create(any(Events.class));
 		file = new File(absolutePath + "/importData/validData.xlsx");
 		upload.setUploadStatus(10);
-		Workbook workbook = null;
+		Workbook workbook = new XSSFWorkbook(file);
 
-		try {
-			workbook = new XSSFWorkbook(file);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		final ParsingResponse<Events> parsingResults = eventService.read(workbook.getSheetAt(0), 1, 5, upload);
 
-		final Sheet eventSheet = workbook.getSheetAt(0);
-
-		int rowTotal = eventSheet.getLastRowNum();
-		if ((rowTotal > 0) || eventSheet.getPhysicalNumberOfRows() > 0) {
-			rowTotal++;
-		}
-
-		final ParsingResponse<Events> parsingResults = eventService.read(eventSheet, 1, rowTotal, upload);
+		workbook.close();
 		assertEquals(4, parsingResults.getValidObjects().size());
 		assertEquals(0, parsingResults.getInvalidRows().size());
+
 	}
 
 	@Test
@@ -361,24 +353,18 @@ public class EventsServiceImplTest {
 		assertInvalidRowMessage("Inexistent MCC and MNC combination");
 	}
 
-	private void assertInvalidRowMessage(final String invalidRowMessage) {
+	private void assertInvalidRowMessage(final String invalidRowMessage)  {
 
 		Workbook workbook = null;
-
 		try {
 			workbook = new XSSFWorkbook(file);
-		} catch (Exception e) {
+		} catch (InvalidFormatException | IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
 		final Sheet eventSheet = workbook.getSheetAt(0);
 
-		int rowTotal = eventSheet.getLastRowNum();
-		if ((rowTotal > 0) || eventSheet.getPhysicalNumberOfRows() > 0) {
-			rowTotal++;
-		}
-		final ParsingResponse<Events> parsingResults = eventService.read(eventSheet, 1, rowTotal, upload);
+		final ParsingResponse<Events> parsingResults = eventService.read(eventSheet, 1, 2, upload);
 		assertEquals(0, parsingResults.getValidObjects().size());
 		assertEquals(1, parsingResults.getInvalidRows().size());
 		final Iterator<InvalidRow> eventsIterator = parsingResults.getInvalidRows().iterator();
