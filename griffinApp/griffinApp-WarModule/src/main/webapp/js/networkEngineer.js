@@ -760,7 +760,7 @@ $(document).ready(function(){
     });
 
     // Drill Down Back Event Handler
-    $("#drillDownBackIcon").click(function(event){
+    $("#imsiDrillDownBackIcon").click(function(event){
       hideAllSections();
       $(".drillDownSections").hide();
       $(`#${$(this).data("target")}`).show();

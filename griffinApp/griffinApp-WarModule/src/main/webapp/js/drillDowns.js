@@ -260,7 +260,7 @@ const queryListOfIMSIEventForDrillDown = function(imsi, fromTime, toTime){
 }
 
 const topTenIMSIDrillDownEventHandler = function(event, array){
-    $("#drillDownBackIcon").data("target", "networkEngQueryFour");
+    $("#imsiDrillDownBackIcon").data("target", "networkEngQueryFour");
     imsiLineChartConfig.options.scales.xAxes[0].ticks.minRotation = 45;
     let activeBar = this.getElementAtEvent(event);
     if(activeBar[0]){
@@ -273,7 +273,7 @@ const topTenIMSIDrillDownEventHandler = function(event, array){
 };
 
 const imsiSummaryDrillDownEventHandler = function(event, array){
-    $("#drillDownBackIcon").data("target", "networkEngQueryOne");
+    $("#imsiDrillDownBackIcon").data("target", "networkEngQueryOne");
     imsiLineChartConfig.options.scales.xAxes[0].ticks.minRotation = 0;
     let activeBar = this.getElementAtEvent(event);
     if(activeBar[0]){
@@ -286,7 +286,7 @@ const imsiSummaryDrillDownEventHandler = function(event, array){
 }
 
 const imsiFailuresDrillDownEventHandler = function(event, array){
-    $("#drillDownBackIcon").data("target", "imsiFailuresCountQuery");
+    $("#imsiDrillDownBackIcon").data("target", "imsiFailuresCountQuery");
     imsiLineChartConfig.options.scales.xAxes[0].ticks.minRotation = 0;
     let activeBar = this.getElementAtEvent(event);
     if(activeBar[0]){
@@ -299,7 +299,7 @@ const imsiFailuresDrillDownEventHandler = function(event, array){
 };
 
 const imsiClickFromTableEventHandler = function(imsi, parentContainer){
-    $("#drillDownBackIcon").data("target", parentContainer);
+    $("#imsiDrillDownBackIcon").data("target", parentContainer);
     queryListOfIMSIEventForDrillDown(imsi, 0, 8640000000000000);    
 }
 
