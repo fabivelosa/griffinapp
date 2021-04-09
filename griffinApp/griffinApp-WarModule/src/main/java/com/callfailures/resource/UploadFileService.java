@@ -87,6 +87,21 @@ public class UploadFileService {
 		return Response.status(200).entity(requestedUpload).build();
 
 	}
+	@GET
+	@Produces({ MediaType.APPLICATION_JSON })
+	@Path("/upload/all")
+	public Response findAllUploads() {
+		try {
+			System.err.println("1");
+			final List<Upload> uploads =uploadDAO.findAllUploads();
+			return Response.status(200).entity(uploads).build();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return Response.status(400).entity(e.getMessage()).build();
+		}
+		
+
+	}
 
 	/**
 	 * header sample { Content-Type=[image/png], Content-Disposition=[form-data;
