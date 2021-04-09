@@ -1,3 +1,4 @@
+// The main method calling all the display methods
 const displayListOfCellEventForDrillDown = function(eventsList){
     hideAllSections();
     $("#networkEngQueryThreeDrillDown").show();
@@ -7,6 +8,7 @@ const displayListOfCellEventForDrillDown = function(eventsList){
     displayNetworkEngQueryThreeDrillDownCharts(eventsList);
 }
 
+// Displays Drill Down Table
 const displayNetworkEngQueryThreeDrillDownTable = function(eventsList){
     const table = $('#networkEngQueryThreeDrillDownTable').DataTable();
     table.clear();
@@ -25,6 +27,7 @@ const displayNetworkEngQueryThreeDrillDownTable = function(eventsList){
     table.draw();
 }
 
+// Calls all the chart display methods
 const displayNetworkEngQueryThreeDrillDownCharts = function(eventsList){
     generateCellFailuresBarLineChart(eventsList);
     generateCellFailureClassPieChart(eventsList);
@@ -32,6 +35,7 @@ const displayNetworkEngQueryThreeDrillDownCharts = function(eventsList){
     generateCellPhoneBarChart(eventsList);
 }
 
+// Displays Time Series Bar and Line Chart
 let networkEngQueryThreeDrillDownBarChart = new Chart($("#networkEngQueryThreeDrillDownChart")[0], imsiLineChartConfig);
 const generateCellFailuresBarLineChart = function(eventsList){
     networkEngQueryThreeDrillDownBarChart.destroy();
@@ -40,13 +44,16 @@ const generateCellFailuresBarLineChart = function(eventsList){
     const incrementalCounts = generateIncrementalTimeSeriesData(eventsList)["counts"];
     
     imsiLineChartConfig.options.scales.yAxes[0].ticks.max = getRoundedUpYAxisMaxValue(incrementalDurations, incrementalCounts);
-    imsiLineChartConfig.options.onClick = drillDownLineChartEventHandler;
+
+    // add the event handler to the chart
+    imsiLineChartConfig.options.onClick = cellDrillDownLineChartEventHandler;
     
     networkEngQueryThreeDrillDownBarChart.data.datasets[0].data = incrementalDurations;
     networkEngQueryThreeDrillDownBarChart.data.datasets[1].data = incrementalCounts;
     networkEngQueryThreeDrillDownBarChart.update();
 };
 
+// Displays Failure Class Bar Chart
 let networkEngQueryThreeDrillDownPieChart = new Chart($("#networkEngQueryThreeDrillDownFailureClassChart")[0], failureClassPieChartConfig);
 const generateCellFailureClassPieChart = function(eventsList){
     const dataset = generateFailureClassDisribution(eventsList);
@@ -56,6 +63,10 @@ const generateCellFailureClassPieChart = function(eventsList){
         data[i] = dataset[labels[i]];
     }
     networkEngQueryThreeDrillDownPieChart.destroy();
+
+    // add the event handler to the chart
+    failureClassPieChartConfig.options.onClick = cellDrillDownPieChartEventHandler;
+
     networkEngQueryThreeDrillDownPieChart = new Chart($("#networkEngQueryThreeDrillDownFailureClassChart")[0], failureClassPieChartConfig);
     networkEngQueryThreeDrillDownPieChart.data.datasets[0].data = data;
     networkEngQueryThreeDrillDownPieChart.data.labels = labels;
@@ -63,6 +74,7 @@ const generateCellFailureClassPieChart = function(eventsList){
     networkEngQueryThreeDrillDownPieChart.update();
 }
 
+// Displays Top 10 IMSI Bar Chart
 let networkEngQueryThreeDrillDownIMSIBarChart = new Chart($("#networkEngQueryThreeDrillDownIMSIChart")[0], top10IMSIHorizontalBarConfig);
 const generateCellIMSIBarChart = function(eventsList){
     const dataset = generateTop10IMSIDistribution(eventsList);
@@ -72,6 +84,10 @@ const generateCellIMSIBarChart = function(eventsList){
         data[i] = dataset[labels[i]];
     }
     networkEngQueryThreeDrillDownIMSIBarChart.destroy();
+
+    // add the event handler to the chart
+    top10IMSIHorizontalBarConfig.options.onClick = cellDrillDownIMSIChartEventHandler;
+
     top10IMSIHorizontalBarConfig.options.scales.xAxes[0].ticks.max = Math.max(...data);
     networkEngQueryThreeDrillDownIMSIBarChart = new Chart($("#networkEngQueryThreeDrillDownIMSIChart")[0], top10IMSIHorizontalBarConfig);
     networkEngQueryThreeDrillDownIMSIBarChart.data.datasets[0].data = data;
@@ -80,17 +96,20 @@ const generateCellIMSIBarChart = function(eventsList){
     networkEngQueryThreeDrillDownIMSIBarChart.update();
 }
 
-
+// Displays Top 10 Phone Model Bar Chart
 let networkEngQueryThreeDrillDownPhoneModelBarChart = new Chart($("#networkEngQueryThreeDrillDownPhoneModelChart")[0], top10PhoneModelHorizontalBarConfig);
 const generateCellPhoneBarChart = function(eventsList){
     const dataset = generateTop10PhoneModelDistribution(eventsList);
-    console.log(dataset);
     const labels =  Object.keys(dataset);
     const data = [];
     for(let i = 0; i < labels.length; i++){
         data[i] = dataset[labels[i]];
     }
     networkEngQueryThreeDrillDownPhoneModelBarChart.destroy();
+
+    // add the event handler to the phone model chart
+    top10PhoneModelHorizontalBarConfig.options.onClick = cellDrillDownPhoneModelChartEventHandler;
+    
     top10PhoneModelHorizontalBarConfig.options.scales.xAxes[0].ticks.max = Math.max(...data);
     networkEngQueryThreeDrillDownPhoneModelBarChart = new Chart($("#networkEngQueryThreeDrillDownPhoneModelChart")[0], top10PhoneModelHorizontalBarConfig);
     networkEngQueryThreeDrillDownPhoneModelBarChart.data.datasets[0].data = data;
@@ -99,19 +118,21 @@ const generateCellPhoneBarChart = function(eventsList){
     networkEngQueryThreeDrillDownPhoneModelBarChart.update();
 }
 
-
+// Adds the data to the Cell ID, Country, and Operator Banner
 const displayCellDetails = function(event){
     $("#networkEngQueryThreeDrillDownChartCardDetailsCellID").val(event.cellId);
     $("#networkEngQueryThreeDrillDownChartCardDetailsCountry").val(event.marketOperator.countryDesc);
     $("#networkEngQueryThreeDrillDownChartCardDetailsOperator").val(event.marketOperator.operatorDesc);
 }
 
+// Stores the full data into the drill down div container
 const cacheDrillDownData = function(data){
     $("#networkEngQueryThreeDrillDown").data("id", data[0].cellId);
     $("#networkEngQueryThreeDrillDown").data("type", "cell");
     $("#networkEngQueryThreeDrillDown").data("events", data);
 }
 
+// AJAX Query
 const queryListOfCellEventForDrillDown = function(cellId, country, operator){
     const startTime = new Date();
     $.ajax({
@@ -132,13 +153,28 @@ const queryListOfCellEventForDrillDown = function(cellId, country, operator){
 }
 
 
+// Data Filters
 const filterHourlyEventData = function(date, storedData){    
     return storedData.filter(data => {
         return roundDateToNearestHour(data).toISOString() == new Date(date).toISOString();
     });
 }
 
-const drillDownLineChartEventHandler = function(event, array){    
+const filterFailureClassEventData = function(failureClass, storedData){
+    return storedData.filter(data => data.failureClass.failureDesc.toLowerCase() == failureClass.toLowerCase());
+}
+
+const filterPhoneModelEventData = function(phoneModel, storedData){
+    return storedData.filter(data => data.ueType.model.toLowerCase() == phoneModel.toLowerCase());
+}
+
+const filterIMSIEventData = function(imsi, storedData){
+    return storedData.filter(data => data.imsi == imsi);
+}
+
+
+// Event Handlers
+const cellDrillDownLineChartEventHandler = function(event, array){    
     const storedData = $(this.canvas).closest(".drillDownSections").data("events");
     const activeBar = this.getElementAtEvent(event);
     if(activeBar[0]){
@@ -151,6 +187,46 @@ const drillDownLineChartEventHandler = function(event, array){
         displayListOfCellEventForDrillDown(storedData);
     }
 }
+
+const cellDrillDownPieChartEventHandler = function(event, array){    
+    const storedData = $(this.canvas).closest(".drillDownSections").data("events");
+    const activeSlice = this.getElementAtEvent(event);
+    if(activeSlice[0]){
+        const index = activeSlice[0]["_index"];
+        const failureClass = this.data.labels[index];
+        const filteredData = filterFailureClassEventData(failureClass, storedData);
+        displayListOfCellEventForDrillDown(filteredData);
+    }else{
+        displayListOfCellEventForDrillDown(storedData);
+    }
+}
+
+const cellDrillDownPhoneModelChartEventHandler = function(event, array){
+    const storedData = $(this.canvas).closest(".drillDownSections").data("events");
+    const activeBar = this.getElementAtEvent(event);
+    if(activeBar[0]){
+        const index = activeBar[0]["_index"];
+        const phoneModel = this.data.labels[index];
+        const filteredData = filterPhoneModelEventData(phoneModel, storedData);
+        displayListOfCellEventForDrillDown(filteredData);
+    }else{
+        displayListOfCellEventForDrillDown(storedData);
+    }
+}
+
+const cellDrillDownIMSIChartEventHandler = function(event, array){
+    const storedData = $(this.canvas).closest(".drillDownSections").data("events");
+    const activeBar = this.getElementAtEvent(event);
+    if(activeBar[0]){
+        const index = activeBar[0]["_index"];
+        const imsi = this.data.labels[index];
+        const filteredData = filterIMSIEventData(imsi, storedData);
+        displayListOfCellEventForDrillDown(filteredData);
+    }else{
+        displayListOfCellEventForDrillDown(storedData);
+    }
+}
+
 
 const cellDrillDownEventHandler = function(event, array){
     $("#cellDrillDownBackIcon").data("target", "networkEngQueryThree");
