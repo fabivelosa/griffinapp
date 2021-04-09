@@ -4,12 +4,10 @@ const displayListOfCellEventForDrillDown = function(eventsList){
     $("#networkEngQueryThreeDrillDownTitle").text(`Drilldown : Cell ${eventsList[0].cellId} of ${eventsList[0].marketOperator.operatorDesc} | ${eventsList[0].marketOperator.countryDesc} `)
     displayCellDetails(eventsList[0]);
     displayNetworkEngQueryThreeDrillDownTable(eventsList);
+    displayNetworkEngQueryThreeDrillDownCharts(eventsList);
 }
 
-
 const displayNetworkEngQueryThreeDrillDownTable = function(eventsList){
-    console.log(" I am happening");
-    console.log(eventsList);
     const table = $('#networkEngQueryThreeDrillDownTable').DataTable();
     table.clear();
     $(eventsList).each(function(index, event){
@@ -27,12 +25,30 @@ const displayNetworkEngQueryThreeDrillDownTable = function(eventsList){
     table.draw();
 }
 
+const displayNetworkEngQueryThreeDrillDownCharts = function(eventsList){
+    generateCellFailuresBarLineChart(eventsList);
+}
+
+let networkEngQueryThreeDrillDownBarChart = new Chart($("#networkEngQueryThreeDrillDownChart")[0], imsiLineChartConfig);
+
+const generateCellFailuresBarLineChart = function(eventsList){
+    networkEngQueryThreeDrillDownBarChart.destroy();
+    networkEngQueryThreeDrillDownBarChart = new Chart($("#networkEngQueryThreeDrillDownChart")[0], imsiLineChartConfig);
+    const incrementalDurations = generateIncrementalTimeSeriesData(eventsList)["durations"];
+    const incrementalCounts = generateIncrementalTimeSeriesData(eventsList)["counts"];
+    imsiLineChartConfig.options.scales.yAxes[0].ticks.max = getRoundedUpYAxisMaxValue(incrementalDurations, incrementalCounts);
+    networkEngQueryThreeDrillDownBarChart.data.datasets[0].data = incrementalDurations;
+    networkEngQueryThreeDrillDownBarChart.data.datasets[1].data = incrementalCounts;
+    networkEngQueryThreeDrillDownBarChart.update();
+    console.log(imsiLineChartConfig);
+
+};
 
 
 const displayCellDetails = function(event){
     $("#networkEngQueryThreeDrillDownChartCardDetailsCellID").val(event.cellId);
-    $("#networkEngQueryFourDrillDownChartCardDetailsCountry").val(event.marketOperator.countryDesc);
-    $("#networkEngQueryFourDrillDownChartCardDetailsOperator").val(event.marketOperator.operatorDesc);
+    $("#networkEngQueryThreeDrillDownChartCardDetailsCountry").val(event.marketOperator.countryDesc);
+    $("#networkEngQueryThreeDrillDownChartCardDetailsOperator").val(event.marketOperator.operatorDesc);
 }
 
 const queryListOfCellEventForDrillDown = function(cellId, country, operator){
@@ -64,6 +80,8 @@ const cellDrillDownEventHandler = function(event, array){
         const country = marketOperatorComboArr[0];
         const operator = marketOperatorComboArr[1];
         const cellId = marketOperatorComboArr[2].split(" ")[1];
+        $("networkEngQueryThreeDrillDown").data("id", cellId);
+        $("networkEngQueryThreeDrillDown").data("type", "cell");
         queryListOfCellEventForDrillDown(cellId, country, operator);
     }
 };

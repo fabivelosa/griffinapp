@@ -11,7 +11,7 @@ const imsiLineChartConfig = {
         fill:false,
      },{
         type: 'bar',
-        label: "Call Failures Count",
+        label: "Hourly Failures Count",
         backgroundColor: "#4e73df",
         hoverBackgroundColor: "#002593",
         borderColor: "#4e73df",
