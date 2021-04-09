@@ -616,13 +616,19 @@
                             <div class="col mb-4">
                                 <div class="card mt-4">
                                     <div class="card-header">
-                                      <div class ="d-flex flex-row justify-content-start">
-                                          <div class = "drillDownBackIcon" id="cellDrillDownBackIcon">
-                                            <span><i class="fas fa-arrow-left"></i></span>
-                                          </div>
-                                          <div class = "mx-4" id="networkEngQueryThreeDrillDownTitle">
-                                          </div>
-                                      </div>
+                                        <div class ="d-flex flex-row justify-content-between">
+                                            <div class ="d-flex flex-row justify-content-start">
+                                                <div class = "drillDownBackIcon" id="cellDrillDownBackIcon">
+                                                    <span><i class="fas fa-arrow-left"></i></span>
+                                                </div>
+                                                <div class = "mx-4" id="networkEngQueryThreeDrillDownTitle">
+                                                </div>
+                                            </div>
+                                            <div id="networkEngQueryThreeDrillDownFilterBanner">
+                                                <div id="networkEngQueryThreeDrillDownFullDataBanner">Click on the bar or slice to further drill down.</div>
+                                                <div id="networkEngQueryThreeDrillDownFilteredDataBanner">You are viewing a filtered data. Click on the chart area to view the full data.</div>
+                                            </div>
+                                        </div>
                                     </div>
                                     <div class="card-body" id="networkEngQueryThreeDrillDownCard">
                                         <div class = "row mt-2 p-4" id = "networkEngQueryThreeDrillDownResult">

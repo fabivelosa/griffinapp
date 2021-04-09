@@ -114,7 +114,12 @@ const generateCellPhoneBarChart = function(eventsList){
     networkEngQueryThreeDrillDownPhoneModelBarChart = new Chart($("#networkEngQueryThreeDrillDownPhoneModelChart")[0], top10PhoneModelHorizontalBarConfig);
     networkEngQueryThreeDrillDownPhoneModelBarChart.data.datasets[0].data = data;
     networkEngQueryThreeDrillDownPhoneModelBarChart.data.labels = labels;
-    networkEngQueryThreeDrillDownPhoneModelBarChart.data.datasets[0].backgroundColor = d3.quantize(d3.interpolateHcl("#4e73df", "#60c96e"), data.length);
+
+    if(data.length == 1){
+        networkEngQueryThreeDrillDownPhoneModelBarChart.data.datasets[0].backgroundColor = "#4e73df";
+    }else{
+        networkEngQueryThreeDrillDownPhoneModelBarChart.data.datasets[0].backgroundColor = d3.quantize(d3.interpolateHcl("#4e73df", "#60c96e"), data.length);
+    }
     networkEngQueryThreeDrillDownPhoneModelBarChart.update();
 }
 
@@ -173,58 +178,95 @@ const filterIMSIEventData = function(imsi, storedData){
 }
 
 
+// Filtered Data Message
+const showFullDataBanner = function(){
+    $("#networkEngQueryThreeDrillDownFullDataBanner").show();
+    $("#networkEngQueryThreeDrillDownFilteredDataBanner").hide();
+}
+
+const showFilterDataBanner = function(){
+    console.log("I happen");
+    $("#networkEngQueryThreeDrillDownFullDataBanner").hide();
+    $("#networkEngQueryThreeDrillDownFilteredDataBanner").show();
+}
+
+
 // Event Handlers
-const cellDrillDownLineChartEventHandler = function(event, array){    
+const cellDrillDownLineChartEventHandler = function(event, array){   
+    const startTime = new Date(); 
     const storedData = $(this.canvas).closest(".drillDownSections").data("events");
+    let filteredData;
     const activeBar = this.getElementAtEvent(event);
     if(activeBar[0]){
         const index = activeBar[0]["_index"];
         const date = this.data.datasets[0].data[index].x;
-        const filteredData = filterHourlyEventData(date, storedData);
+        filteredData = filterHourlyEventData(date, storedData);
         imsiLineChartConfig.options.scales.xAxes[0].ticks.minRotation = 0;
-        displayListOfCellEventForDrillDown(filteredData);
+        showFilterDataBanner();
     }else{
-        displayListOfCellEventForDrillDown(storedData);
+        filteredData = storedData;
+        showFullDataBanner();
     }
+    displayListOfCellEventForDrillDown(filteredData);
+    const endTime = new Date();
+    displayResponseSummary(filteredData, startTime, endTime);
 }
 
 const cellDrillDownPieChartEventHandler = function(event, array){    
-    const storedData = $(this.canvas).closest(".drillDownSections").data("events");
+    const startTime = new Date();
+    let storedData = $(this.canvas).closest(".drillDownSections").data("events");
+    let filteredData;
     const activeSlice = this.getElementAtEvent(event);
     if(activeSlice[0]){
         const index = activeSlice[0]["_index"];
         const failureClass = this.data.labels[index];
-        const filteredData = filterFailureClassEventData(failureClass, storedData);
-        displayListOfCellEventForDrillDown(filteredData);
+        filteredData = filterFailureClassEventData(failureClass, storedData);
+        showFilterDataBanner();
     }else{
-        displayListOfCellEventForDrillDown(storedData);
+        filteredData = storedData;
+        showFullDataBanner();
     }
+    displayListOfCellEventForDrillDown(filteredData);
+    const endTime = new Date();
+    displayResponseSummary(filteredData, startTime, endTime);
 }
 
 const cellDrillDownPhoneModelChartEventHandler = function(event, array){
+    const startTime = new Date();
     const storedData = $(this.canvas).closest(".drillDownSections").data("events");
     const activeBar = this.getElementAtEvent(event);
+    let filteredData;
     if(activeBar[0]){
         const index = activeBar[0]["_index"];
         const phoneModel = this.data.labels[index];
-        const filteredData = filterPhoneModelEventData(phoneModel, storedData);
-        displayListOfCellEventForDrillDown(filteredData);
+        filteredData = filterPhoneModelEventData(phoneModel, storedData);
+        showFilterDataBanner();
     }else{
-        displayListOfCellEventForDrillDown(storedData);
+        filteredData = storedData;
+        showFullDataBanner();
     }
+    displayListOfCellEventForDrillDown(filteredData);
+    const endTime = new Date();
+    displayResponseSummary(filteredData, startTime, endTime);
 }
 
 const cellDrillDownIMSIChartEventHandler = function(event, array){
+    const startTime = new Date();
     const storedData = $(this.canvas).closest(".drillDownSections").data("events");
     const activeBar = this.getElementAtEvent(event);
+    let filteredData;
     if(activeBar[0]){
         const index = activeBar[0]["_index"];
         const imsi = this.data.labels[index];
-        const filteredData = filterIMSIEventData(imsi, storedData);
-        displayListOfCellEventForDrillDown(filteredData);
+        filteredData = filterIMSIEventData(imsi, storedData);
+        showFilterDataBanner();
     }else{
-        displayListOfCellEventForDrillDown(storedData);
+        filteredData = storedData;
+        showFullDataBanner();
     }
+    displayListOfCellEventForDrillDown(filteredData);
+    const endTime = new Date();
+    displayResponseSummary(filteredData, startTime, endTime);
 }
 
 
@@ -240,6 +282,7 @@ const cellDrillDownEventHandler = function(event, array){
         const operator = marketOperatorComboArr[1];
         const cellId = marketOperatorComboArr[2].split(" ")[1];
         queryListOfCellEventForDrillDown(cellId, country, operator);
+        showFullDataBanner();
     }
 };
 
