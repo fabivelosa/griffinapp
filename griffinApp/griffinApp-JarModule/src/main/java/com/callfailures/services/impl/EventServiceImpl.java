@@ -249,4 +249,9 @@ public class EventServiceImpl implements EventService {
 		return eventDAO.findAllIMSIEventsByDate(imsi, startTime, endTime);
 	}
 
+	@Override
+	public List<Events> findListofIMSIEventsByMarketOperatorCellID(int cellID, String country, String operator) {
+		return eventDAO.findAllEventsByMarketOperatorCellID(cellID, country, operator);
+	}
+
 }

@@ -1,0 +1,93 @@
+<div class="row drillDownSections" id="networkEngQueryThreeDrillDown">
+    <div class="col mb-4">
+        <div class="card mt-4">
+            <div class="card-header">
+              <div class ="d-flex flex-row justify-content-start">
+                  <div id="cellDrillDownBackIcon">
+                    <span><i class="fas fa-arrow-left"></i></span>
+                  </div>
+                  <div class = "mx-4" id="networkEngQueryThreeDrillDownTitle">
+                  </div>
+              </div>
+            </div>
+            <div class="card-body" id="networkEngQueryThreeDrillDownCard">
+                <div class = "row mt-2 p-4" id = "networkEngQueryThreeDrillDownResult">
+                    <div class = "col">
+                        <div class="card mb-4 query-chart" id="networkEngQueryThreeDrillDownChartCard">
+                            <div class="card-header text-primary" id="networkEngQueryThreeDrillDownChartTitle">
+                                <span id="networkEngQueryThreeDrillDownChartTitleType"></span> 
+                                <span id="networkEngQueryThreeDrillDownChartTitleDescription"></span>
+                            </div>
+                            <div class="card-body">
+                                <div class = "row networkEngQueryThreeDrillDownChartCardCellDetails pl-2 pr-2 mx-4">
+                                    <div class = "col">
+                                        <label for="networkEngQueryThreeDrillDownChartCardIMSIDetailsIMSI" class="form-label fw-bold small">Cell ID</label>
+                                        <input readonly type="text" class="form-control" id="networkEngQueryThreeDrillDownChartCardIMSIDetailsIMSI" placeholder="IMSI"/>
+                                    </div>
+                                    <div class = "col">
+                                        <label for="networkEngQueryThreeDrillDownChartCardIMSIDetailsCountry" class="form-label fw-bold small">Country</label>
+                                        <input readonly type="text" class="form-control" id="networkEngQueryThreeDrillDownChartCardIMSIDetailsCountry" placeholder="Country"/>
+                                    </div>
+                                    <div class = "col">
+                                        <label for="networkEngQueryThreeDrillDownChartCardIMSIDetailsOperator" class="form-label fw-bold small">Operator</label>
+                                        <input readonly type="text" class="form-control" id="networkEngQueryThreeDrillDownChartCardIMSIDetailsOperator" placeholder="Operator"/>
+                                    </div>
+                                </div>
+                                <div class="d-flex flex-column">
+                                    <div class = "d-flex flex-row align-items-stretch">
+                                        <div class="col-6" id="drillDownFailureClassChart">
+                                            <div class="row mx-4 align-center"><h4>Failure Class Distribution</h4></div>
+                                            <div class="row chart-pie">
+                                                <canvas id="networkEngQueryThreeDrillDownFailureClassChart" width="100%" height="100"></canvas>
+                                            </div>
+                                        </div>
+                                        <div class="col-6" id="drillDownEventCauseChart">
+                                            <div class="row mx-4 align-center"><h4>Event Cause Distribution</h4></div>
+                                            <div class="row chart-bar">
+                                                <canvas id="networkEngQueryThreeDrillDownEventCauseChart" width="100%" height="100"></canvas>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="chart-bar">
+                                        <canvas id="networkEngQueryThreeDrillDownChart" width="100%" height="100"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class = "responseWidget p-3 mb-2">
+                            <div class="d-flex flex-row">
+                                <div class = "responseRows text-left">
+                                    NaN rows returned
+                                </div>
+                                <div class="responseTime text-right">
+                                    Duration: NaN seconds
+                                </div>
+                            </div>
+                        </div>
+                        <div class ="row">
+                            <div class="col">
+                                <table id="networkEngQueryThreeDrillDownTable" class="table table-hover table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>Date</th>
+                                            <th>IMSI</th>
+                                            <th>Duration (ms)</th>
+                                            <th>Cell ID</th>
+                                            <th>Failure Class</th>
+                                            <th>Failure Description</th>
+                                            <th>Event ID</th>
+                                            <th>Cause Code</th>
+                                            <th>Description</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>                                                 
+                    </div>
+                 </div>
+            </div>
+        </div>
+    </div>
+</div>
