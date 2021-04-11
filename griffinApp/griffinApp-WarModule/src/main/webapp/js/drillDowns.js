@@ -97,6 +97,16 @@ const generateFailureClassDisribution = function(dataset){
     return failureMap;
 };
 
+//MARKET OP
+const generateMarketOperatorCell = function(dataset){
+	const marketOperatorCell ={};
+	dataset.forEach(data => {
+		let combo = data.marketOperator.countryDesc + ' '+ data.marketOperator.operatorDesc + ' ' + data.cellId;
+		marketOperatorCell[combo] = marketOperatorCell[combo] ? marketOperatorCell[combo] + 1 : 1;
+	})
+	return marketOperatorCell;
+};
+
 const generateCellDistribution = function(dataset){
     const cells = {};
     dataset.forEach(data => {

@@ -29,11 +29,70 @@ const displayNetworkEngQueryTwoDrillDownTable = function(EventsList){
 //Organise Graphs for drilldown
 const displayNetworkEngQueryTwoDrillDownCharts = function(EventsList){    
 		console.log('howdy');
- //   generateBarLineChart(imsiEventsList);
+    //generateBarLineChartUE(EventsList);
   //  generateFailureClassPieChart(imsiEventsList);
-   // generateCellIDBarChart(imsiEventsList);
+    generateCellIDBarChartUE(EventsList);
+}
+let networkEngQueryTwoDrillDownBarChart = new Chart($("#networkEngQueryTwoDrillDownChart")[0], imsiLineChartConfig);
+
+const generateBarLineChartUE = function(EventsList) {
+    const cumulativeDurations = generateCumulativeTimeSeriesData(EventsList)["durations"];
+    const incrementalDurations = generateIncrementalTimeSeriesData(EventsList)["durations"];
+    const cumulativeCounts = generateCumulativeTimeSeriesData(EventsList)["counts"];
+    const incrementalCounts = generateIncrementalTimeSeriesData(EventsList)["counts"];
+
+    networkEngQueryTwoDrillDownBarChart.data.datasets[0].data = cumulativeDurations;
+    networkEngQueryTwoDrillDownBarChart.data.datasets[1].data = cumulativeCounts;
+    imsiLineChartConfig.options.scales.yAxes[0].ticks.max = getRoundedUpYAxisMaxValue(cumulativeDurations, cumulativeCounts);
+    networkEngQueryTwoDrillDownBarChart.update();
+    $("#networkEngQueryTwoDrillDownChartTitleType").text("Cumulative");
+    $("#networkEngQueryTwoDrillDownChartTitleDescription").text(`Description ${EventsList[0].eventCause.description} Failures`);
+    $("#networkEngQueryTwoIncrementalBtn").show();
+    $("#networkEngQueryTwoCumulativeBtn").hide();
+    initDrillDownButtonsUE(networkEngQueryTwoDrillDownBarChart, cumulativeDurations, incrementalDurations, cumulativeCounts, incrementalCounts);
+};
+
+//Cell ID Chart
+let networkEngQueryTwoDrillDownCellIDChart = new Chart($("#networkEngQueryTwoDrillDownCellIDChart")[0], cellIDChartConfig);
+
+const generateCellIDBarChartUE = function(EventsList){
+    const dataset = generateMarketOperatorCell(EventsList);
+    const labels =  Object.keys(dataset);
+    const data = [];
+    for(let i = 0; i < labels.length; i++){
+        data[i] = dataset[labels[i]];
+    }
+    networkEngQueryTwoDrillDownCellIDChart.destroy();
+    cellIDChartConfig.options.scales.yAxes[0].ticks.max = Math.max(...data);
+    networkEngQueryTwoDrillDownCellIDChart = new Chart($("#networkEngQueryTwoDrillDownCellIDChart")[0], cellIDChartConfig);
+    networkEngQueryTwoDrillDownCellIDChart.data.datasets[0].data = data;
+    networkEngQueryTwoDrillDownCellIDChart.data.labels = labels;
+    networkEngQueryTwoDrillDownCellIDChart.data.datasets[0].backgroundColor = colorPalette.slice(0, data.length);
+    networkEngQueryTwoDrillDownCellIDChart.update();
 }
 
+//Show the graphs
+const initDrillDownButtonsUE = function(chart, cumulativeDurations, incrementalDurations, cumulativeCounts, incrementalCounts){
+    $("#networkEngQueryTwoIncrementalBtn").click(function (event) {
+        $("#networkEngQueryTwoIncrementalBtn").hide();
+        $("#networkEngQueryTwoCumulativeBtn").show();
+        $("#networkEngQueryTwoDrillDownChartTitleType").text("Incremental ")
+        chart.data.datasets[0].data = incrementalDurations;
+        chart.data.datasets[1].data = incrementalCounts;
+        imsiLineChartConfig.options.scales.yAxes[0].ticks.max = getRoundedUpYAxisMaxValue(incrementalDurations, incrementalCounts);
+        chart.update();
+    });
+
+    $("#networkEngQueryTwoCumulativeBtn").click(function (event) {
+        $("#networkEngQueryTwoIncrementalBtn").show();
+        $("#networkEngQueryTwoCumulativeBtn").hide();
+        $("#networkEngQueryTwoDrillDownChartTitleType").text("Cumulative ")
+        chart.data.datasets[0].data = cumulativeDurations;
+        chart.data.datasets[1].data = cumulativeCounts;
+        imsiLineChartConfig.options.scales.yAxes[0].ticks.max = getRoundedUpYAxisMaxValue(cumulativeDurations, cumulativeCounts);
+        chart.update();
+    });
+};
 
 const queryListOfUEEventForDrillDown = function(description){
 	console.log(description);
