@@ -46,7 +46,11 @@ public class EventDAO {
 			FIND_IMSI_BY_FAILURECLASS = "SELECT NEW com.callfailures.entity.views.UniqueIMSI(e.imsi)" + "FROM event e "
 					+ "WHERE e.failureClass.failureClass =:failureClass " + "GROUP BY e.imsi",
 			DRILL_DOWN_FIND_ALL_IMSI_EVENTS_BY_DATE = "SELECT e FROM event e "
-					+ "WHERE (e.dateTime BETWEEN :startTime AND :endTime) " + "AND e.imsi = :imsi";
+					+ "WHERE (e.dateTime BETWEEN :startTime AND :endTime) " + "AND e.imsi = :imsi",
+	        DRILL_DOWN_FIND_ALL_CELLID_EVENTS_BY_CELLID_MARKETOPERATOR = "SELECT e FROM event e "
+							+ "WHERE e.cellId = :cellId "
+							+ "AND (LOWER(e.marketOperator.countryDesc)) = :countryDesc "
+							+ "AND (LOWER(e.marketOperator.operatorDesc)) = :operatorDesc";
 
 	@PersistenceContext
 	EntityManager entityManager;
@@ -273,4 +277,28 @@ public class EventDAO {
 			return null;
 		}
 	}
+	
+	
+	/**
+	 * Queries the drilldown data for a Market, Operator, Cell ID combo in a given period
+	 * 
+	 * @param cellId
+	 * @param country
+	 * @param operator
+	 * @return list of Events associated with the Market, Operator, Cell ID
+	 */
+	@SuppressWarnings("unchecked")
+	public List<Events> findAllEventsByMarketOperatorCellID(final int cellId, final String country, final String operator) {
+		final Query query = entityManager.createQuery(DRILL_DOWN_FIND_ALL_CELLID_EVENTS_BY_CELLID_MARKETOPERATOR, Events.class);
+		query.setParameter("cellId", cellId);
+		query.setParameter("countryDesc", country.trim().toLowerCase());
+		query.setParameter("operatorDesc", operator.trim().toLowerCase());
+		try {
+			return query.getResultList();
+		} catch (NoResultException e) {
+			return null;
+		}
+	}
 }
+
+

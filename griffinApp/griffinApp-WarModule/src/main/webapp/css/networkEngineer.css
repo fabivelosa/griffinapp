@@ -37,8 +37,10 @@
 #errorAlertOnFailuresListForm,
 .responseWidget,
 #networkEngQueryFourDrillDown,
+#networkEngQueryThreeDrillDown,
 #networkEngQueryFourCumulativeBtn,
-#networkEngQueryFourIncrementalBtn{
+#networkEngQueryFourIncrementalBtn,
+#networkEngQueryThreeDrillDownFilteredDataBanner{
     display:none;
 }
 
@@ -94,33 +96,45 @@ td{
 }
 
 /* Drill Down CSS */
-.networkEngQueryFourDrillDownChartCardIMSIDetails{
+.networkEngQueryFourDrillDownChartCardIMSIDetails,
+.networkEngQueryThreeDrillDownChartCardCellDetails{
     padding-top: 0.25rem;
     background-color: #fbfcff;
     border: 1px solid #fbfcff;
 }
 
-.networkEngQueryFourDrillDownChartCardIMSIDetails label{
+.networkEngQueryFourDrillDownChartCardIMSIDetails label,
+.networkEngQueryThreeDrillDownChartCardCellDetails label{
     font-size: .75rem;
     font-weight: bold;
     margin: 0;
     color:#4e73df;
     text-align: left !important;
 }
-.networkEngQueryFourDrillDownChartCardIMSIDetails .form-control{
+.networkEngQueryFourDrillDownChartCardIMSIDetails .form-control,
+.networkEngQueryThreeDrillDownChartCardCellDetails .form-control{
     padding: 0;
     border: none;
     color:#5a5c69;
     background-color: #fbfcff;
 }
 
-#drillDownFailureClassChart, #drillDownCellIDChart{
+#drillDownFailureClassChart, #drillDownCellIDChart, #drillDownEventCauseChart, #drillDownIMSISubChart, #drillPhoneModelChart, #drillCauseCodeChart{
     padding: 2rem;
     margin-top: 1rem;
     border: 1px solid rgb(239, 238, 238);
 }
 
-#networkEngQueryFourDrillDownCard h4{
+#networkEngQueryFourDrillDownCard h4,
+#networkEngQueryThreeDrillDownCard h4{
     text-align: center;
     font-size: 1rem;
+}
+
+#networkEngQueryThreeDrillDownFilterBanner{
+    color:#4e73df;
+}
+
+#networkEngQueryThreeDrillDownFilteredDataBanner{
+    color: orange;
 }

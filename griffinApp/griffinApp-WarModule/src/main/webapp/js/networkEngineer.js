@@ -363,6 +363,7 @@ const displayTopTenCombinationsChart = function(combinations){
         }],
       },
       options: {
+        onClick: cellDrillDownEventHandler,
         maintainAspectRatio: false,
         layout: {
           padding: {
@@ -759,14 +760,14 @@ $(document).ready(function(){
     });
 
     // Drill Down Back Event Handler
-    $("#drillDownBackIcon").click(function(event){
+    $(".drillDownBackIcon").click(function(event){
       hideAllSections();
       $(".drillDownSections").hide();
       $(`#${$(this).data("target")}`).show();
     });
 
     $("body").on("click", ".imsiDrillDownLinks a", function(event){
-      const parentContainer = $(this).closest(".queryContainer").attr("id")
+      const parentContainer = $(this).closest(".queryContainer").attr("id");
       imsiClickFromTableEventHandler($(this).text(), parentContainer);
     });
 

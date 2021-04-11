@@ -99,4 +99,16 @@ public interface EventService {
 	 * @throws InvalidIMSIException
 	 */
 	List<Events> findListofIMSIEventsByDate(final String imsi, final LocalDateTime startTime, final LocalDateTime endTime) throws InvalidIMSIException;
+
+
+	/**
+	 * Queries the drilldown data for a Market, Operator, Cell ID combo in a given period
+	 * @param cellID
+	 * @param country
+	 * @param operator
+	 * @return list of Events associated with the Market, Operator, Cell ID
+	 * @throws InvalidIMSIException
+	 */
+	List<Events> findListofIMSIEventsByMarketOperatorCellID(final int cellID, final String country, final String operator);
+
 }
