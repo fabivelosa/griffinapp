@@ -140,10 +140,11 @@ const cacheDrillDownData = function(data){
 // AJAX Query
 const queryListOfCellEventForDrillDown = function(cellId, country, operator){
     const startTime = new Date();
+    let newOperator = operator.replace("&","%26");
     $.ajax({
         type:'GET',
         dataType:'json',
-        url:`${rootURL2}/cells/query?cellId=${cellId}&country=${country}&operator=${operator}`,
+        url:`${rootURL2}/cells/query?cellId=${cellId}&country=${country}&operator=${newOperator}`,
         beforeSend: setAuthHeader1,
         success: function(eventsList){
             displayListOfCellEventForDrillDown(eventsList);
