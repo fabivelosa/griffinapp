@@ -249,4 +249,15 @@ public class EventServiceImpl implements EventService {
 		return eventDAO.findAllIMSIEventsByDate(imsi, startTime, endTime);
 	}
 
+	@Override
+	public List<Events> findListofIMSIEventsByPhoneModel(String model, LocalDateTime startTime, LocalDateTime endTime)
+			throws InvalidPhoneModelException {
+		if (model.isEmpty()) {
+			throw new InvalidPhoneModelException();
+		}else if (startTime.isAfter(endTime)) {
+			throw new InvalidDateException();
+		}
+		return eventDAO.findAllIMSIEventsByPhoneModel(model, startTime, endTime);
+	}
+
 }

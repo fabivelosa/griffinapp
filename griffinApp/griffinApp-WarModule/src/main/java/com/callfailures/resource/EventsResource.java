@@ -2,6 +2,7 @@ package com.callfailures.resource;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.TimeZone;
 
 import javax.ejb.EJB;
@@ -13,6 +14,7 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import com.callfailures.entity.Events;
 import com.callfailures.entity.Secured;
 import com.callfailures.entity.views.IMSISummary;
 import com.callfailures.entity.views.PhoneModelSummary;
@@ -53,7 +55,6 @@ public class EventsResource {
 			@QueryParam("to") final Long toEpoch,
 			@QueryParam("summary") final boolean summary
 			) {
-		
 		final LocalDateTime startTime = convertLongToLocalDateTime(fromEpoch); 
 		final LocalDateTime endTime = convertLongToLocalDateTime(toEpoch); 	
 		try {	
@@ -81,12 +82,11 @@ public class EventsResource {
 	@Secured
     @Path("/query/ue")
 	@Produces({ MediaType.APPLICATION_JSON })
-	public Response getPhoneModelCallFailureSummary(
+	public Response getEventsfromPhoneModel(
 			@QueryParam("model") final String model,
 			@QueryParam("from") final Long fromEpoch,
 			@QueryParam("to") final Long toEpoch
 			) {
-		
 		final LocalDateTime startTime = convertLongToLocalDateTime(fromEpoch); 
 		final LocalDateTime endTime = convertLongToLocalDateTime(toEpoch); 	
 		try {	
@@ -95,6 +95,32 @@ public class EventsResource {
 				phoneModelSummary = new PhoneModelSummary (model, 0);
 			}
 			return Response.status(200).entity(phoneModelSummary).build();
+		}
+		catch(InvalidPhoneModelException exception) {
+			return Response.status(404).entity(new ErrorMessages(ErrorMessage.INVALID_PHONE_MODEL.getMessage())).build();
+		}
+		catch(InvalidDateException exception) {
+			return Response.status(404).entity(new ErrorMessages(ErrorMessage.INVALID_DATE.getMessage())).build();
+		}
+		catch(Exception exception) {
+			return Response.status(404).build();
+		}
+	}
+	
+	@GET
+	@Secured
+    @Path("/query/ue/imsi")
+	@Produces({ MediaType.APPLICATION_JSON })
+	public Response getPhoneModelCallFailureSummary(
+			@QueryParam("model") final String model,
+			@QueryParam("from") final Long fromEpoch,
+			@QueryParam("to") final Long toEpoch
+			) {
+		final LocalDateTime startTime = convertLongToLocalDateTime(fromEpoch); 
+		final LocalDateTime endTime = convertLongToLocalDateTime(toEpoch); 	
+		try {	
+			final List<Events> events = eventService.findListofIMSIEventsByPhoneModel(model, startTime, endTime);
+			return Response.status(200).entity(events).build();
 		}
 		catch(InvalidPhoneModelException exception) {
 			return Response.status(404).entity(new ErrorMessages(ErrorMessage.INVALID_PHONE_MODEL.getMessage())).build();

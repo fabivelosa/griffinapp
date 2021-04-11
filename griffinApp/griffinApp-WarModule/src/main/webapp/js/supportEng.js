@@ -140,6 +140,7 @@ const displayIMSICallFailureChart = function(imsiSummary){
         }],
       },
       options: {
+        onClick: countCallFailuresDrillDownEventHandler,
         maintainAspectRatio: false,
         layout: {
           padding: {

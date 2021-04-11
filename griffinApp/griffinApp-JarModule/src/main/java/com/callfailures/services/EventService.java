@@ -18,6 +18,7 @@ import com.callfailures.entity.views.PhoneModelSummary;
 import com.callfailures.entity.views.UniqueIMSI;
 import com.callfailures.exception.InvalidDateException;
 import com.callfailures.exception.InvalidIMSIException;
+import com.callfailures.exception.InvalidPhoneModelException;
 import com.callfailures.parsingutils.ParsingResponse;
 
 @Local
@@ -99,4 +100,14 @@ public interface EventService {
 	 * @throws InvalidIMSIException
 	 */
 	List<Events> findListofIMSIEventsByDate(final String imsi, final LocalDateTime startTime, final LocalDateTime endTime) throws InvalidIMSIException;
+	
+	/**
+	 * Drill down of all IMSI Events By Phone Model
+	 * @param model
+	 * @param startTime
+	 * @param endTime
+	 * @return the list of events associated with a Phone Model
+	 * @throws InvalidPhoneModelException
+	 */
+	List<Events> findListofIMSIEventsByPhoneModel(final String model, final LocalDateTime startTime, final LocalDateTime endTime) throws InvalidPhoneModelException; 
 }

@@ -46,7 +46,9 @@ public class EventDAO {
 			FIND_IMSI_BY_FAILURECLASS = "SELECT NEW com.callfailures.entity.views.UniqueIMSI(e.imsi)" + "FROM event e "
 					+ "WHERE e.failureClass.failureClass =:failureClass " + "GROUP BY e.imsi",
 			DRILL_DOWN_FIND_ALL_IMSI_EVENTS_BY_DATE = "SELECT e FROM event e "
-					+ "WHERE (e.dateTime BETWEEN :startTime AND :endTime) " + "AND e.imsi = :imsi";
+					+ "WHERE (e.dateTime BETWEEN :startTime AND :endTime) " + "AND e.imsi = :imsi",
+			DRILL_DOWN_FIND_ALL_IMSI_EVENTS_BY_PHONEMODEL = "SELECT e FROM event e "
+					+ "WHERE (e.dateTime BETWEEN :startTime AND :endTime) " + "AND e.ueType.model = :model";
 
 	@PersistenceContext
 	EntityManager entityManager;
@@ -265,6 +267,28 @@ public class EventDAO {
 			final LocalDateTime endTime) {
 		final Query query = entityManager.createQuery(DRILL_DOWN_FIND_ALL_IMSI_EVENTS_BY_DATE, Events.class);
 		query.setParameter("imsi", IMSI);
+		query.setParameter("startTime", startTime);
+		query.setParameter("endTime", endTime);
+		try {
+			return query.getResultList();
+		} catch (NoResultException e) {
+			return null;
+		}
+	}
+
+	/**
+	 * Queries the drill down data for a Phone Model in a given period
+	 * 
+	 * @param model
+	 * @param startTime
+	 * @param endTime
+	 * @return list of Events for a Phone Model
+	 */
+	@SuppressWarnings("unchecked")
+	public List<Events> findAllIMSIEventsByPhoneModel(final String model, final LocalDateTime startTime,
+			final LocalDateTime endTime) {
+		final Query query = entityManager.createQuery(DRILL_DOWN_FIND_ALL_IMSI_EVENTS_BY_PHONEMODEL, Events.class);
+		query.setParameter("model", model);
 		query.setParameter("startTime", startTime);
 		query.setParameter("endTime", endTime);
 		try {
