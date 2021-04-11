@@ -5,7 +5,7 @@ const displayListOfFailureEventForDrillDown = function(EventsList){
     $("#networkEngQueryTwoDrillDownTitle").text(`Drilldown : ${EventsList[0].eventCause.description}`)
     displayNetworkEngQueryTwoDrillDownTable(EventsList);
     displayNetworkEngQueryTwoDrillDownCharts(EventsList);
-    displayIMSIDetails(EventsList[0]);
+    displayCauseDetails(EventsList[0]);
 }
 
 const displayNetworkEngQueryTwoDrillDownTable = function(EventsList){
@@ -29,7 +29,6 @@ const displayNetworkEngQueryTwoDrillDownTable = function(EventsList){
 //Organise Graphs for drilldown
 const displayNetworkEngQueryTwoDrillDownCharts = function(EventsList){    
     generateBarLineChartUE(EventsList);
-    //generateFailureClassPieChartUE(EventsList);
     generateCellIDBarChartUE(EventsList);
 }
 
@@ -45,7 +44,7 @@ const generateBarLineChartUE = function(EventsList) {
     networkEngQueryTwoDrillDownBarChart.data.datasets[1].data = incrementalCounts;
     imsiLineChartConfig.options.scales.yAxes[0].ticks.max = getRoundedUpYAxisMaxValue(incrementalDurations, incrementalCounts);
     networkEngQueryTwoDrillDownBarChart.update();
-    $("#networkEngQueryTwoDrillDownChartTitleType").text("Cumulative");
+    $("#networkEngQueryTwoDrillDownChartTitleType").text("Incremental");
     $("#networkEngQueryTwoDrillDownChartTitleDescription").text(`Failures of type: ${EventsList[0].eventCause.description}`);
     $("#networkEngQueryTwoIncrementalBtn").show();
     $("#networkEngQueryTwoCumulativeBtn").hide();
@@ -111,8 +110,14 @@ const queryListOfUEEventForDrillDown = function(description){
     });
 }
 
+const displayCauseDetails = function(event){
+    $("#networkEngQueryTwoDrillDownChartCardDetailsEventID").val(event.eventId);
+    $("#networkEngQueryTwoDrillDownChartCardDetailsCauseCode").val(event.eventCause.eventCauseId.causeCode);
+    $("#networkEngQueryTwoDrillDownChartCardDetailsDescription").val(event.eventCause.description);
+}
+
+
 const UEDrillDownEventHandler = function(event, array){
-	console.log('UEDrillDownEventHandler has been called');
     $("#drillDownBackIcon").data("target", "networkEngQueryTwo"); // add in html to drilldown section for querytwo
     imsiLineChartConfig.options.scales.xAxes[0].ticks.minRotation = 0;
     let activeBar = this.getElementAtEvent(event);
