@@ -32,6 +32,8 @@ const displayNetworkEngQueryTwoDrillDownCharts = function(EventsList){
     //generateFailureClassPieChartUE(EventsList);
     generateCellIDBarChartUE(EventsList);
 }
+
+//Fail Events Chart
 let networkEngQueryTwoDrillDownBarChart = new Chart($("#networkEngQueryTwoDrillDownChart")[0], imsiLineChartConfig);
 
 const generateBarLineChartUE = function(EventsList) {
@@ -39,9 +41,9 @@ const generateBarLineChartUE = function(EventsList) {
     const incrementalDurations = generateIncrementalTimeSeriesData(EventsList)["durations"];
     const cumulativeCounts = generateCumulativeTimeSeriesData(EventsList)["counts"];
     const incrementalCounts = generateIncrementalTimeSeriesData(EventsList)["counts"];
-    networkEngQueryTwoDrillDownBarChart.data.datasets[0].data = cumulativeDurations;
-    networkEngQueryTwoDrillDownBarChart.data.datasets[1].data = cumulativeCounts;
-    imsiLineChartConfig.options.scales.yAxes[0].ticks.max = getRoundedUpYAxisMaxValue(cumulativeDurations, cumulativeCounts);
+    networkEngQueryTwoDrillDownBarChart.data.datasets[0].data = incrementalDurations;
+    networkEngQueryTwoDrillDownBarChart.data.datasets[1].data = incrementalCounts;
+    imsiLineChartConfig.options.scales.yAxes[0].ticks.max = getRoundedUpYAxisMaxValue(incrementalDurations, incrementalCounts);
     networkEngQueryTwoDrillDownBarChart.update();
     $("#networkEngQueryTwoDrillDownChartTitleType").text("Cumulative");
     $("#networkEngQueryTwoDrillDownChartTitleDescription").text(`Failures of type: ${EventsList[0].eventCause.description}`);

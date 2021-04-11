@@ -101,7 +101,7 @@ const generateFailureClassDisribution = function(dataset){
 const generateMarketOperatorCell = function(dataset){
 	const marketOperatorCell ={};
 	dataset.forEach(data => {
-		let combo = data.marketOperator.countryDesc + ' '+ data.marketOperator.operatorDesc + ' ' + data.cellId;
+		let combo = 'Cell: '+ data.cellId + ' - '  + data.marketOperator.operatorDesc+ ' ' + data.marketOperator.countryDesc;
 		marketOperatorCell[combo] = marketOperatorCell[combo] ? marketOperatorCell[combo] + 1 : 1;
 	})
 	return marketOperatorCell;
