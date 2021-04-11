@@ -771,5 +771,9 @@ $(document).ready(function(){
       const parentContainer = $(this).closest(".queryContainer").attr("id");
       imsiClickFromTableEventHandler($(this).text(), parentContainer);
     });
+	$("body").on("click", ".failureDescriptionLinks a", function(event){
+      const parentContainer = $(this).closest(".queryContainer").attr("id");
+      descriptionClickFromTableEventHandler($(this).text(), parentContainer);
+    });
 
 });
