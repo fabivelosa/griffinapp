@@ -12,7 +12,7 @@
     <title>Dashboard</title>
 
     <!-- Custom fonts for this template-->
-    <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+    <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">drillD
     <link
         href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
         rel="stylesheet">
@@ -514,6 +514,113 @@
                             </div>
                         </div>
                         
+                        <div class="row drillDownSections" id="networkEngQueryTwoDrillDown">
+                            <div class="col mb-4">
+                                <div class="card mt-4">
+                                    <div class="card-header">
+                                        <div class ="d-flex flex-row justify-content-between">
+                                            <div class ="d-flex flex-row justify-content-start">
+                                                <div class = "drillDownBackIcon" id="cellDrillDownBackIcon">
+                                                    <span><i class="fas fa-arrow-left"></i></span>
+                                                </div>
+                                                <div class = "mx-4" id="networkEngQueryTwoDrillDownTitle">
+                                                </div>
+                                            </div>
+                                            <div id="networkEngQueryTwoDrillDownFilterBanner">
+                                                <div id="networkEngQueryTwoDrillDownFullDataBanner">You are viewing the full dataset. Click on the bar or slice to further drill down.</div>
+                                                <div id="networkEngQueryTwoDrillDownFilteredDataBanner">You are viewing a filtered dataset. Click on the chart area to view the full data.</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card-body" id="networkEngQueryTwoDrillDownCard">
+                                        <div class = "row mt-2 p-4" id = "networkEngQueryTwoDrillDownResult">
+                                            <div class = "col">
+                                                <div class="card mb-4 query-chart" id="networkEngQueryTwoDrillDownChartCard">
+                                                    <div class="card-header text-primary" id="networkEngQueryTwoDrillDownChartTitle">
+                                                        <span id="networkEngQueryTwoDrillDownChartTitleType"></span> 
+                                                        <span id="networkEngQueryTwoDrillDownChartTitleDescription"></span>
+                                                    </div>
+                                                    <div class="card-body">
+                                                        <div class = "row networkEngQueryTwoDrillDownChartCardCellDetails pl-2 pr-2 mx-4">
+                                                            <div class = "col">
+                                                                <label for="networkEngQueryTwoDrillDownChartCardDetailsCellID" class="form-label fw-bold small">Cell ID</label>
+                                                                <input readonly type="text" class="form-control" id="networkEngQueryTwoDrillDownChartCardDetailsCellID" placeholder="PhoneModel"/>
+                                                            </div>
+                                                            <div class = "col">
+                                                                <label for="networkEngQueryTwoDrillDownChartCardDetailsCountry" class="form-label fw-bold small">Country</label>
+                                                                <input readonly type="text" class="form-control" id="networkEngQueryTwoDrillDownChartCardDetailsCountry" placeholder="Country"/>
+                                                            </div>
+                                                            <div class = "col">
+                                                                <label for="networkEngQueryTwoDrillDownChartCardDetailsOperator" class="form-label fw-bold small">Operator</label>
+                                                                <input readonly type="text" class="form-control" id="networkEngQueryTwoDrillDownChartCardDetailsOperator" placeholder="Operator"/>
+                                                            </div>
+                                                        </div>
+                                                        <div class="d-flex flex-column">
+                                                            <div class="chart-bar">
+                                                                <canvas id="networkEngQueryTwoDrillDownChart" width="100%" height="100"></canvas>
+                                                            </div>
+                                                            <div class = "d-flex flex-row align-items-stretch">
+                                                                <div class="col-4" id="drillDownFailureClassChart">
+                                                                    <div class="row mx-4 align-center"><h4>Failure Class Distribution</h4></div>
+                                                                    <div class="row chart-pie">
+                                                                        <canvas id="networkEngQueryTwoDrillDownFailureClassChart" width="100%" height="100"></canvas>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-4" id="drillPhoneModelChart">
+                                                                    <div class="row mx-4 align-center"><h4>Top 10 Phone Model</h4></div>
+                                                                    <div class="row chart-bar">
+                                                                        <canvas id="networkEngQueryTwoDrillDownPhoneModelChart" width="100%" height="100"></canvas>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-4" id="drillDownIMSISubChart">
+                                                                    <div class="row mx-4 align-center"><h4>Top 10 Affected IMSIs</h4></div>
+                                                                    <div class="row chart-bar">
+                                                                        <canvas id="networkEngQueryTwoDrillDownIMSIChart" width="100%" height="100"></canvas>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class = "responseWidget p-3 mb-2">
+                                                    <div class="d-flex flex-row">
+                                                        <div class = "responseRows text-left">
+                                                            NaN rows returned
+                                                        </div>
+                                                        <div class="responseTime text-right">
+                                                            Duration: NaN seconds
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class ="row">
+                                                    <div class="col">
+                                                        <table id="networkEngQueryTwoDrillDownTable" class="table table-hover table-bordered">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>Date</th>
+                                                                    <th>IMSI</th>
+                                                                    <th>Duration (ms)</th>
+                                                                    <th>Cell ID</th>
+                                                                    <th>Failure Class</th>
+                                                                    <th>Failure Description</th>
+                                                                    <th>Event ID</th>
+                                                                    <th>Cause Code</th>
+                                                                    <th>Description</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>                                                 
+                                            </div>
+                                         </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+             
+                        
                         <div class="row drillDownSections" id="networkEngQueryFourDrillDown">
                             <div class="col mb-4">
                                 <div class="card mt-4">
@@ -623,6 +730,7 @@
                                 </div>
                             </div>
                         </div>
+                     
                         <div class="row drillDownSections" id="networkEngQueryThreeDrillDown">
                             <div class="col mb-4">
                                 <div class="card mt-4">
@@ -1221,6 +1329,7 @@
     <script src="js/chartsConfig.js"></script>
     <script src="js/drillDowns.js"></script>
     <script src="js/cellDrillDown.js"></script>
+    <script src="js/ueDrillDown.js"></script>
     <script src="js/networkEngineer.js"></script>
     <script src="js/customerSupport.js"></script>
     <script src="js/supportEng.js"></script>

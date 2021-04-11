@@ -1,8 +1,61 @@
 
+const displayListOfFailureEventForDrillDown = function(EventsList){
+    hideAllSections();
+    $("#networkEngQueryTwoDrillDown").show();
+    $("#networkEngQueryTwoDrillDownTitle").text(`Drilldown : ${EventsList[0].eventCause.description}`)
+    displayNetworkEngQueryTwoDrillDownTable(EventsList);
+    displayNetworkEngQueryTwoDrillDownCharts(EventsList);
+    displayIMSIDetails(EventsList[0]);
+}
 
+const displayNetworkEngQueryTwoDrillDownTable = function(EventsList){
+    const table = $('#networkEngQueryTwoDrillDownTable').DataTable();
+    table.clear();
+    $(EventsList).each(function(index, event){
+        table.row.add([event.dateTime, 
+            event.imsi,
+            event.duration,
+            event.cellId,
+            event.failureClass.failureClass,
+            event.failureClass.failureDesc,
+            event.eventCause.eventCauseId.eventCauseId,
+            event.eventCause.eventCauseId.causeCode,
+            event.eventCause.description
+        ]);
+    });
+    table.draw();
+}
+
+//Organise Graphs for drilldown
+const displayNetworkEngQueryTwoDrillDownCharts = function(EventsList){    
+		console.log('howdy');
+ //   generateBarLineChart(imsiEventsList);
+  //  generateFailureClassPieChart(imsiEventsList);
+   // generateCellIDBarChart(imsiEventsList);
+}
+
+
+const queryListOfUEEventForDrillDown = function(description){
+	console.log(description);
+    const startTime = new Date();
+    $.ajax({
+        type:'GET',
+        dataType:'json',
+        url:`${rootURL2}/userEquipment/description/query?description=${description}`, // query for events here
+        beforeSend: setAuthHeader1,
+        success: function(EventsList){
+            displayListOfFailureEventForDrillDown(EventsList);       
+            displayResponseSummary(EventsList);
+        },
+        error: function(jqXHR, textStatus, errorThrown){
+            console.log("There is an error in queryListOfUEEventForDrillDown")
+        }
+    });
+}
 
 const UEDrillDownEventHandler = function(event, array){
-    $("#drillDownBackIcon").data("target", "networkEngQueryTwo");
+	console.log('UEDrillDownEventHandler has been called');
+    $("#drillDownBackIcon").data("target", "networkEngQueryTwo"); // add in html to drilldown section for querytwo
     imsiLineChartConfig.options.scales.xAxes[0].ticks.minRotation = 0;
     let activeBar = this.getElementAtEvent(event);
     if(activeBar[0]){
@@ -12,21 +65,7 @@ const UEDrillDownEventHandler = function(event, array){
     }
 }
 
-const queryListOfUEEventForDrillDown = function(description){
-    const startTime = new Date();
-    $.ajax({
-        type:'GET',
-        dataType:'json',
-        url:`${rootURL2}/IMSIs/query?imsi=${imsi}&from=${fromTime}&to=${toTime}`,
-        beforeSend: setAuthHeader1,
-        success: function(imsiEventsList){
-            displayListOfIMSIEventForDrillDown(imsiEventsList);
-            const endTime = new Date();
-            displayResponseSummary(imsiEventsList, startTime, endTime);
-        },
-        error: function(jqXHR, textStatus, errorThrown){
-            console.log("There is an error in queryListOfIMSIEventForDrillDown")
-        }
-    });
-}
+
+
+
 

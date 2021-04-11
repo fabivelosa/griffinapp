@@ -58,7 +58,7 @@ const displayPhoneEquipmentFailuresChart = function(phoneFailures){
       }],
     },
     options: {
-	  onClick : UEDrillDownEventHandler,
+	  onClick: UEDrillDownEventHandler,
       maintainAspectRatio: false,
       layout: {
         padding: {
