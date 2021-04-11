@@ -28,9 +28,8 @@ const displayNetworkEngQueryTwoDrillDownTable = function(EventsList){
 
 //Organise Graphs for drilldown
 const displayNetworkEngQueryTwoDrillDownCharts = function(EventsList){    
-		console.log('howdy');
-    //generateBarLineChartUE(EventsList);
-  //  generateFailureClassPieChart(imsiEventsList);
+    generateBarLineChartUE(EventsList);
+    //generateFailureClassPieChartUE(EventsList);
     generateCellIDBarChartUE(EventsList);
 }
 let networkEngQueryTwoDrillDownBarChart = new Chart($("#networkEngQueryTwoDrillDownChart")[0], imsiLineChartConfig);
@@ -40,16 +39,15 @@ const generateBarLineChartUE = function(EventsList) {
     const incrementalDurations = generateIncrementalTimeSeriesData(EventsList)["durations"];
     const cumulativeCounts = generateCumulativeTimeSeriesData(EventsList)["counts"];
     const incrementalCounts = generateIncrementalTimeSeriesData(EventsList)["counts"];
-
     networkEngQueryTwoDrillDownBarChart.data.datasets[0].data = cumulativeDurations;
     networkEngQueryTwoDrillDownBarChart.data.datasets[1].data = cumulativeCounts;
     imsiLineChartConfig.options.scales.yAxes[0].ticks.max = getRoundedUpYAxisMaxValue(cumulativeDurations, cumulativeCounts);
     networkEngQueryTwoDrillDownBarChart.update();
     $("#networkEngQueryTwoDrillDownChartTitleType").text("Cumulative");
-    $("#networkEngQueryTwoDrillDownChartTitleDescription").text(`Description ${EventsList[0].eventCause.description} Failures`);
+    $("#networkEngQueryTwoDrillDownChartTitleDescription").text(`Failures of type: ${EventsList[0].eventCause.description}`);
     $("#networkEngQueryTwoIncrementalBtn").show();
     $("#networkEngQueryTwoCumulativeBtn").hide();
-    initDrillDownButtonsUE(networkEngQueryTwoDrillDownBarChart, cumulativeDurations, incrementalDurations, cumulativeCounts, incrementalCounts);
+    initDrillDownButtons(networkEngQueryTwoDrillDownBarChart, cumulativeDurations, incrementalDurations, cumulativeCounts, incrementalCounts);
 };
 
 //Cell ID Chart
@@ -95,7 +93,6 @@ const initDrillDownButtonsUE = function(chart, cumulativeDurations, incrementalD
 };
 
 const queryListOfUEEventForDrillDown = function(description){
-	console.log(description);
     const startTime = new Date();
     $.ajax({
         type:'GET',
