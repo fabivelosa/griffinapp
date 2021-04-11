@@ -56,7 +56,7 @@ const generateCellFailuresBarLineChart = function(eventsList){
 // Displays Failure Class Bar Chart
 let networkEngQueryThreeDrillDownPieChart = new Chart($("#networkEngQueryThreeDrillDownFailureClassChart")[0], failureClassPieChartConfig);
 const generateCellFailureClassPieChart = function(eventsList){
-    const dataset = generateFailureClassDisribution(eventsList);
+    const dataset = generateCauseCodeDescriptionDistribution(eventsList);
     const labels =  Object.keys(dataset);
     const data = [];
     for(let i = 0; i < labels.length; i++){
@@ -87,6 +87,10 @@ const generateCellIMSIBarChart = function(eventsList){
 
     // add the event handler to the chart
     top10IMSIHorizontalBarConfig.options.onClick = cellDrillDownIMSIChartEventHandler;
+
+    // add unique IMSI count
+    const uniqueIMSICount = countUniqueIMSI(eventsList);
+    $("#cellIDTotalIMSIs").text(` (Out of ${uniqueIMSICount} Unique IMSI)`);
 
     top10IMSIHorizontalBarConfig.options.scales.xAxes[0].ticks.max = Math.max(...data);
     networkEngQueryThreeDrillDownIMSIBarChart = new Chart($("#networkEngQueryThreeDrillDownIMSIChart")[0], top10IMSIHorizontalBarConfig);
@@ -170,6 +174,11 @@ const filterFailureClassEventData = function(failureClass, storedData){
     return storedData.filter(data => data.failureClass.failureDesc.toLowerCase() == failureClass.toLowerCase());
 }
 
+const filterCauseCodeDescriptionEventData = function(causeCodeDescription, storedData){
+    return storedData.filter(data => data.eventCause.description.split("-")[1].trim().toLowerCase() == causeCodeDescription.trim().toLowerCase());
+}
+
+
 const filterPhoneModelEventData = function(phoneModel, storedData){
     return storedData.filter(data => data.ueType.model.toLowerCase() == phoneModel.toLowerCase());
 }
@@ -221,7 +230,7 @@ const cellDrillDownPieChartEventHandler = function(event, array){
     if(activeSlice[0]){
         const index = activeSlice[0]["_index"];
         const failureClass = this.data.labels[index];
-        filteredData = filterFailureClassEventData(failureClass, storedData);
+        filteredData = filterCauseCodeDescriptionEventData(failureClass, storedData);
         showFilterDataBanner();
     }else{
         filteredData = storedData;

@@ -131,7 +131,6 @@ const generateTop10PhoneModelDistribution = function(dataset){
     return top10Object;
 };
 
-
 const generateCauseCodeDescriptionDistribution = function(dataset){
     const items = {};
     dataset.forEach(data => {
@@ -145,6 +144,14 @@ const generateCauseCodeDescriptionDistribution = function(dataset){
     });
     return top10Object;
 }
+
+const countUniqueIMSI = function(dataset){
+    const imsis = new Set();
+    dataset.forEach(data => {
+        imsis.add(data.imsi);
+    });
+    return imsis.size;
+};
 
 
 
