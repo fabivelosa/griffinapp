@@ -250,7 +250,7 @@ public class EventServiceImpl implements EventService {
 	}
 
 	@Override
-	public List<Events> findListofIMSIEventsByMarketOperatorCellID(int cellID, String country, String operator) {
+	public List<Events> findListofIMSIEventsByMarketOperatorCellID(final int cellID, final String country, final String operator) {
 		return eventDAO.findAllEventsByMarketOperatorCellID(cellID, country, operator);
 	}
 

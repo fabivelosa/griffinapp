@@ -120,7 +120,7 @@ td{
     background-color: #fbfcff;
 }
 
-#drillDownFailureClassChart, #drillDownCellIDChart, #drillDownEventCauseChart, #drillDownIMSISubChart, #drillPhoneModelChart{
+#drillDownFailureClassChart, #drillDownCellIDChart, #drillDownEventCauseChart, #drillDownIMSISubChart, #drillPhoneModelChart, #drillCauseCodeChart{
     padding: 2rem;
     margin-top: 1rem;
     border: 1px solid rgb(239, 238, 238);
