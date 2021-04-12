@@ -41,6 +41,8 @@ import com.google.gson.JsonObject;
 public class UserEquipmentResourceIntTest {
 	private final static int tac = 21060800;
 	private final static String ALL_USER_EQUIPMENT = "userEquipment/";
+	private final static String EVENTS_AFFECTED_BY_CAUSE = "userEquipment/description/query?desription=";
+	private final static String VALID_DESCRIPTION = "S1 SIG CONN SETUP-S1 INTERFACE DOWN";
 	private final static String PHONE_FAILURES = "userEquipment/query?tac=" + tac;
 	private final static String LOGIN = "login/auth";
 	private String token;
@@ -111,6 +113,22 @@ public class UserEquipmentResourceIntTest {
 		JsonObject eventCause = phoneFailure.get("eventCause").getAsJsonObject();
 		assertEquals(4098, eventCause.get("eventCauseId").getAsJsonObject().get("eventCauseId").getAsInt());
 		assertEquals(1, eventCause.get("eventCauseId").getAsJsonObject().get("causeCode").getAsInt());
+	}
+	
+	@Test
+	@RunAsClient
+	public void testFindEventsByDescription() {
+		final Response responseGet = resourceClient.resourcePath(PHONE_FAILURES).get(token);
+		assertEquals(200, responseGet.getStatus());
+		
+		final JsonArray result = JsonReader.readAsJsonArray(responseGet.readEntity(String.class));
+		assertEquals(1,result.size());
+		
+		final JsonObject eventCause = result.get(0).getAsJsonObject().get("eventCause").getAsJsonObject();
+		
+		assertNotNull(eventCause);
+		assertEquals(VALID_DESCRIPTION,eventCause.get("description").getAsString());
+		
 	}
 	
 }
