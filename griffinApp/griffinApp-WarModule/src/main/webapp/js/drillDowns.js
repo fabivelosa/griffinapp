@@ -260,7 +260,11 @@ const generatePhoneModelPieChart = function(imsiEventsList){
     networkEngQueryFourDrillDownPhoneModelChart = new Chart($("#networkEngQueryFourDrillDownPhoneModelChart")[0], top10PhoneModelHorizontalBarConfig);
     networkEngQueryFourDrillDownPhoneModelChart.data.datasets[0].data = data;
     networkEngQueryFourDrillDownPhoneModelChart.data.labels = labels;
-    networkEngQueryFourDrillDownPhoneModelChart.data.datasets[0].backgroundColor = d3.quantize(d3.interpolateHcl("#4e73df", "#60c96e"), data.length);
+    if(data.length == 1){
+        networkEngQueryFourDrillDownPhoneModelChart.data.datasets[0].backgroundColor = "#4e73df";
+    }else{
+        networkEngQueryFourDrillDownPhoneModelChart.data.datasets[0].backgroundColor = d3.quantize(d3.interpolateHcl("#4e73df", "#60c96e"), data.length);
+    }
     networkEngQueryFourDrillDownPhoneModelChart.update();
 }
 
