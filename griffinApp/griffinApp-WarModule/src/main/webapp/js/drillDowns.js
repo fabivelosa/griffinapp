@@ -104,7 +104,12 @@ const generateMarketOperatorCell = function(dataset){
 		let combo = 'Cell: '+ data.cellId + ' - '  + data.marketOperator.operatorDesc+ ' ' + data.marketOperator.countryDesc;
 		marketOperatorCell[combo] = marketOperatorCell[combo] ? marketOperatorCell[combo] + 1 : 1;
 	})
-	return marketOperatorCell;
+    const top10Array =  Object.entries(marketOperatorCell).sort((a,b)=>b[1]-a[1])  
+    const top10Object ={};
+    top10Array.forEach(item => {
+        top10Object[item[0]] = item[1];
+    });
+    return top10Object;
 };
 
 const generateCellDistribution = function(dataset){

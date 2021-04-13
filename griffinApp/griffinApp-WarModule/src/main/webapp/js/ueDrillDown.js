@@ -66,7 +66,7 @@ const generateCellIDBarChartUE = function(EventsList){
     networkEngQueryTwoDrillDownCellIDChart = new Chart($("#networkEngQueryTwoDrillDownCellIDChart")[0], cellIDChartConfig);
     networkEngQueryTwoDrillDownCellIDChart.data.datasets[0].data = data;
     networkEngQueryTwoDrillDownCellIDChart.data.labels = labels;
-    networkEngQueryTwoDrillDownCellIDChart.data.datasets[0].backgroundColor = colorPalette.slice(0, data.length);
+    networkEngQueryTwoDrillDownCellIDChart.data.datasets[0].backgroundColor = d3.quantize(d3.interpolateHcl("#4e73df", "#60c96e"), data.length);
     networkEngQueryTwoDrillDownCellIDChart.update();
 }
 
