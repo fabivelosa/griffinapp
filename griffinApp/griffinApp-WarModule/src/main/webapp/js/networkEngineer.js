@@ -764,6 +764,8 @@ $(document).ready(function(){
     $(".drillDownBackIcon").click(function(event){
       hideAllSections();
       $(".drillDownSections").hide();
+
+      console.log(`#${$(this).data("target")}`);
       $(`#${$(this).data("target")}`).show();
     });
 

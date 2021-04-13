@@ -118,7 +118,7 @@ const displayCauseDetails = function(event){
 
 
 const UEDrillDownEventHandler = function(event, array){
-    $("#drillDownBackIcon").data("target", "networkEngQueryTwo"); // add in html to drilldown section for querytwo
+    $("#ueDrillDownBackIcon").data("target", "networkEngQueryTwo"); // add in html to drilldown section for querytwo
     imsiLineChartConfig.options.scales.xAxes[0].ticks.minRotation = 0;
     let activeBar = this.getElementAtEvent(event);
     if(activeBar[0]){
