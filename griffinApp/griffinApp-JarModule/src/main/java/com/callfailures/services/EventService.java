@@ -111,4 +111,5 @@ public interface EventService {
 	 */
 	List<Events> findListofIMSIEventsByMarketOperatorCellID(final int cellID, final String country, final String operator);
 
+	List<Events> findListOfEventsByDescription(final String description);
 }

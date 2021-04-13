@@ -254,4 +254,9 @@ public class EventServiceImpl implements EventService {
 		return eventDAO.findAllEventsByMarketOperatorCellID(cellID, country, operator);
 	}
 
+	@Override
+	public List<Events> findListOfEventsByDescription(final String description) {
+		return eventDAO.findAllEventsByFailureDescription(description);
+	}
+
 }

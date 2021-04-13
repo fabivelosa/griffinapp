@@ -50,7 +50,9 @@ public class EventDAO {
 	        DRILL_DOWN_FIND_ALL_CELLID_EVENTS_BY_CELLID_MARKETOPERATOR = "SELECT e FROM event e "
 							+ "WHERE e.cellId = :cellId "
 							+ "AND (LOWER(e.marketOperator.countryDesc)) = :countryDesc "
-							+ "AND (LOWER(e.marketOperator.operatorDesc)) = :operatorDesc";
+							+ "AND (LOWER(e.marketOperator.operatorDesc)) = :operatorDesc",
+			DRILL_DOWN_FIND_ALL_EVENTS_BY_DESCRIPTION_DESC="SELECT e FROM event e "
+							+ "WHERE e.eventCause.description = :description";
 
 	@PersistenceContext
 	EntityManager entityManager;
@@ -299,6 +301,23 @@ public class EventDAO {
 			return null;
 		}
 	}
+	
+	/**
+	 * Queries the drilldown data for a given Failure Description
+	 * @param failureDescription
+	 * @return list of Events associated with the given failure description
+	 */
+	@SuppressWarnings("unchecked")
+	public List<Events> findAllEventsByFailureDescription(final String description) {
+		final Query query = entityManager.createQuery(DRILL_DOWN_FIND_ALL_EVENTS_BY_DESCRIPTION_DESC, Events.class);
+		query.setParameter("description", description.trim().toLowerCase());
+		try {
+			return query.getResultList();
+		} catch (NoResultException e) {
+			return null;
+		}
+	}
+	
 }
 
 

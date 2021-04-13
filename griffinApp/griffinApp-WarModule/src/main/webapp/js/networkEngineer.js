@@ -58,6 +58,7 @@ const displayPhoneEquipmentFailuresChart = function(phoneFailures){
       }],
     },
     options: {
+	  onClick:UEDrillDownEventHandler,
       maintainAspectRatio: false,
       layout: {
         padding: {
@@ -763,12 +764,18 @@ $(document).ready(function(){
     $(".drillDownBackIcon").click(function(event){
       hideAllSections();
       $(".drillDownSections").hide();
+
+      console.log(`#${$(this).data("target")}`);
       $(`#${$(this).data("target")}`).show();
     });
 
     $("body").on("click", ".imsiDrillDownLinks a", function(event){
       const parentContainer = $(this).closest(".queryContainer").attr("id");
       imsiClickFromTableEventHandler($(this).text(), parentContainer);
+    });
+	$("body").on("click", ".failureDescriptionLinks a", function(event){
+      const parentContainer = $(this).closest(".queryContainer").attr("id");
+      descriptionClickFromTableEventHandler($(this).text(), parentContainer);
     });
 
 });

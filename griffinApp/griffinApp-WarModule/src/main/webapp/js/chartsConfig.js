@@ -201,7 +201,7 @@ const cellIDChartConfig = {
           drawBorder: false
         },
         ticks: {
-          maxTicksLimit: 1
+          maxTicksLimit: 12
         }
       }],
       yAxes: [{
@@ -222,10 +222,6 @@ const cellIDChartConfig = {
           zeroLineBorderDash: [2]
         }
       }],
-    },
-    legend: {
-      display: true,
-      position:'right'
     },
     plugins: {
       datalabels: {
