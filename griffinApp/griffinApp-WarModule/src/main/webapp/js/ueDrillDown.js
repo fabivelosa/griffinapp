@@ -5,7 +5,7 @@ const displayListOfFailureEventForDrillDown = function(EventsList){
     $("#networkEngQueryTwoDrillDownTitle").text(`Drilldown : ${EventsList[0].eventCause.description}`)
     displayNetworkEngQueryTwoDrillDownTable(EventsList);
     displayNetworkEngQueryTwoDrillDownCharts(EventsList);
-    displayCauseDetails(EventsList[0]);
+    displayCauseDetails(EventsList);
 }
 
 const displayNetworkEngQueryTwoDrillDownTable = function(EventsList){
@@ -16,6 +16,10 @@ const displayNetworkEngQueryTwoDrillDownTable = function(EventsList){
             event.imsi,
             event.duration,
             event.cellId,
+            event.marketOperator.countryDesc,
+            event.marketOperator.operatorDesc,
+            event.ueType.model,
+            event.ueType.vendorName,
             event.failureClass.failureClass,
             event.failureClass.failureDesc,
             event.eventCause.eventCauseId.eventCauseId,
@@ -36,9 +40,9 @@ const displayNetworkEngQueryTwoDrillDownCharts = function(EventsList){
 let networkEngQueryTwoDrillDownBarChart = new Chart($("#networkEngQueryTwoDrillDownChart")[0], imsiLineChartConfig);
 
 const generateBarLineChartUE = function(EventsList) {
-    const cumulativeDurations = generateCumulativeTimeSeriesData(EventsList)["durations"];
+    networkEngQueryTwoDrillDownBarChart.destroy();
+    networkEngQueryTwoDrillDownBarChart = new Chart($("#networkEngQueryTwoDrillDownChart")[0], imsiLineChartConfig);
     const incrementalDurations = generateIncrementalTimeSeriesData(EventsList)["durations"];
-    const cumulativeCounts = generateCumulativeTimeSeriesData(EventsList)["counts"];
     const incrementalCounts = generateIncrementalTimeSeriesData(EventsList)["counts"];
     networkEngQueryTwoDrillDownBarChart.data.datasets[0].data = incrementalDurations;
     networkEngQueryTwoDrillDownBarChart.data.datasets[1].data = incrementalCounts;
@@ -48,7 +52,6 @@ const generateBarLineChartUE = function(EventsList) {
     $("#networkEngQueryTwoDrillDownChartTitleDescription").text(`Failures of type: ${EventsList[0].eventCause.description}`);
     $("#networkEngQueryTwoIncrementalBtn").show();
     $("#networkEngQueryTwoCumulativeBtn").hide();
-    initDrillDownButtons(networkEngQueryTwoDrillDownBarChart, cumulativeDurations, incrementalDurations, cumulativeCounts, incrementalCounts);
 };
 
 //Cell ID Chart
@@ -70,29 +73,6 @@ const generateCellIDBarChartUE = function(EventsList){
     networkEngQueryTwoDrillDownCellIDChart.update();
 }
 
-//Show the graphs
-const initDrillDownButtonsUE = function(chart, cumulativeDurations, incrementalDurations, cumulativeCounts, incrementalCounts){
-    $("#networkEngQueryTwoIncrementalBtn").click(function (event) {
-        $("#networkEngQueryTwoIncrementalBtn").hide();
-        $("#networkEngQueryTwoCumulativeBtn").show();
-        $("#networkEngQueryTwoDrillDownChartTitleType").text("Incremental ")
-        chart.data.datasets[0].data = incrementalDurations;
-        chart.data.datasets[1].data = incrementalCounts;
-        imsiLineChartConfig.options.scales.yAxes[0].ticks.max = getRoundedUpYAxisMaxValue(incrementalDurations, incrementalCounts);
-        chart.update();
-    });
-
-    $("#networkEngQueryTwoCumulativeBtn").click(function (event) {
-        $("#networkEngQueryTwoIncrementalBtn").show();
-        $("#networkEngQueryTwoCumulativeBtn").hide();
-        $("#networkEngQueryTwoDrillDownChartTitleType").text("Cumulative ")
-        chart.data.datasets[0].data = cumulativeDurations;
-        chart.data.datasets[1].data = cumulativeCounts;
-        imsiLineChartConfig.options.scales.yAxes[0].ticks.max = getRoundedUpYAxisMaxValue(cumulativeDurations, cumulativeCounts);
-        chart.update();
-    });
-};
-
 const queryListOfUEEventForDrillDown = function(description){
     const startTime = new Date();
     $.ajax({
@@ -110,10 +90,12 @@ const queryListOfUEEventForDrillDown = function(description){
     });
 }
 
-const displayCauseDetails = function(event){
+const displayCauseDetails = function(events){
+    const event = events[0];
     $("#networkEngQueryTwoDrillDownChartCardDetailsEventID").val(event.eventId);
     $("#networkEngQueryTwoDrillDownChartCardDetailsCauseCode").val(event.eventCause.eventCauseId.causeCode);
     $("#networkEngQueryTwoDrillDownChartCardDetailsDescription").val(event.eventCause.description);
+    $("#networkEngQueryTwoDrillDownChartCardDetailsTotalFailureCount").val(events.length);
 }
 
 
