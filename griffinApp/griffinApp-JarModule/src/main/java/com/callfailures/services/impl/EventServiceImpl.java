@@ -255,7 +255,7 @@ public class EventServiceImpl implements EventService {
 	}
 
 	@Override
-	public List<Events> findListOfEventsByDescription(String description) {
+	public List<Events> findListOfEventsByDescription(final String description) {
 		return eventDAO.findAllEventsByFailureDescription(description);
 	}
 
