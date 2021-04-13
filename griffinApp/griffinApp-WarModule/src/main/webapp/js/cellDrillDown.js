@@ -171,6 +171,7 @@ const queryListOfCellEventForDrillDown = function(cellId, country, operator){
 
 // Data Filters
 const filterHourlyEventData = function(date, storedData){    
+    console.log(date);
     return storedData.filter(data => {
         return roundDateToNearestHour(data).toISOString() == new Date(date).toISOString();
     });
@@ -193,17 +194,27 @@ const filterIMSIEventData = function(imsi, storedData){
     return storedData.filter(data => data.imsi == imsi);
 }
 
+const filterCellIDDescriptionEventData = function(cellCombo, storedData){
+    return storedData.filter(data => {
+        let newCombo = 'Cell: '+ data.cellId + ' - '  + data.marketOperator.operatorDesc+ ' ' + data.marketOperator.countryDesc
+        return newCombo == cellCombo;
+    });
+
+
+}
+
+
 
 // Filtered Data Message
 const showFullDataBanner = function(){
-    $("#networkEngQueryThreeDrillDownFullDataBanner").show();
-    $("#networkEngQueryThreeDrillDownFilteredDataBanner").hide();
+    $(".fullDataBanner").show();
+    $(".filteredDataBanner").hide();
 }
 
 const showFilterDataBanner = function(){
     console.log("I happen");
-    $("#networkEngQueryThreeDrillDownFullDataBanner").hide();
-    $("#networkEngQueryThreeDrillDownFilteredDataBanner").show();
+    $(".fullDataBanner").hide();
+    $(".filteredDataBanner").show();
 }
 
 

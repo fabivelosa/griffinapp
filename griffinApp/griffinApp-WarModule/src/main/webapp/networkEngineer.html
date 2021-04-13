@@ -12,7 +12,7 @@
     <title>Dashboard</title>
 
     <!-- Custom fonts for this template-->
-    <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">drillD
+    <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
     <link
         href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
         rel="stylesheet">
@@ -527,8 +527,8 @@
                                                 </div>
                                             </div>
                                             <div id="networkEngQueryTwoDrillDownFilterBanner">
-                                                <!-- <div id="networkEngQueryTwoDrillDownFullDataBanner">You are viewing the full dataset. Click on the bar or slice to further drill down.</div>
-                                                <div id="networkEngQueryTwoDrillDownFilteredDataBanner">You are viewing a filtered dataset. Click on the chart area to view the full data.</div> -->
+                                                <div class="fullDataBanner">You are viewing the full dataset. Click on the bar or slice to further drill down.</div>
+                                                <div class="filteredDataBanner">You are viewing a filtered dataset. Click on the chart area to view the full data.</div>
                                             </div>
                                         </div>
                                     </div>
@@ -621,13 +621,19 @@
                             <div class="col mb-4">
                                 <div class="card mt-4">
                                     <div class="card-header">
-                                      <div class ="d-flex flex-row justify-content-start">
-                                          <div class ="drillDownBackIcon" id="imsiDrillDownBackIcon">
-                                            <span><i class="fas fa-arrow-left"></i></span>
-                                          </div>
-                                          <div class = "mx-4" id="networkEngQueryFourDrillDownTitle">
-                                          </div>
-                                      </div>
+                                        <div class ="d-flex flex-row justify-content-between">
+                                            <div class ="d-flex flex-row justify-content-start">
+                                                <div class ="drillDownBackIcon" id="imsiDrillDownBackIcon">
+                                                    <span><i class="fas fa-arrow-left"></i></span>
+                                                </div>
+                                                <div class = "mx-4" id="networkEngQueryFourDrillDownTitle">
+                                                </div>
+                                            </div>
+                                            <div id="networkEngQueryFourDrillDownFilterBanner">
+                                                <div class="fullDataBanner">You are viewing the full dataset. Click on the bar or slice to further drill down.</div>
+                                                <div class="filteredDataBanner">You are viewing a filtered dataset. Click on the chart area to view the full data.</div>
+                                            </div>
+                                        </div>
                                     </div>
                                     
                                     <div class="card-body" id="networkEngQueryFourDrillDownCard">
@@ -645,30 +651,15 @@
                                                                 <input readonly type="text" class="form-control" id="networkEngQueryFourDrillDownChartCardIMSIDetailsIMSI" placeholder="IMSI"/>
                                                             </div>
                                                             <div class = "col">
-                                                                <label for="networkEngQueryFourDrillDownChartCardIMSIDetailsPhoneModel" class="form-label fw-bold small">Phone Model</label>
-                                                                <input readonly type="text" class="form-control" id="networkEngQueryFourDrillDownChartCardIMSIDetailsPhoneModel" placeholder="Phone Model"/>
-                                                            </div>
-                                                            <div class = "col">
-                                                                <label for="networkEngQueryFourDrillDownChartCardIMSIDetailsPhoneVendor" class="form-label fw-bold small">Vendor</label>
-                                                                <input readonly type="text" class="form-control" id="networkEngQueryFourDrillDownChartCardIMSIDetailsPhoneVendor" placeholder="Vendor"/>
-                                                            </div>
-                                                            <div class = "col">
-                                                                <label for="networkEngQueryFourDrillDownChartCardIMSIDetailsAccessCapability" class="form-label fw-bold small">Access Capability</label>
-                                                                <input readonly type="text" class="form-control" id="networkEngQueryFourDrillDownChartCardIMSIDetailsAccessCapability" placeholder="Access Capability"/>
-                                                            </div>
-                                                            <div class = "col">
                                                                 <label for="networkEngQueryFourDrillDownChartCardIMSIDetailsTotalFailureCount" class="form-label fw-bold small">Total Failures Count</label>
                                                                 <input readonly type="text" class="form-control" id="networkEngQueryFourDrillDownChartCardIMSIDetailsTotalFailureCount" placeholder="Access Capability"/>
                                                             </div>
                                                         </div>
                                                         <div class="d-flex flex-column">
+                                                            <div class="chart-bar">
+                                                                <canvas id="networkEngQueryFourDrillDownChart" width="100%" height="100"></canvas>
+                                                            </div>
                                                             <div class = "d-flex flex-row align-items-stretch">
-                                                                <div class="col-4" id="drillDownFailureClassChart">
-                                                                    <div class="row mx-4 align-center"><h4>Failure Class Distribution</h4></div>
-                                                                    <div class="row chart-pie">
-                                                                        <canvas id="networkEngQueryFourDrillDownFailureClassChart" width="100%" height="100"></canvas>
-                                                                    </div>
-                                                                </div>
                                                                 <div class="col-4" id="drillCauseCodeChart">
                                                                     <div class="row mx-4 align-center"><h4>Cause Code Distribution</h4></div>
                                                                     <div class="row chart-bar">
@@ -681,9 +672,12 @@
                                                                         <canvas id="networkEngQueryFourDrillDownCellIDChart" width="100%" height="100"></canvas>
                                                                     </div>
                                                                 </div>
-                                                            </div>
-                                                            <div class="chart-bar">
-                                                                <canvas id="networkEngQueryFourDrillDownChart" width="100%" height="100"></canvas>
+                                                                <div class="col-4" id="drillDownIMSIPhoneModelChart">
+                                                                    <div class="row mx-4 align-center"><h4>Phone Model Distribution</h4></div>
+                                                                    <div class="row chart-bar">
+                                                                        <canvas id="networkEngQueryFourDrillDownPhoneModelChart" width="100%" height="100"></canvas>
+                                                                    </div>
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -749,8 +743,8 @@
                                                 </div>
                                             </div>
                                             <div id="networkEngQueryThreeDrillDownFilterBanner">
-                                                <div id="networkEngQueryThreeDrillDownFullDataBanner">You are viewing the full dataset. Click on the bar or slice to further drill down.</div>
-                                                <div id="networkEngQueryThreeDrillDownFilteredDataBanner">You are viewing a filtered dataset. Click on the chart area to view the full data.</div>
+                                                <div class="fullDataBanner">You are viewing the full dataset. Click on the bar or slice to further drill down.</div>
+                                                <div class="filteredDataBanner">You are viewing a filtered dataset. Click on the chart area to view the full data.</div>
                                             </div>
                                         </div>
                                     </div>
