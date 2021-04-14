@@ -47,6 +47,7 @@ public class IMSIByDateIntTest {
 	//IMSIs/query?from=1546300800000&to=1616065200000
 	private final static String IMSIS_URL = "IMSIs/query/all";
 	private final static String LOGIN = "login/auth";
+	private final static String IMSIS_BY_PHONE_MODEL = "events/query/ue/imsi";
 	private String token;
 	
 	@ArquillianResource
@@ -188,4 +189,12 @@ public class IMSIByDateIntTest {
 		assertJsonMatchesFileContent(response.readEntity(String.class), getPathFileResponse("imsis", fileName));
 	}
 	
+	@Test
+	@RunAsClient
+	public void testGetListOfEventsOfIMSIByPhoneModel() {
+		final String urlForIMSI = IMSIS_BY_PHONE_MODEL+"?model=VEA3&from="+FROM_TIME+"&to="+TO_TIME+"";
+		final Response responseGet = resourceClient.resourcePath(urlForIMSI).get(token);
+		assertEquals(200, responseGet.getStatus());
+		assertJsonResponseWithFile(responseGet, "response.json");
+	}
 }
