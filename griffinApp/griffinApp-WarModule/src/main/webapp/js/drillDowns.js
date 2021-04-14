@@ -3,13 +3,12 @@ const getRoundedUpYAxisMaxValue = function(durations, counts){
     const durationsMaxValue = Math.max(...durations.map(data => data.y));
     const countsMaxValue = Math.max(...counts.map(data => data.y));
     const maxValue = Math.max(durationsMaxValue, countsMaxValue);
-    return Math.ceil(maxValue) + (10 - (Math.ceil(maxValue) % 10));
+    return maxValue < 5 ? 5 : Math.ceil(maxValue) + (10 - (Math.ceil(maxValue) % 10));
 }
 
 const getMinXAxisValue = function(chartData){
     return new Date(Math.min(...chartData.map(data => new Date(data.x)))).toDateString();
 };
-
 
 const getMaxXAxisValue = function(chartData){
     return new Date(Math.max(...chartData.map(data => new Date(data.x)))).toDateString();
@@ -138,6 +137,8 @@ const generateTop10PhoneModelDistribution = function(dataset){
     dataset.forEach(data => {
         items[data.ueType.model] = items[data.ueType.model] ? items[data.ueType.model] + 1 : 1;
     });
+
+    
     const top10Array =  Object.entries(items).sort((a,b)=>b[1]-a[1]).slice(0,10);    
     const top10Object ={};
     top10Array.forEach(item => {
@@ -188,7 +189,7 @@ const displayListOfIMSIEventForDrillDown = function(imsiEventsList){
     $("#networkEngQueryFourDrillDownTitle").text(`Drilldown : ${imsiEventsList[0].imsi}`)
     displayNetworkEngQueryFourDrillDownTable(imsiEventsList);
     displayNetworkEngQueryFourDrillDownCharts(imsiEventsList);
-    displayIMSIDetails(imsiEventsList[0]);
+    displayIMSIDetails(imsiEventsList);
 }
 
 const displayNetworkEngQueryFourDrillDownTable = function(imsiEventsList){
@@ -199,6 +200,10 @@ const displayNetworkEngQueryFourDrillDownTable = function(imsiEventsList){
             event.imsi,
             event.duration,
             event.cellId,
+            event.marketOperator.countryDesc,
+            event.marketOperator.operatorDesc,
+            event.ueType.model,
+            event.ueType.vendorName,
             event.failureClass.failureClass,
             event.failureClass.failureDesc,
             event.eventCause.eventCauseId.eventCauseId,
@@ -212,50 +217,59 @@ const displayNetworkEngQueryFourDrillDownTable = function(imsiEventsList){
 
 const displayNetworkEngQueryFourDrillDownCharts = function(imsiEventsList){    
     generateBarLineChart(imsiEventsList);
-    generateFailureClassPieChart(imsiEventsList);
+    generatePhoneModelPieChart(imsiEventsList);
     generateCauseCodeBarChart(imsiEventsList);
     generateCellIDBarChart(imsiEventsList);
 }
 
 let networkEngQueryFourDrillDownBarChart = new Chart($("#networkEngQueryFourDrillDownChart")[0], imsiLineChartConfig);
-
 let colorPalette = ["#4e73df", "#ff7f0e", "#2ca02c", "#d62728", "#9467bd", "#8c564b", "#e377c2", "#7f7f7f", "#bcbd22", "#17becf"];
 
-
 const generateBarLineChart = function(imsiEventsList) {
-    const cumulativeDurations = generateCumulativeTimeSeriesData(imsiEventsList)["durations"];
+    networkEngQueryFourDrillDownBarChart.destroy();
+    networkEngQueryFourDrillDownBarChart = new Chart($("#networkEngQueryFourDrillDownChart")[0], imsiLineChartConfig);
     const incrementalDurations = generateIncrementalTimeSeriesData(imsiEventsList)["durations"];
-    const cumulativeCounts = generateCumulativeTimeSeriesData(imsiEventsList)["counts"];
     const incrementalCounts = generateIncrementalTimeSeriesData(imsiEventsList)["counts"];
-    networkEngQueryFourDrillDownBarChart.data.datasets[0].data = cumulativeDurations;
-    networkEngQueryFourDrillDownBarChart.data.datasets[1].data = cumulativeCounts;
-    imsiLineChartConfig.options.scales.yAxes[0].ticks.max = getRoundedUpYAxisMaxValue(cumulativeDurations, cumulativeCounts);
+    networkEngQueryFourDrillDownBarChart.data.datasets[0].data = incrementalDurations;
+    networkEngQueryFourDrillDownBarChart.data.datasets[1].data = incrementalCounts;
+    imsiLineChartConfig.options.scales.yAxes[0].ticks.max = getRoundedUpYAxisMaxValue(incrementalDurations, incrementalCounts);
+
+    // add the event handler to the chart
+    imsiLineChartConfig.options.onClick = imsiDrillDownLineChartEventHandler;
+
     networkEngQueryFourDrillDownBarChart.update();
-    $("#networkEngQueryFourDrillDownChartTitleType").text("Cumulative");
+    $("#networkEngQueryFourDrillDownChartTitleType").text("");
     $("#networkEngQueryFourDrillDownChartTitleDescription").text(`IMSI ${imsiEventsList[0].imsi} Failures`);
-    $("#networkEngQueryFourIncrementalBtn").show();
-    $("#networkEngQueryFourCumulativeBtn").hide();
-    initDrillDownButtons(networkEngQueryFourDrillDownBarChart, cumulativeDurations, incrementalDurations, cumulativeCounts, incrementalCounts);
 };
 
-let networkEngQueryFourDrillDownPieChart = new Chart($("#networkEngQueryFourDrillDownFailureClassChart")[0], failureClassPieChartConfig);
-const generateFailureClassPieChart = function(imsiEventsList){
-    const dataset = generateFailureClassDisribution(imsiEventsList);
+let networkEngQueryFourDrillDownPhoneModelChart = new Chart($("#networkEngQueryFourDrillDownPhoneModelChart")[0], top10PhoneModelHorizontalBarConfig);
+const generatePhoneModelPieChart = function(imsiEventsList){
+    const dataset = generateTop10PhoneModelDistribution(imsiEventsList);
     const labels =  Object.keys(dataset);
     const data = [];
     for(let i = 0; i < labels.length; i++){
         data[i] = dataset[labels[i]];
     }
-    networkEngQueryFourDrillDownPieChart.destroy();
-    networkEngQueryFourDrillDownPieChart = new Chart($("#networkEngQueryFourDrillDownFailureClassChart")[0], failureClassPieChartConfig);
-    networkEngQueryFourDrillDownPieChart.data.datasets[0].data = data;
-    networkEngQueryFourDrillDownPieChart.data.labels = labels;
-    networkEngQueryFourDrillDownPieChart.data.datasets[0].backgroundColor = colorPalette.slice(0, data.length);
-    networkEngQueryFourDrillDownPieChart.update();
+    networkEngQueryFourDrillDownPhoneModelChart.destroy();
+    
+    // add the event handler to the phone model chart
+    top10PhoneModelHorizontalBarConfig.options.onClick = imsiDrillDownPhoneModelChartEventHandler;
+    
+    top10PhoneModelHorizontalBarConfig.options.scales.xAxes[0].ticks.max = Math.max(...data);
+
+    networkEngQueryFourDrillDownPhoneModelChart = new Chart($("#networkEngQueryFourDrillDownPhoneModelChart")[0], top10PhoneModelHorizontalBarConfig);
+    networkEngQueryFourDrillDownPhoneModelChart.data.datasets[0].data = data;
+    networkEngQueryFourDrillDownPhoneModelChart.data.labels = labels;
+    if(data.length == 1){
+        networkEngQueryFourDrillDownPhoneModelChart.data.datasets[0].backgroundColor = "#4e73df";
+    }else{
+        networkEngQueryFourDrillDownPhoneModelChart.data.datasets[0].backgroundColor = d3.quantize(d3.interpolateHcl("#4e73df", "#60c96e"), data.length);
+    }
+    networkEngQueryFourDrillDownPhoneModelChart.update();
 }
 
 
-let networkEngQueryFourDrillDownCauseCodeChart = new Chart($("#networkEngQueryFourDrillDownCauseCodeChart")[0], top10IMSIHorizontalBarConfig);
+let networkEngQueryFourDrillDownCauseCodeChart = new Chart($("#networkEngQueryFourDrillDownCauseCodeChart")[0], failureClassPieChartConfig);
 const generateCauseCodeBarChart = function(imsiEventsList){
     const dataset = generateCauseCodeDescriptionDistribution(imsiEventsList);
     const labels =  Object.keys(dataset);
@@ -264,8 +278,11 @@ const generateCauseCodeBarChart = function(imsiEventsList){
         data[i] = dataset[labels[i]];
     }
     networkEngQueryFourDrillDownCauseCodeChart.destroy();
-    top10IMSIHorizontalBarConfig.options.scales.xAxes[0].ticks.max = Math.max(...data);
-    networkEngQueryFourDrillDownCauseCodeChart = new Chart($("#networkEngQueryFourDrillDownCauseCodeChart")[0], top10IMSIHorizontalBarConfig);
+
+    // add the event handler to the chart
+    failureClassPieChartConfig.options.onClick = imsiDrillDownCauseCodeChartEventHandler;
+
+    networkEngQueryFourDrillDownCauseCodeChart = new Chart($("#networkEngQueryFourDrillDownCauseCodeChart")[0], failureClassPieChartConfig);
     networkEngQueryFourDrillDownCauseCodeChart.data.datasets[0].data = data;
     networkEngQueryFourDrillDownCauseCodeChart.data.labels = labels;
     networkEngQueryFourDrillDownCauseCodeChart.data.datasets[0].backgroundColor = colorPalette.slice(0, data.length);
@@ -275,13 +292,17 @@ const generateCauseCodeBarChart = function(imsiEventsList){
 
 let networkEngQueryFourDrillDownCellIDChart = new Chart($("#networkEngQueryFourDrillDownCellIDChart")[0], cellIDChartConfig);
 const generateCellIDBarChart = function(imsiEventsList){
-    const dataset = generateCellDistribution(imsiEventsList);
+    const dataset = generateMarketOperatorCell(imsiEventsList);
     const labels =  Object.keys(dataset);
     const data = [];
     for(let i = 0; i < labels.length; i++){
         data[i] = dataset[labels[i]];
     }
     networkEngQueryFourDrillDownCellIDChart.destroy();
+
+    // add the event handler to the chart
+    cellIDChartConfig.options.onClick = imsiDrillDownCellIDChartEventHandler;
+
     cellIDChartConfig.options.scales.yAxes[0].ticks.max = Math.max(...data);
     networkEngQueryFourDrillDownCellIDChart = new Chart($("#networkEngQueryFourDrillDownCellIDChart")[0], cellIDChartConfig);
     networkEngQueryFourDrillDownCellIDChart.data.datasets[0].data = data;
@@ -290,36 +311,16 @@ const generateCellIDBarChart = function(imsiEventsList){
     networkEngQueryFourDrillDownCellIDChart.update();
 }
 
-
-
-const initDrillDownButtons = function(chart, cumulativeDurations, incrementalDurations, cumulativeCounts, incrementalCounts){
-    $("#networkEngQueryFourIncrementalBtn").click(function (event) {
-        $("#networkEngQueryFourIncrementalBtn").hide();
-        $("#networkEngQueryFourCumulativeBtn").show();
-        $("#networkEngQueryFourDrillDownChartTitleType").text("Incremental ")
-        chart.data.datasets[0].data = incrementalDurations;
-        chart.data.datasets[1].data = incrementalCounts;
-        imsiLineChartConfig.options.scales.yAxes[0].ticks.max = getRoundedUpYAxisMaxValue(incrementalDurations, incrementalCounts);
-        chart.update();
-    });
-
-    $("#networkEngQueryFourCumulativeBtn").click(function (event) {
-        $("#networkEngQueryFourIncrementalBtn").show();
-        $("#networkEngQueryFourCumulativeBtn").hide();
-        $("#networkEngQueryFourDrillDownChartTitleType").text("Cumulative ")
-        chart.data.datasets[0].data = cumulativeDurations;
-        chart.data.datasets[1].data = cumulativeCounts;
-        imsiLineChartConfig.options.scales.yAxes[0].ticks.max = getRoundedUpYAxisMaxValue(cumulativeDurations, cumulativeCounts);
-        chart.update();
-    });
-};
-
-const displayIMSIDetails = function(imsi){
+const displayIMSIDetails = function(imsiEventsList){
+    const imsi = imsiEventsList[0];
     $("#networkEngQueryFourDrillDownChartCardIMSIDetailsIMSI").val(imsi.imsi);
-    $("#networkEngQueryFourDrillDownChartCardIMSIDetailsCountry").val(imsi.marketOperator.countryDesc);
-    $("#networkEngQueryFourDrillDownChartCardIMSIDetailsOperator").val(imsi.marketOperator.operatorDesc);
-    $("#networkEngQueryFourDrillDownChartCardIMSIDetailsPhoneModel").val(imsi.ueType.model);
-    $("#networkEngQueryFourDrillDownChartCardIMSIDetailsPhoneVendor").val(imsi.ueType.vendorName);
+    $("#networkEngQueryFourDrillDownChartCardIMSIDetailsTotalFailureCount").val(imsiEventsList.length);
+}
+
+const cacheIMSIDrillDownData = function(data){
+    $("#networkEngQueryFourDrillDown").data("id", data[0].imsi);
+    $("#networkEngQueryFourDrillDown").data("type", "imsi");
+    $("#networkEngQueryFourDrillDown").data("events", data);
 }
 
 const queryListOfIMSIEventForDrillDown = function(imsi, fromTime, toTime){
@@ -331,6 +332,7 @@ const queryListOfIMSIEventForDrillDown = function(imsi, fromTime, toTime){
         beforeSend: setAuthHeader1,
         success: function(imsiEventsList){
             displayListOfIMSIEventForDrillDown(imsiEventsList);
+            cacheIMSIDrillDownData(imsiEventsList);
             const endTime = new Date();
             displayResponseSummary(imsiEventsList, startTime, endTime);
         },
@@ -350,6 +352,7 @@ const topTenIMSIDrillDownEventHandler = function(event, array){
         let fromTime = new Date($('#startDateOnIMSITopSummaryForm').val()).valueOf();
         let toTime = new Date($('#endDateOnIMSITopSummaryForm').val()).valueOf();        
         queryListOfIMSIEventForDrillDown(imsi, fromTime, toTime);
+        showFullDataBanner();
     }
 };
 
@@ -363,6 +366,7 @@ const imsiSummaryDrillDownEventHandler = function(event, array){
         let fromTime = new Date($('#startDateOnIMSISummaryFormNE').val()).valueOf();
         let toTime = new Date($('#endDateOnIMSISummaryFormNE').val()).valueOf();        
         queryListOfIMSIEventForDrillDown(imsi, fromTime, toTime);
+        showFullDataBanner();
     }
 }
 
@@ -376,12 +380,92 @@ const imsiFailuresDrillDownEventHandler = function(event, array){
         let fromTime = new Date($('#startDateOnIMSISummaryForm').val()).valueOf();
         let toTime = new Date($('#endDateOnIMSISummaryForm').val()).valueOf();        
         queryListOfIMSIEventForDrillDown(imsi, fromTime, toTime);
+        showFullDataBanner();
     }
 };
+
+const imsiDrillDownLineChartEventHandler = function(event, array){
+    const startTime = new Date();
+    const storedData = $(this.canvas).closest(".drillDownSections").data("events");
+    const activeBar = this.getElementAtEvent(event);
+    let filteredData;
+    if(activeBar[0]){
+        const index = activeBar[0]["_index"];
+        const date = this.data.datasets[0].data[index].x;
+        filteredData = filterHourlyEventData(date, storedData);
+        imsiLineChartConfig.options.scales.xAxes[0].ticks.minRotation = 0;
+        showFilterDataBanner();
+    }else{
+        filteredData = storedData;
+        showFullDataBanner();
+    }
+    displayListOfIMSIEventForDrillDown(filteredData);
+    const endTime = new Date();
+    displayResponseSummary(filteredData, startTime, endTime);
+}
+
+const imsiDrillDownPhoneModelChartEventHandler = function(event, array){
+    const startTime = new Date();
+    const storedData = $(this.canvas).closest(".drillDownSections").data("events");
+    const activeBar = this.getElementAtEvent(event);
+    let filteredData;
+    if(activeBar[0]){
+        const index = activeBar[0]["_index"];
+        const phoneModel = this.data.labels[index];
+        filteredData = filterPhoneModelEventData(phoneModel, storedData);
+        showFilterDataBanner();
+    }else{
+        filteredData = storedData;
+        showFullDataBanner();
+    }
+    displayListOfIMSIEventForDrillDown(filteredData);
+    const endTime = new Date();
+    displayResponseSummary(filteredData, startTime, endTime);
+}
+
+const imsiDrillDownCauseCodeChartEventHandler = function(event, array){    
+    const startTime = new Date();
+    let storedData = $(this.canvas).closest(".drillDownSections").data("events");
+    let filteredData;
+    const activeSlice = this.getElementAtEvent(event);
+    if(activeSlice[0]){
+        const index = activeSlice[0]["_index"];
+        const failureClass = this.data.labels[index];
+        filteredData = filterCauseCodeDescriptionEventData(failureClass, storedData);
+        showFilterDataBanner();
+    }else{
+        filteredData = storedData;
+        showFullDataBanner();
+    }
+    displayListOfIMSIEventForDrillDown(filteredData);
+    const endTime = new Date();
+    displayResponseSummary(filteredData, startTime, endTime);
+}
+
+const imsiDrillDownCellIDChartEventHandler = function(event, array){    
+    const startTime = new Date();
+    let storedData = $(this.canvas).closest(".drillDownSections").data("events");
+    let filteredData;
+    const activeSlice = this.getElementAtEvent(event);
+    if(activeSlice[0]){
+        const index = activeSlice[0]["_index"];
+        const cellCombo = this.data.labels[index];
+        filteredData = filterCellIDDescriptionEventData(cellCombo, storedData);
+        showFilterDataBanner();
+    }else{
+        filteredData = storedData;
+        showFullDataBanner();
+    }
+    displayListOfIMSIEventForDrillDown(filteredData);
+    const endTime = new Date();
+    displayResponseSummary(filteredData, startTime, endTime);
+}
+
 
 const imsiClickFromTableEventHandler = function(imsi, parentContainer){
     $("#imsiDrillDownBackIcon").data("target", parentContainer);
     queryListOfIMSIEventForDrillDown(imsi, 0, 8640000000000000);    
+    showFullDataBanner();
 }
 
 

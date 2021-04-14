@@ -12,7 +12,7 @@
     <title>Dashboard</title>
 
     <!-- Custom fonts for this template-->
-    <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">drillD
+    <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
     <link
         href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
         rel="stylesheet">
@@ -62,9 +62,9 @@
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Network Queries:</h6>
                         <div id="queryNESelectors">
-	                        <a class="collapse-item" href="#" id="netFirstQuery" data-section="networkEngQueryOne">IMSI Diagnostics Summary</a>
-	                        <a class="collapse-item" href="#" id="netFourthQuery" data-section="networkEngQueryFour">Top 10 IMSIs Failures</a>
                             <a class="collapse-item" href="#" id="netThirdQuery" data-section="networkEngQueryThree">Top 10 Cell IDs</a>
+	                        <a class="collapse-item" href="#" id="netFourthQuery" data-section="networkEngQueryFour">Top 10 IMSIs Failures</a>
+                            <a class="collapse-item" href="#" id="netFirstQuery" data-section="networkEngQueryOne">IMSI Diagnostics Summary</a>
 	                        <a class="collapse-item" href="#" id="netSecondQuery" data-section="networkEngQueryTwo">User Equipment Failures</a>
                         </div>
                     </div>
@@ -527,8 +527,8 @@
                                                 </div>
                                             </div>
                                             <div id="networkEngQueryTwoDrillDownFilterBanner">
-                                                <!-- <div id="networkEngQueryTwoDrillDownFullDataBanner">You are viewing the full dataset. Click on the bar or slice to further drill down.</div>
-                                                <div id="networkEngQueryTwoDrillDownFilteredDataBanner">You are viewing a filtered dataset. Click on the chart area to view the full data.</div> -->
+                                                <div class="fullDataBanner">You are viewing the full dataset. Click on the bar or slice to further drill down.</div>
+                                                <div class="filteredDataBanner">You are viewing a filtered dataset. Click on the chart area to view the full data.</div>
                                             </div>
                                         </div>
                                     </div>
@@ -553,6 +553,10 @@
                                                             <div class = "col">
                                                                 <label for="networkEngQueryTwoDrillDownChartCardDetailsDescription" class="form-label fw-bold small">Description</label>
                                                                 <input readonly type="text" class="form-control" id="networkEngQueryTwoDrillDownChartCardDetailsDescription" placeholder="Description"/>
+                                                            </div>
+                                                            <div class = "col">
+                                                                <label for="networkEngQueryTwoDrillDownChartCardDetailsTotalFailureCount" class="form-label fw-bold small">Total Failures Count</label>
+                                                                <input readonly type="text" class="form-control" id="networkEngQueryTwoDrillDownChartCardDetailsTotalFailureCount" placeholder="Failures Count"/>
                                                             </div>
                                                         </div>
                                                         <div class="d-flex flex-column">
@@ -589,6 +593,10 @@
                                                                     <th>IMSI</th>
                                                                     <th>Duration (ms)</th>
                                                                     <th>Cell ID</th>
+                                                                    <th>Market</th>
+                                                                    <th>Operator</th>
+                                                                    <th>Phone Model</th>
+                                                                    <th>Vendor</th>
                                                                     <th>Failure Class</th>
                                                                     <th>Failure Description</th>
                                                                     <th>Event ID</th>
@@ -613,13 +621,19 @@
                             <div class="col mb-4">
                                 <div class="card mt-4">
                                     <div class="card-header">
-                                      <div class ="d-flex flex-row justify-content-start">
-                                          <div class ="drillDownBackIcon" id="imsiDrillDownBackIcon">
-                                            <span><i class="fas fa-arrow-left"></i></span>
-                                          </div>
-                                          <div class = "mx-4" id="networkEngQueryFourDrillDownTitle">
-                                          </div>
-                                      </div>
+                                        <div class ="d-flex flex-row justify-content-between">
+                                            <div class ="d-flex flex-row justify-content-start">
+                                                <div class ="drillDownBackIcon" id="imsiDrillDownBackIcon">
+                                                    <span><i class="fas fa-arrow-left"></i></span>
+                                                </div>
+                                                <div class = "mx-4" id="networkEngQueryFourDrillDownTitle">
+                                                </div>
+                                            </div>
+                                            <div id="networkEngQueryFourDrillDownFilterBanner">
+                                                <div class="fullDataBanner">You are viewing the full dataset. Click on the bar or slice to further drill down.</div>
+                                                <div class="filteredDataBanner">You are viewing a filtered dataset. Click on the chart area to view the full data.</div>
+                                            </div>
+                                        </div>
                                     </div>
                                     
                                     <div class="card-body" id="networkEngQueryFourDrillDownCard">
@@ -637,30 +651,15 @@
                                                                 <input readonly type="text" class="form-control" id="networkEngQueryFourDrillDownChartCardIMSIDetailsIMSI" placeholder="IMSI"/>
                                                             </div>
                                                             <div class = "col">
-                                                                <label for="networkEngQueryFourDrillDownChartCardIMSIDetailsCountry" class="form-label fw-bold small">Country</label>
-                                                                <input readonly type="text" class="form-control" id="networkEngQueryFourDrillDownChartCardIMSIDetailsCountry" placeholder="Country"/>
-                                                            </div>
-                                                            <div class = "col">
-                                                                <label for="networkEngQueryFourDrillDownChartCardIMSIDetailsOperator" class="form-label fw-bold small">Operator</label>
-                                                                <input readonly type="text" class="form-control" id="networkEngQueryFourDrillDownChartCardIMSIDetailsOperator" placeholder="Operator"/>
-                                                            </div>
-                                                            <div class = "col">
-                                                                <label for="networkEngQueryFourDrillDownChartCardIMSIDetailsPhoneModel" class="form-label fw-bold small">Phone Model</label>
-                                                                <input readonly type="text" class="form-control" id="networkEngQueryFourDrillDownChartCardIMSIDetailsPhoneModel" placeholder="Phone Model"/>
-                                                            </div>
-                                                            <div class = "col">
-                                                                <label for="networkEngQueryFourDrillDownChartCardIMSIDetailsPhoneVendor" class="form-label fw-bold small">Vendor</label>
-                                                                <input readonly type="text" class="form-control" id="networkEngQueryFourDrillDownChartCardIMSIDetailsPhoneVendor" placeholder="Vendor"/>
+                                                                <label for="networkEngQueryFourDrillDownChartCardIMSIDetailsTotalFailureCount" class="form-label fw-bold small">Total Failures Count</label>
+                                                                <input readonly type="text" class="form-control" id="networkEngQueryFourDrillDownChartCardIMSIDetailsTotalFailureCount" placeholder="Access Capability"/>
                                                             </div>
                                                         </div>
                                                         <div class="d-flex flex-column">
+                                                            <div class="chart-bar">
+                                                                <canvas id="networkEngQueryFourDrillDownChart" width="100%" height="100"></canvas>
+                                                            </div>
                                                             <div class = "d-flex flex-row align-items-stretch">
-                                                                <div class="col-4" id="drillDownFailureClassChart">
-                                                                    <div class="row mx-4 align-center"><h4>Failure Class Distribution</h4></div>
-                                                                    <div class="row chart-pie">
-                                                                        <canvas id="networkEngQueryFourDrillDownFailureClassChart" width="100%" height="100"></canvas>
-                                                                    </div>
-                                                                </div>
                                                                 <div class="col-4" id="drillCauseCodeChart">
                                                                     <div class="row mx-4 align-center"><h4>Cause Code Distribution</h4></div>
                                                                     <div class="row chart-bar">
@@ -673,16 +672,18 @@
                                                                         <canvas id="networkEngQueryFourDrillDownCellIDChart" width="100%" height="100"></canvas>
                                                                     </div>
                                                                 </div>
-                                                            </div>
-                                                            <div class="chart-bar">
-                                                                <canvas id="networkEngQueryFourDrillDownChart" width="100%" height="100"></canvas>
+                                                                <div class="col-4" id="drillDownIMSIPhoneModelChart">
+                                                                    <div class="row mx-4 align-center"><h4>Phone Model Distribution</h4></div>
+                                                                    <div class="row chart-bar">
+                                                                        <canvas id="networkEngQueryFourDrillDownPhoneModelChart" width="100%" height="100"></canvas>
+                                                                    </div>
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </div>
                                                     <div class="card-footer small text-muted" id="networkEngQueryFourDrillDownChartCardFooter">
                                                         <div class="d-flex flex-row justify-content-end">
-                                                            <button class="btn btn-primary mx-2" type="button" id="networkEngQueryFourIncrementalBtn">Incremental Count View</button>
-                                                            <button class="btn btn-primary mx-2" type="button" id="networkEngQueryFourCumulativeBtn">Cumulative Count View</button>
+
                                                         </div>
                                                     </div>
                                                 </div>
@@ -705,6 +706,10 @@
                                                                     <th>IMSI</th>
                                                                     <th>Duration (ms)</th>
                                                                     <th>Cell ID</th>
+                                                                    <th>Market</th>
+                                                                    <th>Operator</th>
+                                                                    <th>Phone Model</th>
+                                                                    <th>Vendor</th>
                                                                     <th>Failure Class</th>
                                                                     <th>Failure Description</th>
                                                                     <th>Event ID</th>
@@ -738,8 +743,8 @@
                                                 </div>
                                             </div>
                                             <div id="networkEngQueryThreeDrillDownFilterBanner">
-                                                <div id="networkEngQueryThreeDrillDownFullDataBanner">You are viewing the full dataset. Click on the bar or slice to further drill down.</div>
-                                                <div id="networkEngQueryThreeDrillDownFilteredDataBanner">You are viewing a filtered dataset. Click on the chart area to view the full data.</div>
+                                                <div class="fullDataBanner">You are viewing the full dataset. Click on the bar or slice to further drill down.</div>
+                                                <div class="filteredDataBanner">You are viewing a filtered dataset. Click on the chart area to view the full data.</div>
                                             </div>
                                         </div>
                                     </div>
@@ -764,6 +769,10 @@
                                                             <div class = "col">
                                                                 <label for="networkEngQueryThreeDrillDownChartCardDetailsOperator" class="form-label fw-bold small">Operator</label>
                                                                 <input readonly type="text" class="form-control" id="networkEngQueryThreeDrillDownChartCardDetailsOperator" placeholder="Operator"/>
+                                                            </div>
+                                                            <div class = "col">
+                                                                <label for="networkEngQueryThreeDrillDownChartCardDetailsTotalFailureCount" class="form-label fw-bold small">Total Failures Count</label>
+                                                                <input readonly type="text" class="form-control" id="networkEngQueryThreeDrillDownChartCardDetailsTotalFailureCount" placeholder="Description"/>
                                                             </div>
                                                         </div>
                                                         <div class="d-flex flex-column">
@@ -812,6 +821,10 @@
                                                                     <th>IMSI</th>
                                                                     <th>Duration (ms)</th>
                                                                     <th>Cell ID</th>
+                                                                    <th>Market</th>
+                                                                    <th>Operator</th>
+                                                                    <th>Phone Model</th>
+                                                                    <th>Vendor</th>
                                                                     <th>Failure Class</th>
                                                                     <th>Failure Description</th>
                                                                     <th>Event ID</th>

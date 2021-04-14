@@ -55,7 +55,7 @@ const imsiLineChartConfig = {
         yAxes: [{
           ticks: {
             min: 0,
-            max: 30,     
+            max: 5,     
             padding: 10,
          },
         scaleLabel: {
@@ -173,7 +173,6 @@ const cellIDChartConfig = {
   data: {
     labels: [],
     datasets: [{
-      label: "Total Count",
       backgroundColor: [],
       hoverBackgroundColor: "#4e73df",
       borderColor: "#4e73df",
@@ -222,6 +221,9 @@ const cellIDChartConfig = {
           zeroLineBorderDash: [2]
         }
       }],
+    },
+    legend: {
+      display: false
     },
     plugins: {
       datalabels: {

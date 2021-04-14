@@ -3,7 +3,7 @@ const displayListOfCellEventForDrillDown = function(eventsList){
     hideAllSections();
     $("#networkEngQueryThreeDrillDown").show();
     $("#networkEngQueryThreeDrillDownTitle").text(`Drilldown : Cell ${eventsList[0].cellId} of ${eventsList[0].marketOperator.operatorDesc} | ${eventsList[0].marketOperator.countryDesc} `)
-    displayCellDetails(eventsList[0]);
+    displayCellDetails(eventsList);
     displayNetworkEngQueryThreeDrillDownTable(eventsList);
     displayNetworkEngQueryThreeDrillDownCharts(eventsList);
 }
@@ -17,6 +17,10 @@ const displayNetworkEngQueryThreeDrillDownTable = function(eventsList){
             event.imsi,
             event.duration,
             event.cellId,
+            event.marketOperator.countryDesc,
+            event.marketOperator.operatorDesc,
+            event.ueType.model,
+            event.ueType.vendorName,
             event.failureClass.failureClass,
             event.failureClass.failureDesc,
             event.eventCause.eventCauseId.eventCauseId,
@@ -128,10 +132,12 @@ const generateCellPhoneBarChart = function(eventsList){
 }
 
 // Adds the data to the Cell ID, Country, and Operator Banner
-const displayCellDetails = function(event){
+const displayCellDetails = function(eventsList){
+    const event = eventsList[0];
     $("#networkEngQueryThreeDrillDownChartCardDetailsCellID").val(event.cellId);
     $("#networkEngQueryThreeDrillDownChartCardDetailsCountry").val(event.marketOperator.countryDesc);
     $("#networkEngQueryThreeDrillDownChartCardDetailsOperator").val(event.marketOperator.operatorDesc);
+    $("#networkEngQueryThreeDrillDownChartCardDetailsTotalFailureCount").val(eventsList.length)
 }
 
 // Stores the full data into the drill down div container
@@ -165,6 +171,7 @@ const queryListOfCellEventForDrillDown = function(cellId, country, operator){
 
 // Data Filters
 const filterHourlyEventData = function(date, storedData){    
+    console.log(date);
     return storedData.filter(data => {
         return roundDateToNearestHour(data).toISOString() == new Date(date).toISOString();
     });
@@ -187,17 +194,27 @@ const filterIMSIEventData = function(imsi, storedData){
     return storedData.filter(data => data.imsi == imsi);
 }
 
+const filterCellIDDescriptionEventData = function(cellCombo, storedData){
+    return storedData.filter(data => {
+        let newCombo = 'Cell: '+ data.cellId + ' - '  + data.marketOperator.operatorDesc+ ' ' + data.marketOperator.countryDesc
+        return newCombo == cellCombo;
+    });
+
+
+}
+
+
 
 // Filtered Data Message
 const showFullDataBanner = function(){
-    $("#networkEngQueryThreeDrillDownFullDataBanner").show();
-    $("#networkEngQueryThreeDrillDownFilteredDataBanner").hide();
+    $(".fullDataBanner").show();
+    $(".filteredDataBanner").hide();
 }
 
 const showFilterDataBanner = function(){
     console.log("I happen");
-    $("#networkEngQueryThreeDrillDownFullDataBanner").hide();
-    $("#networkEngQueryThreeDrillDownFilteredDataBanner").show();
+    $(".fullDataBanner").hide();
+    $(".filteredDataBanner").show();
 }
 
 
