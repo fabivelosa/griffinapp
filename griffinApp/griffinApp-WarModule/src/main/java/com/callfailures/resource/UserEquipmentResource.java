@@ -11,6 +11,7 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import com.callfailures.entity.Events;
 import com.callfailures.entity.Secured;
 import com.callfailures.entity.UserEquipment;
 import com.callfailures.entity.views.PhoneFailures;
@@ -45,5 +46,13 @@ public class UserEquipmentResource {
 			) {
 		final List<PhoneFailures> phoneFailures =  eventService.findUniqueEventCauseCountByPhoneModel(tac);
 		return Response.status(200).entity(phoneFailures).build();
+	}
+	
+	@GET
+	@Path("/description/query")
+	@Produces({ MediaType.APPLICATION_JSON })
+	public Response findEventsByDescription(@QueryParam("description")final String description) {
+		final List<Events> events = eventService.findListOfEventsByDescription(description);
+		return Response.status(200).entity(events).build();
 	}
 }

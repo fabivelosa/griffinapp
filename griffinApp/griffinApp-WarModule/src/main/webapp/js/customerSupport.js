@@ -35,11 +35,12 @@ const displayEquipmentFailures = function(IMSIfailures){
     const table = $('#phoneFailuresTable').DataTable();
     table.clear();
     $(IMSIfailures).each(function(index, IMSIfailure){
-      let imsiHtml = `<span class="imsiDrillDownLinks"><a href=\"#\">${IMSIfailure.imsi}</a></span>`
+      let imsiHtml = `<span class="imsiDrillDownLinks"><a href=\"#\">${IMSIfailure.imsi}</a></span>`;
+	  let descriptionHtml=`<span class="failureDescriptionLinks"><a href=\"#\">${IMSIfailure.eventCause.description}</a></span>`;
         table.row.add([imsiHtml, 
             IMSIfailure.eventCause.eventCauseId.eventCauseId, 
             IMSIfailure.eventCause.eventCauseId.causeCode,
-            IMSIfailure.eventCause.description
+            descriptionHtml
         ]);
     });
     table.draw();
@@ -275,6 +276,10 @@ const displayIMSIFailureDateChart = function(imsiSummary){
    // $("#imsisFailureDateResultChartCard").text(`Data from ${$('#startDateOnIMSISummaryForm').val()} to ${$('#endDateOnIMSISummaryForm').val()}`);
   }
 
+const descriptionClickFromTableEventHandler = function(description,parentContainer){
+	$("#cellDrillDownBackIcon").data("target",parentContainer);
+	queryListOfUEEventForDrillDown(description);
+}
 
 $(document).ready(function(){		
     setIMSIFieldAutoComplete();

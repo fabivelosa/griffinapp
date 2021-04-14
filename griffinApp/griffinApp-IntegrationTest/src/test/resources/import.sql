@@ -1,5 +1,5 @@
 INSERT INTO eventCause (causeCode, eventCauseId, description) VALUES(1,4098,'S1 SIG CONN SETUP-S1 INTERFACE DOWN');
-INSERT INTO mccmnc (countryCode, operatorCode, countryDesc, operatorDesc) VALUES(344,930,'Antigua and Barbuda','AT&T Wireless-Antigua AG ');
+INSERT INTO mccmnc (countryCode, operatorCode, countryDesc, operatorDesc) VALUES(344,930,'Antigua and Barbuda','AT&T Wireless-Antigua AG');
 INSERT INTO failureClass (failureClass, failureDesc) VALUES(1,'HIGH PRIORITY ACCESS');
 INSERT INTO ue (tac, model, vendorName, accessCapability, ueType, deviceOS, inputMode) VALUES(21060800,'VEA3','S.A.R.L. B  & B International','GSM 1800, GSM 900',null,null,null);
 INSERT INTO event (cellId,dateTime,duration,hier321Id,hier32Id,hier3Id,imsi,neVersion,causeCode,eventCauseId,failureClass,countryCode,operatorCode,tac) VALUES(4,'2021-03-18 10:00:00',1000,'4809532081614990000','8226896360947470000','1150444940909480000','344930000000011','11B',1,4098,1,344,930,21060800);

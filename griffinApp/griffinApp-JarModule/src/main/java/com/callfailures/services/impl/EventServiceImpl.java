@@ -250,6 +250,16 @@ public class EventServiceImpl implements EventService {
 	}
 
 	@Override
+	public List<Events> findListofIMSIEventsByMarketOperatorCellID(final int cellID, final String country, final String operator) {
+		return eventDAO.findAllEventsByMarketOperatorCellID(cellID, country, operator);
+	}
+
+	@Override
+	public List<Events> findListOfEventsByDescription(final String description) {
+		return eventDAO.findAllEventsByFailureDescription(description);
+	}
+
+	@Override
 	public List<Events> findListofIMSIEventsByPhoneModel(String model, LocalDateTime startTime, LocalDateTime endTime)
 			throws InvalidPhoneModelException {
 		if (model.isEmpty()) {
