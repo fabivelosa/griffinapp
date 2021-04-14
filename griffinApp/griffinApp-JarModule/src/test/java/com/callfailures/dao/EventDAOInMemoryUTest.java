@@ -238,6 +238,12 @@ class EventDAOInMemoryUTest {
 		Events event = allEvents.get(0);
 		assertEquals(IMSI, event.getImsi());
 	}
+	
+	@Test
+	void testFindAllIMSIEventsByPhoneModel() {
+		final List<Events> allEvents = eventDAO.findAllIMSIEventsByPhoneModel(phoneModel, startTime, endTime);
+		assertEquals(1, allEvents.size());
+	}
 }
 
 

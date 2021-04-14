@@ -195,6 +195,7 @@ public class IMSIByDateIntTest {
 		final String urlForIMSI = IMSIS_BY_PHONE_MODEL+"?model=VEA3&from="+FROM_TIME+"&to="+TO_TIME+"";
 		final Response responseGet = resourceClient.resourcePath(urlForIMSI).get(token);
 		assertEquals(200, responseGet.getStatus());
-		assertJsonResponseWithFile(responseGet, "response.json");
+		final JsonArray imsis = JsonReader.readAsJsonArray(responseGet.readEntity(String.class));	
+		assertEquals(3,imsis.size());
 	}
 }

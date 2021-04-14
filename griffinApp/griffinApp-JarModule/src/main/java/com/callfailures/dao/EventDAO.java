@@ -48,14 +48,14 @@ public class EventDAO {
 			DRILL_DOWN_FIND_ALL_IMSI_EVENTS_BY_DATE = "SELECT e FROM event e "
 					+ "WHERE (e.dateTime BETWEEN :startTime AND :endTime) " + "AND e.imsi = :imsi",
 			DRILL_DOWN_FIND_ALL_IMSI_EVENTS_BY_PHONEMODEL = "SELECT e FROM event e "
-					+ "WHERE (e.dateTime BETWEEN :startTime AND :endTime) " + "AND e.ueType.model = :model";
+					+ "WHERE (e.dateTime BETWEEN :startTime AND :endTime) " + "AND e.ueType.model = :model",
 	        DRILL_DOWN_FIND_ALL_CELLID_EVENTS_BY_CELLID_MARKETOPERATOR = "SELECT e FROM event e "
 							+ "WHERE e.cellId = :cellId "
 							+ "AND (LOWER(e.marketOperator.countryDesc)) = :countryDesc "
 							+ "AND (LOWER(e.marketOperator.operatorDesc)) = :operatorDesc",
 			DRILL_DOWN_FIND_ALL_EVENTS_BY_DESCRIPTION_DESC="SELECT e FROM event e "
 							+ "WHERE e.eventCause.description = :description";
-
+	        
 	@PersistenceContext
 	EntityManager entityManager;
 
@@ -275,6 +275,65 @@ public class EventDAO {
 		query.setParameter("imsi", IMSI);
 		query.setParameter("startTime", startTime);
 		query.setParameter("endTime", endTime);
+		try {
+			return query.getResultList();
+		} catch (NoResultException e) {
+			return null;
+		}
+	}
+	
+	/**
+	 * Queries the drill down data for a Phone Model in a given period
+	 * 
+	 * @param model
+	 * @param startTime
+	 * @param endTime
+	 * @return list of Events for a Phone Model
+	 */
+	@SuppressWarnings("unchecked")
+	public List<Events> findAllIMSIEventsByPhoneModel(final String model, final LocalDateTime startTime,
+			final LocalDateTime endTime) {
+		final Query query = entityManager.createQuery(DRILL_DOWN_FIND_ALL_IMSI_EVENTS_BY_PHONEMODEL, Events.class);
+		query.setParameter("model", model);
+		query.setParameter("startTime", startTime);
+		query.setParameter("endTime", endTime);
+		try {
+			return query.getResultList();
+		} catch (NoResultException e) {
+			return null;
+		}
+	}
+	
+	/**
+	 * Queries the drilldown data for a Market, Operator, Cell ID combo in a given period
+	 * 
+	 * @param cellId
+	 * @param country
+	 * @param operator
+	 * @return list of Events associated with the Market, Operator, Cell ID
+	 */
+	@SuppressWarnings("unchecked")
+	public List<Events> findAllEventsByMarketOperatorCellID(final int cellId, final String country, final String operator) {
+		final Query query = entityManager.createQuery(DRILL_DOWN_FIND_ALL_CELLID_EVENTS_BY_CELLID_MARKETOPERATOR, Events.class);
+		query.setParameter("cellId", cellId);
+		query.setParameter("countryDesc", country.trim().toLowerCase());
+		query.setParameter("operatorDesc", operator.trim().toLowerCase());
+		try {
+			return query.getResultList();
+		} catch (NoResultException e) {
+			return null;
+		}
+	}
+	
+	/**
+	 * Queries the drilldown data for a given Failure Description
+	 * @param failureDescription
+	 * @return list of Events associated with the given failure description
+	 */
+	@SuppressWarnings("unchecked")
+	public List<Events> findAllEventsByFailureDescription(final String description) {
+		final Query query = entityManager.createQuery(DRILL_DOWN_FIND_ALL_EVENTS_BY_DESCRIPTION_DESC, Events.class);
+		query.setParameter("description", description.trim().toLowerCase());
 		try {
 			return query.getResultList();
 		} catch (NoResultException e) {
