@@ -197,12 +197,12 @@ const displayListOfIMSIEventForDrillDownByPhoneModel = function(imsiEventsList){
     $("#supportEngQueryDrillDown").show();
     $("#supportEngQueryDrillDownTitle").text(`Drilldown : ${imsiEventsList[0].ueType.model}`);
     displayIMSIDetailsPhoneModel(imsiEventsList);
-    displayNetworkEngQueryFourDrillDownTable(imsiEventsList);
+    displayNetworkEngQueryFourDrillDownTablePhoneModel(imsiEventsList);
     displayNetworkEngQueryFourDrillDownChartsPhoneModel(imsiEventsList);
 }
 
 const displayNetworkEngQueryFourDrillDownTable = function(imsiEventsList){
-    const table = $('#supportEngQueryDrillDownTable').DataTable();
+    const table = $('#networkEngQueryFourDrillDownTable').DataTable();
     table.clear();
     $(imsiEventsList).each(function(index, event){
         table.row.add([event.dateTime, 
@@ -223,6 +223,27 @@ const displayNetworkEngQueryFourDrillDownTable = function(imsiEventsList){
     table.draw();
 }
 
+const displayNetworkEngQueryFourDrillDownTablePhoneModel = function(imsiEventsList){
+    const table = $('#supportEngQueryDrillDownTable').DataTable();
+    table.clear();
+    $(imsiEventsList).each(function(index, event){
+        table.row.add([event.dateTime, 
+            event.imsi,
+            event.duration,
+            event.cellId,
+            event.marketOperator.countryDesc,
+            event.marketOperator.operatorDesc,
+            event.ueType.model,
+            event.ueType.vendorName,
+            event.failureClass.failureClass,
+            event.failureClass.failureDesc,
+            event.eventCause.eventCauseId.eventCauseId,
+            event.eventCause.eventCauseId.causeCode,
+            event.eventCause.description
+        ]);
+    });
+    table.draw();
+}
 
 const displayNetworkEngQueryFourDrillDownCharts = function(imsiEventsList){    
     generateBarLineChart(imsiEventsList);
