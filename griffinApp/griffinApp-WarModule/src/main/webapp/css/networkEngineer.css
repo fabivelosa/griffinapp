@@ -115,14 +115,14 @@ td{
 .networkEngQueryFourDrillDownChartCardIMSIDetails .form-control,
 .networkEngQueryThreeDrillDownChartCardCellDetails .form-control,
 .networkEngQueryTwoDrillDownChartCardCellDetails .form-control,
-.userEquipmentFailuresChartCardPhoneDetails.form-control{
+.userEquipmentFailuresChartCardPhoneDetails .form-control{
     padding: 0;
     border: none !important;
     color:#5a5c69;
     background-color: #fbfcff !important;
 }
 
-#drillDownIMSIPhoneModelChart, #drillDownCellIDChart, #drillDownEventCauseChart, #drillDownIMSISubChart, #drillPhoneModelChart, #drillCauseCodeChart{
+#drillDownIMSIPhoneModelChart, #drillDownCellIDChart, #drillDownEventCauseChart, #drillDownIMSISubChart, #drillPhoneModelChart, #drillCauseCodeChart, #drillDownFailureClassChart{
     padding: 2rem;
     margin-top: 1rem;
     border: 1px solid rgb(239, 238, 238);
