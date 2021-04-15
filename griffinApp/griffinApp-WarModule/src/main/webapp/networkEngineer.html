@@ -1252,7 +1252,104 @@
 							</div>
 						</div>
 					</div>
+                    <div class="row drillDownSections" id="supportEngQueryDrillDown">
+                        <div class="col mb-4">
+                            <div class="card mt-4">
+                                <div class="card-header">
+                                    <div class ="d-flex flex-row justify-content-between">
+                                        <div class ="d-flex flex-row justify-content-start">
+                                            <div class ="drillDownBackIcon" id="imsiDrillDownBackIconSup">
+                                                <span><i class="fas fa-arrow-left"></i></span>
+                                            </div>
+                                            <div class = "mx-4" id="supportEngQueryDrillDownTitle">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="card-body" id="supportEngQueryDrillDownCard">
+                                    <div class = "row mt-2 p-4" id = "supportEngQueryDrillDownSummaryFormResult">
+                                        <div class = "col">
+                                            <div class="card mb-4 query-chart" id="supportEngQueryDrillDownChartCard">
+                                                <div class="card-header text-primary" id="networkEngQueryThreeDrillDownChartTitle">
+                                                    <span id="supportEngQueryDrillDownChartTitleType"></span> 
+                                                    <span id="supportEngQueryDrillDownChartTitleDescription"></span>
+                                                </div>
+                                                <div class="card-body">
+                                                    <div class = "row supportEngQueryDrillDownChartCardIMSIDetails pl-2 pr-2 mx-4">
+                                                        <div class = "col-2">
+                                                            <label for="supportEngQueryDrillDownChartCardIMSIDetailsTotalFailureCount" class="form-label fw-bold small">Total Failures Count</label>
+                                                            <input readonly type="text" class="form-control" id="supportEngQueryDrillDownChartCardIMSIDetailsTotalFailureCount" placeholder="Access Capability"/>
+                                                        </div>
+                                                    </div>
+                                                    <div class="d-flex flex-column">
+                                                        <div class="chart-bar">
+                                                            <canvas id="supportEngQueryDrillDownChart" width="100%" height="100"></canvas>
+                                                        </div>
+                                                        <div class = "d-flex flex-row align-items-stretch">
+                                                            <div class="col-7" id="supDrillCauseCodeChart">
+                                                                <div class="row mx-4 align-center"><h4>Cause Code Distribution</h4></div>
+                                                                <div class="row chart-bar">
+                                                                    <canvas id="supportEngQueryDrillDownCauseCodeChart" width="100%" height="100"></canvas>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-5" id="supDrillDownCellIDChart">
+                                                                <div class="row mx-4 align-center"><h4>Cell Distribution</h4></div>
+                                                                <div class="row chart-bar">
+                                                                    <canvas id="supportEngQueryDrillDownCellIDChart" width="100%" height="100"></canvas>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="card-footer small text-muted" id="supportEngQueryDrillDownChartCardFooter">
+                                                    <div class="d-flex flex-row justify-content-end">
 
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class = "responseWidget p-3 mb-2">
+                                                <div class="d-flex flex-row">
+                                                    <div class = "responseRows text-left">
+                                                        NaN rows returned
+                                                    </div>
+                                                    <div class="responseTime text-right">
+                                                        Duration: NaN seconds
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class ="row">
+                                                <div class="col">
+                                                    <table id="supportEngQueryDrillDownTable" class="table table-hover table-bordered">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>Date</th>
+                                                                <th>IMSI</th>
+                                                                <th>Duration (ms)</th>
+                                                                <th>Cell ID</th>
+                                                                <th>Market</th>
+                                                                <th>Operator</th>
+                                                                <th>Phone Model</th>
+                                                                <th>Vendor</th>
+                                                                <th>Failure Class</th>
+                                                                <th>Failure Description</th>
+                                                                <th>Event ID</th>
+                                                                <th>Cause Code</th>
+                                                                <th>Description</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>                                                 
+                                        </div>
+                                     </div>
+                                </div>
+                           
+                            </div>
+                        </div>
+                    </div>
                     <!-- Content Row -->
                     <div class="row">
 

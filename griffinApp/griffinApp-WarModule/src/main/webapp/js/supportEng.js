@@ -140,6 +140,7 @@ const displayIMSICallFailureChart = function(imsiSummary){
         }],
       },
       options: {
+        onClick: countCallFailuresDrillDownEventHandler,
         maintainAspectRatio: false,
         layout: {
           padding: {
@@ -258,7 +259,16 @@ const queryCallIMSIsWithFailure = function(failureClass){
 }
 
 $(document).ready(function(){	
-    autoCompleteIMSI2();	
+    autoCompleteIMSI2();
+
+    $("#imsiDrillDownBackIconSup").click(function(event){
+      hideAllSections();
+      $(".drillDownSections").hide();
+
+      console.log(`#${$(this).data("target")}`);
+      $(`#${$(this).data("target")}`).show();
+    });
+
     $('#imsiCallFaluireForm').submit(function(event){
         event.preventDefault();
         const imsi = $('#imsiOnCallFailureForm').val();

@@ -41,7 +41,9 @@
 #networkEngQueryTwoDrillDown,
 #networkEngQueryFourCumulativeBtn,
 #networkEngQueryFourIncrementalBtn,
-#networkEngQueryThreeDrillDownFilteredDataBanner{
+#networkEngQueryThreeDrillDownFilteredDataBanner,
+#supportEngQueryDrillDown,
+#supportEngQueryDrillDownFilteredDataBanner{
     display:none;
 }
 
@@ -96,7 +98,8 @@ td{
 .networkEngQueryFourDrillDownChartCardIMSIDetails,
 .networkEngQueryThreeDrillDownChartCardCellDetails,
 .networkEngQueryTwoDrillDownChartCardCellDetails,
-.userEquipmentFailuresChartCardPhoneDetails{
+.userEquipmentFailuresChartCardPhoneDetails,
+.supportEngQueryDrillDownChartCardCellDetails{
     padding-top: 0.25rem;
     background-color: #fbfcff;
     border: 1px solid #fbfcff;
@@ -105,7 +108,8 @@ td{
 .networkEngQueryFourDrillDownChartCardIMSIDetails label,
 .networkEngQueryThreeDrillDownChartCardCellDetails label,
 .networkEngQueryTwoDrillDownChartCardCellDetails label,
-.userEquipmentFailuresChartCardPhoneDetails label{
+.userEquipmentFailuresChartCardPhoneDetails label,
+.supportEngQueryDrillDownChartCardIMSIDetails label{
     font-size: .75rem;
     font-weight: bold;
     margin: 0;
@@ -115,21 +119,23 @@ td{
 .networkEngQueryFourDrillDownChartCardIMSIDetails .form-control,
 .networkEngQueryThreeDrillDownChartCardCellDetails .form-control,
 .networkEngQueryTwoDrillDownChartCardCellDetails .form-control,
-.userEquipmentFailuresChartCardPhoneDetails.form-control{
+.userEquipmentFailuresChartCardPhoneDetails.form-control,
+.supportEngQueryDrillDownChartCardIMSIDetails .form-control{
     padding: 0;
     border: none !important;
     color:#5a5c69;
     background-color: #fbfcff !important;
 }
 
-#drillDownIMSIPhoneModelChart, #drillDownCellIDChart, #drillDownEventCauseChart, #drillDownIMSISubChart, #drillPhoneModelChart, #drillCauseCodeChart{
+#drillDownIMSIPhoneModelChart, #drillDownCellIDChart, #drillDownEventCauseChart, #drillDownIMSISubChart, #drillPhoneModelChart, #drillCauseCodeChart, #supDrillCauseCodeChart, #supDrillDownCellIDChart{
     padding: 2rem;
     margin-top: 1rem;
     border: 1px solid rgb(239, 238, 238);
 }
 
 #networkEngQueryFourDrillDownCard h4,
-#networkEngQueryThreeDrillDownCard h4{
+#networkEngQueryThreeDrillDownCard h4,
+#supportEngQueryDrillDownCard h4{
     text-align: center;
     font-size: 1rem;
 }
