@@ -2,6 +2,7 @@ package com.callfailures.commontests.utils;
 
 import static com.callfailures.commontests.utils.JsonTestUtils.*;
 
+import java.io.File;
 import java.net.URISyntaxException;
 import java.net.URL;
 
@@ -9,9 +10,12 @@ import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.Invocation.Builder;
+import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+
+import org.jboss.resteasy.plugins.providers.multipart.MultipartFormDataOutput;
 
 public class ResourceClient {
 	private final URL urlBase;
@@ -43,10 +47,17 @@ public class ResourceClient {
 	public Response postWithFile(final String token, final String fileName) {
 		return postWithContent(token, getRequestFromFileOrEmptyIfNullFile(fileName));
 	}
-
+	
 	public Response postWithContent(final String token, final String content) {
 		System.out.println(content);
 		return buildClient().header(HttpHeaders.AUTHORIZATION, "Bearer " + token).post(Entity.entity(content, MediaType.APPLICATION_JSON));
+	}
+	
+	public Response postWithContentMultiPart(final String token, final String file) {
+		MultipartFormDataOutput mdo = new MultipartFormDataOutput();
+		mdo.addFormData("uploadedFile", new File(file), MediaType.APPLICATION_OCTET_STREAM_TYPE);
+		GenericEntity<MultipartFormDataOutput> entity = new GenericEntity<MultipartFormDataOutput>(mdo) { };
+		return buildClient().header(HttpHeaders.AUTHORIZATION, "Bearer " + token).post(Entity.entity(entity, MediaType.MULTIPART_FORM_DATA_TYPE));
 	}
 	
 	public Response putWithFile(final String fileName) {
