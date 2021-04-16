@@ -120,19 +120,9 @@ public class EventsResource {
 			) {
 		final LocalDateTime startTime = convertLongToLocalDateTime(fromEpoch); 
 		final LocalDateTime endTime = convertLongToLocalDateTime(toEpoch); 	
-		try {	
-			final List<Events> events = eventService.findListofIMSIEventsByPhoneModel(model, startTime, endTime);
-			return Response.status(200).entity(events).build();
-		}
-		catch(InvalidPhoneModelException exception) {
-			return Response.status(404).entity(new ErrorMessages(ErrorMessage.INVALID_PHONE_MODEL.getMessage())).build();
-		}
-		catch(InvalidDateException exception) {
-			return Response.status(404).entity(new ErrorMessages(ErrorMessage.INVALID_DATE.getMessage())).build();
-		}
-		catch(Exception exception) {
-			return Response.status(404).build();
-		}
+			
+		final List<Events> events = eventService.findListofIMSIEventsByPhoneModel(model, startTime, endTime);
+		return Response.status(200).entity(events).build();
 	}
 	
 	private LocalDateTime convertLongToLocalDateTime(final Long startEpoch) {
