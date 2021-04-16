@@ -2,6 +2,7 @@ package com.callfailures.resource;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.TimeZone;
 
 import javax.ejb.EJB;
@@ -13,6 +14,7 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import com.callfailures.entity.Events;
 import com.callfailures.entity.Secured;
 import com.callfailures.entity.views.IMSISummary;
 import com.callfailures.entity.views.PhoneModelSummary;
@@ -105,6 +107,22 @@ public class EventsResource {
 		catch(Exception exception) {
 			return Response.status(404).build();
 		}
+	}
+	
+	@GET
+	@Secured
+    @Path("/query/ue/imsi")
+	@Produces({ MediaType.APPLICATION_JSON })
+	public Response getEventsfromPhoneModel(
+			@QueryParam("model") final String model,
+			@QueryParam("from") final Long fromEpoch,
+			@QueryParam("to") final Long toEpoch
+			) {
+		final LocalDateTime startTime = convertLongToLocalDateTime(fromEpoch); 
+		final LocalDateTime endTime = convertLongToLocalDateTime(toEpoch); 	
+			
+		final List<Events> events = eventService.findListofIMSIEventsByPhoneModel(model, startTime, endTime);
+		return Response.status(200).entity(events).build();
 	}
 	
 	private LocalDateTime convertLongToLocalDateTime(final Long startEpoch) {

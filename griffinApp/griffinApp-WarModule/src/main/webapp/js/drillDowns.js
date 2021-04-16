@@ -192,6 +192,15 @@ const displayListOfIMSIEventForDrillDown = function(imsiEventsList){
     displayIMSIDetails(imsiEventsList);
 }
 
+const displayListOfIMSIEventForDrillDownByPhoneModel = function(imsiEventsList){
+    hideAllSections();
+    $("#supportEngQueryDrillDown").show();
+    $("#supportEngQueryDrillDownTitle").text(`Drilldown : ${imsiEventsList[0].ueType.model}`);
+    displayIMSIDetailsPhoneModel(imsiEventsList);
+    displayNetworkEngQueryFourDrillDownTablePhoneModel(imsiEventsList);
+    displayNetworkEngQueryFourDrillDownChartsPhoneModel(imsiEventsList);
+}
+
 const displayNetworkEngQueryFourDrillDownTable = function(imsiEventsList){
     const table = $('#networkEngQueryFourDrillDownTable').DataTable();
     table.clear();
@@ -214,10 +223,37 @@ const displayNetworkEngQueryFourDrillDownTable = function(imsiEventsList){
     table.draw();
 }
 
+const displayNetworkEngQueryFourDrillDownTablePhoneModel = function(imsiEventsList){
+    const table = $('#supportEngQueryDrillDownTable').DataTable();
+    table.clear();
+    $(imsiEventsList).each(function(index, event){
+        table.row.add([event.dateTime, 
+            event.imsi,
+            event.duration,
+            event.cellId,
+            event.marketOperator.countryDesc,
+            event.marketOperator.operatorDesc,
+            event.ueType.model,
+            event.ueType.vendorName,
+            event.failureClass.failureClass,
+            event.failureClass.failureDesc,
+            event.eventCause.eventCauseId.eventCauseId,
+            event.eventCause.eventCauseId.causeCode,
+            event.eventCause.description
+        ]);
+    });
+    table.draw();
+}
 
 const displayNetworkEngQueryFourDrillDownCharts = function(imsiEventsList){    
     generateBarLineChart(imsiEventsList);
     generatePhoneModelPieChart(imsiEventsList);
+    generateCauseCodeBarChart(imsiEventsList);
+    generateCellIDBarChart(imsiEventsList);
+}
+
+const displayNetworkEngQueryFourDrillDownChartsPhoneModel = function(imsiEventsList){    
+    generateBarLineChartPhoneModel(imsiEventsList);
     generateCauseCodeBarChart(imsiEventsList);
     generateCellIDBarChart(imsiEventsList);
 }
@@ -268,6 +304,20 @@ const generatePhoneModelPieChart = function(imsiEventsList){
     networkEngQueryFourDrillDownPhoneModelChart.update();
 }
 
+let supportEngQueryDrillDownBarChart = new Chart($("#supportEngQueryDrillDownChart")[0], imsiLineChartConfig);
+
+const generateBarLineChartPhoneModel = function(imsiEventsList) {
+    supportEngQueryDrillDownBarChart.destroy();
+    supportEngQueryDrillDownBarChart = new Chart($("#supportEngQueryDrillDownChart")[0], imsiLineChartConfig);
+    const incrementalDurations = generateIncrementalTimeSeriesData(imsiEventsList)["durations"];
+    const incrementalCounts = generateIncrementalTimeSeriesData(imsiEventsList)["counts"];
+    supportEngQueryDrillDownBarChart.data.datasets[0].data = incrementalDurations;
+    supportEngQueryDrillDownBarChart.data.datasets[1].data = incrementalCounts;
+    imsiLineChartConfig.options.scales.yAxes[0].ticks.max = getRoundedUpYAxisMaxValue(incrementalDurations, incrementalCounts);
+    supportEngQueryDrillDownBarChart.update();
+    $("#supportEngQueryDrillDownChartTitleType").text("");
+    $("#supportEngQueryDrillDownChartTitleDescription").text(`Model ${imsiEventsList[0].ueType.model} Failures`);
+};
 
 let networkEngQueryFourDrillDownCauseCodeChart = new Chart($("#networkEngQueryFourDrillDownCauseCodeChart")[0], failureClassPieChartConfig);
 const generateCauseCodeBarChart = function(imsiEventsList){
@@ -287,6 +337,26 @@ const generateCauseCodeBarChart = function(imsiEventsList){
     networkEngQueryFourDrillDownCauseCodeChart.data.labels = labels;
     networkEngQueryFourDrillDownCauseCodeChart.data.datasets[0].backgroundColor = colorPalette.slice(0, data.length);
     networkEngQueryFourDrillDownCauseCodeChart.update();
+}
+
+let supportEngQueryDrillDownCauseCodeChart = new Chart($("#supportEngQueryDrillDownCauseCodeChart")[0], failureClassPieChartConfig);
+const generateCauseCodeBarChartPhoneModel = function(imsiEventsList){
+    const dataset = generateCauseCodeDescriptionDistribution(imsiEventsList);
+    const labels =  Object.keys(dataset);
+    const data = [];
+    for(let i = 0; i < labels.length; i++){
+        data[i] = dataset[labels[i]];
+    }
+    supportEngQueryDrillDownCauseCodeChart.destroy();
+
+    // add the event handler to the chart
+    failureClassPieChartConfig.options.onClick = imsiDrillDownCauseCodeChartEventHandler;
+
+    supportEngQueryDrillDownCauseCodeChart = new Chart($("#supportEngQueryDrillDownCauseCodeChart")[0], failureClassPieChartConfig);
+    supportEngQueryDrillDownCauseCodeChart.data.datasets[0].data = data;
+    supportEngQueryDrillDownCauseCodeChart.data.labels = labels;
+    supportEngQueryDrillDownCauseCodeChart.data.datasets[0].backgroundColor = colorPalette.slice(0, data.length);
+    supportEngQueryDrillDownCauseCodeChart.update();
 }
 
 
@@ -311,10 +381,35 @@ const generateCellIDBarChart = function(imsiEventsList){
     networkEngQueryFourDrillDownCellIDChart.update();
 }
 
+let supportEngQueryDrillDownCellIDChart = new Chart($("#supportEngQueryDrillDownCellIDChart")[0], cellIDChartConfig);
+const generateCellIDBarChartPhoneModel = function(imsiEventsList){
+    const dataset = generateMarketOperatorCell(imsiEventsList);
+    const labels =  Object.keys(dataset);
+    const data = [];
+    for(let i = 0; i < labels.length; i++){
+        data[i] = dataset[labels[i]];
+    }
+    supportEngQueryDrillDownCellIDChart.destroy();
+
+    // add the event handler to the chart
+    cellIDChartConfig.options.onClick = imsiDrillDownCellIDChartEventHandler;
+
+    cellIDChartConfig.options.scales.yAxes[0].ticks.max = Math.max(...data);
+    supportEngQueryDrillDownCellIDChart = new Chart($("#supportEngQueryDrillDownCellIDChart")[0], cellIDChartConfig);
+    supportEngQueryDrillDownCellIDChart.data.datasets[0].data = data;
+    supportEngQueryDrillDownCellIDChart.data.labels = labels;
+    supportEngQueryDrillDownCellIDChart.data.datasets[0].backgroundColor = colorPalette.slice(0, data.length);
+    supportEngQueryDrillDownCellIDChart.update();
+}
+
 const displayIMSIDetails = function(imsiEventsList){
     const imsi = imsiEventsList[0];
     $("#networkEngQueryFourDrillDownChartCardIMSIDetailsIMSI").val(imsi.imsi);
     $("#networkEngQueryFourDrillDownChartCardIMSIDetailsTotalFailureCount").val(imsiEventsList.length);
+}
+
+const displayIMSIDetailsPhoneModel = function(imsiEventsList){
+    $("#supportEngQueryDrillDownChartCardIMSIDetailsTotalFailureCount").val(imsiEventsList.length);
 }
 
 const cacheIMSIDrillDownData = function(data){
@@ -468,4 +563,34 @@ const imsiClickFromTableEventHandler = function(imsi, parentContainer){
     showFullDataBanner();
 }
 
+const countCallFailuresDrillDownEventHandler = function(event, array){
+    $("#imsiDrillDownBackIconSup").data("target", "supportEngQueryOne");
+    imsiLineChartConfig.options.scales.xAxes[0].ticks.minRotation = 0;
+    let activeBar = this.getElementAtEvent(event);
+    if(activeBar[0]){
+        let index = activeBar[0]["_index"];
+        let model = this.data.labels[index];
+        let fromTime = new Date($('#startDateOnCallFailureForm').val()).valueOf();
+        let toTime = new Date($('#endDateOnCallFailureForm').val()).valueOf();      
+        queryListOfIMSIEventForDrillDownByPhoneModel(model, fromTime, toTime);
+    }
+};
+
+const queryListOfIMSIEventForDrillDownByPhoneModel = function(model, fromTime, toTime){
+    const startTime = new Date();
+    $.ajax({
+        type:'GET',
+        dataType:'json',
+        url:`${rootURL2}/events/query/ue/imsi?model=${model}&from=${fromTime}&to=${toTime}`,
+        beforeSend: setAuthHeader1,
+        success: function(imsiEventsList){
+            displayListOfIMSIEventForDrillDownByPhoneModel(imsiEventsList);
+            const endTime = new Date();
+            displayResponseSummary(imsiEventsList, startTime, endTime);
+        },
+        error: function(jqXHR, textStatus, errorThrown){
+            console.log("There is an error in queryListOfIMSIEventForDrillDownByPhoneModel")
+        }
+    });
+};
 
