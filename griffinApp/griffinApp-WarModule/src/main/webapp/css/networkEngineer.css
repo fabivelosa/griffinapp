@@ -127,7 +127,7 @@ td{
     background-color: #fbfcff !important;
 }
 
-#drillDownIMSIPhoneModelChart, #drillDownCellIDChart, #drillDownEventCauseChart, #drillDownIMSISubChart, #drillPhoneModelChart, #supDrillCauseCodeChart, #supDrillDownCellIDChart, #drillCauseCodeChart{
+#drillDownIMSIPhoneModelChart, #drillDownCellIDChart, #drillDownEventCauseChart, #drillDownIMSISubChart, #drillPhoneModelChart, #supDrillCauseCodeChart, #supDrillDownCellIDChart, #drillCauseCodeChart, #drillDownFailureClassChart{
     padding: 2rem;
     margin-top: 1rem;
     border: 1px solid rgb(239, 238, 238);

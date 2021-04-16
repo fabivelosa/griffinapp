@@ -260,7 +260,7 @@ public class EventServiceImpl implements EventService {
 	}
 
 	@Override
-	public List<Events> findListofIMSIEventsByPhoneModel(String model, LocalDateTime startTime, LocalDateTime endTime)
+	public List<Events> findListofIMSIEventsByPhoneModel(final String model, final LocalDateTime startTime, final LocalDateTime endTime)
 			throws InvalidPhoneModelException {
 		if (model.isEmpty()) {
 			throw new InvalidPhoneModelException();

@@ -315,7 +315,7 @@ const generateBarLineChartPhoneModel = function(imsiEventsList) {
     supportEngQueryDrillDownBarChart.data.datasets[1].data = incrementalCounts;
     imsiLineChartConfig.options.scales.yAxes[0].ticks.max = getRoundedUpYAxisMaxValue(incrementalDurations, incrementalCounts);
     supportEngQueryDrillDownBarChart.update();
-    $("#supportEngQueryDrillDownChartTitleType").text("Cumulative");
+    $("#supportEngQueryDrillDownChartTitleType").text("");
     $("#supportEngQueryDrillDownChartTitleDescription").text(`Model ${imsiEventsList[0].ueType.model} Failures`);
 };
 
